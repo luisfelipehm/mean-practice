@@ -1,3 +1,5 @@
+<barranav></barranav>
+
 <style>
     .thumb {
         width: 24px;
@@ -46,6 +48,9 @@
             <a href="#/posts/{{post._id}}">Comentarios</a>
 
 </span>
+
+        {{post.comments}}
+
     </div>
     <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
         <md-input-container>
