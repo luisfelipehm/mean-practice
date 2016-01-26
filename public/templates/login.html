@@ -159,15 +159,21 @@
     .backlogo
     {
         position: absolute;
-        border: solid black;
         width: 10vw;
-        left: 65vw;
+        left: 66vw;
         top: 22vh;
     }
     .logob
     {
-        width: 10vw;
+        width: 15vw;
         height: auto;
+    }
+    .button
+    {
+        position: absolute;
+        left: 75vw;
+        top: 55vh;
+
     }
     .user
     {
@@ -181,15 +187,54 @@
     .pwd
     {
         position: absolute;
-        top: 45vh;
+        top: 42vh;
         left: 65vw;
         z-index: 10;
         width: 12vw;
         height: 7.5vh;
     }
-    .md-input-has-value
+    .derecho
     {
-        background-color:blue ;
+        font-family: Arial;
+        font-size: 0.8vw;
+        width: 18vw;
+        color: white;
+        margin: .5vh 0 0 43%;
+    }
+    .boxcheck
+    {
+        position: absolute;
+        color: white;
+        font-family: Arial;
+        font-size: .6vw;
+        left: 65vw;
+        top: 50vh;
+    }
+    .md-input-container
+    {
+        color: white;
+    }
+    md-input-container.md-default-theme label, md-input-container label, md-input-container.md-default-theme .md-placeholder, md-input-container .md-placeholder {
+
+        color: white;
+    }
+    md-input-container.md-default-theme .md-input, md-input-container .md-input {
+        color: white;
+        border-color: white;
+
+    }
+    md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label {
+        color: white;
+    }
+    .infouser
+    {
+        width: 17vw;
+    }
+    md-input-container.md-default-theme.md-input-invalid .md-input, md-input-container.md-input-invalid .md-input {
+        border-color: yellow;
+    }
+    input[type=checkbox] {
+        zoom: 1;
     }
 
 </style>
@@ -255,11 +300,19 @@
 
 </div>
 
-<div class="endred"> </div>
+<div class="endred">
+    <p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>
+</div>
 
 <!--Logo Soluciones-->
 <div class="backlogo">
     <img class="logob" src="/img/logoblanco.png">
+</div>
+
+<!--checkbox-->
+
+<div class="boxcheck">
+    <input type="checkbox"/> No cerrar sesión <label style="margin-left: 4.4vw">¿Olvidaste tu Contraseña?</label>
 </div>
 
 
@@ -267,30 +320,31 @@
 
 <!-- LOGIN DE USUARIO -->
 
-
-
 <div ng-show="error" class="">
     <span>{{ error.message }}</span>
 </div>
 
 <form ng-submit="usuario.logIn()"
       style="margin-top:30px;">
-    <h3 >Iniciar Sesion</h3>
+    <!--<h3 >Iniciar Sesion</h3>-->
 
   <div class="user">
-    <md-input-container >
+    <md-input-container class="infouser">
         <label >Usuario</label>
-        <input type="text" ng-model="usuario.user.username" required md-maxlength="30">
+        <input type="text" ng-model="usuario.user.username" required >
     </md-input-container>
   </div>
 
   <div class="pwd">
-    <md-input-container >
+    <md-input-container class="infouser">
         <label>Contraseña</label>
-        <input type="text" ng-model="usuario.user.password" required md-maxlength="30">
+        <input type="password" ng-model="usuario.user.password" required >
     </md-input-container>
   </div>
 
-    <md-button type="submit" class="md-raised"> Iniciar Sesion </md-button>
+    <div class="button">
+        <md-button style=" font-weight: bold;" type="submit" class="md-raised"> LOGIN </md-button>
+    </div>
+
 </form>
 
