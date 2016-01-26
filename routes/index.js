@@ -11,13 +11,20 @@ var jwt = require('express-jwt');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 router.get('/posts', function(req, res, next) {
-  Post.find(function(err, posts){
-    if(err){ return next(err); }
 
+  Post.find().populate('comments').exec(function (err,posts) {
+    if(err){ return next(err); }
     res.json(posts);
-  });
+  })
 });
 
+router.get('/posts/:post', function(req, res, next) {
+  req.post.populate('comments', function(err, post) {
+    if (err) { return next(err); }
+
+    res.json(post);
+  });
+});
 
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads2'});
@@ -48,13 +55,7 @@ router.param('post', function(req, res, next, id) {
   });
 });
 
-router.get('/posts/:post', function(req, res, next) {
-  req.post.populate('comments', function(err, post) {
-    if (err) { return next(err); }
 
-    res.json(post);
-  });
-});
 
 router.put('/posts/:post/upvote',auth, function(req, res, next) {
   req.post.upvote(function(err, post){

@@ -1,6 +1,12 @@
 var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload']);
 
 
+app.directive('barranav', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_barra.html'
+    };
+});
 
 app.factory('posts', ['$http','auth',function($http,auth){
     var o = {
@@ -174,8 +180,8 @@ app.controller('AuthCtrl', [
     }]);
 
 app.controller('PostsCtrl', [  'posts','post','auth',  function(  posts,post,auth){
-        var poster = this;
-        poster.post = post;
+    var poster = this;
+    poster.post = post;
     poster.isLoggedIn = auth.isLoggedIn;
 
     poster.addComment = function(){
@@ -189,10 +195,7 @@ app.controller('PostsCtrl', [  'posts','post','auth',  function(  posts,post,aut
         poster.body = '';
     };
 
-
-
-
-    }]);
+}]);
 
 
 app.controller('MyCtrl', ['$scope', 'Upload','auth', '$timeout', function ($scope, Upload,auth, $timeout) {
@@ -220,6 +223,7 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
 
 
     $scope.posts = posts.posts;
+    console.log($scope.posts);
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.remove = function(post) {
         return $http.delete('/posts/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
@@ -231,6 +235,7 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
                 console.log('Error: ' + data);
             });
     };
+
     $scope.uploadPic = function(file) {
         if(file==undefined)
         {
