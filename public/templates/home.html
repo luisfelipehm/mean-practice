@@ -60,7 +60,7 @@
             <input type="text" ng-model="link" required md-maxlength="30">
         </md-input-container>
         <br>Photo:
-        <input type="file" ngf-select ng-model="picFile" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="2MB" required />
+        <input type="file" ngf-select ng-model="picFile" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required />
         <br>
 
         <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
