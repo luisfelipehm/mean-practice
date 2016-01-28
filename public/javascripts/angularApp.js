@@ -47,6 +47,38 @@ app.factory('posts', ['$http','auth',function($http,auth){
 
     return o;
 }]);
+app.factory('documents', ['$http','auth',function($http,auth){
+    var o = {
+        documents:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/documents').success(function(data){
+            angular.copy(data, o.documents);
+        });
+    };
+    o.create = function(document) {
+
+        return $http.post('/documents', document, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.documents.push(data);
+        });
+    };
+
+    o.addSubFolder = function(id , document) {
+        return $http.post('/documents/' + id + '/documents', document, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+    o.get = function(id) {
+        return $http.get('/documents/' + id).then(function(res){
+            return res.data;
+        });
+    };
+
+    return o;
+}]);
 app.factory('auth', ['$http', '$window', function($http, $window){
     var auth = {};
     auth.saveToken = function (token){
@@ -113,14 +145,30 @@ app.config([
                 }
 
             })
-            .state('posts', {
-                url: '/posts/{id}',
-                templateUrl: 'templates/posts.html',
-                controller: 'PostsCtrl as poster',
+            .state('documentos', {
+                url: '/documentos',
+                templateUrl: 'templates/documents.html',
+                controller: 'DocumentsCtrl',
                 resolve: {
-                    post: ['$stateParams', 'posts', function($stateParams, posts) {
-                        return posts.get($stateParams.id);
+                    postPromise: ['documents', function(documents){
+                        return documents.getAll();
+                    }]
+                }
+                //onEnter: ['$state', 'auth', function($state, auth){
+                //    if(auth.isLoggedIn()){
+                //        $state.go('home');
+                //    }
+                //}]
+            })
+            .state('documents', {
+                url: '/documents/{id}',
+                templateUrl: 'templates/document.html',
+                controller: 'DocumentCtrl',
+                resolve: {
+                    document: ['$stateParams', 'documents', function($stateParams, documents) {
+                        return documents.get($stateParams.id);
                     }]}
+
             }).state('login', {
                 url: '/login',
                 templateUrl: 'templates/login.html',
@@ -140,7 +188,18 @@ app.config([
                         $state.go('home');
                     }
                 }]
-            });
+            })
+
+        //    .state('document', {
+        //    url: '/document/{id}',
+        //    templateUrl: 'templates/document.html',
+        //    controller: 'DocumentCtrl',
+        //    resolve: {
+        //        document: ['$stateParams', 'document', function($stateParams, document) {
+        //            return document.get($stateParams.id);
+        //        }]}
+        //})
+        ;
 
         $urlRouterProvider.otherwise('home');
     }]);
@@ -155,74 +214,57 @@ app.controller('NavCtrl', [
         nav.currentUser = auth.currentUser;
         nav.logOut = auth.logOut;
     }]);
-app.controller('AuthCtrl', [
-    '$state',
-    'auth',
-    function( $state, auth){
-        var usuario = this;
-        usuario.user = {};
 
-        usuario.register = function(){
-            auth.register(usuario.user).error(function(error){
-                usuario.error = error;
-            }).then(function(){
-                $state.go('home');
-            });
-        };
 
-        usuario.logIn = function(){
-            auth.logIn(usuario.user).error(function(error){
-                usuario.error = error;
-            }).then(function(){
-                $state.go('home');
-            });
-        };
-    }]);
 
-app.controller('PostsCtrl', [  'posts','post','auth',  function(  posts,post,auth){
-    var poster = this;
-    poster.post = post;
-    poster.isLoggedIn = auth.isLoggedIn;
 
-    poster.addComment = function(){
-        if(poster.body === '') { return; }
-        posts.addComment(post._id, {
-            body: poster.body,
-            author: 'user'
-        }).success(function(comment) {
-            poster.post.comments.push(comment);
+
+
+app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,auth,documents) {
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.documents = documents.documents;
+
+    $scope.crearCarpeta = function(){
+        if(!$scope.nombre || $scope.nombre === '') { return; }
+        documents.create({
+            nombre: $scope.nombre
         });
-        poster.body = '';
+        $scope.nombre = '';
     };
 
 }]);
 
+app.controller('DocumentCtrl', ['$scope', 'documents','document','auth',  function($scope,  documents,document,auth){
 
-app.controller('MyCtrl', ['$scope', 'Upload','auth', '$timeout', function ($scope, Upload,auth, $timeout) {
-    $scope.uploadPic = function(file) {
-        file.upload = Upload.upload({
-            url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-            data: {file: file, username: $scope.username},
-        });
+    $scope.document = document;
+    $scope.isLoggedIn = auth.isLoggedIn;
 
-        file.upload.then(function (response) {
-            $timeout(function () {
-                file.result = response.data;
-            });
-        }, function (response) {
-            if (response.status > 0)
-                $scope.errorMsg = response.status + ': ' + response.data;
-        }, function (evt) {
-            // Math.min is to fix IE which reports 200% sometimes
-            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+    $scope.CarpenCarp = function(id){
+        if($scope.nombre === '') { return; }
+        documents.addSubFolder(id, {
+            nombre: $scope.nombre,
+            padre: $scope.id
+        }).success(function(doc) {
+            console.log(doc);
+            $scope.document.carpetas.push(doc);
         });
-    }
+        $scope.nombre = '';
+    };
+
+
+
+
 }]);
+
+
+
 
 app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', function ($scope,Upload,posts,auth,$timeout,$http) {
 
 
     $scope.posts = posts.posts;
+    $scope.bodyc = {val:''};
+
     console.log($scope.posts);
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.remove = function(post) {
@@ -235,6 +277,26 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
                 console.log('Error: ' + data);
             });
     };
+    $scope.addComment = function(idpost){
+        if($scope.body === '') { return; }
+
+        //$http.post('/posts/' + idpost + '/comments', comment, {
+        //    headers: {Authorization: 'Bearer '+auth.getToken()}
+        //}).success(function (data) {
+        //
+        //}).error(function () {
+        //    console.log('Error: ' + data);
+        //});
+
+        posts.addComment(idpost, {
+            body: $scope.bodyc.val,
+            author: 'user'
+        }).success(function(comment) {
+            posts.getAll();
+        });
+        $scope.bodyc.val = '';
+    };
+
 
     $scope.uploadPic = function(file) {
         if(file==undefined)
@@ -281,10 +343,32 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
             posts.getAll()
         });
 
-
     };
 
     $scope.incrementUpvotes = function(post) {
         posts.upvote(post)
     };
 }]);
+app.controller('AuthCtrl', [
+    '$state',
+    'auth',
+    function( $state, auth){
+        var usuario = this;
+        usuario.user = {};
+
+        usuario.register = function(){
+            auth.register(usuario.user).error(function(error){
+                usuario.error = error;
+            }).then(function(){
+                $state.go('home');
+            });
+        };
+
+        usuario.logIn = function(){
+            auth.logIn(usuario.user).error(function(error){
+                usuario.error = error;
+            }).then(function(){
+                $state.go('home');
+            });
+        };
+    }]);

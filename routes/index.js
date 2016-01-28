@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
+var Folder = mongoose.model('Folder');
 
 var jwt = require('express-jwt');
 
@@ -18,11 +19,68 @@ router.get('/posts', function(req, res, next) {
   })
 });
 
+
+router.post('/documents/:document/documents',auth, function(req, res, next) {
+  var comment = new Folder(req.body);
+  comment.padre = req.document._id;
+  comment.author = req.payload.username;
+
+  comment.save(function(err, comment){
+    if(err){ return next(err); }
+
+    req.document.carpetas.push(comment);
+    req.document.save(function(err, document) {
+      if(err){ return next(err); }
+
+      res.json(req.body);
+    });
+  });
+});
+
+router.get('/documents', function(req, res, next) {
+
+  Folder.find(function(err, documents){
+    if(err){ return next(err); }
+    res.json(documents);
+  });
+
+});
+router.post('/documents',auth, function(req, res, next) {
+  var document = new Folder(req.body);
+  document.author = req.payload.username;
+  document.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(document);
+  });
+});
+
 router.get('/posts/:post', function(req, res, next) {
   req.post.populate('comments', function(err, post) {
     if (err) { return next(err); }
 
     res.json(post);
+  });
+});
+router.param('document', function(req, res, next, id) {
+  var query = Folder.findById(id);
+
+  query.exec(function (err, document){
+    if (err) { return next(err); }
+    if (!document) { return next(new Error('can\'t find post')); }
+
+    req.document = document;
+    return next();
+  });
+});
+
+router.get('/documents/:document', function(req, res, next) {
+
+
+  req.document.populate('carpetas','nombre', function(err, document) {
+    if (err) { return next(err);   }
+  console.log(document);
+    res.json(document);
   });
 });
 
