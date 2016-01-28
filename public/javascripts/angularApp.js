@@ -234,7 +234,7 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
 
 }]);
 
-app.controller('DocumentCtrl', ['$scope', 'documents','document','auth',  function($scope,  documents,document,auth){
+app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
 
     $scope.document = document;
     $scope.isLoggedIn = auth.isLoggedIn;
@@ -249,6 +249,57 @@ app.controller('DocumentCtrl', ['$scope', 'documents','document','auth',  functi
             $scope.document.carpetas.push(doc);
         });
         $scope.nombre = '';
+    };
+
+    $scope.uploadPic = function(files) {
+
+
+
+        angular.forEach(files, function(file) {
+            console.log(file);
+            file.upload = Upload.upload({
+                url: '/documents/'+ $scope.document._id + '/files',
+
+                data:{id: $scope.document._id,file:file,nombre: file.name},
+
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+            });
+
+            file.upload.then(function (response) {
+                console.log("Postcontroller: upload then ");
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 *
+                    evt.loaded / evt.total));
+            });
+            file.upload.progress(function (evt) {
+                // Math.min is to fix IE which reports 200% sometimes
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                console.log("PostController: upload progress " + file.progress);
+            });
+            file.upload.success(function (data, status, headers, config) {
+                $scope.picFile = '';
+
+
+            });
+
+
+        });
+
+
+
+
+
+
+
+
+
+
     };
 
 

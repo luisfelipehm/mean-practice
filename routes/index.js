@@ -5,6 +5,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
+var File = mongoose.model('File');
 var User = mongoose.model('User');
 var Folder = mongoose.model('Folder');
 
@@ -18,6 +19,8 @@ router.get('/posts', function(req, res, next) {
     res.json(posts);
   })
 });
+
+
 
 
 router.post('/documents/:document/documents',auth, function(req, res, next) {
@@ -77,15 +80,62 @@ router.param('document', function(req, res, next, id) {
 router.get('/documents/:document', function(req, res, next) {
 
 
-  req.document.populate('carpetas','nombre', function(err, document) {
+  req.document.populate('files').populate('carpetas','nombre', function(err, document) {
     if (err) { return next(err);   }
-  console.log(document);
+
+
     res.json(document);
   });
 });
 
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads2'});
+
+
+
+router.post('/documents/:document/documents',auth, function(req, res, next) {
+  var comment = new Folder(req.body);
+  comment.padre = req.document._id;
+  comment.author = req.payload.username;
+
+  comment.save(function(err, comment){
+    if(err){ return next(err); }
+
+    req.document.carpetas.push(comment);
+    req.document.save(function(err, document) {
+      if(err){ return next(err); }
+
+      res.json(req.body);
+    });
+  });
+});
+
+router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
+
+  console.log('error');
+    var file = new File();
+    file.author = req.payload.username;
+    file.nombre = req.body.nombre;
+    file.adjunto = '/uploads2/'+req.file.filename;
+    file.padre = req.document._id;
+    file.save(function(err, files){
+      if(err){ return next(err); }
+
+      req.document.files.push(file);
+      req.document.save(function(err, document) {
+        if(err){ return next(err); }
+
+        res.json(req.body);
+      });
+
+    });
+
+
+
+
+
+
+});
 
 router.post('/posts',auth, upload.single('file'), function(req, res, next) {
 
@@ -98,6 +148,8 @@ router.post('/posts',auth, upload.single('file'), function(req, res, next) {
     res.json(post);
   });
 });
+
+
 
 
 

@@ -1,3 +1,29 @@
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    form .progress {
+        line-height: 15px;
+    }
+    }
+
+    .progress {
+        display: inline-block;
+        width: 100px;
+        border: 3px groove #CCC;
+    }
+
+    .progress div {
+        font-size: smaller;
+        background: orange;
+        width: 0;
+    }
+</style>
 <form name="myForm" ng-submit="CarpenCarp(document._id)">
     <md-input-container>
         <label>Nombre de la Carpeta</label>
@@ -9,8 +35,48 @@
 </form>
 
 
+<form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+
+
+
+    <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+    <br>
+
+    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+    <br>
+    Files:
+    <ul>
+        <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"
+             ng-bind="f.progress + '%'"></div>
+      </span>
+        </li>
+        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+        </li>
+    </ul>
+    {{errorMsg}}
+
+
+
+
+    <md-button type="submit"  class="md-raised"> Publicar </md-button>
+
+</form>
+
+
 {{document.nombre}}<br>
 
 <div ng-repeat="doc in document.carpetas">
 <a href="#/documents/{{doc._id}}">{{doc.nombre}}</a> <br>
+</div>
+
+<div ng-repeat="archivo in document.files">
+<a href="{{archivo.adjunto}}">{{archivo.nombre}}</a>
+
+
 </div>

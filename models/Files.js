@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 
-var CommentSchema = new mongoose.Schema({
+var FileSchema = new mongoose.Schema({
     adjunto: String,
     author: String,
+    nombre: String,
     folder: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder' }
 });
 
-mongoose.model('Comment', CommentSchema);
+mongoose.model('File', FileSchema);
