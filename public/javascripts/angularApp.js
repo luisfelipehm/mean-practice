@@ -299,6 +299,7 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
 
 
     $scope.uploadPic = function(file) {
+        alert(file);
         if(file==undefined)
         {
             posts.create({

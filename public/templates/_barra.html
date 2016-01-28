@@ -7,6 +7,7 @@
         height: 5.5vh;
         top: 1vh;
         left: 10%;
+        z-index: 1;
     }
     .username
     {
@@ -90,12 +91,14 @@
     }
     .notifica
     {
-        position: absolute;
+        position: fixed;
         border: solid red;
         width: 15vw;
         height: 12vh;
         right: 21.8vw;
         top: 8vh;
+        z-index: 1;
+        background: white;
     }
     .notitittle
     {
@@ -150,14 +153,15 @@
 
     .arrow-up
     {
-        position: absolute;
-        top: 6.8vh;
-        right: 22vw;
+        position: fixed;
+        top: 6.7vh;
+        right: 22.1vw;
         width: 0;
         height: 0vh;
-        border-left: 15px solid transparent;
-        border-right: 15px solid transparent;
-        border-bottom: 15px solid red;
+        border-left: .5vw solid transparent;
+        border-right: .5vw solid transparent;
+        border-bottom: 1.6vh solid red;
+        z-index: 1;
     }
 
 </style>
