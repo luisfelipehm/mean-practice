@@ -1,10 +1,196 @@
-<nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
-    <ul class="nav navbar-nav">
-        <li ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }}</a></li>
-        <li ng-show="nav.isLoggedIn()"><a href="" ng-click="nav.logOut()">Cerrar Sesion</a></li>
-        <li ng-hide="nav.isLoggedIn()"><a href="/#/login">Log In</a></li>
-        <li ng-hide="nav.isLoggedIn()"><a href="/#/register">Register</a></li>
-        <a ui-sref="home">Inicio</a>
-        notificaciones
-    </ul>
-</nav>
+<style>
+    .barrasup
+    {
+        position: fixed;
+        background: #ce0a31;
+        width: 80%;
+        height: 5.5vh;
+        top: 1vh;
+        left: 10%;
+    }
+    .username
+    {
+        position: absolute;
+        font-family: Arial;
+        font-size: 2.5vh;
+        right: 25%;
+        color: white;
+        top: 1.5vh;
+        margin: 0;
+        text-align: right;
+        width: 10vw;
+    }
+    .inicio
+    {
+        position: absolute;
+        font-family: Arial;
+        font-size: 2.5vh;
+        right: 20.5%;
+        top: 1.5vh;
+        margin: 0;
+    }
+    a:link
+    {
+        text-decoration:none;
+        color: white;
+    }
+    .boxnoti
+    {
+        position: absolute;
+        height: 3vh;
+        width: 1.6vw;
+        margin: 0;
+        right: 15%;
+        top: 2vh;
+    }
+    .imgnoti
+    {
+        width: 1.6vw;
+        height: auto;
+    }
+    .boxinb
+    {
+        position: absolute;
+        height: 3vh;
+        width: 1.6vw;
+        margin: 0;
+        right: 11%;
+        top: 2vh;
+    }
+    .imginb
+    {
+        width: 1.6vw;
+        height: auto;
+    }
+    .boxconfig
+    {
+        position: absolute;
+        height: 3vh;
+        width: 1.6vw;
+        margin: 0;
+        right: 3%;
+        top: 1.5vh;
+    }
+    .imgconfig
+    {
+        width: 1.6vw;
+        height: auto;
+    }
+    .line
+    {
+        position: absolute;
+        font-family: Arial;
+        font-size: 2.5vh;
+        right: 8%;
+        color: white;
+        top: 1.5vh;
+        margin: 0;
+        text-align: right;
+        width: 10vw;
+    }
+    .notifica
+    {
+        position: absolute;
+        border: solid red;
+        width: 15vw;
+        height: 12vh;
+        right: 21.8vw;
+        top: 8vh;
+    }
+    .notitittle
+    {
+        position: absolute;
+        left: 2vw;
+        top: 2vh;
+
+    }
+    .notitxt
+    {
+        font-family: Arial;
+        font-size: 1.2vw;
+        color: red;
+        margin: 0;
+    }
+    .lineh
+    {
+        position: absolute;
+        border: solid #a1a1a1 .1vw;
+        width: 10vw;
+        top: 5vh;
+        left: 1vw;
+    }
+    .listnoti
+    {
+        position: absolute;
+        width: 12vw;
+        left: 1.5vw;
+        top: 6vh;
+    }
+    .event
+    {
+        margin: 0;
+        font-size: .8vw;
+        font-family: Arial;
+        color: red;
+    }
+    .eventhour
+    {
+        margin: 0;
+        font-size: .7vw;
+        font-family: Arial;
+        margin-left: .9vw;
+        margin-bottom: 1vh;
+        color: #a1a1a1 ;
+    }
+    .circulo
+    {
+        margin-right:.6vw;
+        font-size: .8vw;
+    }
+
+    .arrow-up
+    {
+        position: absolute;
+        top: 6.8vh;
+        right: 22vw;
+        width: 0;
+        height: 0vh;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 15px solid red;
+    }
+
+</style>
+
+<div class="barrasup">
+    <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
+        <div>
+            <p class="username" ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }} | </a></p>
+            <!--<p ng-show="nav.isLoggedIn()"><a href="" ng-click="nav.logOut()">Cerrar Sesion</a></p>
+            <p ng-hide="nav.isLoggedIn()"><a href="/#/login">Log In</a></p>
+            <p ng-hide="nav.isLoggedIn()"><a href="/#/register">Register</a></p>-->
+            <p class="inicio"><a style="color: white" ui-sref="home">Inicio</a></p>
+            <p class="boxnoti"><img class="imgnoti" src="/img/icononoti.png"></p>
+            <p class="boxinb"><img class="imginb" src="/img/iconoinb.png"></p>
+            <p class="line">|</p>
+            <p class="boxconfig"><img class="imgconfig" src="/img/iconoconfigurar.png"></p>
+            <!--notificaciones-->
+        </div>
+    </nav>
+</div>
+
+
+<!--Cuadro Notificaciones-->
+<div class="notifica">
+    <div class="notitittle">
+        <p class="notitxt">Notificaciones</p>
+    </div>
+    <div class="lineh"></div>
+    <div class="listnoti">
+        <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación</p>
+        <p class="eventhour">06:00AM - 01:00PM </p>
+    </div>
+</div>
+<!--Triangulo Notificaciones-->
+
+<div class="arrow-up"></div>
