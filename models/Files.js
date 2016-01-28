@@ -1,11 +1,9 @@
 var mongoose = require('mongoose');
 
 var CommentSchema = new mongoose.Schema({
-    body: String,
+    adjunto: String,
     author: String,
-    upvotes: {type: Number, default: 0},
-    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' }
-
+    folder: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder' }
 });
 
 mongoose.model('Comment', CommentSchema);
