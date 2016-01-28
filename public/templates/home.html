@@ -71,7 +71,6 @@
 
         <br>
 
-
             <span class="progress" ng-show="picFile.progress >= 0">
               <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
             </span>
@@ -80,14 +79,10 @@
 
         <md-button type="submit"  class="md-raised"> Publicar </md-button>
 
-
     </form>
     <div ng-hide="isLoggedIn()">
         <h3>Necesitas   <a href="/#/login">Iniciar Sesion</a> o <a href="/#/register">Registrarte</a> Antes de poder publicar</h3>
 
     </div>
-
-
-
 
 </div>
