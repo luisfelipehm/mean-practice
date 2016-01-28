@@ -10,6 +10,7 @@ require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
 require('./models/Folders');
+require('./models/Files');
 require('./config/passport');
 moongose.connect('mongodb://localhost/news');
 var passport = require('passport');
