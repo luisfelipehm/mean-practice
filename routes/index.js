@@ -89,8 +89,18 @@ router.get('/documents/:document', function(req, res, next) {
 });
 
 var multer = require('multer');
-var upload = multer({ dest: './public/uploads2'});
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/uploads2')
+  },
+  filename: function (req, file, cb) {
+    console.log(file);
+    cb(null, file.originalname )
+  }
+});
+
+var upload = multer({ storage: storage });
 
 
 router.post('/documents/:document/documents',auth, function(req, res, next) {
@@ -116,6 +126,7 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
     var file = new File();
     file.author = req.payload.username;
     file.nombre = req.body.nombre;
+    file.filename = req.body.nombre;
     file.adjunto = '/uploads2/'+req.file.filename;
     file.padre = req.document._id;
     file.save(function(err, files){
