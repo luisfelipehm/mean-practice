@@ -119,7 +119,17 @@ router.post('/documents/:document/documents',auth, function(req, res, next) {
     });
   });
 });
+function getReadableFileSizeString(fileSizeInBytes) {
 
+  var i = -1;
+  var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+  do {
+    fileSizeInBytes = fileSizeInBytes / 1024;
+    i++;
+  } while (fileSizeInBytes > 1024);
+
+  return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+}
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
   console.log('error');
@@ -127,6 +137,8 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
     file.author = req.payload.username;
     file.nombre = req.body.nombre;
     file.filename = req.body.nombre;
+    file.fecha =  Date.now();
+    file.tamano = getReadableFileSizeString(req.file.size);
     file.adjunto = '/uploads2/'+req.file.filename;
     file.padre = req.document._id;
     file.save(function(err, files){
