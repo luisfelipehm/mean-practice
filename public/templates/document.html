@@ -1,8 +1,5 @@
 <barranav></barranav>
 
-
-
-<div class="content">
 <style>
     .thumb {
         width: 24px;
@@ -14,7 +11,6 @@
 
     form .progress {
         line-height: 15px;
-    }
     }
 
     .progress {
@@ -39,34 +35,49 @@
     {
         display: inline-block;
     }
-    .tab1{ width: 15%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-left: 0;border-top: 0}
-    .tab2{ width: 25%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-left: 0;border-top: 0}
-    .tab3{ width: 30%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-left: 0;border-top: 0}
-    .tab4{ width: 30%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
+    .tab1{ width: 15%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab2{ width: 25%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab3{ width: 30%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab4{ width: 30%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
     .last > .tab1{border-bottom: 0}
     .last > .tab2{border-bottom: 0}
     .last > .tab3{border-bottom: 0}
     .last > .tab4{border-bottom: 0}
-    .conthead{width: 100%;max-height: 5vh;vertical-align: top;display: flex}
-    /*#tab11{border-left: 0;border-top: 0}*/
-    /*#tab22{border-top: 0;border-left: 0}*/
-    /*#tab33{border-top: 0;border-left: 0}*/
-    /*#tab44{border-top: 0;border-right: 0}*/
+    .conthead
+    {
+        width: 100%;
+        max-height:5vh;
+        vertical-align:top;
+        display:flex
+    }
+    #tab11{border-left: 0;border-top: 0}
+    #tab22{border-top: 0;border-left: 0;text-align: center;font-weight: bold;font-family: Arial;font-size: 1vw;}
+    #tab33{border-top: 0;border-left: 0;text-align: center;font-weight: bold;font-family: Arial;font-size: 1vw;}
+    #tab44{border-top: 0;border-right: 0}
+    .mi
+    {
+        margin-left: .5vw;
+        font-family: Arial;
+        font-size: 1vw;
+    }
 </style>
+
+
+<div class="content">
+
+
+    <!--Crear Carpetas-->
 <form name="myForm" ng-submit="CarpenCarp(document._id)">
     <md-input-container>
         <label>Nombre de la Carpeta</label>
         <input type="text" ng-model="nombre" required md-maxlength="20">
     </md-input-container>
     <md-button type="submit"  class="md-raised"> Publicar </md-button>
-
-
 </form>
 
 
+    <!--Seleccionar imagenes y publicar-->
 <form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
-
-
 
     <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
@@ -90,11 +101,7 @@
     </ul>
     {{errorMsg}}
 
-
-
-
     <md-button type="submit"  class="md-raised"> Publicar </md-button>
-
 </form>
 
 
@@ -103,33 +110,31 @@
 
 <br>
 
+    <div class="conthead">
+        <div class="enlinea tab1" id="tab11"></div>
+        <div class="enlinea tab2" id="tab22"> <p>Nombre</p></div>
+        <div class="enlinea tab3" id="tab33"> <p>Tamaño</p></div>
+        <div class="enlinea tab4" id="tab44"></div>
+    </div>
 
-<div class="conthead">
-    <div class="enlinea tab1" id="tab11"></div>
-    <div class="enlinea tab2" id="tab22">Nombre</div>
-    <div class="enlinea tab3" id="tab33">Tamaño</div>
-    <div class="enlinea tab4" id="tab44"></div>
-</div>
-
-    <div ng-repeat="doc in document.carpetas" style="display: flex">
-        <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 90%"></div>
+    <div ng-repeat="doc in document.carpetas" style="display:flex">
+        <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 10%"></div>
         <div class="enlinea tab2" ><a href="#/documents/{{doc._id}}">{{doc.nombre}}</a></div>
         <div class="enlinea tab3" > -- </div>
         <div class="enlinea tab4" ></div>
+    </div>
+
+    <!--info de los documentos y carpetas-->
+    <div ng-repeat="archivo in document.files" style="display: flex;" ng-class="{'last':$last}">
+
+    <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%"></div>
+        <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}">{{archivo.nombre}}</a></p></div>
+        <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
+    <div class="enlinea tab4"><p class="mi">Eliminar</p></div>
+
 
     </div>
 
-<div ng-repeat="archivo in document.files" style="display: flex" ng-class="{'last':$last}">
-
-<div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%"></div>
-
-    <div class="enlinea tab2"><a href="{{archivo.adjunto}}">{{archivo.nombre}} </a></div>
-    <div class="enlinea tab3">{{archivo.tamano}}</div>
-<div class="enlinea tab4">Eliminar</div>
-
-
-</div>
-
-</div>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
+    </div>
+    <div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
+    <div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>

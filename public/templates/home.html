@@ -96,7 +96,6 @@
     .contenedorpubli
     {
         position: relative;
-        border: solid red;
         margin-bottom: 5vh;
     }
     .imguser
@@ -256,6 +255,13 @@
         width: 1.6vw;
         height: auto;
         position: absolute;
+    }
+    .imgusercoment2
+    {
+        width: 2.9vw;
+        height: auto;
+        position: absolute;
+        left: 5vw;
     }
     .imgtxcomentario
     {
@@ -461,7 +467,8 @@
                     </div>
 
                     <div class="inferior" >
-                        <div class="boxcomentario" >
+                        <div class="boxcomentario">
+                            <img class="imgusercoment2" src="/img/iconouser.jpg">
                             <form ng-submit="addComment(post._id)",>
                                 <md-input-container class="tittleboxcomentario">
                                     <label>Comentario..</label>
