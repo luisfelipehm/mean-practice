@@ -263,9 +263,17 @@
 
                 posted by <a>{{post.author}}</a> |
 
+                <form ng-submit="addComment(post._id)">
+                    <md-input-container style="width: 100%">
+                        <label>Descripción</label>
+                        <input type="text" ng-model="link" required md-maxlength="100">
+                    </md-input-container>
 
+                    <input type="text" ng-model="bodyc.val">
+                </form>
 
                 {{post.comments}}
+
 
             </div>
 
