@@ -291,24 +291,14 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
 
         });
 
-
-
-
-
-
-
-
-
-
     };
-
-
-
-
 }]);
 
 
+app.controller('FotosCtrl',['$scope', function ($scope) {
+    $scope.hola = "Hello World"
 
+}]);
 
 app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', function ($scope,Upload,posts,auth,$timeout,$http) {
 
