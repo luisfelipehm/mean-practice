@@ -1,29 +1,30 @@
 <barranav></barranav>
 
 <style>
-    .thumb {
+    /*Barra de carga*/
+    .thumb
+    {
         width: 24px;
         height: 24px;
         float: none;
         position: relative;
         top: 7px;
     }
-    form .progress {
+    form .progress
+    {
         line-height: 15px;
     }
-
-
-
-
-
-    .progress {
+    .progress
+    {
         display: inline-block;
-        width: 100px;
+        width: 100%;
+        height: 10%;
         border: 3px groove #CCC;
     }
-    .progress div {
+    .progress div
+    {
         font-size: smaller;
-        background: orange;
+        background: red;
         width: 0;
     }
     .content
@@ -33,6 +34,10 @@
         left: 22%;
         width: 56%;
     }
+
+
+    /*Cuado Publicacion*/
+
     .boxpubli
     {
         margin-bottom: 2vh;
@@ -122,8 +127,8 @@
     .container
     {
         position: absolute;
-        left: 30vw;
-        top: 15vh;
+        left: 36vw;
+        top: 16vh;
         width: 2vw;
         height: 4vh;
     }
@@ -143,16 +148,61 @@
         filter: alpha(opacity=0); /* IE 5-7 */
     }
 
-    .lineh
-    {
-        position: absolute;
-    }
     .btnpubli
     {
         position: absolute;
-        top: 14vh;
+        top: 16vh;
         left: 46vw;
+        width: 5vw;
+        height: 3vh;
+        border-radius: .2vw;
+        box-sizing: border-box;
+        transition:all 1s cubic-bezier(.25,.8,.25,1) ;
+        background-color: white;
+        cursor: pointer;
+        text-align: center;
+        font-size: 1vw;
+        padding-top:.4vh;
     }
+
+    .btnpubli:hover
+    {
+        color: white;
+        background-color: #E30613;
+    }
+    .btnselect
+    {
+        position: absolute;
+        top: 16vh;
+        left: 39vw;
+    }
+    .selec
+    {
+        color: #E30613;
+        width: 6vw;
+        height: 3vh;
+        font-size: .8vw;
+        margin: 0;
+        padding: 0;
+    }
+    .li
+    {
+        border: solid grey .1vw ;
+        width: 100%;
+        margin: 1vh 0 1vh 0;
+    }
+    button
+    {
+        background-color: transparent;
+        -webkit-appearance: none;
+    }
+    #blanco:hover
+    {
+        color: white;
+    }
+
+
+
 
 </style>
 
@@ -209,7 +259,7 @@
                 </span>
             </div>
 
-            <div class="lineh"></div>
+
 
             <br>
 
@@ -219,15 +269,31 @@
 
             <br>
 
-            <span class="progress" ng-show="true">
+            <!--Linea Horizontal-->
+            <div class="li"></div>
+
+            <span class="progress" ng-show="picFile.progress >= 0">
               <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
             </span>
 
             <span ng-show="picFile.result">Upload Successful</span>
 
-
+            <!--button publicar-->
             <div class="btnpubli">
-                <md-button type="submit"  class="md-raised"> Publicar </md-button>
+                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left: 0"> Publicar</button>
+                <!--<md-button type="submit" class="publi" style="display:none"> Publicar </md-button>-->
+            </div>
+
+
+
+            <!--button select-->
+            <div class="btnselect">
+                <select class="selec">
+                    <option selected>Privacidad</option>
+                    <option >Example1</option>
+                    <option >Example2</option>
+                    <option >Example3</option>
+                </select>
             </div>
 
 
@@ -244,7 +310,7 @@
     <div>
 
 
-        <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search">
+        <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
             <div class="boxpubli">
 
@@ -263,18 +329,11 @@
 
                 posted by <a>{{post.author}}</a> |
 
-
-
                 {{post.comments}}
 
             </div>
 
         </div>
-
-
-
-
-
 
     </div>
 </div>
