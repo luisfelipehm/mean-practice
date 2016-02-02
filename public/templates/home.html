@@ -200,6 +200,51 @@
     {
         color: white;
     }
+    .boxcomentario
+    {
+
+    }
+    .superior
+    {
+        position: relative;
+        border: solid #dddddc;
+        background-color: #dddddc;
+        width: 100%;
+        min-height:6vh;
+        border-radius: 1vw 1vw 0 0;
+    }
+    .inferior
+    {
+        border: solid #cccccb;
+        background-color: #cccccb;
+        width: 100%;
+        height: 8vh;
+        border-radius:0 0 1vw 1vw;
+    }
+    .tittleboxcomentario
+    {
+        position: relative;
+        left: 20%;
+        width: 70%;
+    }
+    .comentariouser
+    {
+        font-size: 1vw;
+        font-family: Arial;
+        font-weight: normal;
+        color: black;
+        margin-left: 3.4%;
+    }
+    .autorcomentario
+    {
+        border: solid darkblue;
+        font-size: 1vw;
+        font-family: Arial;
+        font-weight: bold;
+        color: red;
+        margin-left: 2%;
+    }
+
 
 
 
@@ -280,11 +325,9 @@
 
             <!--button publicar-->
             <div class="btnpubli">
-                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left: 0"> Publicar</button>
+                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left:0"> Publicar</button>
                 <!--<md-button type="submit" class="publi" style="display:none"> Publicar </md-button>-->
             </div>
-
-
 
             <!--button select-->
             <div class="btnselect">
@@ -328,26 +371,35 @@
 
                 posted by <a>{{post.author}}</a> |
 
+                <!--Formulario Comentarios-->
 
-                <form ng-submit="addComment(post._id)">
-                    <md-input-container>
-                        <label>Comentario..</label>
-                        <input type="text" ng-model="bodyc.val" required md-maxlength="100">
-                    </md-input-container>
+                <div style="margin-top: 2vh">
+                    <div class="superior">
+                        <div ng-repeat="comentario in post.comments">
+                            <!--<p class="autorcomentario">{{comentario.author}}</p>-->
+                            <!--<p class="comentariouser" >{{comentario.body}}</p>-->
 
-                    <!--<input type="text" ng-model="bodyc.val">-->
-                </form>
+                            <p class="autorcomentario">
+                                <img class="imgnoti" src="/img/iconouser.jpg">
+                                {{comentario.author}}<br>
+                                <span class="comentariouser"> {{comentario.body}}</span>
+                            </p>
+                            <!--<p>{{comentario.upvotes}}</p>-->
+                        </div>
+                    </div>
 
-
-                <div ng-repeat="comentario in post.comments">
-                        <p>{{comentario.body}}</p>
-                        <p>{{comentario.author}}</p>
-                        <!--<p>{{comentario.upvotes}}</p>-->
-
+                    <div class="inferior" >
+                        <div class="boxcomentario" >
+                            <form ng-submit="addComment(post._id)",>
+                                <md-input-container class="tittleboxcomentario">
+                                    <label>Comentario..</label>
+                                    <input type="text" ng-model="bodyc.val" required md-maxlength="100">
+                                </md-input-container>
+                                <!--<input type="text" ng-model="bodyc.val">-->
+                            </form>
+                        </div>
+                    </div>
                 </div>
-
-
-
 
             </div>
 
