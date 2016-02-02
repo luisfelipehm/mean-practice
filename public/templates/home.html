@@ -328,7 +328,26 @@
 
                 posted by <a>{{post.author}}</a> |
 
-                {{post.comments}}
+
+                <form ng-submit="addComment(post._id)">
+                    <md-input-container>
+                        <label>Comentario..</label>
+                        <input type="text" ng-model="bodyc.val" required md-maxlength="100">
+                    </md-input-container>
+
+                    <!--<input type="text" ng-model="bodyc.val">-->
+                </form>
+
+
+                <div ng-repeat="comentario in post.comments">
+                        <p>{{comentario.body}}</p>
+                        <p>{{comentario.author}}</p>
+                        <!--<p>{{comentario.upvotes}}</p>-->
+
+                </div>
+
+
+
 
             </div>
 
