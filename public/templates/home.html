@@ -200,6 +200,112 @@
     {
         color: white;
     }
+    .boxcomentario
+    {
+
+    }
+    .superior
+    {
+        position: relative;
+        border: solid #ededed;
+        background-color: #ededed;
+        width: 100%;
+        min-height:6vh;
+        border-radius: 1vw 1vw 0 0;
+    }
+    .inferior
+    {
+        border: solid #b2b2b2;
+        background-color: #b2b2b2;
+        width: 100%;
+        height: 8vh;
+        border-radius:0 0 1vw 1vw;
+    }
+    .tittleboxcomentario
+    {
+        position: relative;
+        left: 20%;
+        width: 70%;
+    }
+    .comentariouser
+    {
+        font-size: .6vw;
+        font-family: Arial;
+        font-weight: normal;
+        color: #575756;
+        margin-left:3.4% ;
+        margin-top: 0;
+    }
+   .comentarioautor
+    {
+        margin-left: 3.4%;
+    }
+
+    .autorcomentario
+    {
+        font-size: .9vw;
+        font-family: Arial;
+        font-weight: bold;
+        color: #575756;
+        margin-left: 3%;
+        margin-top: 2%;
+        width: 94%;
+    }
+    .imgusercoment
+    {
+        width: 1.6vw;
+        height: auto;
+        position: absolute;
+    }
+    .imgtxcomentario
+    {
+        position: absolute;
+        width: 1vh;
+        height: auto;
+        right: 1%;
+    }
+    .supcoment
+    {
+        position: relative;
+        top: 1.5vh;
+        left: 1.5vw;
+        width: 15%;
+        font-family: Arial;
+        font-size: .8vw;
+    }
+    .supcoment2
+    {
+        position: absolute;
+        top: 1.5vh;
+        left: 10vw;
+        width: 15%;
+        font-family: Arial;
+        font-size: .8vw;
+    }
+    .imgcoment
+    {
+        width: 2vh;
+        height: auto;
+        float: left;
+        margin-right: .8vw;
+    }
+    .imgmas
+    {
+        width: 1.6vh;
+        height: auto;
+        float: left;
+        margin-right: .8vw;
+    }
+    .lineadivide
+    {
+        position: relative;
+        border-bottom: solid .1vw black;
+        width: 96%;
+        top: 2.8vh;
+        margin-bottom: 5vh;
+        margin-left: 2%;
+    }
+
 
 
 
@@ -280,11 +386,9 @@
 
             <!--button publicar-->
             <div class="btnpubli">
-                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left: 0"> Publicar</button>
+                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left:0"> Publicar</button>
                 <!--<md-button type="submit" class="publi" style="display:none"> Publicar </md-button>-->
             </div>
-
-
 
             <!--button select-->
             <div class="btnselect">
@@ -309,7 +413,6 @@
     <!--Publicación-->
     <div>
 
-
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
             <div class="boxpubli">
@@ -329,26 +432,46 @@
 
                 posted by <a>{{post.author}}</a> |
 
+                <!--Formulario Comentarios-->
 
-                <form ng-submit="addComment(post._id)">
-                    <md-input-container>
-                        <label>Comentario..</label>
-                        <input type="text" ng-model="bodyc.val" required md-maxlength="100">
-                    </md-input-container>
+                <div style="margin-top: 2vh">
 
-                    <!--<input type="text" ng-model="bodyc.val">-->
-                </form>
+                    <div class="superior">
+                        <div class="supcoment">
+                            <img class="imgcoment" src="/img/iconocomen.png">
+                            <span>Comentarios</span>
+                        </div>
+                        <div class="supcoment2">
+                            <img class="imgmas" src="/img/icono-mas.png">
+                            <span>Compartir</span>
+                        </div>
+                        <div class="lineadivide"></div>
+                        <div ng-repeat="comentario in post.comments">
+                            <!--<p class="autorcomentario">{{comentario.author}}</p>-->
+                            <!--<p class="comentariouser" >{{comentario.body}}</p>-->
 
+                            <div class="autorcomentario">
+                                <img class="imgusercoment" src="/img/iconouser.jpg">
+                                <img class="imgtxcomentario" src="/img/iconox.png">
+                                <span class="comentarioautor">{{comentario.author}}</span> <br>
+                                <p class="comentariouser"> {{comentario.body}}</p>
+                            </div>
+                            <!--<p>{{comentario.upvotes}}</p>-->
+                        </div>
+                    </div>
 
-                <div ng-repeat="comentario in post.comments">
-                        <p>{{comentario.body}}</p>
-                        <p>{{comentario.author}}</p>
-                        <!--<p>{{comentario.upvotes}}</p>-->
-
+                    <div class="inferior" >
+                        <div class="boxcomentario" >
+                            <form ng-submit="addComment(post._id)",>
+                                <md-input-container class="tittleboxcomentario">
+                                    <label>Comentario..</label>
+                                    <input type="text" ng-model="bodyc.val" required md-maxlength="200">
+                                </md-input-container>
+                                <!--<input type="text" ng-model="bodyc.val">-->
+                            </form>
+                        </div>
+                    </div>
                 </div>
-
-
-
 
             </div>
 
