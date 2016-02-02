@@ -35,6 +35,23 @@
         left: 22%;
         width: 56%;
     }
+    .enlinea
+    {
+        display: inline-block;
+    }
+    .tab1{ width: 15%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab2{ width: 25%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab3{ width: 30%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab4{ width: 30%;height: 5vh;border: 1px solid #575757;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
+    .last > .tab1{border-bottom: 0}
+    .last > .tab2{border-bottom: 0}
+    .last > .tab3{border-bottom: 0}
+    .last > .tab4{border-bottom: 0}
+    .conthead{width: 100%;max-height: 5vh;vertical-align: top;display: flex}
+    /*#tab11{border-left: 0;border-top: 0}*/
+    /*#tab22{border-top: 0;border-left: 0}*/
+    /*#tab33{border-top: 0;border-left: 0}*/
+    /*#tab44{border-top: 0;border-right: 0}*/
 </style>
 <form name="myForm" ng-submit="CarpenCarp(document._id)">
     <md-input-container>
@@ -81,17 +98,38 @@
 </form>
 
 
-{{document.nombre}}<br>
+{{document.nombre}}
 
-<div ng-repeat="doc in document.carpetas">
-<a href="#/documents/{{doc._id}}">{{doc.nombre}}</a> <br>
-</div>
+
 <br>
-<div ng-repeat="archivo in document.files">
-<a href="{{archivo.adjunto}}">{{archivo.nombre}}</a>
+
+
+<div class="conthead">
+    <div class="enlinea tab1" id="tab11"></div>
+    <div class="enlinea tab2" id="tab22">Nombre</div>
+    <div class="enlinea tab3" id="tab33">Tamaño</div>
+    <div class="enlinea tab4" id="tab44"></div>
+</div>
+
+    <div ng-repeat="doc in document.carpetas" style="display: flex">
+        <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 90%"></div>
+        <div class="enlinea tab2" ><a href="#/documents/{{doc._id}}">{{doc.nombre}}</a></div>
+        <div class="enlinea tab3" > -- </div>
+        <div class="enlinea tab4" ></div>
+
+    </div>
+
+<div ng-repeat="archivo in document.files" style="display: flex" ng-class="{'last':$last}">
+
+<div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%"></div>
+
+    <div class="enlinea tab2"><a href="{{archivo.adjunto}}">{{archivo.nombre}} </a></div>
+    <div class="enlinea tab3">{{archivo.tamano}}</div>
+<div class="enlinea tab4">Eliminar</div>
 
 
 </div>
+
 </div>
 <div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
 <div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
