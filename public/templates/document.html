@@ -73,9 +73,8 @@
     }
     .contac
     {
-        border: solid dodgerblue;
+        margin-top: 1vh;
     }
-
 
     /*icono adjuntar*/
     .container
@@ -103,6 +102,7 @@
     }
     .btnpubli
     {
+        margin-left:9vw;
         width: 5vw;
         height: 3vh;
         border-radius: .2vw;
@@ -129,6 +129,15 @@
     {
         color: white;
     }
+    ul > li
+    {
+        font-size: .8vw;
+    }
+    .md-char-counter
+    {
+        font-size: 1vw;
+    }
+
 
 </style>
 
@@ -138,18 +147,13 @@
 
     <!--Crear Carpetas-->
 
-<form name="myForm" ng-submit="CarpenCarp(document._id)">
-    <md-input-container>
-        <label>Nombre de la Carpeta</label>
-        <input type="text" ng-model="nombre" required md-maxlength="20">
-    </md-input-container>
-    <md-button type="submit"  class="md-raised"> Publicar </md-button>
-</form>
+
 
 
     <!--Seleccionar archicos y publicar-->
 
 
+    <br>
 
 {{document.nombre}}
 
@@ -162,7 +166,7 @@
 
     <div class="contac">
 
-        <div style="display: inline-block; width: 15vw; margin-left: 21vw">
+        <div style="display: inline-block;  width: 15vw; margin-left: 21vw">
 
            <form  enctype="multipart/form-data" name="myForm2" style="margin: 0" ng-submit="uploadPic(picFile)">
 
@@ -178,15 +182,22 @@
                 <p style="margin: 0; font-size: 1vw">Files:</p>
 
                 <ul>
-                    <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-                      <span class="progress" ng-show="f.progress >= 0">
-                        <div style="width:{{f.progress}}%"
-                             ng-bind="f.progress + '%'"></div>
-                      </span>
-                    </li>
-                    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                    </li>
+
+                        <li ng-repeat="f in picFile" style="font:smaller">
+                            <div style="border: solid darkcyan; width: 7.5vw;height: 12vh;margin-bottom: 1vh">
+                                {{f.name}} {{f.$errorParam}}
+                            </div>
+                          <span class="progress" ng-show="f.progress >= 0">
+                            <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
+                          </span>
+                        </li>
+
+
+                            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                            </li>
+
                 </ul>
+
 
                 {{errorMsg}}
 
@@ -230,13 +241,17 @@
 
 
 
-        <div style="display: inline-block; border: solid slateblue;width: 18vw; vertical-align: top;">
-            <form name="myForm" ng-submit="CarpenCarp(document._id)">
-                <md-input-container>
+        <div style="display: inline-block;width: 15vw;margin: 0; vertical-align: top;">
+            <form name="myForm" style="margin: 0" ng-submit="CarpenCarp(document._id)">
+                <md-input-container style="font-size: 1vw; width: 10vw">
                     <label>Nombre de la Carpeta</label>
                     <input type="text" ng-model="nombre" required md-maxlength="20">
                 </md-input-container>
-                <md-button type="submit"  class="md-raised"> Publicar </md-button>
+
+                <div class="btnpubli">
+                    <button id="blanco" style="width: 5vw; height: 3vh; border: 0; top:-1vh; left:0"> Publicar</button>
+                </div>
+
             </form>
         </div>
 
