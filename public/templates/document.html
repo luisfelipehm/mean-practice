@@ -36,9 +36,9 @@
         display: inline-block;
     }
     .tab1{ width: 15%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
-    .tab2{ width: 25%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
-    .tab3{ width: 30%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
-    .tab4{ width: 30%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
+    .tab2{ width: 60%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab3{ width: 15%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-left: 0;border-top: 0}
+    .tab4{ width: 10%;height: 5vh;border: .1vw solid #575757;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
     .last > .tab1{border-bottom: 0}
     .last > .tab2{border-bottom: 0}
     .last > .tab3{border-bottom: 0}
@@ -60,6 +60,76 @@
         font-family: Arial;
         font-size: 1vw;
     }
+    .iconodocument
+    {
+        margin-left: 35%;
+    }
+    .boxnewdocument
+    {
+        position: relative;
+        width: 30vw;
+        height: auto;
+        left: 48%;
+    }
+    .contac
+    {
+        border: solid dodgerblue;
+    }
+
+
+    /*icono adjuntar*/
+    .container
+    {
+        width: 2vw;
+        height: 4vh;
+    }
+    .select-wrapper
+    {
+        background: url(img/iconoadju.png) no-repeat;
+        background-size:contain;
+        display: block;
+        position: relative;
+        width: 4vw;
+        height: 3vh;
+        left: 13vw;
+    }
+    #image_src
+    {
+        width: 26px;
+        height: 26px;
+        margin-right: 100px;
+        opacity: 0;
+        filter: alpha(opacity=0); /* IE 5-7 */
+    }
+    .btnpubli
+    {
+        width: 5vw;
+        height: 3vh;
+        border-radius: .2vw;
+        box-sizing: border-box;
+        transition:all 1s cubic-bezier(.25,.8,.25,1) ;
+        background-color: white;
+        cursor: pointer;
+        text-align: center;
+        font-size: 1vw;
+        margin-bottom: 1vh;
+    }
+    .btnpubli:hover
+    {
+        background-color: #E30613;
+    }
+    button
+    {
+        color: grey;
+        background-color: transparent;
+        -webkit-appearance: none;
+        padding: 0;
+    }
+    #blanco:hover
+    {
+        color: white;
+    }
+
 </style>
 
 
@@ -67,6 +137,7 @@
 
 
     <!--Crear Carpetas-->
+
 <form name="myForm" ng-submit="CarpenCarp(document._id)">
     <md-input-container>
         <label>Nombre de la Carpeta</label>
@@ -76,40 +147,106 @@
 </form>
 
 
-    <!--Seleccionar imagenes y publicar-->
-<form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+    <!--Seleccionar archicos y publicar-->
 
-    <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
-
-    <br>
-
-    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
-
-    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
-
-    <br>
-    Files:
-    <ul>
-        <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-      <span class="progress" ng-show="f.progress >= 0">
-        <div style="width:{{f.progress}}%"
-             ng-bind="f.progress + '%'"></div>
-      </span>
-        </li>
-        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-        </li>
-    </ul>
-    {{errorMsg}}
-
-    <md-button type="submit"  class="md-raised"> Publicar </md-button>
-</form>
 
 
 {{document.nombre}}
 
 
-<br>
+    <div class="boxnewdocument">
+       <img src="img/icono-documento-n.png"style="height: 5%;  margin-left: 4%">
+       <img src="img/icono-carpeta-n.png"style="height: 5%;  margin-left: 4%">
+    </div>
 
+
+    <div class="contac">
+
+        <div style="display: inline-block; width: 15vw; margin-left: 21vw">
+
+           <form  enctype="multipart/form-data" name="myForm2" style="margin: 0" ng-submit="uploadPic(picFile)">
+
+            <div class="container">
+                <span class="select-wrapper">
+                  <input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+                </span>
+            </div>
+
+                <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+                <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+                <p style="margin: 0; font-size: 1vw">Files:</p>
+
+                <ul>
+                    <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                      <span class="progress" ng-show="f.progress >= 0">
+                        <div style="width:{{f.progress}}%"
+                             ng-bind="f.progress + '%'"></div>
+                      </span>
+                    </li>
+                    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                    </li>
+                </ul>
+
+                {{errorMsg}}
+
+                <!--<md-button type="submit"  class="md-raised"> Publicar </md-button>-->
+
+               <div class="btnpubli">
+                   <button id="blanco" style="width: 5vw; height: 3vh; border: 0; top:-1vh; left:0"> Publicar</button>
+               </div>
+
+           </form>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="display: inline-block; border: solid slateblue;width: 18vw; vertical-align: top;">
+            <form name="myForm" ng-submit="CarpenCarp(document._id)">
+                <md-input-container>
+                    <label>Nombre de la Carpeta</label>
+                    <input type="text" ng-model="nombre" required md-maxlength="20">
+                </md-input-container>
+                <md-button type="submit"  class="md-raised"> Publicar </md-button>
+            </form>
+        </div>
+
+    </div>
+
+
+
+    <br>
+
+    <!--Titulo de la tabla-->
     <div class="conthead">
         <div class="enlinea tab1" id="tab11"></div>
         <div class="enlinea tab2" id="tab22"> <p>Nombre</p></div>
@@ -118,19 +255,25 @@
     </div>
 
     <div ng-repeat="doc in document.carpetas" style="display:flex">
-        <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 10%"></div>
-        <div class="enlinea tab2" ><a href="#/documents/{{doc._id}}">{{doc.nombre}}</a></div>
-        <div class="enlinea tab3" > -- </div>
+        <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 85%;margin-top: 2%; margin-left: 35%"></div>
+        <div class="enlinea tab2" ><p class="mi"><a href="#/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
+        <div class="enlinea tab3" ><p class="mi"> -- </p></div>
         <div class="enlinea tab4" ></div>
     </div>
 
     <!--info de los documentos y carpetas-->
     <div ng-repeat="archivo in document.files" style="display: flex;" ng-class="{'last':$last}">
 
-    <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%"></div>
+    <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%; margin-top: 1%; margin-left: 38%"></div>
         <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}">{{archivo.nombre}}</a></p></div>
         <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
-    <div class="enlinea tab4"><p class="mi">Eliminar</p></div>
+    <div class="enlinea tab4">
+        <p class="mi">
+            <img src="img/icono-editar.png"style="height: 2vh;margin-left: .7vw">
+            <img src="img/iconox.png"style="height: 2vh;margin-left: .2vw">
+        </p>
+
+    </div>
 
 
     </div>
