@@ -47,6 +47,8 @@ app.factory('posts', ['$http','auth',function($http,auth){
 
     return o;
 }]);
+
+
 app.factory('documents', ['$http','auth',function($http,auth){
     var o = {
         documents:[]
@@ -79,6 +81,35 @@ app.factory('documents', ['$http','auth',function($http,auth){
 
     return o;
 }]);
+
+app.factory('fotos', ['$http','auth',function($http,auth){
+    var o = {
+        fotos:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/fotos').success(function(data){
+            angular.copy(data, o.fotos);
+        });
+    };
+    o.create = function(fotos) {
+
+        return $http.post('/fotos', fotos, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.fotos.push(data);
+        });
+    };
+
+    o.get = function(id) {
+        return $http.get('/fotos/' + id).then(function(res){
+            return res.data;
+        });
+    };
+
+    return o;
+}]);
+
 app.factory('auth', ['$http', '$window', function($http, $window){
     var auth = {};
     auth.saveToken = function (token){
@@ -160,16 +191,7 @@ app.config([
                 //    }
                 //}]
             })
-            .state('documents', {
-                url: '/documents/{id}',
-                templateUrl: 'templates/document.html',
-                controller: 'DocumentCtrl',
-                resolve: {
-                    document: ['$stateParams', 'documents', function($stateParams, documents) {
-                        return documents.get($stateParams.id);
-                    }]}
-
-            }).state('login', {
+            .state('login', {
                 url: '/login',
                 templateUrl: 'templates/login.html',
                 controller: 'AuthCtrl as usuario',
@@ -188,6 +210,42 @@ app.config([
                         $state.go('home');
                     }
                 }]
+            })
+            .state('fotox', {
+                url: '/fotos',
+                templateUrl: 'templates/fotos.html',
+                controller: 'FotosCtrl',
+                resolve: {
+                    postPromise: ['fotos', function(fotos){
+                        return fotos.getAll();
+                    }]
+                }
+            })
+            .state('fotos', {
+                url: '/fotos/{id}',
+                templateUrl: 'templates/album.html',
+                controller: 'FotoCtrl',
+                resolve: {
+                    foto: ['$stateParams', 'fotos', function($stateParams, fotos) {
+                        return fotos.get($stateParams.id);
+                    }]}
+
+            })
+            .state('documents', {
+                url: '/documents/{id}',
+                templateUrl: 'templates/document.html',
+                controller: 'DocumentCtrl',
+                resolve: {
+                    document: ['$stateParams', 'documents', function($stateParams, documents) {
+                        return documents.get($stateParams.id);
+                    }]}
+
+            })
+            .state('calendar', {
+                url: '/calendar',
+                templateUrl: 'templates/calendar.html',
+                controller: 'CalendarCtrl',
+
             })
 
         //    .state('document', {
@@ -245,7 +303,6 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
             nombre: $scope.nombre,
             padre: $scope.id
         }).success(function(doc) {
-            console.log(doc);
             $scope.document.carpetas.push(doc);
         });
         $scope.nombre = '';
@@ -266,7 +323,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
             });
 
             file.upload.then(function (response) {
-                console.log("Postcontroller: upload then ");
+
                 $timeout(function () {
                     file.result = response.data;
                 });
@@ -291,24 +348,76 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
 
         });
 
+    };
+}]);
+
+app.controller('CalendarCtrl',['$scope', function ($scope) {
+    $scope.hola = 'Hello World';
+}]);
+app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,Upload,$timeout,$http, fotos,foto,auth){
+
+    $scope.foto = foto;
+    $scope.isLoggedIn = auth.isLoggedIn;
+
+    $scope.uploadPic = function(files) {
 
 
 
+        angular.forEach(files, function(file) {
+            console.log(file);
+            file.upload = Upload.upload({
+                url: '/fotos/'+ $scope.foto._id + '/files',
+
+                data:{id: $scope.foto._id,file:file,nombre: file.name},
+
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+            });
+
+            file.upload.then(function (response) {
+
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 *
+                    evt.loaded / evt.total));
+            });
+            file.upload.progress(function (evt) {
+                // Math.min is to fix IE which reports 200% sometimes
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                console.log("PostController: upload progress " + file.progress);
+            });
+            file.upload.success(function (data, status, headers, config) {
+                $scope.picFile = '';
+                fotos.get($scope.foto._id);
+
+            });
 
 
-
-
-
+        });
 
     };
-
-
-
-
 }]);
 
 
+app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function ($scope,fotos,Upload,$http,auth) {
+    $scope.hola = "Hello World";
 
+    $scope.fotos = fotos.fotos;
+
+    $scope.crearAlbum = function(){
+        if(!$scope.nombre || $scope.nombre === '') { return; }
+        fotos.create({
+            nombre: $scope.nombre
+        });
+        $scope.nombre = '';
+        fotos.getAll();
+    };
+
+}]);
 
 app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', function ($scope,Upload,posts,auth,$timeout,$http) {
 

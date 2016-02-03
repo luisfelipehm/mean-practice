@@ -1,0 +1,36 @@
+<style>
+    .content
+    {
+        position: absolute;
+        top: 6.5vh;
+        left: 22%;
+        width: 56%;
+    }
+</style>
+<barranav></barranav>
+<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
+<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
+
+
+<div class="content">
+{{hola}}
+
+
+
+
+    <form name="myForm" ng-submit="crearAlbum()">
+        <md-input-container>
+            <label>Nombre del Album</label>
+            <input type="text" ng-model="nombre" required md-maxlength="20">
+        </md-input-container>
+        <md-button type="submit"  class="md-raised"> Publicar </md-button>
+
+
+    </form>
+
+
+    <div ng-repeat="album in fotos">
+
+        <a href="#/fotos/{{album._id}}">{{album.nombre}}</a>
+    </div>
+</div>

@@ -3,8 +3,11 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var mongoose = require('mongoose');
+var moment = require('moment');
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
+var Foto = mongoose.model('Foto');
+var Fotosfile = mongoose.model('Fotosfile');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
 var Folder = mongoose.model('Folder');
@@ -21,25 +24,6 @@ router.get('/posts', function(req, res, next) {
 });
 
 
-
-
-router.post('/documents/:document/documents',auth, function(req, res, next) {
-  var comment = new Folder(req.body);
-  comment.padre = req.document._id;
-  comment.author = req.payload.username;
-
-  comment.save(function(err, comment){
-    if(err){ return next(err); }
-
-    req.document.carpetas.push(comment);
-    req.document.save(function(err, document) {
-      if(err){ return next(err); }
-
-      res.json(req.body);
-    });
-  });
-});
-
 router.get('/documents', function(req, res, next) {
 
   Folder.find(function(err, documents){
@@ -48,6 +32,32 @@ router.get('/documents', function(req, res, next) {
   });
 
 });
+
+router.get('/fotos', function(req, res, next) {
+
+  Foto.find(function(err, fotos){
+    if(err){ return next(err); }
+    res.json(fotos);
+  });
+
+});
+
+router.post('/fotos',auth, function(req, res, next) {
+  var foto = new Foto(req.body);
+  foto.author = req.payload.username;
+  foto.save(function(err, post){
+    if(err){ return next(err); }
+    res.json(foto);
+  });
+});
+
+
+
+
+
+
+
+
 router.post('/documents',auth, function(req, res, next) {
   var document = new Folder(req.body);
   document.author = req.payload.username;
@@ -65,6 +75,22 @@ router.get('/posts/:post', function(req, res, next) {
     res.json(post);
   });
 });
+
+
+
+router.param('foto', function(req, res, next, id) {
+  var query = Foto.findById(id);
+
+  query.exec(function (err, foto){
+    if (err) { return next(err); }
+    if (!foto) { return next(new Error('can\'t find post')); }
+
+    req.foto = foto;
+    return next();
+  });
+});
+
+
 router.param('document', function(req, res, next, id) {
   var query = Folder.findById(id);
 
@@ -77,9 +103,18 @@ router.param('document', function(req, res, next, id) {
   });
 });
 
+router.get('/fotos/:foto', function(req, res, next) {
+console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+  req.foto.populate('files').populate('adjunto','nombre', function(err, foto) {
+    if (err) { return next(err);   }
+
+
+    res.json(foto);
+  });
+});
+
 router.get('/documents/:document', function(req, res, next) {
-
-
+  console.log(req.document);
   req.document.populate('files').populate('carpetas','nombre', function(err, document) {
     if (err) { return next(err);   }
 
@@ -103,6 +138,27 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 
+router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res, next) {
+
+
+  var file = new Fotosfile();
+  file.nombre = req.body.nombre;
+  file.filename = req.body.nombre;
+  file.adjunto = '/uploads2/'+req.file.filename;
+  file.save(function(err, files){
+    if(err){ return next(err); }
+
+    req.foto.files.push(file);
+    req.foto.save(function(err, document) {
+      if(err){ return next(err); }
+
+      res.json(req.body);
+    });
+
+  });
+});
+
+
 router.post('/documents/:document/documents',auth, function(req, res, next) {
   var comment = new Folder(req.body);
   comment.padre = req.document._id;
@@ -119,6 +175,10 @@ router.post('/documents/:document/documents',auth, function(req, res, next) {
     });
   });
 });
+
+
+
+
 function getReadableFileSizeString(fileSizeInBytes) {
 
   var i = -1;
@@ -152,12 +212,6 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
       });
 
     });
-
-
-
-
-
-
 });
 
 router.post('/posts',auth, upload.single('file'), function(req, res, next) {
