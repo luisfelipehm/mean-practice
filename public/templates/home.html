@@ -96,7 +96,6 @@
     .contenedorpubli
     {
         position: relative;
-        border: solid red;
         margin-bottom: 5vh;
     }
     .imguser
@@ -132,7 +131,8 @@
         width: 2vw;
         height: 4vh;
     }
-    .select-wrapper {
+    .select-wrapper
+    {
         background: url(img/iconoadju.png) no-repeat;
         background-size:contain;
         display: block;
@@ -140,7 +140,8 @@
         width: 4vw;
         height: 3vh;
     }
-    #image_src {
+    #image_src
+    {
         width: 26px;
         height: 26px;
         margin-right: 100px;
@@ -193,8 +194,10 @@
     }
     button
     {
+        color: grey;
         background-color: transparent;
         -webkit-appearance: none;
+        padding: 0;
     }
     #blanco:hover
     {
@@ -256,6 +259,13 @@
         width: 1.6vw;
         height: auto;
         position: absolute;
+    }
+    .imgusercoment2
+    {
+        width: 2.9vw;
+        height: auto;
+        position: absolute;
+        left: 5vw;
     }
     .imgtxcomentario
     {
@@ -365,8 +375,6 @@
                 </span>
             </div>
 
-
-
             <br>
 
             <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
@@ -461,7 +469,8 @@
                     </div>
 
                     <div class="inferior" >
-                        <div class="boxcomentario" >
+                        <div class="boxcomentario">
+                            <img class="imgusercoment2" src="/img/iconouser.jpg">
                             <form ng-submit="addComment(post._id)",>
                                 <md-input-container class="tittleboxcomentario">
                                     <label>Comentario..</label>
