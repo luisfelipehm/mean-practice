@@ -1,4 +1,4 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar']);
 
 
 app.directive('barranav', function() {
@@ -353,6 +353,20 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
 
 app.controller('CalendarCtrl',['$scope', function ($scope) {
     $scope.hola = 'Hello World';
+    $scope.uiConfig = {
+        calendar:{
+            height: 450,
+            editable: true,
+            header:{
+                left: 'month basicWeek basicDay agendaWeek agendaDay',
+                center: 'title',
+                right: 'today prev,next'
+            },
+            dayClick: $scope.alertEventOnClick,
+            eventDrop: $scope.alertOnDrop,
+            eventResize: $scope.alertOnResize
+        }
+    };
 }]);
 app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,Upload,$timeout,$http, fotos,foto,auth){
 
