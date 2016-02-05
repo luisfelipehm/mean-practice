@@ -7,6 +7,18 @@ app.directive('barranav', function() {
         templateUrl: '/templates/_barra.html'
     };
 });
+app.directive('barrader', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_barraderecha.html'
+    };
+});
+app.directive('barraizq', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_barraizquierda.html'
+    };
+});
 
 app.factory('posts', ['$http','auth',function($http,auth){
     var o = {
@@ -353,6 +365,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
 
 app.controller('CalendarCtrl',['$scope', function ($scope) {
     $scope.hola = 'Hello World';
+    $scope.eventSources = [];
     $scope.uiConfig = {
         calendar:{
             height: 450,
@@ -361,6 +374,35 @@ app.controller('CalendarCtrl',['$scope', function ($scope) {
                 left: 'month basicWeek basicDay agendaWeek agendaDay',
                 center: 'title',
                 right: 'today prev,next'
+            },
+            dayClick: $scope.alertEventOnClick,
+            eventDrop: $scope.alertOnDrop,
+            eventResize: $scope.alertOnResize
+        }
+    };
+}]);
+app.controller('CalendarbarCtrl',['$scope', function ($scope) {
+    $scope.hola = 'Hello World';
+    $scope.eventSource = [];
+    $scope.uiConfi = {
+        calendar:{
+            height: 450,
+            editable: true,
+            header:{
+                left: '',
+                center: '',
+                right: '',
+                border: 'none'
+            },
+            firstDay: 1,
+            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miercoles','Jueves', 'Viernes', 'Sabado'],
+            dayNamesShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+            buttonText: {
+                today: 'Hoy',
+                week: 'Semana',
+                day: 'Dia'
             },
             dayClick: $scope.alertEventOnClick,
             eventDrop: $scope.alertOnDrop,

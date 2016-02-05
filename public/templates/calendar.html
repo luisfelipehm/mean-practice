@@ -1,3 +1,16 @@
-{{hola}}
+<style>
+    .calendarcontainer
+    {
+        position: absolute;
+        top: 32vh;
+        width: 90%;
+        left: 5%;
+    }
+</style>
+<div ng-controller="CalendarbarCtrl">
 
+    <div class="calendarcontainer">
 <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+
+</div>
+</div>
