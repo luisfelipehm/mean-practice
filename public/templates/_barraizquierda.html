@@ -1,0 +1,197 @@
+<style>
+
+    .fc-basic-view .fc-body .fc-row {
+        min-height: 1vh !important;
+    }
+    #calendar2 .fc-widget-header{
+        font-family: Openlight, arial, sans-serif;
+        background-color: transparent;
+        height: 30px;
+        color: white;
+        font-size: 2.2vh;
+        padding-top: 1%;
+        border:0;
+    }
+    table
+    {
+        border: 1px transparent;
+    }
+    #calendar2 .fc-head
+    {
+        border: 0;
+    }
+    #calendar2  .fc-widget-content{
+        border: none;
+    }
+    #calendar2  .fc-center{
+        color: #01539c;
+        font-size: 5px;
+
+    }
+    #calendar2 .fc-today{
+        color: white;
+        background-color: #01539c;
+        /*background: url('http://localhost:3000/assets/icono-calendario-d-28122440dd50b54b10baf83c2ad129800d735f747b8b73a58aa05ce0a59fede4.png') no-repeat;*/
+        background-size: 3vh;
+        background-position:100% 100%;
+    }
+    #calendar2 .fc button .fc-icon{
+        position: relative;
+        top: -0.05em; /* seems to be a good adjustment across browsers */
+        left: -5em;
+        vertical-align: middle;
+    }
+
+    #calendar2 h2{
+        margin-top: 15%;
+        font-size: 25px;
+    }
+    #calendar2 .fc-button-group{
+        margin-top: -12%;
+    }
+
+    #calendar2   td.fc-day-number
+    {
+        font-size: 2.8vh;
+        text-align: center;
+        vertical-align: bottom;
+        font-family: Museo, arial, sans-serif;
+        padding-top: 1vh;
+
+    }
+    #calendar2 .fc-content-skeleton
+    {
+        margin-top: 1.5vh; !important
+    }
+    #calendar2 .fc-body
+    {
+    border: 0;
+        background-color: #;
+    }
+
+    .superiorcalendar
+    {
+        top: 5.7vh;
+        left: 6%;
+        width: 88%;
+        height: 32vh;
+        color: white;
+        background-image: url("/img/calendario_fondo.png");
+        background-size:100% ;
+
+    }
+    .calendarcontainer
+    {
+        position: absolute;
+        top: 32vh;
+        width: 90%;
+        left: 5%;
+    }
+    .fc-scroller {
+        overflow-y: hidden !important;
+    }
+    .siguiente
+    {
+        height: 1px;
+        width: 1px;
+        border: 15px solid transparent;
+        border-left: 20px solid #f39200;
+        cursor: pointer ;
+        position: absolute;
+        top: 40%;
+        right: 1%;
+    }
+    .anterior
+    {
+        height: 1px;
+        width: 1px;
+        border: 15px solid transparent;
+        border-right: 20px solid #f39200;
+        cursor: pointer ;
+        position: absolute;
+        top: 40%;
+        left: 1%;
+    }
+    #calendar2 .fc-row
+    {
+        height: 3.5vh !important;
+    }
+
+    .diacalendar
+    {
+        font-size: 3vh;
+        top: 6%;
+        left: 40%;
+        margin: 0;
+    }
+    .dianumcalendar
+    {
+        margin: 0;
+        font-size: 18vh;
+        left: 40%;
+        top: 10%;
+
+    }
+    .mescalendar
+    {
+        font-size: 3vh;
+        left: 40%;
+        top: 75%;
+        margin: 0;
+    }
+    .fc-other-month
+    {
+        color: transparent;
+    }
+    .ab
+    {
+        position: absolute;
+    }
+</style>
+<div style="position: absolute; height:50vh; width: 22%; top: 6.5vh; left: 0">
+    <div class="superiorcalendar ab">
+        <p class="diacalendar ab"></p>
+        <p class="dianumcalendar ab"></p>
+        <p class="mescalendar ab"></p>
+        <div class="siguiente"></div>
+        <div class="anterior"></div>
+    </div>
+
+
+<div ng-controller="CalendarbarCtrl" class="calendarcontainer">
+    <div ui-calendar="uiConfi.calendar" ng-model="eventSource" id="calendar2"></div>
+</div>
+</div>
+
+<script>
+    function calcularleft(element){
+        var mid = element.outerWidth()/2;
+        var pare = element.parent().outerWidth()/2;
+        var total = pare-mid;
+        var cien = pare*2;
+        var last = total*100/cien;
+        return last;
+    }
+    $('table.calendar2 > tbody > tr > td:nth-child(-n+2)').addClass('weekend');
+
+    $('.fc-row').click(function () {
+        $alert('hola');
+    });
+    $('.fc-scroller').css('height','32vh');
+
+
+    $('.siguiente').click(function(){
+        $('#calendar2').fullCalendar('next');
+
+
+
+    });
+    $('.anterior').click(function(){
+        $('#calendar2').fullCalendar('prev');
+
+    });
+
+    $('.diacalendar').html(moment().format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
+    $('.dianumcalendar').html(moment().format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
+    $('.mescalendar').html(moment().format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
+</script>
