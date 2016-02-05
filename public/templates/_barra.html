@@ -26,7 +26,7 @@
         position: absolute;
         font-family: Arial;
         font-size: 2.5vh;
-        right: 20.5%;
+        right: 20%;
         top: 1.5vh;
         margin: 0;
     }
@@ -80,25 +80,36 @@
     .line
     {
         position: absolute;
-        font-family: Arial;
-        font-size: 2.5vh;
         right: 8%;
-        color: white;
+        background-color: white;
         top: 1.5vh;
         margin: 0;
         text-align: right;
-        width: 10vw;
+        width: .1vw;
+        height: 3vh;
+    }
+    .line2
+    {
+        position: absolute;
+        right: 24.3%;
+        background-color: white;
+        top: 1.5vh;
+        margin: 0;
+        text-align: right;
+        width: .1vw;
+        height: 3vh;
     }
     .notifica
     {
         position: fixed;
-        border: solid red;
+        border: solid #E30613 .2vw;
         width: 15vw;
-        height: 12vh;
+        height: 19vh;
         right: 21.8vw;
         top: 8vh;
         z-index: 1;
         background: white;
+        display: none;
     }
     .notitittle
     {
@@ -111,7 +122,7 @@
     {
         font-family: Arial;
         font-size: 1.2vw;
-        color: red;
+        color: #E30613;
         margin: 0;
     }
     .lineh
@@ -119,22 +130,22 @@
         position: absolute;
         border: solid #a1a1a1 .1vw;
         width: 10vw;
-        top: 5vh;
         left: 1vw;
+        top: 5.5vh;
     }
     .listnoti
     {
-        position: absolute;
+        position: relative;
         width: 12vw;
         left: 1.5vw;
-        top: 6vh;
+        top: 1vh;
     }
     .event
     {
         margin: 0;
         font-size: .8vw;
         font-family: Arial;
-        color: red;
+        color: #575756;
     }
     .eventhour
     {
@@ -147,6 +158,7 @@
     }
     .circulo
     {
+        color: #E30613;
         margin-right:.6vw;
         font-size: .8vw;
     }
@@ -154,29 +166,44 @@
     .arrow-up
     {
         position: fixed;
-        top: 6.7vh;
-        right: 22.1vw;
-        width: 0;
-        height: 0vh;
-        border-left: .5vw solid transparent;
-        border-right: .5vw solid transparent;
-        border-bottom: 1.6vh solid red;
+        top: 7.1vh;
+        right: 22.5vw;
+        height: 1.5vh;
+        width: 1.5vh;
+        border-left: solid #E30613 .2vw;
+        border-top: solid #E30613 .2vw;
         z-index: 1;
+        transform: rotate(45deg);
+        display: none;
+        background-color:white ;
+
+    }
+    .boxinter
+    {
+        position: absolute;
+        left: 1vw;
+        top: 30%;
+        width: 85%;
+        overflow: hidden;
+        overflow-y: scroll;
+        height: 12vh;
     }
 
 </style>
 
+
+
 <div class="barrasup">
     <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
         <div>
-            <p class="username" ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }} | </a></p>
+            <p class="username" ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }} <div class="line2"></div> </a></p>
             <!--<p ng-show="nav.isLoggedIn()"><a href="" ng-click="nav.logOut()">Cerrar Sesion</a></p>
             <p ng-hide="nav.isLoggedIn()"><a href="/#/login">Log In</a></p>
             <p ng-hide="nav.isLoggedIn()"><a href="/#/register">Register</a></p>-->
             <p class="inicio"><a style="color: white" ui-sref="home">Inicio</a></p>
             <p class="boxnoti"><img class="imgnoti" src="/img/icononoti.png"></p>
             <p class="boxinb"><img class="imginb" src="/img/iconoinb.png"></p>
-            <p class="line">|</p>
+            <div class="line"></div>
             <p class="boxconfig"><img class="imgconfig" src="/img/iconoconfigurar.png"></p>
             <!--notificaciones-->
         </div>
@@ -184,17 +211,82 @@
 </div>
 
 
-<!--&lt;!&ndash;Cuadro Notificaciones&ndash;&gt;-->
-<!--<div class="notifica">-->
-    <!--<div class="notitittle">-->
-        <!--<p class="notitxt">Notificaciones</p>-->
-    <!--</div>-->
-    <!--<div class="lineh"></div>-->
-    <!--<div class="listnoti">-->
-        <!--<p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación</p>-->
-        <!--<p class="eventhour">06:00AM - 01:00PM </p>-->
-    <!--</div>-->
-<!--</div>-->
-<!--&lt;!&ndash;Triangulo Notificaciones&ndash;&gt;-->
+<!--Cuadro Notificaciones-->
+<div class="notifica ">
+    <div class="notitittle ">
+        <p class="notitxt">Notificaciones</p>
+    </div>
+    <div class="lineh"></div>
+    <div class="boxinter " >
 
-<!--<div class="arrow-up"></div>-->
+        <div class="listnoti">
+            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación</p>
+            <p class="eventhour">06:00AM - 01:00PM </p>
+        </div>
+        <div class="listnoti">
+            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación a</p>
+            <p class="eventhour">06:00AM - 01:00PM </p>
+        </div>
+        <div class="listnoti">
+            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación s</p>
+            <p class="eventhour">06:00AM - 01:00PM </p>
+        </div>
+        <div class="listnoti">
+            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación d</p>
+            <p class="eventhour">06:00AM - 01:00PM </p>
+        </div>
+        <div class="listnoti">
+            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación d</p>
+            <p class="eventhour">06:00AM - 01:00PM </p>
+        </div>
+    </div>
+</div>
+
+<!--Triangulo Notificaciones-->
+
+<div class="arrow-up"></div>
+
+<script>
+    $(".boxnoti").click(function(){
+        $( ".notifica" ).toggle("slow");
+        $( ".arrow-up" ).toggle("slow");
+    });
+</script>
+
+
+
+
+    <script>
+        $(document).ready(function(){
+            $('.mainMenu').children('li').on('click', function() {
+                $(this).children('ul').slideToggle('slow');
+
+            });
+        });
+    </script>
+
+    <style>
+
+        .boxinter::-webkit-scrollbar
+        {
+            width: 0.5vw;
+            position: absolute;
+            left: 18vw;
+
+        }
+
+        .boxinter::-webkit-scrollbar-track
+        {
+            background: rgba(151, 151, 150, 0.34);
+            border-radius: 5px;
+        }
+
+        .boxinter::-webkit-scrollbar-thumb{
+
+            background:#E30613;
+            border-radius: 5px;
+
+        }
+
+
+    </style>

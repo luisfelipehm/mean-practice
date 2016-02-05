@@ -566,6 +566,7 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
         posts.upvote(post)
     };
 }]);
+
 app.controller('AuthCtrl', [
     '$state',
     'auth',

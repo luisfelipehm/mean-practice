@@ -73,9 +73,9 @@
     }
     .contac
     {
-        border: solid dodgerblue;
+        position: relative;
+        margin-top: 1vh;
     }
-
 
     /*icono adjuntar*/
     .container
@@ -103,6 +103,7 @@
     }
     .btnpubli
     {
+        margin-left:9vw;
         width: 5vw;
         height: 3vh;
         border-radius: .2vw;
@@ -129,40 +130,45 @@
     {
         color: white;
     }
+    ul > li
+    {
+        font-size: .8vw;
+    }
+    .formudoc
+    {
+        width: 15vw;
+        width: auto;
+        display: none;
+
+    }
+    .formucar
+    {
+        position:relative;
+        width: auto;
+        display: none;
+    }
+
 
 </style>
 
 
 <div class="content">
 
-
-    <!--Crear Carpetas-->
-
-<form name="myForm" ng-submit="CarpenCarp(document._id)">
-    <md-input-container>
-        <label>Nombre de la Carpeta</label>
-        <input type="text" ng-model="nombre" required md-maxlength="20">
-    </md-input-container>
-    <md-button type="submit"  class="md-raised"> Publicar </md-button>
-</form>
-
-
-    <!--Seleccionar archicos y publicar-->
-
-
+    <br>
 
 {{document.nombre}}
 
 
+    <!--button new document and folder-->
     <div class="boxnewdocument">
-       <img src="img/icono-documento-n.png"style="height: 5%;  margin-left: 4%">
-       <img src="img/icono-carpeta-n.png"style="height: 5%;  margin-left: 4%">
+       <img src="img/icono-documento-n.png" id="btn1" style="height: 5%;  margin-left: 4%">
+       <img src="img/icono-carpeta-n.png"id="btn2"style="position: absolute;width: 12vw;height: 5vh; left: 16vw; ">
     </div>
-
 
     <div class="contac">
 
-        <div style="display: inline-block; width: 15vw; margin-left: 21vw">
+        <!--Seleccionar archicos y publicar-->
+        <div class="formudoc">
 
            <form  enctype="multipart/form-data" name="myForm2" style="margin: 0" ng-submit="uploadPic(picFile)">
 
@@ -177,23 +183,27 @@
 
                 <p style="margin: 0; font-size: 1vw">Files:</p>
 
-                <ul>
-                    <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-                      <span class="progress" ng-show="f.progress >= 0">
-                        <div style="width:{{f.progress}}%"
-                             ng-bind="f.progress + '%'"></div>
-                      </span>
-                    </li>
-                    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                    </li>
-                </ul>
+
+                        <div ng-repeat="f in picFile" style="font:smaller; display:inline-block;margin-left: 1vw; margin-top: 1vh ">
+                            <div style="border: solid darkcyan; width: 7.5vw;height: 12vh;margin-bottom: 1vh">
+                                {{f.name}} {{f.$errorParam}}
+                            </div>
+                          <span class="progress" ng-show="f.progress >= 0">
+                            <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
+                          </span>
+                        </div>
+
+
+                            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                            </li>
+
 
                 {{errorMsg}}
 
                 <!--<md-button type="submit"  class="md-raised"> Publicar </md-button>-->
 
-               <div class="btnpubli">
-                   <button id="blanco" style="width: 5vw; height: 3vh; border: 0; top:-1vh; left:0"> Publicar</button>
+               <div class="btnpubli" style="margin-left: 90%">
+                   <button id="blanco" style="width: 5vw; height: 3vh; border: 0;  left:0"> Publicar</button>
                </div>
 
            </form>
@@ -202,41 +212,21 @@
         </div>
 
 
+        <!--Crear Carpetas-->
 
+        <div class="formucar">
+            <form name="myForm" style="margin: 0" ng-submit="CarpenCarp(document._id)">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div style="display: inline-block; border: solid slateblue;width: 18vw; vertical-align: top;">
-            <form name="myForm" ng-submit="CarpenCarp(document._id)">
-                <md-input-container>
+                <md-input-container style="font-size: 1vw; width: 55vw">
                     <label>Nombre de la Carpeta</label>
                     <input type="text" ng-model="nombre" required md-maxlength="20">
                 </md-input-container>
-                <md-button type="submit"  class="md-raised"> Publicar </md-button>
+
+
+                <div class="btnpubli" style="margin-left: 90%">
+                    <button id="blanco" style="width: 5vw; height: 3vh; border: 0; top:-1vh; left:0"> Publicar</button>
+                </div>
+
             </form>
         </div>
 
@@ -281,3 +271,12 @@
     </div>
     <div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
     <div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
+
+<script>
+    $("#btn1").click(function(){
+       $(".formudoc").toggle("slow")
+    });
+    $("#btn2").click(function(){
+       $(".formucar").toggle("slow")
+    });
+</script>
