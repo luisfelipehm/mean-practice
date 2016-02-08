@@ -57,6 +57,7 @@
         vertical-align: bottom;
         font-family: Museo, arial, sans-serif;
         padding-top: 1vh;
+        color: white;
 
     }
     #calendar2 .fc-content-skeleton
@@ -65,8 +66,8 @@
     }
     #calendar2 .fc-body
     {
-    border: 0;
-        background-color: #;
+        border: 0;
+        background-color: #be1622 ;
     }
 
     .superiorcalendar
@@ -92,25 +93,29 @@
     }
     .siguiente
     {
-        height: 1px;
-        width: 1px;
-        border: 15px solid transparent;
-        border-left: 20px solid #f39200;
+        height: 5vh;
+        width: 5vh;
+        transform: rotate(135deg);
+        border-top: .7vh solid #E30613;
+        border-left: .7vh solid #E30613;
+        border-radius: .3vw .3vw .0vw .3vw;
         cursor: pointer ;
         position: absolute;
-        top: 40%;
-        right: 1%;
+        top: 35%;
+        right: 7%;
     }
     .anterior
     {
-        height: 1px;
-        width: 1px;
-        border: 15px solid transparent;
-        border-right: 20px solid #f39200;
+        height: 5vh;
+        width: 5vh;
+        transform: rotate(-45deg);
+        border-top: .7vh solid #E30613;
+        border-left: .7vh solid #E30613;
+        border-radius: .3vw .3vw .0vw .3vw;
         cursor: pointer ;
         position: absolute;
-        top: 40%;
-        left: 1%;
+        top: 35%;
+        left: 7%;
     }
     #calendar2 .fc-row
     {
@@ -139,29 +144,29 @@
         top: 75%;
         margin: 0;
     }
-    .fc-other-month
-    {
-        color: transparent;
-    }
+
     .ab
     {
         position: absolute;
     }
+    #calendar2 td.fc-other-month
+    {
+        color: transparent; !important;
+    }
 </style>
-<div style="position: absolute; height:50vh; width: 22%; top: 6.5vh; left: 0">
-    <div class="superiorcalendar ab">
-        <p class="diacalendar ab"></p>
-        <p class="dianumcalendar ab"></p>
-        <p class="mescalendar ab"></p>
-        <div class="siguiente"></div>
-        <div class="anterior"></div>
+
+    <div style="position: absolute; height:50vh; width: 22%; top: 6.5vh; left: 0">
+            <div class="superiorcalendar ab">
+                <p class="diacalendar ab"></p>
+                <p class="dianumcalendar ab"></p>
+                <p class="mescalendar ab"></p>
+                <div class="siguiente"></div>
+                <div class="anterior"></div>
+            </div>
+        <div ng-controller="CalendarbarCtrl" class="calendarcontainer">
+            <div ui-calendar="uiConfi.calendar" ng-model="eventSource" id="calendar2"></div>
+        </div>
     </div>
-
-
-<div ng-controller="CalendarbarCtrl" class="calendarcontainer">
-    <div ui-calendar="uiConfi.calendar" ng-model="eventSource" id="calendar2"></div>
-</div>
-</div>
 
 <script>
     function calcularleft(element){
