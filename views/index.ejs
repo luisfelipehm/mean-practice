@@ -21,9 +21,27 @@
 
 
   <script src="/javascripts/angularApp.js"></script>
+  <style>
+    .content
+    {
+      position: absolute;
+      top: 6.5vh;
+      left: 22%;
+      width: 56%;
+    }
+  </style>
 </head>
 <body ng-app="flapperNews" >
+<barranav></barranav>
+<barraizq></barraizq>
+<barrader></barrader>
+  <div class="content">
+    <ui-view>
+    </ui-view>
+  </div>
 
-<ui-view></ui-view>
+
+
+
 </body>
 </html>

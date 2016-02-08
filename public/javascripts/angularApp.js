@@ -7,6 +7,12 @@ app.directive('barranav', function() {
         templateUrl: '/templates/_barra.html'
     };
 });
+app.directive('fullbars', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_fullbars.html'
+    };
+});
 app.directive('barrader', function() {
     return {
         restrict: 'E',
@@ -573,7 +579,7 @@ app.controller('AuthCtrl', [
     function( $state, auth){
         var usuario = this;
         usuario.user = {};
-
+        usuario.viendo = true;
         usuario.register = function(){
             auth.register(usuario.user).error(function(error){
                 usuario.error = error;
