@@ -6,7 +6,6 @@
     #calendar2 .fc-widget-header{
         font-family: Openlight, arial, sans-serif;
         background-color: transparent;
-        height: 30px;
         color: white;
         font-size: 2.2vh;
         padding-top: 1%;
@@ -58,8 +57,8 @@
         font-family: Museo, arial, sans-serif;
         padding-top: 1vh;
         color: white;
-
     }
+
     #calendar2 .fc-content-skeleton
     {
         margin-top: 1.5vh; !important
@@ -67,25 +66,25 @@
     #calendar2 .fc-body
     {
         border: 0;
-        background-color: #be1622 ;
+        background-color: #be1622;
     }
 
     .superiorcalendar
     {
-        top: 5.7vh;
+        top: 8vh;
         left: 6%;
         width: 88%;
-        height: 32vh;
+        height: 60%;
         color: white;
         background-image: url("/img/calendario_fondo.png");
+        background-repeat: no-repeat;
         background-size:100% ;
-
     }
     .calendarcontainer
     {
         position: absolute;
-        top: 32vh;
-        width: 90%;
+        top: 32.4vh;
+        width: 88%;
         left: 5%;
     }
     .fc-scroller {
@@ -141,10 +140,9 @@
     {
         font-size: 3vh;
         left: 40%;
-        top: 75%;
+        top: 68%;
         margin: 0;
     }
-
     .ab
     {
         position: absolute;
@@ -153,6 +151,21 @@
     {
         color: transparent; !important;
     }
+    .fc-view-container
+    {
+        position: absolute;
+        top: 0vh;
+        left: .2vw;
+        width: 19.4vw;
+    }
+    .lineh
+    {
+        position: relative;
+        width: 17vw;
+        top: 24.3vh;
+    }
+
+
 </style>
 
     <div style="position: absolute; height:50vh; width: 22%; top: 6.5vh; left: 0">
@@ -162,6 +175,7 @@
                 <p class="mescalendar ab"></p>
                 <div class="siguiente"></div>
                 <div class="anterior"></div>
+                <div class="lineh"></div>
             </div>
         <div ng-controller="CalendarbarCtrl" class="calendarcontainer">
             <div ui-calendar="uiConfi.calendar" ng-model="eventSource" id="calendar2"></div>
@@ -187,8 +201,6 @@
 
     $('.siguiente').click(function(){
         $('#calendar2').fullCalendar('next');
-
-
 
     });
     $('.anterior').click(function(){
