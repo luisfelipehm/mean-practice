@@ -1,12 +1,5 @@
 <style>
-    .content
-    {
-        position: absolute;
-        top: 6.5vh;
-        left: 22%;
-        width: 56%;
-    }
-    .cuadrosalbumes
+    div.ng-gallery div
     {
         width: 30%;
         display: inline-block;
@@ -14,7 +7,7 @@
         height: 30vh;
         margin: 1.5%;
     }
-    .imagenesalbum
+    img.ng-thumb
     {
         display: block;
         margin-left: auto;
@@ -26,141 +19,43 @@
         cursor: pointer;
     }
 </style>
-<barranav></barranav>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
+<script>
+</script>
 
-
-<div class="content">
-
-
-    <form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+<form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
 
-        <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+    <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
-        <br>
+    <br>
 
-        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
-        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
 
-        <br>
-        Files:
-        <ul>
-            <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+    <br>
+    Files:
+    <ul>
+        <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
       <span class="progress" ng-show="f.progress >= 0">
         <div style="width:{{f.progress}}%"
              ng-bind="f.progress + '%'"></div>
       </span>
-            </li>
-            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-            </li>
-        </ul>
-        {{errorMsg}}
+        </li>
+        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+        </li>
+    </ul>
+    {{errorMsg}}
 
 
 
 
-        <md-button type="submit"  class="md-raised"> Publicar </md-button>
+    <md-button type="submit"  class="md-raised"> Publicar </md-button>
 
-    </form>
-
-<div style="border: solid red; margin-bottom: 5%" >
-    <div ng-repeat="imagen in foto.files" class="cuadrosalbumes">
-        <a>
-        <img  src="{{imagen.adjunto}}" class="imagenesalbum">
-        </a>
-    </div>
-</div>
-
-</div>
-
-
-
-<script>
-    $(document).ready(function(){
-        $('.mainMenu').children('li').on('click', function() {
-            $(this).children('ul').slideToggle('slow');
-        });
-    });
-</script>
-
-
-
-<script>
-    $('.cuadrosalbumes').click(function(){
-       $('#modal').show()
-    });
-</script>
+</form>
 
 
 
 
-<style type="text/css">
-
-    /* base semi-transparente */
-    #modal
-    {
-        display: none;
-        z-index: 40;
-        background-color: rgba(0,0,0,.75);
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        top: 0;
-        left: 0;
-    }
-    .previous
-    {
-        position: absolute;
-        top: 50%;
-        left: 2%;
-        width: 2vw;
-        height: 2vw;
-        border-top: .5vh solid white;
-        border-left: .5vh solid white;
-        transform: rotate(-45deg);
-    }
-    .next
-    {
-        position: absolute;
-        top: 50%;
-        right: 2%;
-        width: 2vw;
-        height: 2vw;
-        border-top: .5vh solid white;
-        border-left: .5vh solid white;
-        transform: rotate(135deg);
-
-    }
-    .imagenenmodal
-    {
-        position: absolute;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-</style>
-
-
-
-<!--Modal-->
-<div id="modal">
-    <div class="previous"></div>
-    <div class="next"></div>
-    <img src="/uploads2/images2.jpg" class="imagenenmodal">
-
-    </div>
-
-</div>
-
-
-<!--Contenido Modal-->
-
-
-
+<ng-gallery images="images"></ng-gallery>

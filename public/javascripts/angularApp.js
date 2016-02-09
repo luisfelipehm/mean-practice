@@ -1,10 +1,16 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery']);
 
 
 app.directive('barranav', function() {
     return {
         restrict: 'E',
         templateUrl: '/templates/_barra.html'
+    };
+});
+app.directive('fullbars', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_fullbars.html'
     };
 });
 app.directive('barrader', function() {
@@ -415,6 +421,16 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
     $scope.foto = foto;
     $scope.isLoggedIn = auth.isLoggedIn;
 
+    $scope.images = [];
+    angular.forEach(foto.files, function (adj) {
+        $scope.images.push({
+            thumb: adj.adjunto, img: adj.adjunto
+        })
+    });
+
+
+
+
     $scope.uploadPic = function(files) {
 
 
@@ -463,6 +479,8 @@ app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function (
     $scope.hola = "Hello World";
 
     $scope.fotos = fotos.fotos;
+    console.log($scope.fotos);
+
 
     $scope.crearAlbum = function(){
         if(!$scope.nombre || $scope.nombre === '') { return; }
@@ -573,7 +591,7 @@ app.controller('AuthCtrl', [
     function( $state, auth){
         var usuario = this;
         usuario.user = {};
-
+        usuario.viendo = true;
         usuario.register = function(){
             auth.register(usuario.user).error(function(error){
                 usuario.error = error;
