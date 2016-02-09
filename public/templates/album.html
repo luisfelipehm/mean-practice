@@ -1,11 +1,7 @@
+
+
 <style>
-    .content
-    {
-        position: absolute;
-        top: 6.5vh;
-        left: 22%;
-        width: 56%;
-    }
+
     .cuadrosalbumes
     {
         width: 30%;
@@ -26,14 +22,18 @@
         cursor: pointer;
     }
 </style>
-<barranav></barranav>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
+<script>
+//    $(document).ready(function () {
+//
+//
+//        $('.imagenesalbum').click(function () {
+//            alert('hola mundo');
+//            $('.imagenmodal').attr('src',$(this).attr('src'));
+//            $('#modal').show()
+//        })
+//    })
 
-
-<div class="content">
-
-
+</script>
     <form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
@@ -67,42 +67,13 @@
 
     </form>
 
-<div style="border: solid red; margin-bottom: 5%" >
+
+<ng-gallery images="foto.files"></ng-gallery>
     <div ng-repeat="imagen in foto.files" class="cuadrosalbumes">
-        <a>
+
         <img  src="{{imagen.adjunto}}" class="imagenesalbum">
-        </a>
+
     </div>
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <style type="text/css">
@@ -160,11 +131,13 @@
 <div id="modal">
     <div class="previous"></div>
     <div class="next"></div>
-    <img src="/uploads2/images2.jpg" class="imagenenmodal">
-
-    </div>
+    <img src="" class="imagenenmodal">
 
 </div>
+
+
+
+
 
 
 <!--Contenido Modal-->

@@ -4,6 +4,9 @@
 
   <link rel="stylesheet" href="/libs/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/libs/fullcalendar/dist/fullcalendar.css">
+  <link rel="stylesheet" href="/libs/ngGallery/src/css/screen.css">
+  <link rel="stylesheet" href="/libs/ngGallery/src/css/ngGallery.css">
+
   <script src="/libs/jquery/dist/jquery.min.js"></script>
   <script src="/libs/moment/min/moment.min.js"></script>
   <script src="/libs/angular/angular.min.js"></script>
@@ -14,6 +17,7 @@
   <script src="/libs/ng-file-upload/ng-file-upload-shim.min.js"></script>
   <script src="/libs/ng-file-upload/ng-file-upload.min.js"></script>
   <script src="/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="/libs/ngGallery/src/js/ngGallery.js"></script>
   <script src="/libs/angular-ui-calendar/src/calendar.js"></script>
   <script src="/libs/fullcalendar/dist/fullcalendar.min.js"></script>
   <script src="/libs/fullcalendar/dist/gcal.js"></script>
@@ -21,9 +25,27 @@
 
 
   <script src="/javascripts/angularApp.js"></script>
+  <style>
+    .content
+    {
+      position: absolute;
+      top: 6.5vh;
+      left: 22%;
+      width: 56%;
+    }
+  </style>
 </head>
 <body ng-app="flapperNews" >
+<barranav></barranav>
+<barraizq></barraizq>
+<barrader></barrader>
+  <div class="content">
+    <ui-view>
+    </ui-view>
+  </div>
 
-<ui-view></ui-view>
+
+
+
 </body>
 </html>
