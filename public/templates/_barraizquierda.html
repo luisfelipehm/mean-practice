@@ -71,12 +71,11 @@
 
     .superiorcalendar
     {
-        top: 8vh;
-        left: 6%;
-        width: 88%;
+        top: 0vh;
+        left: 9%;
+        width: 19vw;
         height: 60%;
         color: white;
-        background-image: url("/img/calendario_fondo.png");
         background-repeat: no-repeat;
         background-size:100% ;
     }
@@ -100,7 +99,7 @@
         border-radius: .3vw .3vw .0vw .3vw;
         cursor: pointer ;
         position: absolute;
-        top: 35%;
+        top: 18vh;
         right: 7%;
     }
     .anterior
@@ -113,7 +112,7 @@
         border-radius: .3vw .3vw .0vw .3vw;
         cursor: pointer ;
         position: absolute;
-        top: 35%;
+        top: 18vh;
         left: 7%;
     }
     #calendar2 .fc-row
@@ -124,7 +123,7 @@
     .diacalendar
     {
         font-size: 3vh;
-        top: 6%;
+        top: 10vh;
         left: 40%;
         margin: 0;
     }
@@ -133,14 +132,14 @@
         margin: 0;
         font-size: 18vh;
         left: 40%;
-        top: 10%;
+        top: 10.5vh;
 
     }
     .mescalendar
     {
         font-size: 3vh;
         left: 40%;
-        top: 68%;
+        top: 28vh;
         margin: 0;
     }
     .ab
@@ -158,29 +157,92 @@
         left: .2vw;
         width: 19.4vw;
     }
-    .lineh
+    .linecalendar
+    {
+        position: absolute;
+        width: 93%;
+        top: 32.3vh;
+        left: 2%;
+        height: 1px;
+        background-color: white;
+
+    }
+    .iconorojo
     {
         position: relative;
-        width: 17vw;
-        top: 24.3vh;
+        top: 1.2vh;
+        left: 2vw;
+        height: 1.9vh;
+        width: auto;
     }
+    .cajamenu
+    {
+        position: relative;
+        margin-top: 20%;
+        margin-left: 1.2%;
 
+        width: 19vw;
+        z-index: 1;
+    }
+    .txtmenu
+    {
+        position: relative;
+        top: 1.2vh;
+        font-size: 1vw;
+        color: black;
+        margin-left: 16%;
+    }
+    .lista
+    {
+
+        list-style-type: none;
+        margin-bottom: .1vh;
+        height: 4vh;
+
+    }
+    .lista:hover
+    {
+        cursor: pointer;
+        background-image: url(/img/sombramenu.png);
+    }
+    .linkmenu
+    {
+        text-decoration: none
+    }
 
 </style>
 
-    <div style="position: absolute; height:50vh; width: 22%; top: 6.5vh; left: 0">
+<div style="position:absolute;height:50vh; width: 22%; top: 60vh;">
+
+
+        <div class="cajamenu">
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Departamento</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">PQRSF</span></a> </li>
+         <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Asociados</span></a> </li>
+
+        </div>
+
+
+    <div style="position: relative;margin-top:15px">
+        <img src="/img/calendario_fondo.png" style="left: 6%;position: absolute;top: 8.4vh;width:  88%;">
             <div class="superiorcalendar ab">
                 <p class="diacalendar ab"></p>
                 <p class="dianumcalendar ab"></p>
                 <p class="mescalendar ab"></p>
                 <div class="siguiente"></div>
                 <div class="anterior"></div>
-                <div class="lineh"></div>
+                <div class="linecalendar"></div>
             </div>
         <div ng-controller="CalendarbarCtrl" class="calendarcontainer">
             <div ui-calendar="uiConfi.calendar" ng-model="eventSource" id="calendar2"></div>
         </div>
     </div>
+</div>
 
 <script>
     function calcularleft(element){
