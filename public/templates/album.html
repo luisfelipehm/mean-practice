@@ -1,3 +1,5 @@
+
+
 <style>
 
     .cuadrosalbumes
@@ -20,13 +22,18 @@
         cursor: pointer;
     }
 </style>
+<script>
+//    $(document).ready(function () {
+//
+//
+//        $('.imagenesalbum').click(function () {
+//            alert('hola mundo');
+//            $('.imagenmodal').attr('src',$(this).attr('src'));
+//            $('#modal').show()
+//        })
+//    })
 
-
-
-
-
-
-
+</script>
     <form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
@@ -60,42 +67,13 @@
 
     </form>
 
-<div style="border: solid red; margin-bottom: 5%" >
+
+<ng-gallery images="foto.files"></ng-gallery>
     <div ng-repeat="imagen in foto.files" class="cuadrosalbumes">
-        <a>
+
         <img  src="{{imagen.adjunto}}" class="imagenesalbum">
-        </a>
+
     </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <style type="text/css">
@@ -153,11 +131,13 @@
 <div id="modal">
     <div class="previous"></div>
     <div class="next"></div>
-    <img src="/uploads2/images2.jpg" class="imagenenmodal">
-
-    </div>
+    <img src="" class="imagenenmodal">
 
 </div>
+
+
+
+
 
 
 <!--Contenido Modal-->

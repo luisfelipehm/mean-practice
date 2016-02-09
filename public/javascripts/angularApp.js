@@ -1,4 +1,4 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery']);
 
 
 app.directive('barranav', function() {
@@ -420,6 +420,7 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
 
     $scope.foto = foto;
     $scope.isLoggedIn = auth.isLoggedIn;
+
 
     $scope.uploadPic = function(files) {
 
