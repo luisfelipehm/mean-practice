@@ -1,5 +1,4 @@
 <style>
-
     div.ng-gallery div
     {
         width: 30%;
@@ -7,68 +6,60 @@
         overflow: hidden;
         height: 30vh;
         margin: 1.5%;
+        position: relative;
     }
     img.ng-thumb
     {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
+        position: absolute;
         height: 100%;
 
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
     }
     img
     {
         cursor: pointer;
     }
+
+
 </style>
-<script>
-
-</script>
-
-    <form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
+<form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
-        <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
-        <br>
+    <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
-        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+    <br>
 
-        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
-        <br>
-        Files:
-        <ul>
-            <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+    <br>
+    Files:
+    <ul>
+        <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
       <span class="progress" ng-show="f.progress >= 0">
         <div style="width:{{f.progress}}%"
              ng-bind="f.progress + '%'"></div>
       </span>
-            </li>
-            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-            </li>
-        </ul>
-        {{errorMsg}}
+        </li>
+        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+        </li>
+    </ul>
+    {{errorMsg}}
 
 
 
+    <md-button type="submit"  class="md-raised"> Publicar </md-button>
 
-        <md-button type="submit"  class="md-raised"> Publicar </md-button>
-
-    </form>
+</form>
 
 
 
 
 <ng-gallery images="images"></ng-gallery>
-
-
-
-
-
-
-
-
-
-
