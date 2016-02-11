@@ -128,6 +128,43 @@ app.factory('fotos', ['$http','auth',function($http,auth){
     return o;
 }]);
 
+app.factory('formularios', ['$http','auth',function($http,auth){
+    var o = {
+        formularios:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/formularios').success(function(data){
+            angular.copy(data, o.formularios);
+        });
+    };
+    o.create = function(formularios) {
+
+        return $http.post('/formularios', formularios, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.formularios.push(data);
+        });
+    };
+
+    o.get = function(id) {
+        return $http.get('/formularios/' + id).then(function(res){
+            return res.data;
+        });
+    };
+    o.addPregunta = function(id, pregunta) {
+        console.log(pregunta);
+        console.log('hola mundo');
+
+        return $http.post('/formularios/' + id + '/preguntas', pregunta, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+
+    return o;
+}]);
+
+
 app.factory('auth', ['$http', '$window', function($http, $window){
     var auth = {};
     auth.saveToken = function (token){
@@ -177,6 +214,7 @@ app.config(function($mdThemingProvider) {
         .primaryPalette('grey')
         .accentPalette('pink');
 });
+
 app.config([
     '$stateProvider',
     '$urlRouterProvider',
@@ -265,6 +303,17 @@ app.config([
                 controller: 'CalendarCtrl',
 
             })
+            .state('formularios',{
+                url: '/formularios',
+                templateUrl: 'templates/formularios.html',
+                controller: 'FormulariosCtrl',
+                resolve: {
+                    postPromise: ['formularios', function(formularios){
+                        return formularios.getAll();
+                    }]
+                }
+            })
+
 
         //    .state('document', {
         //    url: '/document/{id}',
@@ -387,6 +436,46 @@ app.controller('CalendarCtrl',['$scope', function ($scope) {
         }
     };
 }]);
+
+
+app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scope,auth,formularios) {
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.formularios = formularios.formularios;
+
+    $scope.crearFormulario = function(){
+        if(!$scope.nombre || $scope.nombre === '') { return; }
+        formularios.create({
+            nombre: $scope.nombre
+        });
+        $scope.nombre = '';
+    };
+    $scope.pregunta = {valor:''};
+    $scope.tipo = {valor:''};
+    $scope.addPregunta = function(idformulario){
+        if($scope.body === '') { return; }
+
+        //$http.post('/posts/' + idpost + '/comments', comment, {
+        //    headers: {Authorization: 'Bearer '+auth.getToken()}
+        //}).success(function (data) {
+        //
+        //}).error(function () {
+        //    console.log('Error: ' + data);
+        //});
+
+        formularios.addPregunta(idformulario, {
+            pregunta: $scope.pregunta.valor,
+            tipo:     $scope.tipo.valor
+        }).success(function(pregunta) {
+            formularios.getAll();
+        });
+        $scope.pregunta = '';
+        $scope.tipo = '';
+    };
+
+}]);
+
+
+
 app.controller('CalendarbarCtrl',['$scope', function ($scope) {
     $scope.hola = 'Hello World';
     $scope.eventSource = [];
