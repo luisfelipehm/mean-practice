@@ -123,7 +123,11 @@
         left: 20%;
         width: 40vw;
     }
-
+    .container{
+        position: absolute;
+        right: 27%;
+        top: 16vh
+    }
     .select-wrapper
     {
         background: url(img/iconoadju.png) no-repeat;
@@ -131,7 +135,7 @@
         display: block;
         position: relative;
         width: 4vw;
-        height: 3vh;
+        height: auto;
     }
     #image_src
     {
@@ -466,7 +470,7 @@
                     <div class="inferior" >
                         <div class="boxcomentario">
                             <img class="imgusercoment2" src="/img/iconouser.jpg">
-                            <form ng-submit="addComment(post._id)",>
+                            <form ng-submit="addComment(post._id)">
                                 <md-input-container class="tittleboxcomentario">
                                     <label>Comentario..</label>
                                     <input type="text" ng-model="bodyc.val" required md-maxlength="200">
@@ -483,5 +487,4 @@
 
     </div>
 
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 0"></div>
-<div style="position: absolute; height:50vh; width: 22%; top: 5.5vh; left: 78%"></div>
+

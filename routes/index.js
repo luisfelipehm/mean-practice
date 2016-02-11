@@ -8,15 +8,17 @@ var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Fotosfile = mongoose.model('Fotosfile');
+var Pregunta = mongoose.model('Pregunta');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
 var Folder = mongoose.model('Folder');
+var Formulario = mongoose.model('Formulario');
 
 var jwt = require('express-jwt');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
-router.get('/posts', function(req, res, next) {
 
+router.get('/posts', function(req, res, next) {
   Post.find().populate('comments').exec(function (err,posts) {
     if(err){ return next(err); }
     res.json(posts);
@@ -32,6 +34,52 @@ router.get('/documents', function(req, res, next) {
   });
 
 });
+
+router.get('/formularios', function(req, res, next) {
+
+  Formulario.find(function(err, formularios){
+    if(err){ return next(err); }
+    res.json(formularios);
+  });
+});
+router.post('/formularios',auth, function(req, res, next) {
+  var formulario = new Formulario(req.body);
+  formulario.author = req.payload.username;
+  formulario.preguntas = [];
+  formulario.save(function(err, formulario){
+    if(err){ return next(err); }
+    res.json(formulario);
+  });
+});
+
+router.param('formulario', function(req, res, next, id) {
+  var query = Formulario.findById(id);
+
+  query.exec(function (err, formulario){
+    if (err) { return next(err); }
+    if (!formulario) { return next(new Error('can\'t find post')); }
+
+    req.formulario = formulario;
+    return next();
+  });
+});
+router.post('/formularios/:formulario/preguntas',auth, function(req, res, next) {
+  var pregunta = new Pregunta(req.body);
+
+  pregunta.save(function(err, comment){
+    if(err){ return next(err); }
+
+    req.formulario.preguntas.push(pregunta);
+    req.formulario.save(function (err, formulario) {
+      if(err){ return next(err); }
+
+      res.json(req.body);
+    })
+
+  });
+});
+
+
 
 router.get('/fotos', function(req, res, next) {
 
