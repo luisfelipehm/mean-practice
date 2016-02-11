@@ -1,5 +1,297 @@
- <h1>Flapper News</h1>
 
+<style>
+    barrader{display: none}
+    barraizq{display: none}
+    barranav{display: none}
+    .content{position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;}
+    .imgfa
+    {
+        width: auto;
+        height: 2.5vh;
+        margin-left: 1vw;
+        width: auto;
+        top: 1vh;
+        left: 90.5vw;
+        cursor:pointer;
+    }
+    .imgin
+    {
+        height: 3.4vh;
+        width: auto;
+        top: 1vh;
+        left: 94.5vw;
+    }
+    .fondo
+    {
+        height: 72vh;
+        width: auto;
+    }
+    .imgfon
+    {
+        margin-top: 0;
+        height: 100%;
+        width: 100%;
+    }
+    .cuadrologin
+    {
+        position: absolute;
+        width: 33.5vw;
+        height: 50vh;
+        top: 15vh;
+        left: 57vw;
+    }
+    .saw
+    {
+        width: auto;
+        height: 50vh;
+    }
+    .barrainf
+    {
+        position: absolute;
+        background: #ce0a31;
+        mix-blend-mode: multiply;
+        height: 13vh ;
+        width: 100%;
+        top: 84vh;
+    }
+    .boxfon
+    {
+        height: 97vh;
+        width: 100%;
+        overflow: hidden;
+    }
+    .endred
+    {
+        background: #ce0a31;
+        position: absolute;
+        height: 3vh;
+        width: 100%;
+        top: 97vh;
+    }
+    .imgsvg
+    {
+        fill: #E30613;
+        mix-blend-mode: multiply;
+    }
+    #Capa_1
+    {
+        transform: rotate(-90deg);
+        mix-blend-mode: multiply;
+    }
+
+    .txt
+    {
+        position: absolute;
+        top:58vh;
+        left: 3vw;
+    }
+    .tittle
+    {
+        color: white;
+        font-family: arial;
+        font-weight: bold;
+        font-size: 3vw;
+        text-shadow: .2vw .2vw .8vw black;
+        margin: 0;
+    }
+
+    .sublista1
+    {
+        position: absolute;
+        top: 86vh;
+        left: 25vw;
+    }
+    .list
+    {
+        text-align: center;
+        font-family: Arial;
+        font-size: .8vw;
+        color: white;
+        margin-left: 30vw;
+        margin: 0 0 .1vh 0;
+    }
+    .mint
+    {
+        color: white;
+        margin: 0 1vh 2vh 2.2vw ;
+        font-family: Arial;
+        font-size: .9vw;
+        font-weight: normal;
+    }
+    .line1
+    {
+        position: absolute;
+        height: 13vh;
+        border-left: solid #5B5B5D .1vw;
+        left: 48.7vw;
+        top: 5.5vh;
+    }
+    .line2
+    {
+        position: absolute;
+        height: 13vh;
+        border-left: solid #5B5B5D .1vw;
+        left: 65vw;
+        top: 5.5vh;
+    }
+    .backlogo
+    {
+        position: absolute;
+        width: 10vw;
+        left: 66vw;
+        top: 32vh;
+    }
+    .logob
+    {
+        width: 15vw;
+        height: auto;
+    }
+    .button
+    {
+        position: absolute;
+        left: 77vw;
+        top: 64vh;
+    }
+    .user
+    {
+        position: absolute;
+        top: 45vh;
+        left: 65vw;
+        z-index: 10;
+        width: 12vw;
+        height: 7.5vh;
+    }
+    .pwd
+    {
+        position: absolute;
+        top: 52vh;
+        left: 65vw;
+        z-index: 10;
+        width: 12vw;
+        height: 7.5vh;
+    }
+    .derecho
+    {
+        font-family: Arial;
+        font-size: 0.8vw;
+        width: 18vw;
+        color: white;
+        margin: .5vh 0 0 43%;
+    }
+    .boxcheck
+    {
+        position: absolute;
+        color: white;
+        font-family: Arial;
+        font-size: .6vw;
+        left: 65vw;
+        top: 60vh;
+    }
+    .md-input-container
+    {
+        color: white;
+    }
+    md-input-container.md-default-theme label, md-input-container label, md-input-container.md-default-theme .md-placeholder, md-input-container .md-placeholder
+    {
+
+        color: white;
+    }
+    md-input-container.md-default-theme .md-input, md-input-container .md-input {
+        color: white;
+        border-color: white;
+
+    }
+    md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label
+    {
+        color: white;
+    }
+    .infouser
+    {
+        width: 17vw;
+    }
+    md-input-container.md-default-theme.md-input-invalid .md-input, md-input-container.md-input-invalid .md-input
+    {
+        border-color: yellow;
+    }
+    input[type=checkbox]
+    {
+        zoom: 1;
+    }
+    .icosociales
+    {
+        position: absolute;
+        z-index: 1;
+        display: flex;
+        top: 93vh;
+        left: 45vw;
+        width: 8.5vw;
+        height: auto;
+        padding: 0;
+    }
+
+</style>
+
+
+<!--Esta es la imagen de fondo-->
+<div class="boxfon">
+    <img class="imgfon" src="/img/fondo.jpg">
+</div>
+
+<!--este es el cuadro del login en svg-->
+<div class="cuadrologin">
+
+    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">
+    <path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1
+	c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
+    </svg>
+
+</div>
+
+<div class="txt">
+    <p class="tittle">¡Su Solución</p>
+    <p class="tittle">Es Nuestro Objetivo!</p>
+</div>
+
+
+<div class="barrainf">
+
+</div>
+
+<div class="sublista1">
+    <p class="list"> Carrera 13 # 37 - 37 Piso 5</p>
+    <p class="list"> info@susolucion.com.co / director.comercial@susolucion.com.co / giovanna.romero@susolucion.com.co / miopinion@susolucion.com.co</p>
+    <p class="list"> Atendemos de Lunes a Viernes 7:30 am - 5:00 pm </p>
+</div>
+
+<div class="icosociales">
+    <a href="https://twitter.com" target="_blank"> <img class="imgfa" src="/img/icono-t.png"></a>
+    <a href="https://www.facebook.com" target="_blank"> <img class="imgfa" src="/img/icono-f.png"></a>
+    <a href="https://www.linkedin.com/" target="_blank"> <img class="imgfa" src="/img/icono-i.png"></a>
+</div>
+
+<div class="endred">
+    <p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>
+</div>
+
+<!--Logo Soluciones-->
+<div class="backlogo">
+    <img class="logob" src="/img/logoblanco.png">
+</div>
+
+<!--checkbox-->
+
+<div class="boxcheck">
+    <input type="checkbox"/> No cerrar sesión <label style="margin-left: 4.4vw">¿Olvidaste tu Contraseña?</label>
+</div>
+
+
+
+
+<!-- LOGIN DE USUARIO -->
 
 <div ng-show="error" class="">
     <span>{{ error.message }}</span>
@@ -7,18 +299,25 @@
 
 <form ng-submit="usuario.logIn()"
       style="margin-top:30px;">
-    <h3>Iniciar Sesion</h3>
+    <!--<h3 >Iniciar Sesion</h3>-->
 
+  <div class="user">
+    <md-input-container class="infouser">
+        <label >Usuario</label>
+        <input type="text" ng-model="usuario.user.username" required >
+    </md-input-container>
+  </div>
 
-        <input type="text"
-               class="form-control"
-               placeholder="Username"
-               ng-model="usuario.user.username">
+  <div class="pwd">
+    <md-input-container class="infouser">
+        <label>Contraseña</label>
+        <input type="password" ng-model="usuario.user.password" required >
+    </md-input-container>
+  </div>
 
-        <input type="password"
-               class="form-control"
-               placeholder="Password"
-               ng-model="usuario.user.password">
+    <div class="button">
+        <md-button style=" font-weight: bold;" type="submit" class="md-raised"> LOGIN </md-button>
+    </div>
 
-    <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
 </form>
+

@@ -1,0 +1,74 @@
+<style>
+
+    div.ng-gallery div
+    {
+        width: 30%;
+        display: inline-block;
+        overflow: hidden;
+        height: 30vh;
+        margin: 1.5%;
+    }
+    img.ng-thumb
+    {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100%;
+
+    }
+    img
+    {
+        cursor: pointer;
+    }
+</style>
+<script>
+
+</script>
+
+    <form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+
+
+
+        <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+        <br>
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+        <br>
+        Files:
+        <ul>
+            <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"
+             ng-bind="f.progress + '%'"></div>
+      </span>
+            </li>
+            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+            </li>
+        </ul>
+        {{errorMsg}}
+
+
+
+
+        <md-button type="submit"  class="md-raised"> Publicar </md-button>
+
+    </form>
+
+
+
+
+<ng-gallery images="images"></ng-gallery>
+
+
+
+
+
+
+
+
+
+

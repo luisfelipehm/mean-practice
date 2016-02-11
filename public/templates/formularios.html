@@ -1,0 +1,25 @@
+<form name="myForm" ng-submit="crearFormulario()">
+    <md-input-container>
+        <label>Nombre del Formulario</label>
+        <input type="text" ng-model="nombre" required md-maxlength="20">
+    </md-input-container>
+    <md-button type="submit"  class="md-raised"> Publicar </md-button>
+
+
+</form>
+
+
+<div ng-repeat="forma in formularios">
+{{forma}}
+    <form ng-submit="addPregunta(forma._id)" >
+        <md-input-container>
+            <label>Pregunta</label>
+            <input type="text" ng-model="pregunta.valor" required md-maxlength="200">
+        </md-input-container>
+        <md-input-container>
+            <label>Tipo</label>
+            <input type="text" ng-model="tipo.valor" required md-maxlength="200">
+        </md-input-container>
+        <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
+    </form>
+</div>

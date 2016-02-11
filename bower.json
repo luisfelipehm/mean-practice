@@ -15,5 +15,9 @@
     "public/libs",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "ng-file-upload": "~11.2.3",
+    "angular-ui-calendar": "~1.0.1"
+  }
 }
