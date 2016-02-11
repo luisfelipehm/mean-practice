@@ -6,6 +6,12 @@
   <link rel="stylesheet" href="/libs/fullcalendar/dist/fullcalendar.css">
   <link rel="stylesheet" href="/libs/ngGallery/src/css/screen.css">
   <link rel="stylesheet" href="/libs/ngGallery/src/css/ngGallery.css">
+  <!--carousel-->
+  <link rel="stylesheet" href="/libs/slick-carousel/slick/slick.css">
+  <link rel="stylesheet" href="/libs/slick-carousel/slick/slick-theme.css">
+
+
+
 
   <script src="/libs/jquery/dist/jquery.min.js"></script>
   <script src="/libs/moment/min/moment.min.js"></script>
@@ -21,6 +27,18 @@
   <script src="/libs/angular-ui-calendar/src/calendar.js"></script>
   <script src="/libs/fullcalendar/dist/fullcalendar.min.js"></script>
   <script src="/libs/fullcalendar/dist/gcal.js"></script>
+  <!--carousel-->
+  <script src="/libs/slick-carousel/slick/slick.js"></script>
+  <script src="/libs/angular-slick/dist/slick.min.js"></script>
+
+
+  <script>
+    define(function (require) {
+      var angular = require('angular');
+      var ngTouch = require('angular-touch');
+      var carousel  = require('angular-carousel');
+    });
+  </script>
 
 
 
@@ -29,7 +47,7 @@
     .content
     {
       position: absolute;
-      top: 50vh;
+      top: 55vh;
       left: 22%;
       width: 56%;
     }
@@ -43,10 +61,14 @@
 <body ng-app="flapperNews" >
 
 <div style="position: absolute; ">
-  <img style="width: 99.2vw" src="/img/foto_mundo.png">
+  <img style="width:100%" src="/img/foto_mundo.png">
 </div>
 
-  <div style="position: relative; top: 10.7%">
+<div style="position: absolute;top:45vh; width: 100%;">
+  <!--<img style="width:100%" src="/img/fondo_barra_izq.png">-->
+</div>
+
+  <div style="position: relative; top: 7%">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 1594.8 522.9" enable-background="new 0 0 1594.8 522.9" xml:space="preserve">
       <linearGradient id="SVGID_52_" gradientUnits="userSpaceOnUse" x1="36.6315" y1="265.1648" x2="1572.6389" y2="493.1659">
         <stop offset="0" style="stop-color:#E3152D"/>

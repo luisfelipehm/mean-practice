@@ -1,5 +1,4 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery']);
-
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick']);
 
 app.directive('barranav', function() {
     return {
@@ -695,3 +694,5 @@ app.controller('AuthCtrl', [
             });
         };
     }]);
+
+
