@@ -14,6 +14,8 @@ require('./models/Folders');
 require('./models/Files');
 require('./models/Fotosfiles');
 require('./models/Fotos');
+require('./models/Formularios');
+require('./models/Preguntas');
 require('./config/passport');
 moongose.connect('mongodb://localhost/news');
 var passport = require('passport');
