@@ -37,7 +37,7 @@ router.get('/documents', function(req, res, next) {
 
 router.get('/formularios', function(req, res, next) {
 
-  Formulario.find(function(err, formularios){
+  Formulario.find().populate('preguntas').exec(function(err, formularios){
     if(err){ return next(err); }
     res.json(formularios);
   });

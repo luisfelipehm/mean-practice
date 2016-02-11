@@ -16,10 +16,17 @@
             <label>Pregunta</label>
             <input type="text" ng-model="pregunta.valor" required md-maxlength="200">
         </md-input-container>
+
         <md-input-container>
-            <label>Tipo</label>
-            <input type="text" ng-model="tipo.valor" required md-maxlength="200">
+            <label>State</label>
+            <md-select ng-model="tipo.valor">
+
+                <md-option ng-repeat="state in states" value="{{state.html}}">
+                    {{state.visual}}
+                </md-option>
+            </md-select>
         </md-input-container>
         <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
     </form>
+
 </div>
