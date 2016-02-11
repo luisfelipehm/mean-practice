@@ -449,18 +449,16 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
         });
         $scope.nombre = '';
     };
+    $scope.states = [
+        {html:'checkbox',visual: 'opcion multiple'},
+        {html:'radio',visual: 'unica opcion'},
+        {html:'text',visual: 'texto'}
+    ];
+
     $scope.pregunta = {valor:''};
     $scope.tipo = {valor:''};
     $scope.addPregunta = function(idformulario){
         if($scope.body === '') { return; }
-
-        //$http.post('/posts/' + idpost + '/comments', comment, {
-        //    headers: {Authorization: 'Bearer '+auth.getToken()}
-        //}).success(function (data) {
-        //
-        //}).error(function () {
-        //    console.log('Error: ' + data);
-        //});
 
         formularios.addPregunta(idformulario, {
             pregunta: $scope.pregunta.valor,
