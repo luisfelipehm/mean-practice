@@ -52,6 +52,9 @@ router.post('/formularios',auth, function(req, res, next) {
   });
 });
 
+
+// PARAMETRO DE FORMULARIO
+
 router.param('formulario', function(req, res, next, id) {
   var query = Formulario.findById(id);
 
@@ -63,6 +66,23 @@ router.param('formulario', function(req, res, next, id) {
     return next();
   });
 });
+
+
+// OBTENER UN FORMULARIO
+
+router.get('/formularios/:formulario', function(req, res, next) {
+
+  req.formulario.populate('preguntas', function(err, formulario) {
+    if (err) { return next(err);   }
+
+
+    res.json(formulario);
+  });
+});
+
+// CREAR PREGUNTAS EN LOS FORMULARIOS
+
+
 router.post('/formularios/:formulario/preguntas',auth, function(req, res, next) {
   var pregunta = new Pregunta(req.body);
 
@@ -79,7 +99,7 @@ router.post('/formularios/:formulario/preguntas',auth, function(req, res, next) 
   });
 });
 
-
+// INDEX DE ALBUMS
 
 router.get('/fotos', function(req, res, next) {
 
@@ -89,6 +109,8 @@ router.get('/fotos', function(req, res, next) {
   });
 
 });
+
+// CREAR ALBUMS
 
 router.post('/fotos',auth, function(req, res, next) {
   var foto = new Foto(req.body);
@@ -100,10 +122,7 @@ router.post('/fotos',auth, function(req, res, next) {
 });
 
 
-
-
-
-
+// OBTENER LA CARPETA INICIAL DE DOCUMENTOS
 
 
 router.post('/documents',auth, function(req, res, next) {
@@ -116,6 +135,8 @@ router.post('/documents',auth, function(req, res, next) {
   });
 });
 
+// OBTENER UNA PUBLICACION
+
 router.get('/posts/:post', function(req, res, next) {
   req.post.populate('comments', function(err, post) {
     if (err) { return next(err); }
@@ -124,7 +145,7 @@ router.get('/posts/:post', function(req, res, next) {
   });
 });
 
-
+// PARAMETRO DE ALBUM PARA SHOW
 
 router.param('foto', function(req, res, next, id) {
   var query = Foto.findById(id);
@@ -137,7 +158,7 @@ router.param('foto', function(req, res, next, id) {
     return next();
   });
 });
-
+// PARAMETRO DE DOCUMENTO PARA SHOW
 
 router.param('document', function(req, res, next, id) {
   var query = Folder.findById(id);
@@ -151,6 +172,8 @@ router.param('document', function(req, res, next, id) {
   });
 });
 
+// OBTENER UN ALBUM
+
 router.get('/fotos/:foto', function(req, res, next) {
 console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
   req.foto.populate('files').populate('adjunto','nombre', function(err, foto) {
@@ -160,6 +183,8 @@ console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
     res.json(foto);
   });
 });
+
+// OBTENER UNA CARPETA
 
 router.get('/documents/:document', function(req, res, next) {
   console.log(req.document);
@@ -171,6 +196,9 @@ router.get('/documents/:document', function(req, res, next) {
   });
 });
 
+
+
+// EN DONDE SE VAN A GUARDAR LOS ARCHIVOS QUE SE SUBAN
 var multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -184,6 +212,10 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({ storage: storage });
+
+
+
+//ANADIR FOTOS A LOS ALBUMS
 
 
 router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res, next) {
@@ -207,6 +239,9 @@ router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res,
 });
 
 
+//CREAR CARPETAS DENTRO DE LAS CARPETAS
+
+
 router.post('/documents/:document/documents',auth, function(req, res, next) {
   var comment = new Folder(req.body);
   comment.padre = req.document._id;
@@ -225,7 +260,7 @@ router.post('/documents/:document/documents',auth, function(req, res, next) {
 });
 
 
-
+// FUNCION PARA DARLE UN TAMANO A LOS ARCHIVOS
 
 function getReadableFileSizeString(fileSizeInBytes) {
 
@@ -238,6 +273,10 @@ function getReadableFileSizeString(fileSizeInBytes) {
 
   return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
 }
+
+
+ //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
+
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
   console.log('error');
@@ -262,6 +301,8 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
     });
 });
 
+// CREAR PUBLICACION QUE INCLUYE SUBIDA DE ARCHIVOS
+
 router.post('/posts',auth, upload.single('file'), function(req, res, next) {
 
   req.body.file = '/uploads2/'+req.file.filename;
@@ -274,9 +315,7 @@ router.post('/posts',auth, upload.single('file'), function(req, res, next) {
   });
 });
 
-
-
-
+// PARAMETRO DE PUBLICACION
 
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
@@ -292,6 +331,8 @@ router.param('post', function(req, res, next, id) {
 
 
 
+//ME GUSTA
+
 router.put('/posts/:post/upvote',auth, function(req, res, next) {
   req.post.upvote(function(err, post){
     if (err) { return next(err); }
@@ -299,6 +340,9 @@ router.put('/posts/:post/upvote',auth, function(req, res, next) {
     res.json(post);
   });
 });
+
+
+//ELIMINAR PUBLICACIONES
 
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
@@ -308,6 +352,9 @@ router.delete('/posts/:_id',auth, function(req, res,next){
     });
   });
 });
+
+
+// NUEVOS COMENTARIOS A LAS PUBLICACIONES
 
 router.post('/posts/:post/comments',auth, function(req, res, next) {
   var comment = new Comment(req.body);
@@ -324,6 +371,9 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
     });
   });
 });
+
+
+//CREACION DE USUARIOS
 
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
@@ -343,6 +393,9 @@ router.post('/register', function(req, res, next){
   });
 });
 
+
+// LOGIN
+
 router.post('/login', function(req, res, next){
   if(!req.body.username || !req.body.password){
     return res.status(400).json({message: 'Please fill out all fields'});
@@ -359,7 +412,10 @@ router.post('/login', function(req, res, next){
   })(req, res, next);
 });
 
-/* GET home page. */
+
+// Home page
+
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
