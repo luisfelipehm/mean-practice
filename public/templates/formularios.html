@@ -11,6 +11,8 @@
 
 <div ng-repeat="forma in formularios">
 {{forma}}
+    <a href="#/formularios/{{forma._id}}">{{forma.nombre}}</a>
+
     <form ng-submit="addPregunta(forma._id)" >
         <md-input-container>
             <label>Pregunta</label>
@@ -26,7 +28,19 @@
                 </md-option>
             </md-select>
         </md-input-container>
+
+
+        <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
+            <input type="text" ng-model="opcion.valor">
+             <div ng-click="addOpcion()">anadir opcion</div>
+            <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
+                {{opt}}
+                <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
+            </div>
+        </div>
+
         <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
     </form>
+
 
 </div>

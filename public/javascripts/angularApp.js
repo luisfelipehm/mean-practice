@@ -312,6 +312,16 @@ app.config([
                     }]
                 }
             })
+            .state('formulario', {
+                url: '/formularios/{id}',
+                templateUrl: 'templates/formulario.html',
+                controller: 'FormularioCtrl',
+                resolve: {
+                    formulario: ['$stateParams', 'formularios', function($stateParams, formularios) {
+                        return formularios.get($stateParams.id);
+                    }]}
+
+            })
 
 
         //    .state('document', {
@@ -437,9 +447,19 @@ app.controller('CalendarCtrl',['$scope', function ($scope) {
 }]);
 
 
+
+
 app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scope,auth,formularios) {
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.formularios = formularios.formularios;
+    $scope.pregunta = {valor:''};
+    $scope.tipo = {valor:''};
+    $scope.opcion = {valor:''};
+    $scope.opciones = [];
+    $scope.addOpcion = function () {
+        $scope.opciones.push($scope.opcion.valor);
+        $scope.opcion.valor = '';
+    };
 
     $scope.crearFormulario = function(){
         if(!$scope.nombre || $scope.nombre === '') { return; }
@@ -448,26 +468,47 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
         });
         $scope.nombre = '';
     };
+
+
     $scope.states = [
-        {html:'checkbox',visual: 'opcion multiple'},
-        {html:'radio',visual: 'unica opcion'},
-        {html:'text',visual: 'texto'}
+        {html:'checkbox',visual: 'Opcion Multiple'},
+        {html:'radio',visual: 'Unica Opcion'},
+        {html:'text',visual: 'Texto'},
+        {html:'interruptor',visual: 'SI / NO'}
     ];
 
-    $scope.pregunta = {valor:''};
-    $scope.tipo = {valor:''};
+    $scope.removerOpcion = function (id) {
+        $scope.opciones.splice(id, 1);
+    };
+
+
     $scope.addPregunta = function(idformulario){
         if($scope.body === '') { return; }
 
         formularios.addPregunta(idformulario, {
             pregunta: $scope.pregunta.valor,
-            tipo:     $scope.tipo.valor
+            tipo:     $scope.tipo.valor,
+            opciones: $scope.opciones
         }).success(function(pregunta) {
             formularios.getAll();
         });
         $scope.pregunta = '';
         $scope.tipo = '';
     };
+
+}]);
+
+
+app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  function($scope, formularios,formulario,auth){
+
+    $scope.formulario = formulario;
+    $scope.isLoggedIn = auth.isLoggedIn;
+
+
+
+
+
+
 
 }]);
 
