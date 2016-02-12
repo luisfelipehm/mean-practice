@@ -1,1 +1,70 @@
 <p>hola mundo</p>
+{{formulario.nombre}}
+<style>
+    div.flex-xs {
+        min-height: 40px; }
+    div {
+        clear: both; }
+    md-checkbox {
+        float: left; }
+    fieldset.standard {
+        border-style: solid;
+        border-width: 1px; }
+    md-checkbox.md-default-theme.md-checked .md-ink-ripple, md-checkbox.md-checked .md-ink-ripple {
+        color: #E30613;
+    }
+    md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-icon {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked.md-warn .md-ink-ripple, md-switch.md-checked.md-warn .md-ink-ripple {
+        color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked.md-warn .md-thumb, md-switch.md-checked.md-warn .md-thumb {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked.md-warn .md-bar, md-switch.md-checked.md-warn .md-bar {
+        background-color: rgba(227,6,19,0.5);
+    }
+    md-radio-group.md-default-theme:not([disabled]) .md-primary .md-on, md-radio-group:not([disabled]) .md-primary .md-on, md-radio-group.md-default-theme:not([disabled]).md-primary .md-on, md-radio-group:not([disabled]).md-primary .md-on, md-radio-button.md-default-theme:not([disabled]) .md-primary .md-on, md-radio-button:not([disabled]) .md-primary .md-on, md-radio-button.md-default-theme:not([disabled]).md-primary .md-on, md-radio-button:not([disabled]).md-primary .md-on {
+        background-color: #E30613;
+    }
+    md-radio-group.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-group:not([disabled]) .md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-group:not([disabled]) .md-primary.md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-group:not([disabled]).md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-group:not([disabled]).md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-button:not([disabled]) .md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-button:not([disabled]) .md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-button:not([disabled]).md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-button:not([disabled]).md-primary.md-checked .md-off {
+        border-color: #E30613;
+    }
+</style>
+
+
+<div ng-repeat="preg in formulario.preguntas">
+    <fieldset>
+    <div ng-if="preg.tipo == 'checkbox'">
+        {{preg.pregunta}}
+        <div ng-repeat="opt in preg.opciones">
+            <div flex-xs flex="50">
+                <md-checkbox ng-model="data.cb1" aria-label="{{opt}}">
+                    {{opt}}
+                </md-checkbox>
+            </div>
+        </div>
+    </div>
+    <div ng-if="preg.tipo == 'radio'">
+        {{preg.pregunta}}
+        <md-radio-group ng-model="data.group1">
+        <div ng-repeat="opt in preg.opciones">
+            <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
+        </div>
+        </md-radio-group>
+    </div>
+    <div ng-if="preg.tipo == 'text'">
+        <md-input-container flex>
+            <label>{{preg.pregunta}}</label>
+            <input type="text"/>
+        </md-input-container>
+    </div>
+    <div ng-if="preg.tipo == 'interruptor'">
+        {{preg.pregunta}}
+        <md-switch ng-model="jdjd" aria-label="Switch 2" ng-true-value="'yup'" ng-false-value="'nope'" class="md-warn">
+
+        </md-switch>
+    </div>
+</fieldset>
+</div>
