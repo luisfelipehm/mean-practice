@@ -317,7 +317,7 @@ app.config([
                 templateUrl: 'templates/formulario.html',
                 controller: 'FormularioCtrl',
                 resolve: {
-                    document: ['$stateParams', 'formularios', function($stateParams, formularios) {
+                    formulario: ['$stateParams', 'formularios', function($stateParams, formularios) {
                         return formularios.get($stateParams.id);
                     }]}
 
@@ -468,11 +468,18 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
         });
         $scope.nombre = '';
     };
+
+
     $scope.states = [
-        {html:'checkbox',visual: 'opcion multiple'},
-        {html:'radio',visual: 'unica opcion'},
-        {html:'text',visual: 'texto'}
+        {html:'checkbox',visual: 'Opcion Multiple'},
+        {html:'radio',visual: 'Unica Opcion'},
+        {html:'text',visual: 'Texto'},
+        {html:'interruptor',visual: 'SI / NO'}
     ];
+
+    $scope.removerOpcion = function (id) {
+        $scope.opciones.splice(id, 1);
+    };
 
 
     $scope.addPregunta = function(idformulario){

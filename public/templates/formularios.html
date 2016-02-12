@@ -30,11 +30,12 @@
         </md-input-container>
 
 
-        <div ng-show="tipo.valor == 'checkbox'">
+        <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
             <input type="text" ng-model="opcion.valor">
              <div ng-click="addOpcion()">anadir opcion</div>
-            <div ng-repeat="opt in opciones">
+            <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
                 {{opt}}
+                <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
             </div>
         </div>
 
