@@ -1,21 +1,18 @@
 <p>hola mundo</p>
 {{formulario.nombre}}
 <style>
-    div.flex-xs {
-        min-height: 40px; }
-    div {
-        clear: both; }
-    md-checkbox {
-        float: left; }
-    fieldset.standard {
-        border-style: solid;
-        border-width: 1px; }
-    md-checkbox.md-default-theme.md-checked .md-ink-ripple, md-checkbox.md-checked .md-ink-ripple {
-        color: #E30613;
+
+
+
+    md-checkbox.md-checked .md-icon:after {
+        left: 7px;
+        top: 2px;
     }
-    md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-icon {
-        background-color: #E30613;
+
+    md-checkbox.md-checked.red .md-icon {
+        background-color: rgba(227, 6, 19, 1);
     }
+
     md-switch.md-default-theme.md-checked.md-warn .md-ink-ripple, md-switch.md-checked.md-warn .md-ink-ripple {
         color: #E30613;
     }
@@ -33,14 +30,18 @@
     }
 </style>
 
+{{formulario.preguntas}}
+<form>
 
 <div ng-repeat="preg in formulario.preguntas">
+
     <fieldset>
+
     <div ng-if="preg.tipo == 'checkbox'">
         {{preg.pregunta}}
-        <div ng-repeat="opt in preg.opciones">
+        <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" >
             <div flex-xs flex="50">
-                <md-checkbox ng-model="data.cb1" aria-label="{{opt}}">
+                <md-checkbox ng-model="valores2[$parent.$index][$index]" aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
                     {{opt}}
                 </md-checkbox>
             </div>
@@ -48,7 +49,8 @@
     </div>
     <div ng-if="preg.tipo == 'radio'">
         {{preg.pregunta}}
-        <md-radio-group ng-model="data.group1">
+        <md-radio-group ng-model="valores2[$index]" ng-required="true">
+
         <div ng-repeat="opt in preg.opciones">
             <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
         </div>
@@ -57,14 +59,27 @@
     <div ng-if="preg.tipo == 'text'">
         <md-input-container flex>
             <label>{{preg.pregunta}}</label>
-            <input type="text"/>
+            <input type="text" ng-model="valores2[$index].respuesta"/>
         </md-input-container>
     </div>
     <div ng-if="preg.tipo == 'interruptor'">
         {{preg.pregunta}}
-        <md-switch ng-model="jdjd" aria-label="Switch 2" ng-true-value="'yup'" ng-false-value="'nope'" class="md-warn">
+        <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn">
 
         </md-switch>
     </div>
 </fieldset>
 </div>
+</form>
+
+{{valores2}}
+
+
+
+<nvd3 options="options" data="resultadofinal"></nvd3>
+{{resultado2}}<br>
+{{obj2}}<br>
+{{resultado3}}<br>
+{{obj3}}
+<nvd3 options="options" data="resultadofinal2"></nvd3>
+<nvd3 options="options" data="resultadofinal3"></nvd3>

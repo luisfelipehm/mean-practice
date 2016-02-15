@@ -1,4 +1,4 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3']);
 
 app.directive('barranav', function() {
     return {
@@ -492,23 +492,152 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
         }).success(function(pregunta) {
             formularios.getAll();
         });
-        $scope.pregunta = '';
-        $scope.tipo = '';
+        $scope.pregunta = {valor:''};
+        $scope.tipo = {valor:''};
     };
 
 }]);
 
-
+function toObject(arr, num) {
+    var rv = {};
+    for (var i = 0; i < arr.length; ++i)
+        rv[i] = num == 0 ?  false : arr[i];
+    return rv;
+}
 app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  function($scope, formularios,formulario,auth){
 
     $scope.formulario = formulario;
     $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.valores2 = [];
+    angular.forEach($scope.formulario.preguntas, function (preg) {
+            $scope.valores2.push(
+                ((preg.tipo == 'checkbox' || preg.tipo == 'radio') ?  ""  : {pregunta: preg.pregunta,  respuesta: ((preg.tipo == 'interruptor') ?  'No' :  '')} )
+        )
+        }
+
+    );
+    $scope.valores = [];
+
+    $scope.options = {
+        chart: {
+            type: 'pieChart',
+            height: 500,
+            donut: true ,
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+            showLabels: false,
+            duration: 500,
+            labelThreshold: 0.01,
+            labelSunbeamLayout: true,
+            legend: {
+                margin: {
+                    top: 5,
+                    right: 35,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
+
+    $scope.data = [
+        {
+            key: "One",
+            y: 5
+        },
+        {
+            key: "Two",
+            y: 2
+        },
+        {
+            key: "Three",
+            y: 9
+        },
+        {
+            key: "Four",
+            y: 7
+        },
+        {
+            key: "Five",
+            y: 4
+        },
+        {
+            key: "Six",
+            y: 3
+        },
+        {
+            key: "Seven",
+            y: .5
+        }
+    ];
 
 
+    $scope.data2 = [
+
+        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
+        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"Si"}],
+        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"Si"}],
+        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"0":"Musica","2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
+        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
+        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}]
+
+    ];
+    $scope.resultado = [];
+    $scope.resultado2 = [];
+    $scope.resultado3 = [];
+    $scope.resultadofinal = [];
+    $scope.resultadofinal2 = [];
+    $scope.resultadofinal3 = [];
 
 
+    /*  Checkbox */
+
+    angular.forEach($scope.data2, function (dat) {
+        $scope.resultado3.push(dat[1])
+    });
+    $scope.resultadox = [];
+
+    angular.forEach($scope.resultado3, function (dat) {
+        angular.forEach(dat, function (dat2) {
+            $scope.resultadox.push(dat2);
+        })
+    });
+    $scope.obj3 = {};
+    for (var i = 0, j = $scope.resultadox.length; i < j; i++) {
+        $scope.obj3[$scope.resultadox[i]] = ($scope.obj3[$scope.resultadox[i]] || 0) + 1;
+    }
+
+    for(var x in $scope.obj3){
+        $scope.resultadofinal3.push({key: x, y: $scope.obj3[x]});
+    }
+
+    /* Radio Button */
+
+    angular.forEach($scope.data2, function (dat) {
+             $scope.resultado.push(dat[2])
+    });
+    $scope.obj = {};
+    for (var i = 0, j = $scope.resultado.length; i < j; i++) {
+        $scope.obj[$scope.resultado[i]] = ($scope.obj[$scope.resultado[i]] || 0) + 1;
+    }
+
+    for(var x in $scope.obj){
+        $scope.resultadofinal.push({key: x, y: $scope.obj[x]});
+    }
 
 
+    /*  Interruptor */
+    angular.forEach($scope.data2, function (dat) {
+        $scope.resultado2.push(dat[3].respuesta)
+    });
+    $scope.obj2 = {};
+    for (var i = 0, j = $scope.resultado2.length; i < j; i++) {
+        $scope.obj2[$scope.resultado2[i]] = ($scope.obj2[$scope.resultado2[i]] || 0) + 1;
+    }
+
+    for(var x in $scope.obj2){
+        $scope.resultadofinal2.push({key: x, y: $scope.obj2[x]});
+    }
 
 }]);
 
