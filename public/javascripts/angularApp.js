@@ -602,6 +602,7 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  
             $scope.resultadox.push(dat2);
         })
     });
+    
     $scope.obj3 = {};
     for (var i = 0, j = $scope.resultadox.length; i < j; i++) {
         $scope.obj3[$scope.resultadox[i]] = ($scope.obj3[$scope.resultadox[i]] || 0) + 1;
