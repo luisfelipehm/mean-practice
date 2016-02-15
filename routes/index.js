@@ -5,6 +5,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var moment = require('moment');
 var Post = mongoose.model('Post');
+var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Fotosfile = mongoose.model('Fotosfile');
@@ -17,6 +18,8 @@ var Formulario = mongoose.model('Formulario');
 var jwt = require('express-jwt');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
+
+
 
 router.get('/posts', function(req, res, next) {
   Post.find().populate('comments').exec(function (err,posts) {
@@ -68,7 +71,29 @@ router.param('formulario', function(req, res, next, id) {
 });
 
 
+router.post('/formularios/:formulario/responder',auth, function(req, res, next) {
+  var comment = new Respuesta(req.body);
+  comment.author = req.payload.username;
+  comment.save(function(err, comment){
+    if(err){ return next(err); }
+    req.formulario.respuestas.push(comment);
+    req.formulario.save(function(err, formulario) {
+      if(err){ return next(err); }
+      res.json(comment);
+    });
+  });
+});
+
 // OBTENER UN FORMULARIO
+router.get('/formularios/:formulario/results', function(req, res, next) {
+
+  req.formulario.populate('respuestas', function(err, formulario) {
+    if (err) { return next(err);   }
+
+
+    res.json(formulario);
+  });
+});
 
 router.get('/formularios/:formulario', function(req, res, next) {
 
@@ -385,7 +410,6 @@ router.post('/register', function(req, res, next){
   user.username = req.body.username;
 
   user.setPassword(req.body.password);
-
   user.save(function (err){
     if(err){ return next(err); }
 
@@ -419,5 +443,7 @@ router.post('/login', function(req, res, next){
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+
 
 module.exports = router;

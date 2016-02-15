@@ -11,9 +11,18 @@
   <link rel="stylesheet" href="/libs/slick-carousel/slick/slick-theme.css">
   <link rel="stylesheet" href="/libs/nvd3/build/nv.d3.min.css">
 
+  <script src="/socket.io/socket.io.js"></script>
+
+
+
   <script src="/libs/jquery/dist/jquery.min.js"></script>
+
   <script src="/libs/moment/min/moment.min.js"></script>
   <script src="/libs/angular/angular.min.js"></script>
+  <script src="/libs/angular-socket-io/socket.js"></script>
+  <script>
+    var socket = io('ws://192.168.0.24');
+  </script>
   <script src="/libs/angular-animate/angular-animate.min.js"></script>
   <script src="/libs/angular-aria/angular-aria.min.js"></script>
   <script src="/libs/angular-messages/angular-messages.min.js"></script>
@@ -65,9 +74,28 @@
       left: 0;
       width: 100%;
     }
+    .chatbox
+    {
+      position: fixed;
+      width: 300px;
+      height: 15vh;
+      bottom: 0;
+      right: 0;
+      border: 1px solid black;
+
+    }
   </style>
 </head>
 <body ng-app="flapperNews" >
+
+<div class="chatbox" ng-controller="ChatCtrl">
+  <ul id="messages">
+    <li ng-repeat="men in mensajes">{{men}}</li>
+  </ul>
+  <form action="" id="chati">
+    <input id="m" autocomplete="off" /><p id="enviando">Send</p>
+  </form>
+</div>
 
 <!--<div style="position: absolute;top: 0;left: 0;width: 100% ">-->
   <!--<img style="width:100%; height: 51vh" src="/img/foto_mundo.png">-->
