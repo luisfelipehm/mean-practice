@@ -28,6 +28,20 @@ var multer  = require('multer');
 var app = express();
 app.io = require('socket.io')();
 
+app.io.on('connection', function(socket){
+  //var clients = findClientsSocket() ;
+  //console.log(clients);
+  console.log('a user connected');
+
+  socket.on('message', function(msg){
+    app.io.emit('message', msg);
+  });
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+// receive from client (index.ejs) with socket.on
+
+});
 
 
 // view engine setup
@@ -81,17 +95,25 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.io.on('connection', function(socket){
-  console.log('a user connected');
+function findClientsSocket(roomId, namespace) {
+  var res = []
+      , ns = app.io.of(namespace ||"/");    // the default namespace is "/"
 
-  socket.on('message', function(msg){
-    app.io.emit('message', msg);
-  });
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-// receive from client (index.ejs) with socket.on
+  if (ns) {
+    for (var id in ns.connected) {
+      if(roomId) {
+        var index = ns.connected[id].rooms.indexOf(roomId) ;
+        if(index !== -1) {
+          res.push(ns.connected[id]);
+        }
+      } else {
+        res.push(ns.connected[id]);
+      }
+    }
+  }
+  return res;
+}
 
-});
+
 
 module.exports = app;
