@@ -1,0 +1,13 @@
+<style>
+    .nv-label > text{
+        fill: white !important;
+    }
+    .graficasform
+    {
+        width: 50%;
+        display: inline-block;
+    }
+</style>
+<div ng-repeat="resu in resultadofinal" class="graficasform">
+    <nvd3 options="options" data="resu"></nvd3>
+</div>

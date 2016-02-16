@@ -28,58 +28,61 @@
     md-radio-group.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-group:not([disabled]) .md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-group:not([disabled]) .md-primary.md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-group:not([disabled]).md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-group:not([disabled]).md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-button:not([disabled]) .md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-button:not([disabled]) .md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-button:not([disabled]).md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-button:not([disabled]).md-primary.md-checked .md-off {
         border-color: #E30613;
     }
+
 </style>
 
-{{formulario.preguntas}}
-<form>
+
+<form ng-submit="responder(formulario._id)">
 
 <div ng-repeat="preg in formulario.preguntas">
 
     <fieldset>
-
+        <!--EN CASO DE QUE SEA UN CHECKBOX-->
     <div ng-if="preg.tipo == 'checkbox'">
-        {{preg.pregunta}}
+        <!--PREG PREGUNTA ES EL NOMBRE DE LA PREGUNTA-->
+        <h1>{{preg.pregunta}}</h1>
+        <!--CADA CHECKBOX-->
         <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" >
             <div flex-xs flex="50">
-                <md-checkbox ng-model="valores2[$parent.$index][$index]" aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
+
+                <md-checkbox ng-model="valores2[$parent.$index].respuesta[opt]" aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
                     {{opt}}
                 </md-checkbox>
             </div>
         </div>
     </div>
+        <!--EN CASO DE QUE SEA UN RADIO BUTTON -->
     <div ng-if="preg.tipo == 'radio'">
-        {{preg.pregunta}}
-        <md-radio-group ng-model="valores2[$index]" ng-required="true">
-
+        <h1>{{preg.pregunta}}</h1>
+        <md-radio-group ng-model="valores2[$index].respuesta" ng-required="true" required>
+            <!--CADA RADIO BUTTON-->
         <div ng-repeat="opt in preg.opciones">
             <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
         </div>
         </md-radio-group>
     </div>
+        <!--EN CASO DE QUE SEA UN CAMPO DE TEXTO-->
     <div ng-if="preg.tipo == 'text'">
         <md-input-container flex>
             <label>{{preg.pregunta}}</label>
             <input type="text" ng-model="valores2[$index].respuesta"/>
         </md-input-container>
     </div>
+        <!--EN CASO DE QUE SEA UN INTERRUPTOR-->
     <div ng-if="preg.tipo == 'interruptor'">
-        {{preg.pregunta}}
+        <h1>{{preg.pregunta}}</h1>
         <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn">
 
         </md-switch>
     </div>
 </fieldset>
 </div>
+    <!--BOTON DE ENVIAR-->
+    <fieldset>
+        <md-button type="submit"  class="md-raised"> Enviar Formulario </md-button>
+    </fieldset>
 </form>
 
-{{valores2}}
 
 
 
-<nvd3 options="options" data="resultadofinal"></nvd3>
-{{resultado2}}<br>
-{{obj2}}<br>
-{{resultado3}}<br>
-{{obj3}}
-<nvd3 options="options" data="resultadofinal2"></nvd3>
-<nvd3 options="options" data="resultadofinal3"></nvd3>

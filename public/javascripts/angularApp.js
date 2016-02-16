@@ -1,10 +1,13 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io']);
 
 app.directive('barranav', function() {
     return {
         restrict: 'E',
         templateUrl: '/templates/_barra.html'
     };
+});
+app.factory('mySocket', function (socketFactory) {
+    return socketFactory();
 });
 app.directive('fullbars', function() {
     return {
@@ -151,11 +154,21 @@ app.factory('formularios', ['$http','auth',function($http,auth){
             return res.data;
         });
     };
+    o.getResults = function (id) {
+        return $http.get('/formularios/' + id + '/results').then(function(res){
+            return res.data;
+        });
+    };
     o.addPregunta = function(id, pregunta) {
         console.log(pregunta);
         console.log('hola mundo');
 
         return $http.post('/formularios/' + id + '/preguntas', pregunta, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+    o.respon = function(id, comment) {
+        return $http.post('/formularios/' + id + '/responder', comment, {
             headers: {Authorization: 'Bearer '+auth.getToken()}
         });
     };
@@ -322,6 +335,16 @@ app.config([
                     }]}
 
             })
+            .state('formularioresults', {
+                url: '/formularios/{id}/results',
+                templateUrl: 'templates/formularioresults.html',
+                controller: 'FormularioresultsCtrl',
+                resolve: {
+                    formularior: ['$stateParams', 'formularios', function($stateParams, formularios) {
+                        return formularios.getResults($stateParams.id);
+                    }]}
+
+            })
 
 
         //    .state('document', {
@@ -338,8 +361,6 @@ app.config([
         $urlRouterProvider.otherwise('home');
     }]);
 
-
-
 app.controller('NavCtrl', [
     'auth',
     function( auth){
@@ -348,11 +369,6 @@ app.controller('NavCtrl', [
         nav.currentUser = auth.currentUser;
         nav.logOut = auth.logOut;
     }]);
-
-
-
-
-
 
 app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,auth,documents) {
     $scope.isLoggedIn = auth.isLoggedIn;
@@ -446,9 +462,6 @@ app.controller('CalendarCtrl',['$scope', function ($scope) {
     };
 }]);
 
-
-
-
 app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scope,auth,formularios) {
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.formularios = formularios.formularios;
@@ -497,35 +510,55 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
     };
 
 }]);
+app.controller('ChatCtrl',['$scope','mySocket', function ($scope,mySocket) {
 
-function toObject(arr, num) {
-    var rv = {};
-    for (var i = 0; i < arr.length; ++i)
-        rv[i] = num == 0 ?  false : arr[i];
-    return rv;
-}
-app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  function($scope, formularios,formulario,auth){
-
-    $scope.formulario = formulario;
+    $scope.mensajes = [];
+    $scope.clients = findClientsSocket() ;
+    $('#enviando').click(function () {
+        socket.emit('message', $('#m').val());
+        $('#m').val('');
+    });
+    mySocket.forward('message', $scope);
+    $scope.$on('socket:message', function (ev, data) {
+            $scope.mensajes.push(data);
+    });
+}]);
+app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','auth', function ($scope, formularios,formularior,auth) {
+    $scope.formulario = formularior;
     $scope.isLoggedIn = auth.isLoggedIn;
-    $scope.valores2 = [];
-    angular.forEach($scope.formulario.preguntas, function (preg) {
-            $scope.valores2.push(
-                ((preg.tipo == 'checkbox' || preg.tipo == 'radio') ?  ""  : {pregunta: preg.pregunta,  respuesta: ((preg.tipo == 'interruptor') ?  'No' :  '')} )
-        )
-        }
+    $scope.data2 = [];
+    angular.forEach($scope.formulario.respuestas, function (respues) {
+        $scope.data2.push(respues.dato);
+    })
 
-    );
-    $scope.valores = [];
+    function enumerador(arreglo) {
+        objeto = {};
+        for (var i = 0, j = arreglo.length; i < j; i++) {
+            if(arreglo[i] != false && arreglo[i] != ""){
+            objeto[arreglo[i]] = (objeto[arreglo[i]] || 0) + 1;
+            }
+        }
+        return objeto;
+    }
+    function aD3(dato) {
+        resultado = [];
+        for (var x in dato) {
+            resultado.push({key: x, y: dato[x]});
+        }
+        return resultado;
+    }
 
     $scope.options = {
         chart: {
             type: 'pieChart',
             height: 500,
             donut: true ,
+            color:['#E30613','#4a4a49','#646363','#7c7c7b','#929292','#a8a8a7','#bdbcbc','#d0d0d0'],
+            showLabels: true,
+            labelType: "percent",
             x: function(d){return d.key;},
             y: function(d){return d.y;},
-            showLabels: false,
+
             duration: 500,
             labelThreshold: 0.01,
             labelSunbeamLayout: true,
@@ -540,105 +573,154 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  
         }
     };
 
-    $scope.data = [
-        {
-            key: "One",
-            y: 5
-        },
-        {
-            key: "Two",
-            y: 2
-        },
-        {
-            key: "Three",
-            y: 9
-        },
-        {
-            key: "Four",
-            y: 7
-        },
-        {
-            key: "Five",
-            y: 4
-        },
-        {
-            key: "Six",
-            y: 3
-        },
-        {
-            key: "Seven",
-            y: .5
-        }
-    ];
 
+    $scope.resultadofinal = [];
+    $scope.resultadofinal3 = [];
+
+    for(z=0; z< $scope.data2[0].length;z++) {
+
+        $scope.resultadofinal3 = [];
+        $scope.resultado3 = [];
+
+        angular.forEach($scope.data2, function (dat) {
+            $scope.resultado3.push(dat[z].respuesta)
+        });
+
+        console.log();
+        //console.log(Object.keys());
+
+        if(typeof $scope.resultado3[0] === 'object'){
+            $scope.resultadox = [];
+
+            angular.forEach($scope.resultado3, function (dat) {
+                angular.forEach(dat, function (dat2) {
+                    $scope.resultadox.push(dat2);
+                })
+            });
+            $scope.obj3 = enumerador($scope.resultadox);
+        }else{
+            $scope.obj3 = enumerador($scope.resultado3);
+
+        }
+        $scope.resultadofinal3 = aD3($scope.obj3);
+
+
+        $scope.resultadofinal.push($scope.resultadofinal3);
+
+    }
+
+}]);
+
+app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth','$state',  function($scope, formularios,formulario,auth,$state){
+
+    $scope.formulario = formulario;
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.valores2 = [];
+    angular.forEach($scope.formulario.preguntas, function (preg) {
+            $scope.valores2.push(
+                ( {pregunta: preg.pregunta,  respuesta:   '' })
+        )
+        }
+
+    );
+
+    $scope.responder = function (idform) {
+        formularios.respon(idform,  {
+            dato: $scope.valores2
+        }).success(function () {
+            $state.go('home');
+        })
+    };
+
+    $scope.options = {
+        chart: {
+            type: 'pieChart',
+            height: 500,
+            donut: true ,
+            color:['#E30613','#575756','#878787'],
+            showLabels: true,
+            labelType: "percent",
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+
+            duration: 500,
+            labelThreshold: 0.01,
+            labelSunbeamLayout: true,
+            legend: {
+                margin: {
+                    top: 5,
+                    right: 35,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
 
     $scope.data2 = [
 
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"Si"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"Si"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"0":"Musica","2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}]
+            [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"No"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Tarjeta de Identidad"}],
 
     ];
+
+
+    function enumerador(arreglo) {
+        objeto = {};
+        for (var i = 0, j = arreglo.length; i < j; i++) {
+            objeto[arreglo[i]] = (objeto[arreglo[i]] || 0) + 1;
+        }
+        return objeto;
+    }
+    function aD3(dato) {
+        resultado = [];
+        for (var x in dato) {
+            resultado.push({key: x, y: dato[x]});
+        }
+        return resultado;
+    }
+
     $scope.resultado = [];
     $scope.resultado2 = [];
-    $scope.resultado3 = [];
+
     $scope.resultadofinal = [];
     $scope.resultadofinal2 = [];
     $scope.resultadofinal3 = [];
 
+    for(z=0; z< $scope.data2[0].length;z++) {
 
-    /*  Checkbox */
+        $scope.resultadofinal3 = [];
+        $scope.resultado3 = [];
 
-    angular.forEach($scope.data2, function (dat) {
-        $scope.resultado3.push(dat[1])
-    });
+        angular.forEach($scope.data2, function (dat) {
+            $scope.resultado3.push(dat[z].respuesta)
+        });
+
+        console.log();
+        //console.log(Object.keys());
+
+if(typeof $scope.resultado3[0] === 'object'){
     $scope.resultadox = [];
 
-    angular.forEach($scope.resultado3, function (dat) {
-        angular.forEach(dat, function (dat2) {
-            $scope.resultadox.push(dat2);
-        })
-    });
-    
-    $scope.obj3 = {};
-    for (var i = 0, j = $scope.resultadox.length; i < j; i++) {
-        $scope.obj3[$scope.resultadox[i]] = ($scope.obj3[$scope.resultadox[i]] || 0) + 1;
+        angular.forEach($scope.resultado3, function (dat) {
+            angular.forEach(dat, function (dat2) {
+                $scope.resultadox.push(dat2);
+            })
+        });
+    $scope.obj3 = enumerador($scope.resultadox);
+}else{
+    $scope.obj3 = enumerador($scope.resultado3);
+
+}
+        $scope.resultadofinal3 = aD3($scope.obj3);
+
+
+        $scope.resultadofinal.push($scope.resultadofinal3);
+
     }
-
-    for(var x in $scope.obj3){
-        $scope.resultadofinal3.push({key: x, y: $scope.obj3[x]});
-    }
-
-    /* Radio Button */
-
-    angular.forEach($scope.data2, function (dat) {
-             $scope.resultado.push(dat[2])
-    });
-    $scope.obj = {};
-    for (var i = 0, j = $scope.resultado.length; i < j; i++) {
-        $scope.obj[$scope.resultado[i]] = ($scope.obj[$scope.resultado[i]] || 0) + 1;
-    }
-
-    for(var x in $scope.obj){
-        $scope.resultadofinal.push({key: x, y: $scope.obj[x]});
-    }
-
-
-    /*  Interruptor */
-    angular.forEach($scope.data2, function (dat) {
-        $scope.resultado2.push(dat[3].respuesta)
-    });
-    $scope.obj2 = {};
-    for (var i = 0, j = $scope.resultado2.length; i < j; i++) {
-        $scope.obj2[$scope.resultado2[i]] = ($scope.obj2[$scope.resultado2[i]] || 0) + 1;
-    }
-
-    for(var x in $scope.obj2){
-        $scope.resultadofinal2.push({key: x, y: $scope.obj2[x]});
-    }
+    console.log($scope.resultadofinal);
 
 }]);
 

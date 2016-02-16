@@ -11,7 +11,8 @@
 
 <div ng-repeat="forma in formularios">
 {{forma}}
-    <a href="#/formularios/{{forma._id}}">{{forma.nombre}}</a>
+    <a href="#/formularios/{{forma._id}}">Responder {{forma.nombre}}</a>
+    <a href="#/formularios/{{forma._id}}/results">Resultados {{forma.nombre}}</a>
 
     <form ng-submit="addPregunta(forma._id)" >
 
