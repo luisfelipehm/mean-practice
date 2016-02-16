@@ -513,7 +513,7 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
 app.controller('ChatCtrl',['$scope','mySocket', function ($scope,mySocket) {
 
     $scope.mensajes = [];
-    $scope.clients = findClientsSocket() ;
+
     $('#enviando').click(function () {
         socket.emit('message', $('#m').val());
         $('#m').val('');
