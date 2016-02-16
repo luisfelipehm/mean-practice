@@ -16,6 +16,7 @@ require('./models/Fotosfiles');
 require('./models/Fotos');
 require('./models/Formularios');
 require('./models/Preguntas');
+require('./models/Conectados');
 require('./models/Respuestas');
 require('./config/passport');
 moongose.connect('mongodb://localhost/news');
@@ -27,21 +28,8 @@ var multer  = require('multer');
 
 var app = express();
 app.io = require('socket.io')();
+require('./sockets/chat')(app.io);
 
-app.io.on('connection', function(socket){
-  //var clients = findClientsSocket() ;
-  //console.log(clients);
-  console.log('a user connected');
-
-  socket.on('message', function(msg){
-    app.io.emit('message', msg);
-  });
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-// receive from client (index.ejs) with socket.on
-
-});
 
 
 // view engine setup
