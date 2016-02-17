@@ -1,3 +1,6 @@
+<script>
+    var numerodechats = 0;
+</script>
 <style>
     .chatty
     {
@@ -190,16 +193,18 @@
     }
 </style>
 
-<div ng-controller="ChatCtrl">
+<div ng-controller="ChatCtrl" id="chap">
 
 
 
 
     <div class="chatty">
 
+
+
         <div ng-repeat="users in usuariosconectados">
             <p ng-click="generarChat(users.username)" >
-                {{users.actual}}
+
                 <img src="/img/chat-conectado.png" class="conectchat" ng-show="users.actual">
                 <img src="/img/chat-desconectado.png" class="conectchat" ng-show="!users.actual" >
                 {{users.username}}</p>

@@ -196,8 +196,8 @@
 <div class="barrasup">
     <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
         <div>
-            <p class="username" ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }} <div class="line2"></div> </a></p>
-            <p ng-show="nav.isLoggedIn()"><a href="" ng-click="nav.logOut()">Cerrar Sesion</a></p>
+            <p class="username" ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser.username }} <div class="line2"></div> </a></p>
+            <p ng-show="nav.isLoggedIn()"><a href="" ng-click="nav.logOut(nav.currentUser.username)">Cerrar Sesion</a></p>
 
             <p class="inicio"><a style="color: white" ui-sref="home">Inicio</a></p>
             <p class="boxnoti"><img class="imgnoti" src="/img/icononoti.png"></p>

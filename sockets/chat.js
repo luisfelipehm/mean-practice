@@ -2,14 +2,33 @@ module.exports = function(io) {
 
     var mongoose = require('mongoose');
     var Conectado = mongoose.model('Conectado');
+    var Conversation = mongoose.model('Conversation');
     var User = mongoose.model('User');
 
 
     io.on('connection', function(socket){
-        //var clients = findClientsSocket() ;
-        //console.log(clients);
 
 
+
+
+        socket.on('chateando', function (msg) {
+            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: msg.mesj,receptor: msg.recibe });
+            conv.save(function(){
+
+                //var sabe = [{usernameone: msg.envia,usernametwo: msg.recibe},{usernametwo: msg.recibe,usernameone: msg.envia}];
+
+                io.emit('chateando',msg);
+
+
+
+
+
+            });
+
+
+
+
+        });
 
         socket.on('usuario', function (user) {
 
@@ -20,11 +39,16 @@ module.exports = function(io) {
                  io.emit('usuario',user)
             });
             });
+        socket.on('disusuario', function (user) {
 
-            //var conectado = new Conectado({username: user,sock:socket.id,actual:true});
-            //conectado.save(function(){
+            User.findOne({ username: user }, function (err, name) {
+                name.sock = '';
+                name.actual = false;
+                name.save();
+                io.emit('usuario',user)
+            });
+        });
 
-            //}); });
 
 
 
@@ -48,14 +72,7 @@ module.exports = function(io) {
 
 
 
-            //Conectado.findOne({ sock:socket.id }, function (err, name) {
-            //    name.sock = '';
-            //    name.actual = false;
-            //    name.save();
-            //});
-            //var query = Conectado.find().remove({ sock:socket.id });
-            //query.exec();
-            //io.emit('usuario', 'DC')
+
 
         });
 
@@ -65,7 +82,7 @@ module.exports = function(io) {
 
 
 
-// receive from client (index.ejs) with socket.on
+
 
 
 

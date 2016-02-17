@@ -208,7 +208,7 @@ app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $wi
             var token = auth.getToken();
             var payload = JSON.parse($window.atob(token.split('.')[1]));
 
-            return payload.username;
+            return payload;
         }else
         {
             return "no conectado"
@@ -225,10 +225,8 @@ app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $wi
         });
     };
     auth.logOut = function(){
-
-
-        $window.localStorage.removeItem('flapper-news-token');
-        $state.go('login');
+            $window.localStorage.removeItem('flapper-news-token');
+            $state.go('login');
     };
 
     return auth;
@@ -403,11 +401,16 @@ app.config([
         $urlRouterProvider.otherwise('/root/home');
     }]);
 
-app.controller('NavCtrl', ['auth', function( auth){
+app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$scope){
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
-        nav.currentUser = auth.currentUser;
-        nav.logOut = auth.logOut;
+        nav.currentUser = auth.currentUser();
+
+        nav.logOut = function (user) {
+            socket.emit('disusuario', user );
+            mySocket.forward('usuario', $scope);
+            auth.logOut();
+        }
     }]);
 
 app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,auth,documents) {
@@ -574,13 +577,31 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
 
     $scope.mensajes = [];
     $scope.usuariosconectados = [];
-
+    $scope.currentUser = auth.currentUser();
     $scope.isLoggedIn = auth.isLoggedIn;
 
     if ($scope.isLoggedIn) {
-        socket.emit('usuario', auth.currentUser());
+        socket.emit('usuario', $scope.currentUser.username);
         mySocket.forward('usuario', $scope);
     }
+
+    $scope.obtenerMensajes = function (name1,name2,rec) {
+
+        //return $http.get('/products').then(function(response) {
+        //    return response.data;
+        //});
+        $http.get('/mensajes/'+ name1 +','+ name2).then(function (response) {
+
+            angular.copy(response.data, $scope.mensajes);
+            var lastme = $scope.mensajes.slice(-1)[0];
+            $("#"+rec+"chattext2").val('');
+
+            $('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>')
+
+        })
+    };
+
+
     $scope.actualizarUsers = function () {
         return $http.get('/conectados').success(function(data){
             angular.copy(data,$scope.usuariosconectados)
@@ -591,23 +612,59 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
        $scope.actualizarUsers();
     });
 
+    mySocket.forward('chateando', $scope);
+
+
+        $scope.$on('socket:chateando', function (ev, data) {
+            if(data.envia == $scope.currentUser.username){
+                $scope.obtenerMensajes(data.participan[0],data.participan[1],data.recibe);
+            }else if(data.recibe == $scope.currentUser.username)
+            {
+                if($('#'+data.envia+'chat').length == 0){
+                    $scope.generarChat(data.envia);
+                }else{
+                    $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
+                }
+            }
+        });
+
+
+
+
+
+
 
     $scope.numerochats = 1;
     $scope.generarChat = function (name) {
-      $('.chatty').append('<div class="chatbox" id="'+name+'chat" style="bottom: 0px; right: '+ $scope.numerochats*285 +'px; display: block;">' +
-          '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
-      '<h1> '+name+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
-            '<br clear="all"></div><div class="chatboxcontent"></div>'+
-          '    <div class="chatboxinput"><form class="new_message" ng-submit="enviarMensaje()" accept-charset="UTF-8" >'+
-          '<textarea class="chatboxtextarea"></textarea> </form> </div> </div>');
+        var part = [name , $scope.currentUser.username].sort();
 
-        $scope.numerochats += 1;
+        $http.get('/mensajes/'+ part[0] +','+ part[1]).then(function (response) {
+            angular.copy(response.data, $scope.mensajes);
+
+            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext").submit(function () {  socket.emit("chateando",{mesj: $("#'+name+'chattext2").val(), envia:"'+ $scope.currentUser.username +'", participan: ["'+name +'","'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'"  }); });' +
+                '$("#closechat'+ name+'").click(function () {numerodechats--;$("#'+name+'chat").remove();})' +
+                '</script>' +
+                '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
+                '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
+                '<h1> '+name+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+                '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
+                '    <div class="chatboxinput"><form id="'+name+'chattext" class="new_message" ng-submit="enviarMensaje( '+$scope.currentUser.username+' , '+name+', '+name+'chattext )" accept-charset="UTF-8" >'+
+                '<input type="text" id="'+name+'chattext2" class="chatboxtextarea"> </div> </div>' +
+                '<script>$("#'+name+'chat").css("right",numerodechats*285+"px")</script>');
+
+            $scope.numerochats += 1;
+
+            angular.forEach($scope.mensajes, function (mensa) {
+                $('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>')
+            })
+
+        });
     };
 
 
     $scope.cerrarChat= function (name) {
         console.log('#'+name+'chat');
-        $('#'+name+'chat').remove();
+
     };
 
     $scope.actualizarUsers();
