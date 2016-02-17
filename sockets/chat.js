@@ -23,15 +23,24 @@ module.exports = function(io) {
             //var conectado = new Conectado({username: user,sock:socket.id,actual:true});
             //conectado.save(function(){
 
-            //});
-
-        });
+            //}); });
 
 
 
         socket.on('sok', function(msg){
             io.emit('sok', msg);
         });
+
+            socket.once('disusuario', function (user) {
+
+                User.findOne({ username: user }, function (err, name) {
+                    name.sock = '';
+                    name.actual = false;
+                    name.save();
+                    io.emit('usuario',user)
+                });
+            });
+
 
         socket.once('disconnect', function () {
 
