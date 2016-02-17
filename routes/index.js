@@ -9,6 +9,7 @@ var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Fotosfile = mongoose.model('Fotosfile');
 var Conectado = mongoose.model('Conectado');
+var Conversation = mongoose.model('Conversation');
 var Pregunta = mongoose.model('Pregunta');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
@@ -71,6 +72,24 @@ router.get('/conectados', function(req, res, next) {
   });
 
 });
+
+router.get('/mensajes/:mes', function(req, res, next) {
+
+var sabe = req.params.mes.split(',').sort();
+
+
+console.log(sabe);
+      Conversation.find({ usernametwo: sabe }, function(err,mensa){
+        if(err){ return next(err); }
+        console.log(mensa);
+        res.json(mensa);
+          });
+
+
+
+
+});
+
 
 
 
