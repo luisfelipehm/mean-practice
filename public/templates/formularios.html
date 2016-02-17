@@ -1,49 +1,96 @@
-<form name="myForm" ng-submit="crearFormulario()">
-    <md-input-container>
-        <label>Nombre del Formulario</label>
-        <input type="text" ng-model="nombre" required md-maxlength="20">
-    </md-input-container>
-    <md-button type="submit"  class="md-raised"> Publicar </md-button>
+<style>
+    .nombreformulario
+    {
+        border: solid aqua;
+        width: 90%;
+        margin-left: 5%;
+    }
+    .boxformularios
+    {
+        background: #ebebeb;
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        overflow: hidden;
+    }
+    .iconoformulario
+    {
+        position: relative;
+        width: 7vw;
+        left: 4%;
+    }
+    .boxiconossuperiores
+    {
+        margin-top: 2%;
+    }
+    .iconossuperioruno
+    {
+        height: 2vh;
+        margin-left: 91%;
+    }
+    .iconossuperiordos
+    {
+        height: 2vh;
+        margin-left: 1%;
+    }
+
+</style>
 
 
-</form>
+<div class="nombreformulario">
 
-
-<div ng-repeat="forma in formularios">
-{{forma}}
-    <a href="#/formularios/{{forma._id}}">Responder {{forma.nombre}}</a>
-    <a href="#/formularios/{{forma._id}}/results">Resultados {{forma.nombre}}</a>
-
-    <form ng-submit="addPregunta(forma._id)" >
-
+    <form name="myForm" ng-submit="crearFormulario()">
         <md-input-container>
-            <label>Pregunta</label>
-            <input type="text" ng-model="pregunta.valor" required md-maxlength="200">
+            <label>Nombre del Formulario</label>
+            <input type="text" ng-model="nombre" required md-maxlength="20">
         </md-input-container>
-
-        <md-input-container>
-            <label>Tipo</label>
-            <md-select ng-model="tipo.valor">
-
-                <md-option ng-repeat="state in states" value="{{state.html}}">
-                    {{state.visual}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-
-
-        <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
-            <input type="text" ng-model="opcion.valor">
-             <div ng-click="addOpcion()">anadir opcion</div>
-            <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
-                {{opt}}
-                <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
-            </div>
-        </div>
-
-        <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
-
+        <md-button type="submit"  class="md-raised"> Publicar </md-button>
     </form>
+</div>
+
+<div ng-repeat="forma in formularios" class="boxformularios">
+       <!--{{forma}}-->
+
+    <div class="boxiconossuperiores">
+        <img class="iconossuperioruno" src="/img/icono-editar.png">
+        <img class="iconossuperiordos" src="/img/iconox.png">
+    </div>
+           <img class="iconoformulario" src="/img/icono-fomulario.png">
+       <a href="#/formularios/{{forma._id}}">Responder {{forma.nombre}}</a>
+       <a href="#/formularios/{{forma._id}}/results">Resultados {{forma.nombre}}</a>
+
+       <form ng-submit="addPregunta(forma._id)" >
+
+           <md-input-container>
+               <label>Pregunta</label>
+               <input type="text" ng-model="pregunta.valor" required md-maxlength="200">
+           </md-input-container>
+
+           <md-input-container>
+               <label>Tipo</label>
+               <md-select ng-model="tipo.valor">
+
+                   <md-option ng-repeat="state in states" value="{{state.html}}">
+                       {{state.visual}}
+                   </md-option>
+               </md-select>
+           </md-input-container>
 
 
+           <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
+               <input type="text" ng-model="opcion.valor">
+                <div ng-click="addOpcion()">anadir opcion</div>
+               <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
+                   {{opt}}
+                   <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
+               </div>
+           </div>
+
+           <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
+
+       </form>
 </div>
