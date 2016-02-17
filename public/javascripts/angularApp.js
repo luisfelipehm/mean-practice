@@ -225,7 +225,7 @@ app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $wi
         });
     };
     auth.logOut = function(){
-        socket.emit('disusuario', auth.currentUser());
+
 
         $window.localStorage.removeItem('flapper-news-token');
         $state.go('login');
