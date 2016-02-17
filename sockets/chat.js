@@ -19,6 +19,7 @@ module.exports = function(io) {
                 name.save();
                  io.emit('usuario',user)
             });
+            });
 
             //var conectado = new Conectado({username: user,sock:socket.id,actual:true});
             //conectado.save(function(){
