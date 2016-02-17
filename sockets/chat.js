@@ -31,17 +31,6 @@ module.exports = function(io) {
             io.emit('sok', msg);
         });
 
-            socket.once('disusuario', function (user) {
-
-                User.findOne({ username: user }, function (err, name) {
-                    name.sock = '';
-                    name.actual = false;
-                    name.save();
-                    io.emit('usuario',user)
-                });
-            });
-
-
         socket.once('disconnect', function () {
 
             User.findOne({ sock: socket.id }).exec(function (err,document) {
