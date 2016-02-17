@@ -21,6 +21,12 @@ app.directive('barrader', function() {
         templateUrl: '/templates/_barraderecha.html'
     };
 });
+app.directive('chat', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_chat.html'
+    };
+});
 app.directive('barraizq', function() {
     return {
         restrict: 'E',
@@ -177,7 +183,7 @@ app.factory('formularios', ['$http','auth',function($http,auth){
 }]);
 
 
-app.factory('auth', ['$http', '$window', function($http, $window){
+app.factory('auth', ['$http', '$window','$state', function($http, $window,$state){
     var auth = {};
     auth.saveToken = function (token){
         $window.localStorage['flapper-news-token'] = token;
@@ -220,6 +226,7 @@ app.factory('auth', ['$http', '$window', function($http, $window){
     };
     auth.logOut = function(){
         $window.localStorage.removeItem('flapper-news-token');
+        $state.go('login');
     };
 
     return auth;
@@ -233,10 +240,28 @@ app.config(function($mdThemingProvider) {
 app.config([
     '$stateProvider',
     '$urlRouterProvider',
+
+
     function($stateProvider, $urlRouterProvider) {
 
         $stateProvider
+            .state( 'root', {
+                url: '/root',
+                views: {
+                    "main": {
+                        controller: 'RootCtrl',
+                        templateUrl: 'templates/root.html'
+                    }
+                },
+                onEnter: ['$state', 'auth', function($state, auth){
+                    if(auth.isLoggedIn() == false){
+                        $state.go('login');
+                    }
+                }]
+            })
+
             .state('home', {
+                parent: 'root',
                 url: '/home',
                 templateUrl: 'templates/home.html',
                 controller: 'MainCtrl',
@@ -245,9 +270,9 @@ app.config([
                         return posts.getAll();
                     }]
                 }
-
             })
             .state('documentos', {
+                parent: 'root',
                 url: '/documentos',
                 templateUrl: 'templates/documents.html',
                 controller: 'DocumentsCtrl',
@@ -264,8 +289,12 @@ app.config([
             })
             .state('login', {
                 url: '/login',
-                templateUrl: 'templates/login.html',
-                controller: 'AuthCtrl as usuario',
+                views: {
+                    "main": {
+                        controller: 'AuthCtrl as usuario',
+                        templateUrl: 'templates/login.html'
+                    }
+                },
                 onEnter: ['$state', 'auth', function($state, auth){
                     if(auth.isLoggedIn()){
                         $state.go('home');
@@ -273,6 +302,7 @@ app.config([
                 }]
             })
             .state('register', {
+                parent: 'root',
                 url: '/register',
                 templateUrl: 'templates/register.html',
                 controller: 'AuthCtrl as usuario',
@@ -283,7 +313,8 @@ app.config([
                 }]
             })
             .state('fotox', {
-                url: '/fotos',
+                parent: 'root',
+                url: '/fotos/',
                 templateUrl: 'templates/fotos.html',
                 controller: 'FotosCtrl',
                 resolve: {
@@ -293,6 +324,7 @@ app.config([
                 }
             })
             .state('fotos', {
+                parent: 'root',
                 url: '/fotos/{id}',
                 templateUrl: 'templates/album.html',
                 controller: 'FotoCtrl',
@@ -303,6 +335,7 @@ app.config([
 
             })
             .state('documents', {
+                parent: 'root',
                 url: '/documents/{id}',
                 templateUrl: 'templates/document.html',
                 controller: 'DocumentCtrl',
@@ -313,12 +346,14 @@ app.config([
 
             })
             .state('calendar', {
+                parent: 'root',
                 url: '/calendar',
                 templateUrl: 'templates/calendar.html',
                 controller: 'CalendarCtrl',
 
             })
             .state('formularios',{
+                parent: 'root',
                 url: '/formularios',
                 templateUrl: 'templates/formularios.html',
                 controller: 'FormulariosCtrl',
@@ -329,6 +364,7 @@ app.config([
                 }
             })
             .state('formulario', {
+                parent: 'root',
                 url: '/formularios/{id}',
                 templateUrl: 'templates/formulario.html',
                 controller: 'FormularioCtrl',
@@ -339,6 +375,7 @@ app.config([
 
             })
             .state('formularioresults', {
+                parent: 'root',
                 url: '/formularios/{id}/results',
                 templateUrl: 'templates/formularioresults.html',
                 controller: 'FormularioresultsCtrl',
@@ -347,7 +384,7 @@ app.config([
                         return formularios.getResults($stateParams.id);
                     }]}
 
-            })
+            });
 
 
         //    .state('document', {
@@ -359,14 +396,12 @@ app.config([
         //            return document.get($stateParams.id);
         //        }]}
         //})
-        ;
 
-        $urlRouterProvider.otherwise('home');
+
+        $urlRouterProvider.otherwise('/root/home');
     }]);
 
-app.controller('NavCtrl', [
-    'auth',
-    function( auth){
+app.controller('NavCtrl', ['auth', function( auth){
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser;
@@ -374,7 +409,13 @@ app.controller('NavCtrl', [
     }]);
 
 app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,auth,documents) {
+
     $scope.isLoggedIn = auth.isLoggedIn;
+
+    if(!$scope.isLoggedIn)
+    {
+
+    }
     $scope.documents = documents.documents;
 
     $scope.crearCarpeta = function(){
@@ -386,6 +427,7 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
     };
 
 }]);
+app.controller('RootCtrl', ['$scope', function ($scope) { }])
 
 app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
 
@@ -545,11 +587,13 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
     $scope.mensajes = [];
     $scope.usuariosconectados = [];
 
+    $scope.isLoggedIn = auth.isLoggedIn;
 
-    socket.emit('usuario', auth.currentUser());
+    if ($scope.isLoggedIn) {
+        socket.emit('usuario', auth.currentUser());
 
     mySocket.forward('usuario', $scope);
-
+    }
     $scope.actualizarUsers = function () {
         return $http.get('/conectados').success(function(data){
 
@@ -582,35 +626,7 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
 
     $scope.actualizarUsers();
 
-    //<div class="chatbox" style="bottom: 0px; right: 350px; display: block;">
-    //
-    //    <div class="chatboxhead">
-    //    <div class="chatboxtitle">
-    //    <i class="fa fa-comments"></i>
-    //
-    //    <h1>Usuario</h1>
-    //    </div>
-    //    <div class="chatboxoptions">
-    //
-    //    &nbsp;&nbsp;
-    //<a class="closeChat" href="#"><i class="fa  fa-times"></i> </a>
-    //    </div>
-    //    <br clear="all">
-    //    </div>
-    //    <div class="chatboxcontent">
-    //    </div>
-    //    <div class="chatboxinput">
-    //    <form class="new_message" ng-submit="enviarMensaje()" accept-charset="UTF-8" >
-    //
-    //    <textarea class="chatboxtextarea"></textarea>
-    //    </form>
-    //    </div>
-    //
-    //
-    //
-    //
-    //
-    //    </div>
+
 
 
 
