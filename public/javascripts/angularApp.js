@@ -30,7 +30,7 @@ app.directive('barraizq', function() {
 
 app.factory('posts', ['$http','auth',function($http,auth){
     var o = {
-    posts:[]
+        posts:[]
     };
 
     o.getAll = function() {
@@ -203,6 +203,9 @@ app.factory('auth', ['$http', '$window', function($http, $window){
             var payload = JSON.parse($window.atob(token.split('.')[1]));
 
             return payload.username;
+        }else
+        {
+            return "no conectado"
         }
     };
     auth.register = function(user){
@@ -510,19 +513,130 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
     };
 
 }]);
-app.controller('ChatCtrl',['$scope','mySocket', function ($scope,mySocket) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,mySocket,auth,$http) {
+
+    //Array.prototype.remove = function() {
+    //    var what, a = arguments, L = a.length, ax;
+    //    while (L && this.length) {
+    //        what = a[--L];
+    //        while ((ax = this.indexOf(what)) !== -1) {
+    //            this.splice(ax, 1);
+    //        }
+    //    }
+    //    return this;
+    //};
+
 
     $scope.mensajes = [];
+    $scope.usuariosconectados = [];
 
-    $('#enviando').click(function () {
-        socket.emit('message', $('#m').val());
-        $('#m').val('');
+
+    socket.emit('usuario', auth.currentUser());
+
+    mySocket.forward('usuario', $scope);
+
+    $scope.actualizarUsers = function () {
+        return $http.get('/conectados').success(function(data){
+
+            angular.copy(data,$scope.usuariosconectados)
+        });
+    };
+
+    $scope.$on('socket:usuario', function (ev, data) {
+       $scope.actualizarUsers();
     });
-    mySocket.forward('message', $scope);
-    $scope.$on('socket:message', function (ev, data) {
-            $scope.mensajes.push(data);
-    });
+
+
+    $scope.numerochats = 1;
+    $scope.generarChat = function (name) {
+      $('.chatty').append('<div class="chatbox" id="'+name+'chat" style="bottom: 0px; right: '+ $scope.numerochats*285 +'px; display: block;">' +
+          '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
+      '<h1> '+name+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+            '<br clear="all"></div><div class="chatboxcontent"></div>'+
+          '    <div class="chatboxinput"><form class="new_message" ng-submit="enviarMensaje()" accept-charset="UTF-8" >'+
+          '<textarea class="chatboxtextarea"></textarea> </form> </div> </div>');
+
+        $scope.numerochats += 1;
+    };
+
+
+    $scope.cerrarChat= function (name) {
+        console.log('#'+name+'chat');
+        $('#'+name+'chat').remove();
+    };
+
+    $scope.actualizarUsers();
+
+    //<div class="chatbox" style="bottom: 0px; right: 350px; display: block;">
+    //
+    //    <div class="chatboxhead">
+    //    <div class="chatboxtitle">
+    //    <i class="fa fa-comments"></i>
+    //
+    //    <h1>Usuario</h1>
+    //    </div>
+    //    <div class="chatboxoptions">
+    //
+    //    &nbsp;&nbsp;
+    //<a class="closeChat" href="#"><i class="fa  fa-times"></i> </a>
+    //    </div>
+    //    <br clear="all">
+    //    </div>
+    //    <div class="chatboxcontent">
+    //    </div>
+    //    <div class="chatboxinput">
+    //    <form class="new_message" ng-submit="enviarMensaje()" accept-charset="UTF-8" >
+    //
+    //    <textarea class="chatboxtextarea"></textarea>
+    //    </form>
+    //    </div>
+    //
+    //
+    //
+    //
+    //
+    //    </div>
+
+
+
+    //$('#enviando').click(function () {
+    //    socket.emit('sok', $('#m').val());
+    //    $('#m').val('');
+    //});
+    //
+    //
+    //mySocket.forward('sok', $scope);
+    //$scope.$on('socket:sok', function (ev, data) {
+    //        $scope.mensajes.push(data);
+    //});
 }]);
+
+
+
+
+
+
+
+
+
+
+
+
 app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','auth', function ($scope, formularios,formularior,auth) {
     $scope.formulario = formularior;
     $scope.isLoggedIn = auth.isLoggedIn;
@@ -586,8 +700,8 @@ app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','au
             $scope.resultado3.push(dat[z].respuesta)
         });
 
-        console.log();
-        //console.log(Object.keys());
+
+
 
         if(typeof $scope.resultado3[0] === 'object'){
             $scope.resultadox = [];

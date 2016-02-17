@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
@@ -9,11 +8,16 @@ var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Fotosfile = mongoose.model('Fotosfile');
+var Conectado = mongoose.model('Conectado');
 var Pregunta = mongoose.model('Pregunta');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
 var Folder = mongoose.model('Folder');
 var Formulario = mongoose.model('Formulario');
+
+
+
+
 
 var jwt = require('express-jwt');
 
@@ -21,7 +25,9 @@ var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
 
 
+
 router.get('/posts', function(req, res, next) {
+
   Post.find().populate('comments').exec(function (err,posts) {
     if(err){ return next(err); }
     res.json(posts);
@@ -45,6 +51,29 @@ router.get('/formularios', function(req, res, next) {
     res.json(formularios);
   });
 });
+
+
+router.post('/conectados',auth, function(req, res, next) {
+  var conectado = new Conectado(req.body);
+  //formulario.author = req.payload.username;
+  conectado.save(function(err, conectado){
+    if(err){ return next(err); }
+    res.json(conectado);
+  });
+});
+
+router.get('/conectados', function(req, res, next) {
+
+  User.find(function(err, conectados){
+
+    if(err){ return next(err); }
+    res.json(conectados);
+  });
+
+});
+
+
+
 router.post('/formularios',auth, function(req, res, next) {
   var formulario = new Formulario(req.body);
   formulario.author = req.payload.username;
@@ -369,6 +398,16 @@ router.put('/posts/:post/upvote',auth, function(req, res, next) {
 
 //ELIMINAR PUBLICACIONES
 
+router.delete('/conectados/:_id',auth, function(req, res,next){
+
+  Conectado.findById( req.params._id, function ( err, conectado ){
+    conectado.remove( function ( err, conectado ){
+      res.json(conectado);
+    });
+  });
+});
+
+
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Post.findById( req.params._id, function ( err, post ){
@@ -441,9 +480,10 @@ router.post('/login', function(req, res, next){
 
 
 router.get('/', function(req, res, next) {
+
   res.render('index', { title: 'Express' });
 });
 
 
 
-module.exports = router;
+  module.exports = router;
