@@ -27,9 +27,9 @@
 
     .contenedorformulario
     {
-        background: #e3e3e3;
         width: 90%;
         margin-left: 5%;
+        background: #e3e3e3;
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
         -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
         box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
@@ -119,13 +119,12 @@
                 <!--PREG PREGUNTA ES EL NOMBRE DE LA PREGUNTA-->
                     <div class="contenedortituloformulario">
                         <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
-                        <!--ICONO ELIMINAR PREGUNTA-->
-                        <img class="eliminarpregunta" src="/img/iconox.png">
                     </div>
                     <!--CADA CHECKBOX-->
-                    <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" style="margin-left: 4.5%; color: #737374;">
-                        <div flex-xs flex="50">
-                            <md-checkbox ng-model="valores2[$parent.$index].respuesta[opt]" aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
+                    <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" style="color: #737374;" >
+
+                        <div flex-xs flex="50" style="margin-left: 2.5%">
+                            <md-checkbox ng-model="valores2[$parent.$index].respuesta[opt]"  aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
                                 {{opt}}
                             </md-checkbox>
                         </div>
@@ -136,8 +135,6 @@
             <div ng-if="preg.tipo == 'radio'">
                 <div class="contenedortituloformulario">
                     <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
-                    <!--ICONO ELIMINAR PREGUNTA-->
-                    <img class="eliminarpregunta" src="/img/iconox.png">
                 </div>
                 <md-radio-group ng-model="valores2[$index].respuesta" ng-required="true" required>
                     <!--CADA RADIO BUTTON-->
@@ -157,8 +154,6 @@
             <div ng-if="preg.tipo == 'interruptor'">
                 <div class="contenedortituloformulario">
                     <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}} </label>
-                    <!--ICONO ELIMINAR PREGUNTA-->
-                    <img class="eliminarpregunta" src="/img/iconox.png">
                 </div>
                 <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn" style="margin-left: 4.5%">
 
@@ -171,6 +166,8 @@
             <div class="bottonenviar" >
                 <md-button type="submit"  class=" md-warn botonsuelo md-raised">Enviar</md-button>
             </div>
+
+
     </form>
 
 </div>
