@@ -23,9 +23,7 @@ module.exports = function(io) {
             //var conectado = new Conectado({username: user,sock:socket.id,actual:true});
             //conectado.save(function(){
 
-            //});
-
-        });
+            //}); });
 
 
 

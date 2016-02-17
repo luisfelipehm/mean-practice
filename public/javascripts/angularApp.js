@@ -183,7 +183,7 @@ app.factory('formularios', ['$http','auth',function($http,auth){
 }]);
 
 
-app.factory('auth', ['$http', '$window','$state', function($http, $window,$state){
+app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $window,$state,mySocket){
     var auth = {};
     auth.saveToken = function (token){
         $window.localStorage['flapper-news-token'] = token;
@@ -225,6 +225,8 @@ app.factory('auth', ['$http', '$window','$state', function($http, $window,$state
         });
     };
     auth.logOut = function(){
+        socket.emit('disusuario', auth.currentUser());
+
         $window.localStorage.removeItem('flapper-news-token');
         $state.go('login');
     };
@@ -427,7 +429,7 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
     };
 
 }]);
-app.controller('RootCtrl', ['$scope', function ($scope) { }])
+app.controller('RootCtrl', ['$scope', function ($scope) { }]);
 
 app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
 
@@ -556,20 +558,6 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
 
 }]);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,mySocket,auth,$http) {
 
     //Array.prototype.remove = function() {
@@ -591,12 +579,10 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
 
     if ($scope.isLoggedIn) {
         socket.emit('usuario', auth.currentUser());
-
-    mySocket.forward('usuario', $scope);
+        mySocket.forward('usuario', $scope);
     }
     $scope.actualizarUsers = function () {
         return $http.get('/conectados').success(function(data){
-
             angular.copy(data,$scope.usuariosconectados)
         });
     };
