@@ -4,11 +4,13 @@
         border: solid aqua;
         width: 90%;
         margin-left: 5%;
+        margin-top: 5vh;
     }
     .boxformularios
     {
         background: #ebebeb;
         width: 90%;
+        height: 30vh;
         margin-left: 5%;
         margin-top: 2%;
         margin-bottom: 2%;
@@ -19,7 +21,7 @@
     }
     .iconoformulario
     {
-        position: relative;
+        position: absolute;
         width: 7vw;
         left: 4%;
     }
@@ -37,12 +39,25 @@
         height: 2vh;
         margin-left: 1%;
     }
+    .btnresultados
+    {
+        position: relative;
+        top: 1vh;
+        left: 11vw;
+        width: 6vw;
+        opacity: 0.6;
+    }
+    .btnresultados:hover
+    {
+        opacity: 1;
+    }
+
+    /*INFORMACION DEL FORMULARIO*/
 
 </style>
 
 
 <div class="nombreformulario">
-
     <form name="myForm" ng-submit="crearFormulario()">
         <md-input-container>
             <label>Nombre del Formulario</label>
@@ -54,43 +69,72 @@
 
 <div ng-repeat="forma in formularios" class="boxformularios">
        <!--{{forma}}-->
-
+    <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
         <img class="iconossuperioruno" src="/img/icono-editar.png">
-        <img class="iconossuperiordos" src="/img/iconox.png">
+        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png">
     </div>
-           <img class="iconoformulario" src="/img/icono-fomulario.png">
-       <a href="#/root/formularios/{{forma._id}}">Responder {{forma.nombre}}</a>
-       <a href="#/root/formularios/{{forma._id}}/results">Resultados {{forma.nombre}}</a>
 
-       <form ng-submit="addPregunta(forma._id)" >
+    <div style="height: auto; position: absolute">
+        <div>
+            <label style="margin-left: 11vw; font-size: 1.5vw; font-weight: bold ">{{forma.nombre}}</label>
+        </div >
+        <div  style="position: absolute;top: 0; left: 2vw; top: 1vh" >
+            <a href="#/root/formularios/{{forma._id}}">
+            <img style="width: 6.5vw; height: auto" src="/img/icono-fomulario.png">
+            </a>
+        </div>
+        <div>
+            <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
+                <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>18 Febrero 2016</span>
+            </p>
+        </div>
+        <div>
+            <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
+                <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>Formilario de salud</span>
+            </p>
+        </div>
+        <div>
+            <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
+                <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>0 personas encuestadas</span>
+            </p>
+        </div>
 
-           <md-input-container>
-               <label>Pregunta</label>
-               <input type="text" ng-model="pregunta.valor" required md-maxlength="200">
-           </md-input-container>
+        <div >
+            <a href="#/root/formularios/{{forma._id}}/results"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
+        </div>
 
-           <md-input-container>
-               <label>Tipo</label>
-               <md-select ng-model="tipo.valor">
+        <form ng-submit="addPregunta(forma._id)" >
 
-                   <md-option ng-repeat="state in states" value="{{state.html}}">
-                       {{state.visual}}
-                   </md-option>
-               </md-select>
-           </md-input-container>
+            <md-input-container>
+                <label>Pregunta</label>
+                <input type="text" ng-model="pregunta.valor" required md-maxlength="200">
+            </md-input-container>
+
+            <md-input-container>
+                <label>Tipo</label>
+                <md-select ng-model="tipo.valor">
+
+                    <md-option ng-repeat="state in states" value="{{state.html}}">
+                        {{state.visual}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
 
 
-           <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
-               <input type="text" ng-model="opcion.valor">
+            <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
+                <input type="text" ng-model="opcion.valor">
                 <div ng-click="addOpcion()">anadir opcion</div>
-               <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
-                   {{opt}}
-                   <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
-               </div>
-           </div>
+                <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
+                    {{opt}}
+                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
+                </div>
+            </div>
 
-           <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
+            <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
 
-       </form>
+        </form>
+
+    </div>
+
 </div>
