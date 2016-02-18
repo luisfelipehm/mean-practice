@@ -7,6 +7,7 @@ var Post = mongoose.model('Post');
 var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
+var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
 var Conectado = mongoose.model('Conectado');
 var Conversation = mongoose.model('Conversation');
@@ -273,8 +274,21 @@ var storage = multer.diskStorage({
     cb(null, './public/uploads2')
   },
   filename: function (req, file, cb) {
-    console.log(file);
-    cb(null, file.originalname )
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if(dd<10){
+      dd='0'+dd
+    }
+    if(mm<10){
+      mm='0'+mm
+    }
+
+  var nombre = file.originalname.split('.');
+    console.log(nombre[0] + '.' + nombre[1]);
+    cb(null, nombre[0] + ' ' +  dd+'-'+mm+'-'+yyyy + '.' + nombre[1]   )
   }
 });
 
@@ -343,6 +357,37 @@ function getReadableFileSizeString(fileSizeInBytes) {
 
 
  //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
+
+
+router.post('/usersf',auth,upload.single('file'), function(req, res, next){
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  var user = new User(req.body);
+  user.fotoperfil = '/uploads2/'+req.file.filename;
+  user.username = req.body.username;
+
+  user.setPassword(req.body.password);
+  user.save(function (err, user){
+    if(err){ return next(err); }
+
+    res.json(user);
+  });
+});
+
+router.post('/posts',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.file = '/uploads2/'+req.file.filename;
+  var post = new Post(req.body);
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(post);
+  });
+});
 
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
@@ -453,6 +498,28 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
 //CREACION DE USUARIOS
 
 
+router.get('/areas', function(req, res, next) {
+  Area.find(function(err, area){
+    if(err){ return next(err); }
+    res.json(area);
+  });
+});
+router.post('/areas', function(req, res, next){
+  var area = new Area(req.body);
+  area.save(function (err, area){
+    if(err){ return next(err); }
+  });
+});
+
+router.get('/users', function(req, res, next) {
+
+  User.find(function(err, users){
+
+    if(err){ return next(err); }
+    res.json(users);
+  });
+
+});
 router.post('/users', function(req, res, next){
 
   if(!req.body.username || !req.body.password){
@@ -470,6 +537,8 @@ router.post('/users', function(req, res, next){
 
   });
 });
+
+
 
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
