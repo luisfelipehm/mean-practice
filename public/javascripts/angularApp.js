@@ -1,5 +1,22 @@
+
 var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io']);
 
+
+app.config(['$httpProvider', function($httpProvider) {
+    //initialize get if not there
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+    }
+
+    // Answer edited to include suggestions from comments
+    // because previous version of code introduced browser-related errors
+
+    //disable IE ajax request caching
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+    // extra
+    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+    $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+}]);
 app.directive('barranav', function() {
     return {
         restrict: 'E',
@@ -135,6 +152,33 @@ app.factory('fotos', ['$http','auth',function($http,auth){
 
     return o;
 }]);
+app.factory('users', ['$http','auth',function($http,auth){
+    var o = {
+        users:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/users').success(function(data){
+            angular.copy(data, o.users);
+        });
+    };
+    o.create = function(user) {
+
+        return $http.post('/users', user, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.users.push(data);
+        });
+    };
+
+    o.get = function(id) {
+        return $http.get('/users/' + id).then(function(res){
+            return res.data;
+        });
+    };
+
+    return o;
+}]);
 
 app.factory('formularios', ['$http','auth',function($http,auth){
     var o = {
@@ -181,7 +225,6 @@ app.factory('formularios', ['$http','auth',function($http,auth){
 
     return o;
 }]);
-
 
 app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $window,$state,mySocket){
     var auth = {};
@@ -231,6 +274,7 @@ app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $wi
 
     return auth;
 }]);
+
 app.config(function($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('grey')
@@ -311,6 +355,17 @@ app.config([
                         $state.go('home');
                     }
                 }]
+            })
+            .state('users', {
+                parent: 'root',
+                url: '/users/',
+                templateUrl: 'templates/users.html',
+                controller: 'UsersCtrl',
+                //resolve: {
+                //    postPromise: ['fotos', function(fotos){
+                //        return fotos.getAll();
+                //    }]
+                //}
             })
             .state('fotox', {
                 parent: 'root',
@@ -401,6 +456,48 @@ app.config([
         $urlRouterProvider.otherwise('/root/home');
     }]);
 
+app.controller('UsersCtrl', ['$scope','auth','users', function ($scope,auth,users) {
+    //$scope.users = users.users;
+
+    //$scope.seed = [
+    //    { nombre: "JUAN JOSE",email: "\N",area: "GESTION DE INFRAESTRUCTURA TECNOLOGICA",cargo: "INGENIERO DE SISTEMAS",sexo: "\N",telefono: "\N",direccion: "\N",region: "CUNDINAMARCA",documento: "12746250",apellido: "OBANDO CABRERA",contratacion: "PLANTA",username: "jjobandocb",password: "12746250" },
+    //    { nombre: "DIEGO FERNANDO",email: "dfapolinarm@solucionescyf.com.co",area: "Gestion de Infraestructura Tecnologica",cargo: "DIRECTOR DE SISTEMAS",sexo: "Masculino",telefono: "07/01/1967",direccion: "cra 13 37 37 piso 8",region: "CUNDINAMARCA",documento: "16743751",apellido: "APOLINAR MARTINEZ",contratacion: "PLANTA",username: "dfapolinarmb",password: "16743751" },
+    //    { nombre: "JONATHAN",email: "jlopezb@saludcoop.com.co",area: "Gestion de Infraestructura Tecnologica",cargo: "TECNICO DE SISTEMAS",sexo: "Masculino",telefono: "304 243 2837",direccion: "\N",region: "CUNDINAMARCA",documento: "80160929",apellido: "LOPEZ BETANCOURT",contratacion: "PLANTA",username: "jlopezbb",password: "80160929" },
+    //];
+    //
+    //angular.forEach($scope.seed, function (us) {
+    //    users.create({
+    //        username: us.username,
+    //        password: us.password,
+    //        email: (us.email == "\N" ? "" : us.area),
+    //        area:  (us.area == "\N" ? "" : us.area),
+    //        cargo: (us.cargo == "\N" ? "" : us.cargo),
+    //        sexo: (us.sexo == "\N" ? "" : us.sexo),
+    //        telefono: (us.telefono == "\N" ? "" : us.telefono),
+    //        direccion: (us.direccion == "\N" ? "" : us.direccion),
+    //        region: (us.region == "\N" ? "" : us.region),
+    //        documento: (us.documento == "\N" ? "" : us.documento),
+    //        apellido: (us.apellido == "\N" ? "" : us.apellido),
+    //        contratacion: (us.contratacion == "\N" ? "" : us.contratacion)
+    //    })
+    //});
+
+
+
+
+
+    $scope.crearUsuario = function(){
+        if(!$scope.username || $scope.username === '') { return; }
+        users.create({
+            username: $scope.username,
+            password: $scope.password
+        });
+        $scope.username = '';
+        $scope.password = '';
+    };
+
+}]);
+
 app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$scope){
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
@@ -432,6 +529,7 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
     };
 
 }]);
+
 app.controller('RootCtrl', ['$scope', function ($scope) { }]);
 
 app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
@@ -596,7 +694,18 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
             var lastme = $scope.mensajes.slice(-1)[0];
             $("#"+rec+"chattext2").val('');
 
-            $('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>')
+
+            //$('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>');
+            $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
+                '   <div class="avatar"> ' +
+                '           <img src="http://placehold.it/50x50"> ' +
+                '    </div>       ' +
+                '        <div class="chatboxmessagecontent">    ' +
+                '           <p>'+lastme.mensaje+'</p>     ' +
+                '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">        softplus • 21:45 PM    </time>    ' +
+                '         </div> ' +
+                '   </li>');
+            $('#chatcontent'+rec).scrollTop($('#chatcontent'+rec)[0].scrollHeight);
 
         })
     };
@@ -631,41 +740,59 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
 
 
 
+var a =
+
 
 
 
     $scope.numerochats = 1;
     $scope.generarChat = function (name) {
+        if($('#'+name+'chat').length > 0){
+
+        }   else {
         var part = [name , $scope.currentUser.username].sort();
 
         $http.get('/mensajes/'+ part[0] +','+ part[1]).then(function (response) {
             angular.copy(response.data, $scope.mensajes);
-
-            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext").submit(function () {  socket.emit("chateando",{mesj: $("#'+name+'chattext2").val(), envia:"'+ $scope.currentUser.username +'", participan: ["'+name +'","'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'"  }); });' +
-                '$("#closechat'+ name+'").click(function () {numerodechats--;$("#'+name+'chat").remove();})' +
+            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'"});} e.preventDefault();}});' +
+                '$("#closechat'+ name+'").click(function () {$("#'+name+'chat").nextAll(".chatbox").css("right", "-=285");numerodechats--;$("#'+name+'chat").remove();})' +
                 '</script>' +
                 '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
                 '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
                 '<h1> '+name+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
                 '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
-                '    <div class="chatboxinput"><form id="'+name+'chattext" class="new_message" ng-submit="enviarMensaje( '+$scope.currentUser.username+' , '+name+', '+name+'chattext )" accept-charset="UTF-8" >'+
-                '<input type="text" id="'+name+'chattext2" class="chatboxtextarea"> </div> </div>' +
-                '<script>$("#'+name+'chat").css("right",numerodechats*285+"px")</script>');
+                '    <div class="chatboxinput">'+
+                '<input type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> </div> </div>' +
+                '<script>$("#'+name+'chat").css("right",numerodechats*285+"px");' +
+                ' $("#'+name +'chattext2").focus();' +
+                '' +
+                '</script>');
 
             $scope.numerochats += 1;
 
             angular.forEach($scope.mensajes, function (mensa) {
-                $('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>')
-            })
+
+                //$('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>');
+                $('#chatcontent'+name).append('<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
+                    '   <div class="avatar"> ' +
+                    '           <img src="http://placehold.it/50x50"> ' +
+                    '    </div>       ' +
+                    '        <div class="chatboxmessagecontent">    ' +
+                    '           <p>'+mensa.mensaje+'</p>     ' +
+                    '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">        softplus • 21:45 PM    </time>    ' +
+                    '         </div> ' +
+                    '   </li>');
+
+
+            });
+
+            $('#chatcontent'+name).scrollTop($('#chatcontent'+name)[0].scrollHeight)
 
         });
+        }
     };
 
 
-    $scope.cerrarChat= function (name) {
-        console.log('#'+name+'chat');
-
-    };
 
     $scope.actualizarUsers();
 
@@ -684,17 +811,6 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
     //        $scope.mensajes.push(data);
     //});
 }]);
-
-
-
-
-
-
-
-
-
-
-
 
 app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','auth', function ($scope, formularios,formularior,auth) {
     $scope.formulario = formularior;
@@ -897,8 +1013,6 @@ if(typeof $scope.resultado3[0] === 'object'){
 
 }]);
 
-
-
 app.controller('CalendarbarCtrl',['$scope', function ($scope) {
     $scope.hola = 'Hello World';
     $scope.eventSource = [];
@@ -928,6 +1042,7 @@ app.controller('CalendarbarCtrl',['$scope', function ($scope) {
         }
     };
 }]);
+
 app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,Upload,$timeout,$http, fotos,foto,auth){
 
     $scope.foto = foto;
@@ -985,7 +1100,6 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
 
     };
 }]);
-
 
 app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function ($scope,fotos,Upload,$http,auth) {
     $scope.hola = "Hello World";
