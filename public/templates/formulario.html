@@ -105,72 +105,72 @@
 
 </style>
 
-<!--TITULO DEL FORMULARIO-->
-<p class="tituloformulario"> {{formulario.nombre}} </p>
+    <!--TITULO DEL FORMULARIO-->
+    <p class="tituloformulario"> {{formulario.nombre}} </p>
 
-<div class="contenedorformulario">
+    <div class="contenedorformulario">
 
-    <form ng-submit="responder(formulario._id)">
-        <div ng-repeat="preg in formulario.preguntas">
+        <form ng-submit="responder(formulario._id)">
+            <div ng-repeat="preg in formulario.preguntas">
 
-            <div class="encabezadopre">
-                <!--EN CASO DE QUE SEA UN CHECKBOX-->
-                <div ng-if="preg.tipo == 'checkbox'">
-                <!--PREG PREGUNTA ES EL NOMBRE DE LA PREGUNTA-->
+                <div class="encabezadopre">
+                    <!--EN CASO DE QUE SEA UN CHECKBOX-->
+                    <div ng-if="preg.tipo == 'checkbox'">
+                    <!--PREG PREGUNTA ES EL NOMBRE DE LA PREGUNTA-->
+                        <div class="contenedortituloformulario">
+                            <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
+                        </div>
+                        <!--CADA CHECKBOX-->
+                        <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" style="color: #737374;" >
+
+                            <div flex-xs flex="50" style="margin-left: 2.5%">
+                                <md-checkbox ng-model="valores2[$parent.$index].respuesta[opt]"  aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
+                                    {{opt}}
+                                </md-checkbox>
+                            </div>
+                    </div>
+                </div>
+
+                    <!--EN CASO DE QUE SEA UN RADIO BUTTON -->
+                <div ng-if="preg.tipo == 'radio'">
                     <div class="contenedortituloformulario">
                         <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
                     </div>
-                    <!--CADA CHECKBOX-->
-                    <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" style="color: #737374;" >
+                    <md-radio-group ng-model="valores2[$index].respuesta" ng-required="true" required>
+                        <!--CADA RADIO BUTTON-->
+                    <div ng-repeat="opt in preg.opciones" style="margin-left: 4.5%; color: #737374;">
+                        <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
+                    </div>
+                    </md-radio-group>
+                </div>
+                    <!--EN CASO DE QUE SEA UN CAMPO DE TEXTO-->
+                <div ng-if="preg.tipo == 'text'">
+                    <md-input-container flex>
+                        <label>{{preg.pregunta}}</label>
+                        <input type="text" ng-model="valores2[$index].respuesta"/>
+                    </md-input-container>
+                </div>
+                    <!--EN CASO DE QUE SEA UN INTERRUPTOR-->
+                <div ng-if="preg.tipo == 'interruptor'">
+                    <div class="contenedortituloformulario">
+                        <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}} </label>
+                    </div>
+                    <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn" style="margin-left: 4.5%">
 
-                        <div flex-xs flex="50" style="margin-left: 2.5%">
-                            <md-checkbox ng-model="valores2[$parent.$index].respuesta[opt]"  aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
-                                {{opt}}
-                            </md-checkbox>
-                        </div>
+                    </md-switch>
                 </div>
             </div>
-
-                <!--EN CASO DE QUE SEA UN RADIO BUTTON -->
-            <div ng-if="preg.tipo == 'radio'">
-                <div class="contenedortituloformulario">
-                    <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
+            </div>
+                <div class="lineformulario"></div>
+                <!--BOTON DE ENVIAR-->
+                <div class="bottonenviar" >
+                    <md-button type="submit"  class=" md-warn botonsuelo md-raised">Enviar</md-button>
                 </div>
-                <md-radio-group ng-model="valores2[$index].respuesta" ng-required="true" required>
-                    <!--CADA RADIO BUTTON-->
-                <div ng-repeat="opt in preg.opciones" style="margin-left: 4.5%; color: #737374;">
-                    <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
-                </div>
-                </md-radio-group>
-            </div>
-                <!--EN CASO DE QUE SEA UN CAMPO DE TEXTO-->
-            <div ng-if="preg.tipo == 'text'">
-                <md-input-container flex>
-                    <label>{{preg.pregunta}}</label>
-                    <input type="text" ng-model="valores2[$index].respuesta"/>
-                </md-input-container>
-            </div>
-                <!--EN CASO DE QUE SEA UN INTERRUPTOR-->
-            <div ng-if="preg.tipo == 'interruptor'">
-                <div class="contenedortituloformulario">
-                    <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}} </label>
-                </div>
-                <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn" style="margin-left: 4.5%">
-
-                </md-switch>
-            </div>
-        </div>
-        </div>
-            <div class="lineformulario"></div>
-            <!--BOTON DE ENVIAR-->
-            <div class="bottonenviar" >
-                <md-button type="submit"  class=" md-warn botonsuelo md-raised">Enviar</md-button>
-            </div>
 
 
-    </form>
+        </form>
 
-</div>
+    </div>
 
 
 
