@@ -30,9 +30,10 @@
     .content
     {
         position: absolute;
-        top: 51vh;
+        top: 44vh;
         left: 22%;
         width: 56%;
+        z-index: 9 ;
     }
 
 
@@ -41,6 +42,12 @@
     .boxpubli
     {
         margin-bottom: 2vh;
+        width: 90%;
+        margin-left: 5%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);"
     }
     .imgpublica
     {
@@ -54,12 +61,15 @@
         font-family: Arial;
         font-size: 1.5vw;
         color: red;
-        margin-left: ;
+        width: 90%;
+        margin-left: 5%;
+        padding-top: 4%;
     }
     .boxiconremove
     {
+        margin-top: 2vh;
         position: absolute;
-        right: 6%;
+        left: 50.5vw;
     }
     .imgtx
     {
@@ -97,8 +107,14 @@
     }
     .contenedorpubli
     {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 2vh;
         position: relative;
-        margin-bottom: 5vh;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
     }
     .imguser
     {
@@ -106,7 +122,7 @@
         border-radius: 50%;
         width: 8vw;
         height: 8vw;
-        left: 2vw;
+        left: 1vw;
         top: 1vh;
         overflow: hidden;
     }
@@ -114,28 +130,34 @@
     {
         position: absolute;
         top: 1%;
-        left: 20%;
-        width: 40vw;
+        left: 22%;
+        width: 36.5vw;
     }
     .descriptionbox
     {
         position: absolute;
-        top: 25%;
-        left: 20%;
-        width: 40vw;
+        top: 29%;
+        left: 22%;
+        width: 36.5vw;
     }
-    .container{
+    .containerfoto
+    {
         position: absolute;
-        right: 27%;
-        top: 16vh
+        right: 31%;
+        top: 12.6vh;
+        opacity: 0.7;
+    }
+    .containerfoto:hover
+    {
+        opacity: 1;
     }
     .select-wrapper
     {
-        background: url(img/iconoadju.png) no-repeat;
+        background: url(img/icono_adjunto.png) no-repeat;
         background-size:contain;
         display: block;
         position: relative;
-        width: 4vw;
+        width: 2.5vw;
         height: auto;
     }
     #image_src
@@ -150,8 +172,8 @@
     .btnpubli
     {
         position: absolute;
-        top: 16vh;
-        left: 46vw;
+        top: 12.5vh;
+        left: 42.5vw;
         width: 5vw;
         height: 3vh;
         border-radius: .2vw;
@@ -172,8 +194,8 @@
     .btnselect
     {
         position: absolute;
-        top: 16vh;
-        left: 39vw;
+        top: 12.5vh;
+        left: 35vw;
     }
     .selec
     {
@@ -184,12 +206,7 @@
         margin: 0;
         padding: 0;
     }
-    .li
-    {
-        border: solid grey .1vw ;
-        width: 100%;
-        margin: 1vh 0 1vh 0;
-    }
+
     button
     {
         color: grey;
@@ -274,6 +291,7 @@
         width: 1vh;
         height: auto;
         right: 2.5%;
+
     }
     .supcoment
     {
@@ -284,15 +302,7 @@
         font-family: Arial;
         font-size: .8vw;
         margin-bottom: 5%;
-    }
-    .supcoment2
-    {
-        position: absolute;
-        top: 1.5vh;
-        left: 10vw;
-        width: 15%;
-        font-family: Arial;
-        font-size: .8vw;
+        cursor: pointer;
     }
     .imgcoment
     {
@@ -318,17 +328,39 @@
         margin-bottom: 5vh;
     }
     md-input-container.md-default-theme .md-input, md-input-container .md-input {
-        border-color: red;
+        border-color: black;
+    }
+    .cajabuscar
+    {
+        margin-left: 5%;
+        width: 90%;
+        margin-top: 5vh;
+    }
+    .lupita
+    {
+        left: 47.5vw;
+        position: relative;
+        width: 1vw;
+        height: auto;
     }
 
 </style>
 
+    <script>
+        $(".imguser").click(function(){
+            $( "#ocultarpublicacion" ).toggle("slow");
+        });
+    </script>
 
 
-    <md-input-container>
-        <label>Filtrar</label>
-        <input type="text" ng-model="search" required md-maxlength="10">
-    </md-input-container>
+    <div class="cajabuscar">
+        <img class="lupita" src="/img/lupa.png">
+        <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+            <label>Buscar</label>
+            <input type="text" ng-model="search" required>
+        </md-input-container>
+    </div>
+
 
     <!--Formulario para publicacion-->
 
@@ -345,7 +377,7 @@
             <div class="tittlebox">
                 <md-input-container style="width: 100%">
                     <label>Título</label>
-                    <input type="text" ng-model="title" required md-maxlength="25">
+                    <input type="text" ng-model="title">
                 </md-input-container>
             </div>
 
@@ -353,19 +385,17 @@
             <div class="descriptionbox">
                 <md-input-container style="width: 100%">
                     <label>Descripción</label>
-                    <input type="text" ng-model="link" required md-maxlength="100">
+                    <input type="text" ng-model="link" required>
                 </md-input-container>
             </div>
 
             <!--adjuntar archivos para publicar-->
 
-            <div class="container">
+            <div class="containerfoto">
                 <span class="select-wrapper">
                     <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" required/>
                 </span>
             </div>
-
-            <br>
 
             <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
@@ -373,20 +403,12 @@
 
             <br>
 
-            <!--Linea Horizontal-->
-            <div class="li"></div>
 
             <span class="progress" ng-show="picFile.progress >= 0">
               <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
             </span>
 
             <span ng-show="picFile.result">Upload Successful</span>
-
-            <!--button publicar-->
-            <div class="btnpubli">
-                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left:0"> Publicar</button>
-                <!--<md-button type="submit" class="publi" style="display:none"> Publicar </md-button>-->
-            </div>
 
             <!--button select-->
             <div class="btnselect">
@@ -398,11 +420,17 @@
                 </select>
             </div>
 
+            <!--button publicar-->
+            <div class="btnpubli">
+                <button id="blanco" style="width: 5vw; height: 3vh; border: 0; position: absolute; top:0; left:0"> Publicar</button>
+                <!--<md-button type="submit" class="publi" style="display:none"> Publicar </md-button>-->
+            </div>
+
+
 
         </form>
 
     </div>
-
 
 
 
@@ -411,14 +439,11 @@
 
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
-            <div class="boxpubli"style="width: 90%; margin-left: 5%; background: #e3e3e3;
-                -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
-                -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
-                 box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);">
+            <div class="boxpubli">
+                <span class="boxiconremove"><a ng-click="remove(post)"><img class="imgtx" src="/img/icono-eliminar-g.png" ></a></span>
+                    <p class="tittlepli">{{post.title}}
 
-                <p class="tittlepli">{{post.title}}
-                    <span class="boxiconremove"><a ng-click="remove(post)"><img class="imgtx" src="/img/iconox.png"></a></span>
-                </p>
+                    </p>
 
                 <div class="boxdescrip">
                     <img class="imgpublica" src="{{post.file}}">
@@ -432,27 +457,27 @@
                 <!--posted by <a>{{post.author}}</a> |-->
 
                 <!--Formulario Comentarios-->
-                <div style="margin-top: 2vh">
+                <div style="margin-top: 2vh;">
                     <div class="superior">
                         <div class="supcoment">
                             <img class="imgcoment" src="/img/iconocomen.png">
                             <span>Comentarios</span>
                         </div>
-
+                    <!--COMENTARIOS-->
                         <div ng-repeat="comentario in post.comments">
                             <!--<p class="autorcomentario">{{comentario.author}}</p>-->
                             <!--<p class="comentariouser" >{{comentario.body}}</p>-->
-
-                            <div class="autorcomentario">
+                            <div class="autorcomentario" >
                                 <div class="imgusercoment">
                                  <img style="width: 2vw; height: auto" src="/img/perro.jpg">
                                 </div>
-                                <img class="imgtxcomentario" src="/img/iconox.png">
+                                <img class="imgtxcomentario" src="/img/icono-eliminar-g.png">
                                 <span class="comentarioautor">{{comentario.author}}</span> <br>
                                 <p class="comentariouser"> {{comentario.body}}</p>
                             </div>
                             <!--<p>{{comentario.upvotes}}</p>-->
                         </div>
+
                     </div>
                     <div class="lineadivide"></div>
                     <div class="inferior" >

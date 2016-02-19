@@ -43,6 +43,7 @@
         margin: 0;
         right: 15%;
         top: 2vh;
+        cursor: pointer;
     }
     .imgnoti
     {
@@ -245,12 +246,12 @@
 
 <div class="arrow-up"></div>
 
-<script>
-    $(".boxnoti").click(function(){
-        $( ".notifica" ).toggle("slow");
-        $( ".arrow-up" ).toggle("slow");
-    });
-</script>
+    <script>
+        $(".boxnoti").click(function(){
+            $( ".notifica" ).toggle("slow");
+            $( ".arrow-up" ).toggle("slow");
+        });
+    </script>
 
 
 
@@ -259,7 +260,6 @@
         $(document).ready(function(){
             $('.mainMenu').children('li').on('click', function() {
                 $(this).children('ul').slideToggle('slow');
-
             });
         });
     </script>
