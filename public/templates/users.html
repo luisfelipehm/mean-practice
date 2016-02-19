@@ -93,22 +93,104 @@
             </span>
 
     <span ng-show="picFile.result">Upload Successful</span>
-
-
-
-
-
-
-
-
-
-
-
     <md-button type="submit" class="md-raised"> Registrar </md-button>
 </form>
 
 
 
 <div ng-repeat="user in users">
-    {{user.username}}
+    {{user.username}}{{user.nombre}} <span ng-hide="editing" ng-click="editing = true">Editar</span>
+    <form ng-show="editing" enctype="multipart/form-data" name="myForm"
+          ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion],user._id);editing = false;">
+        <h3>Editar</h3>
+
+
+        <md-input-container>
+            <label>Login</label>
+            <input type="text" ng-model="user.username" required md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>Contraseña</label>
+            <input type="password" ng-model="user.password" required md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>nombre</label>
+            <input type="text" ng-model="user.nombre" required md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>apellido</label>
+            <input type="text" ng-model="user.apellido" required md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>email</label>
+            <input type="text" ng-model="user.email" required md-maxlength="30">
+        </md-input-container>
+
+        <md-input-container>
+
+
+            <md-select  placeholder="Area" ng-model="user.area" md-on-open="loadAreas()">
+                <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                    {{area.nombre}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container>
+            <label>cargo</label>
+            <input type="text" ng-model="user.cargo" required md-maxlength="30">
+        </md-input-container>
+        <md-radio-group ng-model="user.sexo" ng-required="true" required>
+            <md-radio-button value="Masculino" class="md-primary">Masculino</md-radio-button>
+            <md-radio-button value="Femenino" class="md-primary">Femenino</md-radio-button>
+        </md-radio-group>
+
+        <md-input-container>
+            <label>telefono</label>
+            <input type="text" ng-model="user.telefono" md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>direccion</label>
+            <input type="text" ng-model="user.direccion" md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>region</label>
+            <input type="text" ng-model="user.region" md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>documento</label>
+            <input type="text" ng-model="user.documento" required md-maxlength="30">
+        </md-input-container>
+        <md-input-container>
+            <label>contratacion</label>
+            <input type="text" ng-model="user.contratacion" md-maxlength="30">
+        </md-input-container>
+
+
+
+
+        <div class="container">
+                <span class="select-wrapper">
+                    <input type="file" ngf-select ng-model="user.picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
+                </span>
+        </div>
+
+        <br>
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{user.picFile.size / 1000000|number:1}}MB: max {{user.picFile.$errorParam}}</i>
+
+        <img ng-show="myForm.file.$valid" ngf-src="!user.picFile.$error && user.picFile" class="thumb">
+
+        <br>
+
+        <!--Linea Horizontal-->
+        <div class="li"></div>
+
+            <span class="progress" ng-show="user.picFile.progress >= 0">
+              <div style="width:{{picFile.progress}}%" ng-bind="user.picFile.progress + '%'" class="ng-binding"></div>
+            </span>
+
+        <span ng-show="user.picFile.result">Upload Successful</span>
+        <md-button type="submit" class="md-raised"> Actualizar </md-button>
+    </form>
 </div>

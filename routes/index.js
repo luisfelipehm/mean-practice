@@ -359,23 +359,7 @@ function getReadableFileSizeString(fileSizeInBytes) {
  //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 
 
-router.post('/usersf',auth,upload.single('file'), function(req, res, next){
 
-  if(!req.body.username || !req.body.password){
-    return res.status(400).json({message: 'Please fill out all fields'});
-  }
-
-  var user = new User(req.body);
-  user.fotoperfil = '/uploads2/'+req.file.filename;
-  user.username = req.body.username;
-
-  user.setPassword(req.body.password);
-  user.save(function (err, user){
-    if(err){ return next(err); }
-
-    res.json(user);
-  });
-});
 
 router.post('/posts',auth, upload.single('file'), function(req, res, next) {
 
@@ -479,19 +463,29 @@ router.delete('/posts/:_id',auth, function(req, res,next){
 // NUEVOS COMENTARIOS A LAS PUBLICACIONES
 
 router.post('/posts/:post/comments',auth, function(req, res, next) {
-  var comment = new Comment(req.body);
-  comment.post = req.post;
-  comment.author = req.payload.username;
-  comment.save(function(err, comment){
-    if(err){ return next(err); }
+  User.findOne({ username: req.payload.username  }, function (err, name) {
 
-    req.post.comments.push(comment);
-    req.post.save(function(err, post) {
+  });
+
+
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+    var comment = new Comment(req.body);
+    comment.post = req.post;
+    comment.author = req.payload.username;
+    comment.fotoperfil = name.fotoperfil;
+    comment.save(function(err, comment){
       if(err){ return next(err); }
 
-      res.json(comment);
+      req.post.comments.push(comment);
+      req.post.save(function(err, post) {
+        if(err){ return next(err); }
+
+        res.json(comment);
+      });
     });
   });
+
+
 });
 
 
@@ -535,6 +529,86 @@ router.post('/users', function(req, res, next){
     if(err){ return next(err); }
 
 
+  });
+});
+
+router.post('/users/:_id', function(req, res, next){
+
+  User.findOne({ username: req.body.username  }, function (err, name) {
+
+    name.setPassword(req.body.password);
+    name.nombre =         req.body.nombre;
+    name.email =          req.body.email;
+    name.area =           req.body.area;
+    name.cargo =          req.body.cargo;
+    name.sexo =           req.body.sexo;
+    name.telefono =       req.body.telefono;
+    name.direccion =      req.body.direccion;
+    name.region =         req.body.region;
+    name.documento =      req.body.documento;
+    name.apellido =       req.body.apellido;
+    name.contratacion =   req.body.contratacion;
+    name.save();
+    res.json(name);
+  });
+
+});
+
+
+router.get('/users/:_id', function(req, res, next){
+
+    var user = req.params._id;
+    User.findById( user, function (err, name) {
+      res.json(name);
+    });
+
+
+});
+
+router.post('/usersf/:_id',auth,upload.single('file'), function(req, res, next){
+  console.log('con foto');
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  User.findOne({ username: req.body.username  }, function (err, name) {
+    console.log('subiendo foto');
+    name.setPassword(req.body.password);
+    name.fotoperfil = '/uploads2/'+req.file.filename;
+    console.log('/uploads2/'+req.file.filename);
+    name.nombre =         req.body.nombre;
+    name.email =          req.body.email;
+    name.area =           req.body.area;
+    name.cargo =          req.body.cargo;
+    name.sexo =           req.body.sexo;
+    name.telefono =       req.body.telefono;
+    name.direccion =      req.body.direccion;
+    name.region =         req.body.region;
+    name.documento =      req.body.documento;
+    name.apellido =       req.body.apellido;
+    name.contratacion =   req.body.contratacion;
+    name.save();
+    res.json(name);
+  });
+
+
+});
+
+router.post('/usersf',auth,upload.single('file'), function(req, res, next){
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  var user = new User(req.body);
+  user.fotoperfil = '/uploads2/'+req.file.filename;
+  user.username = req.body.username;
+
+  user.setPassword(req.body.password);
+  user.save(function (err, user){
+    if(err){ return next(err); }
+
+    res.json(user);
   });
 });
 

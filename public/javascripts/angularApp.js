@@ -172,6 +172,7 @@ app.factory('areas', ['$http','auth',function($http,auth){
     };
     return o;
 }]);
+
 app.factory('users', ['$http','auth',function($http,auth){
     var o = {
         users:[]
@@ -190,10 +191,18 @@ app.factory('users', ['$http','auth',function($http,auth){
             o.users.push(data);
         });
     };
+    o.edit = function(user,id) {
 
+        return $http.post('/users/'+ id, user, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.users.push(data);
+        });
+    };
     o.get = function(id) {
-        return $http.get('/users/' + id).then(function(res){
-            return res.data;
+        return $http.get('/users/' + id).then(function(data){
+            return data;
+            console.log(data);
         });
     };
 
@@ -270,7 +279,6 @@ app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $wi
         if(auth.isLoggedIn()){
             var token = auth.getToken();
             var payload = JSON.parse($window.atob(token.split('.')[1]));
-
             return payload;
         }else
         {
@@ -304,8 +312,6 @@ app.config(function($mdThemingProvider) {
 app.config([
     '$stateProvider',
     '$urlRouterProvider',
-
-
     function($stateProvider, $urlRouterProvider) {
 
         $stateProvider
@@ -330,9 +336,14 @@ app.config([
                 templateUrl: 'templates/home.html',
                 controller: 'MainCtrl',
                 resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
                     postPromise: ['posts', function(posts){
                         return posts.getAll();
                     }]
+
                 }
             })
             .state('documentos', {
@@ -486,6 +497,7 @@ app.config([
 
         $urlRouterProvider.otherwise('/root/home');
     }]);
+
 app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,areas) {
     $scope.areas = areas.areas;
     $scope.crearArea = function () {
@@ -495,6 +507,7 @@ app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,area
         })
     }
 }]);
+
 app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout','$http', function ($scope,auth,users,areas,Upload,$timeout,$http) {
 
      $scope.users = users.users;
@@ -504,7 +517,6 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             areas.getAll();
             $scope.areas = areas.areas;
      };
-
 
     //$scope.seed = [
     //    { nombre: "JUAN JOSE",email: "\N",area: "GESTION DE INFRAESTRUCTURA TECNOLOGICA",cargo: "INGENIERO DE SISTEMAS",sexo: "\N",telefono: "\N",direccion: "\N",region: "CUNDINAMARCA",documento: "12746250",apellido: "OBANDO CABRERA",contratacion: "PLANTA",username: "jjobandocb",password: "12746250" },
@@ -529,6 +541,68 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
     //        contratacion: (us.contratacion == "\N" ? "" : us.contratacion)
     //    })
     //});
+
+
+    $scope.uploadPic2 = function (file,datos,id) {
+        if(file==undefined)
+        {
+            users.edit({
+                username:       datos[0],
+                password:       datos[1],
+                nombre:         datos[2],
+                email:          datos[3],
+                area:           datos[4],
+                cargo:          datos[5],
+                sexo:           datos[6],
+                telefono:       datos[7],
+                direccion:      datos[8],
+                region:         datos[9],
+                documento:      datos[10],
+                apellido:       datos[11],
+                contratacion:   datos[12]
+            },id);
+        }else{
+
+            file.upload = Upload.upload({
+                url: '/usersf/'+ id,
+                data: {
+                    username:       datos[0],
+                    password:       datos[1],
+                    nombre:         datos[2],
+                    email:          datos[3],
+                    area:           datos[4],
+                    cargo:          datos[5],
+                    sexo:           datos[6],
+                    telefono:       datos[7],
+                    direccion:      datos[8],
+                    region:         datos[9],
+                    documento:      datos[10],
+                    apellido:       datos[11],
+                    contratacion:   datos[12]},
+                file: file,
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+
+            file.upload.progress(function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+
+            file.upload.success(function (data, status, headers, config) {
+                users.getAll();
+            });
+        }
+    };
+
 
 
     $scope.uploadPic = function(file) {
@@ -603,8 +677,6 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
         });
 
         file.upload.success(function (data, status, headers, config) {
-            console.log("paso3 error");
-            console.log('si');
             $scope.username = '';
             $scope.password = '';
             $scope.nombre = '';
@@ -1256,11 +1328,40 @@ app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function (
 
 }]);
 
-app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', function ($scope,Upload,posts,auth,$timeout,$http) {
+app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http','users', function ($scope,Upload,posts,auth,$timeout,$http,users) {
 
 
     $scope.posts = posts.posts;
     $scope.bodyc = {val:''};
+    $scope.currentUser = auth.currentUser();
+
+    $scope.fotoperfil = '';
+    //console.log($scope.fotoperfil);
+    //$scope.getUser = function (id) {
+    //    return $http.get('/users/' + id).then(function(res){
+    //        console.log(res.fotoperfil)
+    //    });
+    //};
+    //$scope.bodyc = {val:''};
+    //$scope.currentUser = auth.currentUser();
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+    });
+
+
+     //users.get($scope.currentUser._id);
+
+    //$scope.fotoperfil = $scope.usuario.fotoperfil;
+
+
+    $scope.selectthing = function(idx, form) {
+        if ($scope.selectedIndex == idx  ){
+            form ? $scope.selectedIndex = idx : $scope.selectedIndex = undefined
+
+        }else{
+            $scope.selectedIndex = idx;
+        }
+    };
 
     console.log($scope.posts);
     $scope.isLoggedIn = auth.isLoggedIn;
@@ -1288,6 +1389,7 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
         posts.addComment(idpost, {
             body: $scope.bodyc.val,
             author: 'user'
+
         }).success(function(comment) {
             posts.getAll();
         });
