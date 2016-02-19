@@ -7,6 +7,7 @@ var Post = mongoose.model('Post');
 var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
+var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
 var Conectado = mongoose.model('Conectado');
 var Conversation = mongoose.model('Conversation');
@@ -273,8 +274,21 @@ var storage = multer.diskStorage({
     cb(null, './public/uploads2')
   },
   filename: function (req, file, cb) {
-    console.log(file);
-    cb(null, file.originalname )
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if(dd<10){
+      dd='0'+dd
+    }
+    if(mm<10){
+      mm='0'+mm
+    }
+
+  var nombre = file.originalname.split('.');
+    console.log(nombre[0] + '.' + nombre[1]);
+    cb(null, nombre[0] + ' ' +  dd+'-'+mm+'-'+yyyy + '.' + nombre[1]   )
   }
 });
 
@@ -343,6 +357,21 @@ function getReadableFileSizeString(fileSizeInBytes) {
 
 
  //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
+
+
+
+
+router.post('/posts',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.file = '/uploads2/'+req.file.filename;
+  var post = new Post(req.body);
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(post);
+  });
+});
 
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
@@ -434,25 +463,57 @@ router.delete('/posts/:_id',auth, function(req, res,next){
 // NUEVOS COMENTARIOS A LAS PUBLICACIONES
 
 router.post('/posts/:post/comments',auth, function(req, res, next) {
-  var comment = new Comment(req.body);
-  comment.post = req.post;
-  comment.author = req.payload.username;
-  comment.save(function(err, comment){
-    if(err){ return next(err); }
+  User.findOne({ username: req.payload.username  }, function (err, name) {
 
-    req.post.comments.push(comment);
-    req.post.save(function(err, post) {
+  });
+
+
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+    var comment = new Comment(req.body);
+    comment.post = req.post;
+    comment.author = req.payload.username;
+    comment.fotoperfil = name.fotoperfil;
+    comment.save(function(err, comment){
       if(err){ return next(err); }
 
-      res.json(comment);
+      req.post.comments.push(comment);
+      req.post.save(function(err, post) {
+        if(err){ return next(err); }
+
+        res.json(comment);
+      });
     });
   });
+
+
 });
 
 
 //CREACION DE USUARIOS
 
 
+router.get('/areas', function(req, res, next) {
+  Area.find(function(err, area){
+    if(err){ return next(err); }
+    res.json(area);
+  });
+});
+router.post('/areas', function(req, res, next){
+  var area = new Area(req.body);
+  area.save(function (err, area){
+    if(err){ return next(err); }
+  });
+});
+
+router.get('/users', function(req, res, next) {
+
+  User.find(function(err, users){
+
+    if(err){ return next(err); }
+    res.json(users);
+  });
+
+});
 router.post('/users', function(req, res, next){
 
   if(!req.body.username || !req.body.password){
@@ -470,6 +531,88 @@ router.post('/users', function(req, res, next){
 
   });
 });
+
+router.post('/users/:_id', function(req, res, next){
+
+  User.findOne({ username: req.body.username  }, function (err, name) {
+
+    name.setPassword(req.body.password);
+    name.nombre =         req.body.nombre;
+    name.email =          req.body.email;
+    name.area =           req.body.area;
+    name.cargo =          req.body.cargo;
+    name.sexo =           req.body.sexo;
+    name.telefono =       req.body.telefono;
+    name.direccion =      req.body.direccion;
+    name.region =         req.body.region;
+    name.documento =      req.body.documento;
+    name.apellido =       req.body.apellido;
+    name.contratacion =   req.body.contratacion;
+    name.save();
+    res.json(name);
+  });
+
+});
+
+
+router.get('/users/:_id', function(req, res, next){
+
+    var user = req.params._id;
+    User.findById( user, function (err, name) {
+      res.json(name);
+    });
+
+
+});
+
+router.post('/usersf/:_id',auth,upload.single('file'), function(req, res, next){
+  console.log('con foto');
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  User.findOne({ username: req.body.username  }, function (err, name) {
+    console.log('subiendo foto');
+    name.setPassword(req.body.password);
+    name.fotoperfil = '/uploads2/'+req.file.filename;
+    console.log('/uploads2/'+req.file.filename);
+    name.nombre =         req.body.nombre;
+    name.email =          req.body.email;
+    name.area =           req.body.area;
+    name.cargo =          req.body.cargo;
+    name.sexo =           req.body.sexo;
+    name.telefono =       req.body.telefono;
+    name.direccion =      req.body.direccion;
+    name.region =         req.body.region;
+    name.documento =      req.body.documento;
+    name.apellido =       req.body.apellido;
+    name.contratacion =   req.body.contratacion;
+    name.save();
+    res.json(name);
+  });
+
+
+});
+
+router.post('/usersf',auth,upload.single('file'), function(req, res, next){
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  var user = new User(req.body);
+  user.fotoperfil = '/uploads2/'+req.file.filename;
+  user.username = req.body.username;
+
+  user.setPassword(req.body.password);
+  user.save(function (err, user){
+    if(err){ return next(err); }
+
+    res.json(user);
+  });
+});
+
+
 
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){

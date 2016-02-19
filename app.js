@@ -18,6 +18,7 @@ require('./models/Formularios');
 require('./models/Preguntas');
 require('./models/Conectados');
 require('./models/Conversations');
+require('./models/Areas');
 require('./models/Respuestas');
 require('./config/passport');
 moongose.connect('mongodb://localhost/news');
