@@ -77,17 +77,11 @@ router.get('/mensajes/:mes', function(req, res, next) {
 
 var sabe = req.params.mes.split(',').sort();
 
-
-console.log(sabe);
       Conversation.find({ usernametwo: sabe }, function(err,mensa){
         if(err){ return next(err); }
         console.log(mensa);
         res.json(mensa);
           });
-
-
-
-
 });
 
 
@@ -457,6 +451,25 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
 
 
 //CREACION DE USUARIOS
+
+
+router.post('/users', function(req, res, next){
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  var user = new User(req.body);
+
+  user.username = req.body.username;
+
+  user.setPassword(req.body.password);
+  user.save(function (err, user){
+    if(err){ return next(err); }
+
+
+  });
+});
 
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
