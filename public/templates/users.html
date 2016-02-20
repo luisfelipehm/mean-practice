@@ -101,7 +101,7 @@
 <div ng-repeat="user in users">
     {{user.username}}{{user.nombre}} <span ng-hide="editing" ng-click="editing = true">Editar</span>
     <form ng-show="editing" enctype="multipart/form-data" name="myForm"
-          ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion],user._id);editing = false;">
+          ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers],user._id);editing = false;">
         <h3>Editar</h3>
 
 
@@ -165,6 +165,37 @@
             <label>contratacion</label>
             <input type="text" ng-model="user.contratacion" md-maxlength="30">
         </md-input-container>
+
+        <md-checkbox ng-model="user.adminusers"  aria-label="Modificar Usuarios" class="red" >
+            Modificar Usuarios
+        </md-checkbox>
+
+        <md-checkbox ng-model="user.adminpubli"   class="red" >
+            Publicar
+        </md-checkbox>
+
+        <md-checkbox ng-model="user.admindocs" class="red" >
+            Subir Documentos
+        </md-checkbox>
+
+        <md-checkbox ng-model="user.adminforms" class="red" >
+            Crear Formularios
+        </md-checkbox>
+
+        <md-checkbox ng-model="user.adminfotos" class="red" >
+            Crear Albums de fotos
+        </md-checkbox>
+
+        <md-checkbox ng-model="user.admincrono" class="red" >
+            Crear Eventos de Cronograma
+        </md-checkbox>
+
+        <md-checkbox ng-model="user.adminpqrsf" class="red" >
+            Correspondencia de PQRSF
+        </md-checkbox>
+
+
+
 
 
 

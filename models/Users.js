@@ -18,7 +18,16 @@ var UserSchema = new mongoose.Schema({
     contratacion: String,
     salt: String,
     sock: String,
-    actual: Boolean
+    actual: Boolean,
+    adminusers: Boolean,
+    adminpubli: Boolean,
+    admindocs: Boolean,
+    adminforms: Boolean,
+    adminfotos: Boolean,
+    admincrono: Boolean,
+    adminpqrsf: Boolean,
+    ultimaconexion: Date
+
 });
 
 
