@@ -368,7 +368,7 @@
 
     <!--Formulario para publicacion-->
 
-    <div class="contenedorpubli">
+    <div class="contenedorpubli" ng-show="usuario.data.adminpubli">
 
         <!--Imagen user-->
         <div class="imguser">
@@ -444,7 +444,7 @@
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
             <div class="boxpubli">
-                <span class="boxiconremove"><a ng-click="remove(post)"><img class="imgtx" src="/img/icono-eliminar-g.png" ></a></span>
+                <span class="boxiconremove"><a ng-click="remove(post)"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></a></span>
                     <p class="tittlepli">{{post.title}}
 
                     </p>
@@ -475,7 +475,7 @@
                                 <div class="imgusercoment">
                                  <img style="width: 2vw; height: auto" src="{{comentario.fotoperfil}}">
                                 </div>
-                                <img class="imgtxcomentario" src="/img/icono-eliminar-g.png">
+                                <img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-click="removeComment(comentario)" ng-if="currentUser.username == comentario.author">
                                 <span class="comentarioautor">{{comentario.author}}</span> <br>
                                 <p class="comentariouser"> {{comentario.body}}</p>
                             </div>
@@ -487,7 +487,7 @@
                     <div class="inferior" >
                         <div class="boxcomentario">
                             <div class="imgusercoment2">
-                                <img style="width: 5vw; height: auto" src="/img/perro.jpg">
+                                <img style="width: 5vw; height: auto" src="{{usuario.data.fotoperfil}}">
                             </div>
                             <form ng-submit="addComment(post._id , fotoperfil);selectthing($index, true)">
                                 <md-input-container class="tittleboxcomentario">

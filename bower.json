@@ -18,6 +18,8 @@
   ],
   "dependencies": {
     "ng-file-upload": "~11.2.3",
-    "angular-ui-calendar": "~1.0.1"
+    "angular-ui-calendar": "~1.0.1",
+    "angular-moment": "^0.10.3",
+    "moment": "^2.11.2"
   }
 }

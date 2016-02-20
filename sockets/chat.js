@@ -12,7 +12,7 @@ module.exports = function(io) {
 
 
         socket.on('chateando', function (msg) {
-            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: msg.mesj,receptor: msg.recibe });
+            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: msg.mesj,receptor: msg.recibe, fecha: Date.now() });
             conv.save(function(){
 
                 //var sabe = [{usernameone: msg.envia,usernametwo: msg.recibe},{usernametwo: msg.recibe,usernameone: msg.envia}];
@@ -29,12 +29,19 @@ module.exports = function(io) {
 
 
         });
+        socket.on('pubs', function (user) {
+
+                io.emit('pubs',user)
+
+        });
+
 
         socket.on('usuario', function (user) {
 
             User.findOne({ username: user }, function (err, name) {
                 name.sock = socket.id;
                 name.actual = true;
+                name.ultimaconexion = Date.now();
                 name.save();
                  io.emit('usuario',user)
             });

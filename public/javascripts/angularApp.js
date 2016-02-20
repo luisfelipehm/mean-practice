@@ -1,5 +1,5 @@
 
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment']);
 
 
 app.config(['$httpProvider', function($httpProvider) {
@@ -559,8 +559,16 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 region:         datos[9],
                 documento:      datos[10],
                 apellido:       datos[11],
-                contratacion:   datos[12]
+                contratacion:   datos[12],
+                adminpubli:     datos[13],
+                admindocs:      datos[14],
+                adminforms:     datos[15],
+                adminfotos:     datos[16],
+                admincrono:     datos[17],
+                adminpqrsf:     datos[18],
+                adminusers:     datos[19]
             },id);
+            users.getAll();
         }else{
 
             file.upload = Upload.upload({
@@ -578,7 +586,15 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                     region:         datos[9],
                     documento:      datos[10],
                     apellido:       datos[11],
-                    contratacion:   datos[12]},
+                    contratacion:   datos[12],
+                    adminpubli:     datos[13],
+                    admindocs:      datos[14],
+                    adminforms:     datos[15],
+                    adminfotos:     datos[16],
+                    admincrono:     datos[17],
+                    adminpqrsf:     datos[18],
+                    adminusers:     datos[19]},
+
                 file: file,
                 headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 
@@ -868,7 +884,7 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
 
 }]);
 
-app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,mySocket,auth,$http) {
+app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function ($scope,mySocket,auth,$http,moment) {
 
     //Array.prototype.remove = function() {
     //    var what, a = arguments, L = a.length, ax;
@@ -906,12 +922,10 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http', function ($scope,
 
             //$('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>');
             $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
-                '   <div class="avatar"> ' +
-                '           <img src="http://placehold.it/50x50"> ' +
-                '    </div>       ' +
+                ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\"http://placehold.it/50x50\"> </div>") +
                 '        <div class="chatboxmessagecontent">    ' +
                 '           <p>'+lastme.mensaje+'</p>     ' +
-                '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">        softplus • 21:45 PM    </time>    ' +
+                '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">'  +   moment(lastme.fecha).format('LT')   +' </time>    ' +
                 '         </div> ' +
                 '   </li>');
             $('#chatcontent'+rec).scrollTop($('#chatcontent'+rec)[0].scrollHeight);
@@ -983,12 +997,10 @@ var a =
 
                 //$('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>');
                 $('#chatcontent'+name).append('<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
-                    '   <div class="avatar"> ' +
-                    '           <img src="http://placehold.it/50x50"> ' +
-                    '    </div>       ' +
+                    ($scope.currentUser.username == mensa.usernameone  ? "" : "<div class=\"avatar\"><img src=\"http://placehold.it/50x50\"> </div>") +
                     '        <div class="chatboxmessagecontent">    ' +
                     '           <p>'+mensa.mensaje+'</p>     ' +
-                    '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">        softplus • 21:45 PM    </time>    ' +
+                    '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(mensa.fecha).format('LT')   +'   </time>    ' +
                     '         </div> ' +
                     '   </li>');
 
@@ -1328,12 +1340,15 @@ app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function (
 
 }]);
 
-app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http','users', function ($scope,Upload,posts,auth,$timeout,$http,users) {
+app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout','$http','users', function ($scope,Upload,mySocket,posts,auth,$timeout,$http,users) {
 
 
     $scope.posts = posts.posts;
     $scope.bodyc = {val:''};
     $scope.currentUser = auth.currentUser();
+
+
+
 
     $scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
@@ -1375,6 +1390,16 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http','
                 console.log('Error: ' + data);
             });
     };
+    $scope.removeComment = function(comment) {
+        return $http.delete('/comments/' + comment._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                posts.getAll()
+
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
     $scope.addComment = function(idpost){
         if($scope.body === '') { return; }
 
@@ -1396,8 +1421,15 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http','
         $scope.bodyc.val = '';
     };
 
+    mySocket.forward('pubs', $scope);
+
 
     $scope.uploadPic = function(file) {
+
+
+
+
+
 
         if(file==undefined)
         {
@@ -1440,11 +1472,17 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http','
             $scope.link = '';
             $scope.picFile = '';
             console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
-            posts.getAll()
+            socket.emit('pubs', 'update');
+            posts.getAll();
+
         });
 
     };
+    $scope.$on('socket:pubs', function (ev, data) {
+        console.log('hola')
+        posts.getAll();
 
+    });
     $scope.incrementUpvotes = function(post) {
         posts.upvote(post)
     };

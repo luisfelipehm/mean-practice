@@ -459,6 +459,15 @@ router.delete('/posts/:_id',auth, function(req, res,next){
   });
 });
 
+router.delete('/comments/:_id',auth, function(req, res,next){
+  console.log("Deleting");
+  Comment.findById( req.params._id, function ( err, comment ){
+    comment.remove( function ( err, comment ){
+      res.json(comment);
+    });
+  });
+});
+
 
 // NUEVOS COMENTARIOS A LAS PUBLICACIONES
 
@@ -548,6 +557,13 @@ router.post('/users/:_id', function(req, res, next){
     name.documento =      req.body.documento;
     name.apellido =       req.body.apellido;
     name.contratacion =   req.body.contratacion;
+    name.adminusers =     req.body.adminusers;
+    name.adminpubli =     req.body.adminpubli;
+    name.admindocs =      req.body.admindocs;
+    name.adminforms =     req.body.adminforms;
+    name.adminfotos =     req.body.adminfotos;
+    name.admincrono =     req.body.admincrono;
+    name.adminpqrsf =     req.body.adminpqrsf;
     name.save();
     res.json(name);
   });
@@ -587,6 +603,13 @@ router.post('/usersf/:_id',auth,upload.single('file'), function(req, res, next){
     name.documento =      req.body.documento;
     name.apellido =       req.body.apellido;
     name.contratacion =   req.body.contratacion;
+    name.adminusers =     req.body.adminusers;
+    name.adminpubli =     req.body.adminpubli;
+    name.admindocs =      req.body.admindocs;
+    name.adminforms =     req.body.adminforms;
+    name.adminfotos =     req.body.adminfotos;
+    name.admincrono =     req.body.admincrono;
+    name.adminpqrsf =     req.body.adminpqrsf;
     name.save();
     res.json(name);
   });
