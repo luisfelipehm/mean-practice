@@ -53,16 +53,30 @@
   <script src="/javascripts/angularApp.js"></script>
   <style>
 
+    html {
+      height: 100%;
+    }
+    body {
+      min-height: 100%;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+
     .content
     {
-      background-image: url("img/textura.jpg");
+      background-image: url("img/fondo_centro.png");
+      background-size: 25px 25px;
       position: absolute;
-      top: 44vh;
+      top: 42vh;
       left: 22%;
-      width: 56%;
-      min-height: 110% ;
+      min-height: 100% ;
       height: auto;
       margin-top: 0;
+      -webkit-box-shadow: inset 0px 0px 50px -8px ;
+      -moz-box-shadow: inset 0px 0px 50px -8px ;
+      box-shadow: inset 0px 0px 50px -8px;
     }
     form.new_message
     {
@@ -86,13 +100,14 @@
       left: 0;
       width: 100%;
     }
-
-
+    .vwer
+    {
+      height: 100%;
+      min-height: 100%;
+    }
   </style>
 </head>
 <body ng-app="flapperNews" >
-
-
 
 
 <!--<div style="position: absolute;top: 0;left: 0;width: 100% ">-->
@@ -100,9 +115,7 @@
 <!--</div>-->
 
 
-
-
-    <div ui-view="main"></div>
+    <div class="vwer" ui-view="main"></div>
 
 
 

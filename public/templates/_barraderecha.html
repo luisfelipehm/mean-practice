@@ -4,19 +4,17 @@
     {
         color: #575756;
         font-size: 1.5vw;
-        margin-left: 35%;
+        margin-left: 7.5vw;
     }
     .imagenesactividades
     {
         width: 15vw;
         position: absolute;
         left: 4vw;
-        background: black;
         autoHeight: true
     }
     .imgactiva
     {
-        border: solid green;
         margin-left: auto;
         margin-right: auto;
         autoHeight: true;
@@ -33,23 +31,37 @@
         position: absolute;
         height:50vh;
         width: 22%;
-        top: 57vh;
-        left: 77.9%;
+        top: 15vh;
+    }
+    .fondobarradercha
+    {
+        position: absolute;
+        background-image: url("../img/textura.png");
+        background-size:25px 25px;
+        height: 100vh;
+        width: 21.9vw;
+        top: 42vh;
+        right: 0vw;
+        -webkit-box-shadow: inset 0px 0px 50px -8px ;
+        -moz-box-shadow: inset 0px 0px 50px -8px ;
+        box-shadow: inset 0px 0px 50px -8px;
     }
 
 </style>
 
 
+<div class="fondobarradercha">
 
-<div class="barraderechaimg">
-    <p class="dtittle1">Actividades</p>
+    <div class="barraderechaimg">
+        <p class="dtittle1">Actividades</p>
 
-  <!--IMAGENES BARRA DERECHA-->
-    <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades">
-        <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-f.png"></div>
-        <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-t.png"></div>
-        <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro.jpg"></div>
-        <!--<div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro2.jpg"></div>-->
-    </slick>
+      <!--IMAGENES BARRA DERECHA-->
+        <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades">
+            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-f.png"></div>
+            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-t.png"></div>
+            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro.jpg"></div>
+            <!--<div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro2.jpg"></div>-->
+        </slick>
 
+    </div>
 </div>
