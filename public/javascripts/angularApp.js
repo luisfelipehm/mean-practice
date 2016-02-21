@@ -1,10 +1,30 @@
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3']);
 
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment']);
+
+
+app.config(['$httpProvider', function($httpProvider) {
+    //initialize get if not there
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+    }
+
+    // Answer edited to include suggestions from comments
+    // because previous version of code introduced browser-related errors
+
+    //disable IE ajax request caching
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+    // extra
+    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+    $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+}]);
 app.directive('barranav', function() {
     return {
         restrict: 'E',
         templateUrl: '/templates/_barra.html'
     };
+});
+app.factory('mySocket', function (socketFactory) {
+    return socketFactory();
 });
 app.directive('fullbars', function() {
     return {
@@ -18,6 +38,12 @@ app.directive('barrader', function() {
         templateUrl: '/templates/_barraderecha.html'
     };
 });
+app.directive('chat', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/templates/_chat.html'
+    };
+});
 app.directive('barraizq', function() {
     return {
         restrict: 'E',
@@ -27,7 +53,7 @@ app.directive('barraizq', function() {
 
 app.factory('posts', ['$http','auth',function($http,auth){
     var o = {
-    posts:[]
+        posts:[]
     };
 
     o.getAll = function() {
@@ -127,6 +153,62 @@ app.factory('fotos', ['$http','auth',function($http,auth){
     return o;
 }]);
 
+app.factory('areas', ['$http','auth',function($http,auth){
+    var o = {
+        areas:[]
+    };
+    o.getAll = function() {
+        return $http.get('/areas').success(function(data){
+            angular.copy(data, o.areas);
+        });
+    };
+    o.create = function(area) {
+
+        return $http.post('/areas', area, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.areas.push(data);
+        });
+    };
+    return o;
+}]);
+
+app.factory('users', ['$http','auth',function($http,auth){
+    var o = {
+        users:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/users').success(function(data){
+            angular.copy(data, o.users);
+        });
+    };
+    o.create = function(user) {
+
+        return $http.post('/users', user, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.users.push(data);
+        });
+    };
+    o.edit = function(user,id) {
+
+        return $http.post('/users/'+ id, user, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.users.push(data);
+        });
+    };
+    o.get = function(id) {
+        return $http.get('/users/' + id).then(function(data){
+            return data;
+            console.log(data);
+        });
+    };
+
+    return o;
+}]);
+
 app.factory('formularios', ['$http','auth',function($http,auth){
     var o = {
         formularios:[]
@@ -151,6 +233,11 @@ app.factory('formularios', ['$http','auth',function($http,auth){
             return res.data;
         });
     };
+    o.getResults = function (id) {
+        return $http.get('/formularios/' + id + '/results').then(function(res){
+            return res.data;
+        });
+    };
     o.addPregunta = function(id, pregunta) {
         console.log(pregunta);
         console.log('hola mundo');
@@ -159,12 +246,16 @@ app.factory('formularios', ['$http','auth',function($http,auth){
             headers: {Authorization: 'Bearer '+auth.getToken()}
         });
     };
+    o.respon = function(id, comment) {
+        return $http.post('/formularios/' + id + '/responder', comment, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
 
     return o;
 }]);
 
-
-app.factory('auth', ['$http', '$window', function($http, $window){
+app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $window,$state,mySocket){
     var auth = {};
     auth.saveToken = function (token){
         $window.localStorage['flapper-news-token'] = token;
@@ -188,8 +279,10 @@ app.factory('auth', ['$http', '$window', function($http, $window){
         if(auth.isLoggedIn()){
             var token = auth.getToken();
             var payload = JSON.parse($window.atob(token.split('.')[1]));
-
-            return payload.username;
+            return payload;
+        }else
+        {
+            return "no conectado"
         }
     };
     auth.register = function(user){
@@ -203,11 +296,13 @@ app.factory('auth', ['$http', '$window', function($http, $window){
         });
     };
     auth.logOut = function(){
-        $window.localStorage.removeItem('flapper-news-token');
+            $window.localStorage.removeItem('flapper-news-token');
+            $state.go('login');
     };
 
     return auth;
 }]);
+
 app.config(function($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('grey')
@@ -220,18 +315,39 @@ app.config([
     function($stateProvider, $urlRouterProvider) {
 
         $stateProvider
+            .state( 'root', {
+                url: '/root',
+                views: {
+                    "main": {
+                        controller: 'RootCtrl',
+                        templateUrl: 'templates/root.html'
+                    }
+                },
+                onEnter: ['$state', 'auth', function($state, auth){
+                    if(auth.isLoggedIn() == false){
+                        $state.go('login');
+                    }
+                }]
+            })
+
             .state('home', {
+                parent: 'root',
                 url: '/home',
                 templateUrl: 'templates/home.html',
                 controller: 'MainCtrl',
                 resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
                     postPromise: ['posts', function(posts){
                         return posts.getAll();
                     }]
-                }
 
+                }
             })
             .state('documentos', {
+                parent: 'root',
                 url: '/documentos',
                 templateUrl: 'templates/documents.html',
                 controller: 'DocumentsCtrl',
@@ -248,8 +364,12 @@ app.config([
             })
             .state('login', {
                 url: '/login',
-                templateUrl: 'templates/login.html',
-                controller: 'AuthCtrl as usuario',
+                views: {
+                    "main": {
+                        controller: 'AuthCtrl as usuario',
+                        templateUrl: 'templates/login.html'
+                    }
+                },
                 onEnter: ['$state', 'auth', function($state, auth){
                     if(auth.isLoggedIn()){
                         $state.go('home');
@@ -257,6 +377,7 @@ app.config([
                 }]
             })
             .state('register', {
+                parent: 'root',
                 url: '/register',
                 templateUrl: 'templates/register.html',
                 controller: 'AuthCtrl as usuario',
@@ -266,8 +387,20 @@ app.config([
                     }
                 }]
             })
+            .state('users', {
+                parent: 'root',
+                url: '/users/',
+                templateUrl: 'templates/users.html',
+                controller: 'UsersCtrl',
+                resolve: {
+                    postPromise: ['users', function(users){
+                        return users.getAll();
+                    }]
+                }
+            })
             .state('fotox', {
-                url: '/fotos',
+                parent: 'root',
+                url: '/fotos/',
                 templateUrl: 'templates/fotos.html',
                 controller: 'FotosCtrl',
                 resolve: {
@@ -277,6 +410,7 @@ app.config([
                 }
             })
             .state('fotos', {
+                parent: 'root',
                 url: '/fotos/{id}',
                 templateUrl: 'templates/album.html',
                 controller: 'FotoCtrl',
@@ -287,6 +421,7 @@ app.config([
 
             })
             .state('documents', {
+                parent: 'root',
                 url: '/documents/{id}',
                 templateUrl: 'templates/document.html',
                 controller: 'DocumentCtrl',
@@ -297,12 +432,14 @@ app.config([
 
             })
             .state('calendar', {
+                parent: 'root',
                 url: '/calendar',
                 templateUrl: 'templates/calendar.html',
                 controller: 'CalendarCtrl',
 
             })
             .state('formularios',{
+                parent: 'root',
                 url: '/formularios',
                 templateUrl: 'templates/formularios.html',
                 controller: 'FormulariosCtrl',
@@ -313,6 +450,7 @@ app.config([
                 }
             })
             .state('formulario', {
+                parent: 'root',
                 url: '/formularios/{id}',
                 templateUrl: 'templates/formulario.html',
                 controller: 'FormularioCtrl',
@@ -322,6 +460,28 @@ app.config([
                     }]}
 
             })
+            .state('areas', {
+                parent: 'root',
+                url: '/areas',
+                templateUrl: 'templates/areas.html',
+                controller: 'AreasCtrl',
+                resolve: {
+                    postPromise: ['areas', function(areas){
+                        return areas.getAll();
+                    }]
+                }
+            })
+            .state('formularioresults', {
+                parent: 'root',
+                url: '/formularios/{id}/results',
+                templateUrl: 'templates/formularioresults.html',
+                controller: 'FormularioresultsCtrl',
+                resolve: {
+                    formularior: ['$stateParams', 'formularios', function($stateParams, formularios) {
+                        return formularios.getResults($stateParams.id);
+                    }]}
+
+            });
 
 
         //    .state('document', {
@@ -333,29 +493,256 @@ app.config([
         //            return document.get($stateParams.id);
         //        }]}
         //})
-        ;
 
-        $urlRouterProvider.otherwise('home');
+
+        $urlRouterProvider.otherwise('/root/home');
     }]);
 
+app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,areas) {
+    $scope.areas = areas.areas;
+    $scope.crearArea = function () {
+        if(!$scope.nombre || $scope.nombre === '') { return; }
+        areas.create({
+            nombre: $scope.nombre
+        })
+    }
+}]);
+
+app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout','$http', function ($scope,auth,users,areas,Upload,$timeout,$http) {
+
+     $scope.users = users.users;
 
 
-app.controller('NavCtrl', [
-    'auth',
-    function( auth){
+     $scope.loadAreas = function() {
+            areas.getAll();
+            $scope.areas = areas.areas;
+     };
+
+    //$scope.seed = [
+    //    { nombre: "JUAN JOSE",email: "\N",area: "GESTION DE INFRAESTRUCTURA TECNOLOGICA",cargo: "INGENIERO DE SISTEMAS",sexo: "\N",telefono: "\N",direccion: "\N",region: "CUNDINAMARCA",documento: "12746250",apellido: "OBANDO CABRERA",contratacion: "PLANTA",username: "jjobandocb",password: "12746250" },
+    //    { nombre: "DIEGO FERNANDO",email: "dfapolinarm@solucionescyf.com.co",area: "Gestion de Infraestructura Tecnologica",cargo: "DIRECTOR DE SISTEMAS",sexo: "Masculino",telefono: "07/01/1967",direccion: "cra 13 37 37 piso 8",region: "CUNDINAMARCA",documento: "16743751",apellido: "APOLINAR MARTINEZ",contratacion: "PLANTA",username: "dfapolinarmb",password: "16743751" },
+    //    { nombre: "JONATHAN",email: "jlopezb@saludcoop.com.co",area: "Gestion de Infraestructura Tecnologica",cargo: "TECNICO DE SISTEMAS",sexo: "Masculino",telefono: "304 243 2837",direccion: "\N",region: "CUNDINAMARCA",documento: "80160929",apellido: "LOPEZ BETANCOURT",contratacion: "PLANTA",username: "jlopezbb",password: "80160929" },
+    //];
+    //
+    //angular.forEach($scope.seed, function (us) {
+    //    users.create({
+    //        username: us.username,
+    //        password: us.password,
+    //        nombre: (us.nombre == "\N" ? "" : us.nombre),
+    //        email: (us.email == "\N" ? "" : us.email),
+    //        area:  (us.area == "\N" ? "" : us.area),
+    //        cargo: (us.cargo == "\N" ? "" : us.cargo),
+    //        sexo: (us.sexo == "\N" ? "" : us.sexo),
+    //        telefono: (us.telefono == "\N" ? "" : us.telefono),
+    //        direccion: (us.direccion == "\N" ? "" : us.direccion),
+    //        region: (us.region == "\N" ? "" : us.region),
+    //        documento: (us.documento == "\N" ? "" : us.documento),
+    //        apellido: (us.apellido == "\N" ? "" : us.apellido),
+    //        contratacion: (us.contratacion == "\N" ? "" : us.contratacion)
+    //    })
+    //});
+
+
+    $scope.uploadPic2 = function (file,datos,id) {
+        if(file==undefined)
+        {
+            users.edit({
+                username:       datos[0],
+                password:       datos[1],
+                nombre:         datos[2],
+                email:          datos[3],
+                area:           datos[4],
+                cargo:          datos[5],
+                sexo:           datos[6],
+                telefono:       datos[7],
+                direccion:      datos[8],
+                region:         datos[9],
+                documento:      datos[10],
+                apellido:       datos[11],
+                contratacion:   datos[12],
+                adminpubli:     datos[13],
+                admindocs:      datos[14],
+                adminforms:     datos[15],
+                adminfotos:     datos[16],
+                admincrono:     datos[17],
+                adminpqrsf:     datos[18],
+                adminusers:     datos[19]
+            },id);
+            users.getAll();
+        }else{
+
+            file.upload = Upload.upload({
+                url: '/usersf/'+ id,
+                data: {
+                    username:       datos[0],
+                    password:       datos[1],
+                    nombre:         datos[2],
+                    email:          datos[3],
+                    area:           datos[4],
+                    cargo:          datos[5],
+                    sexo:           datos[6],
+                    telefono:       datos[7],
+                    direccion:      datos[8],
+                    region:         datos[9],
+                    documento:      datos[10],
+                    apellido:       datos[11],
+                    contratacion:   datos[12],
+                    adminpubli:     datos[13],
+                    admindocs:      datos[14],
+                    adminforms:     datos[15],
+                    adminfotos:     datos[16],
+                    admincrono:     datos[17],
+                    adminpqrsf:     datos[18],
+                    adminusers:     datos[19]},
+
+                file: file,
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+
+            file.upload.progress(function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+
+            file.upload.success(function (data, status, headers, config) {
+                users.getAll();
+            });
+        }
+    };
+
+
+
+    $scope.uploadPic = function(file) {
+
+        if(file==undefined)
+        {
+            users.create({
+                username:       $scope.username,
+                password:       $scope.password,
+                nombre:         $scope.nombre,
+                email:          $scope.email,
+                area:           $scope.area,
+                cargo:          $scope.cargo,
+                sexo:           $scope.sexo,
+                telefono:       $scope.telefono,
+                direccion:      $scope.direccion,
+                region:         $scope.region,
+                documento:      $scope.documento,
+                apellido:       $scope.apellido,
+                contratacion:   $scope.contratacion
+            });
+            $scope.username = '';
+            $scope.password = '';
+            $scope.nombre = '';
+            $scope.email= '';
+            $scope.area= '';
+            $scope.cargo= '';
+            $scope.sexo= '';
+            $scope.telefono= '';
+            $scope.direccion= '';
+            $scope.region= '';
+            $scope.documento= '';
+            $scope.apellido= '';
+            $scope.contratacion= '';
+        }else{
+
+        file.upload = Upload.upload({
+            url: '/usersf',
+            data: {username:       $scope.username,
+                password:       $scope.password,
+                nombre:         $scope.nombre,
+                email:          $scope.email,
+                area:           $scope.area,
+                cargo:          $scope.cargo,
+                sexo:           $scope.sexo,
+                telefono:       $scope.telefono,
+                direccion:      $scope.direccion,
+                region:         $scope.region,
+                documento:      $scope.documento,
+                apellido:       $scope.apellido,
+                contratacion:   $scope.contratacion},
+            file: file,
+            headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+
+        });
+
+        file.upload.then(function (response) {
+            console.log("paso1 error");
+            $timeout(function () {
+                file.result = response.data;
+            });
+        }, function (response) {
+            console.log("paso1 otro");
+            if (response.status > 0)
+                $scope.errorMsg = response.status + ': ' + response.data;
+        });
+
+        file.upload.progress(function (evt) {
+            console.log("paso2 error");
+            // Math.min is to fix IE which reports 200% sometimes
+            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+
+        file.upload.success(function (data, status, headers, config) {
+            $scope.username = '';
+            $scope.password = '';
+            $scope.nombre = '';
+            $scope.email= '';
+            $scope.area= '';
+            $scope.cargo= '';
+            $scope.sexo= '';
+            $scope.telefono= '';
+            $scope.direccion= '';
+            $scope.region= '';
+            $scope.documento= '';
+            $scope.apellido= '';
+            $scope.contratacion= '';
+            $scope.picFile = '';
+            users.getAll();
+        });
+        }
+    };
+
+
+
+
+
+    //$scope.crearUsuario = function(){
+    //    if(!$scope.username || $scope.username === '') { return; }
+    //
+    //};
+
+}]);
+
+app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$scope){
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
-        nav.currentUser = auth.currentUser;
-        nav.logOut = auth.logOut;
+        nav.currentUser = auth.currentUser();
+
+        nav.logOut = function (user) {
+            socket.emit('disusuario', user );
+            mySocket.forward('usuario', $scope);
+            auth.logOut();
+        }
     }]);
 
-
-
-
-
-
 app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,auth,documents) {
+
     $scope.isLoggedIn = auth.isLoggedIn;
+
+    if(!$scope.isLoggedIn)
+    {
+
+    }
     $scope.documents = documents.documents;
 
     $scope.crearCarpeta = function(){
@@ -367,6 +754,8 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
     };
 
 }]);
+
+app.controller('RootCtrl', ['$scope', function ($scope) { }]);
 
 app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
 
@@ -446,9 +835,6 @@ app.controller('CalendarCtrl',['$scope', function ($scope) {
     };
 }]);
 
-
-
-
 app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scope,auth,formularios) {
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.formularios = formularios.formularios;
@@ -498,34 +884,191 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
 
 }]);
 
-function toObject(arr, num) {
-    var rv = {};
-    for (var i = 0; i < arr.length; ++i)
-        rv[i] = num == 0 ?  false : arr[i];
-    return rv;
-}
-app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  function($scope, formularios,formulario,auth){
+app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function ($scope,mySocket,auth,$http,moment) {
 
-    $scope.formulario = formulario;
+    //Array.prototype.remove = function() {
+    //    var what, a = arguments, L = a.length, ax;
+    //    while (L && this.length) {
+    //        what = a[--L];
+    //        while ((ax = this.indexOf(what)) !== -1) {
+    //            this.splice(ax, 1);
+    //        }
+    //    }
+    //    return this;
+    //};
+
+
+    $scope.mensajes = [];
+    $scope.usuariosconectados = [];
+    $scope.currentUser = auth.currentUser();
     $scope.isLoggedIn = auth.isLoggedIn;
-    $scope.valores2 = [];
-    angular.forEach($scope.formulario.preguntas, function (preg) {
-            $scope.valores2.push(
-                ((preg.tipo == 'checkbox' || preg.tipo == 'radio') ?  ""  : {pregunta: preg.pregunta,  respuesta: ((preg.tipo == 'interruptor') ?  'No' :  '')} )
-        )
-        }
 
-    );
-    $scope.valores = [];
+    if ($scope.isLoggedIn) {
+        socket.emit('usuario', $scope.currentUser.username);
+        mySocket.forward('usuario', $scope);
+    }
+
+    $scope.obtenerMensajes = function (name1,name2,rec) {
+
+        //return $http.get('/products').then(function(response) {
+        //    return response.data;
+        //});
+        $http.get('/mensajes/'+ name1 +','+ name2).then(function (response) {
+
+            angular.copy(response.data, $scope.mensajes);
+            var lastme = $scope.mensajes.slice(-1)[0];
+            $("#"+rec+"chattext2").val('');
+
+
+            //$('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>');
+            $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
+                ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\"http://placehold.it/50x50\"> </div>") +
+                '        <div class="chatboxmessagecontent">    ' +
+                '           <p>'+lastme.mensaje+'</p>     ' +
+                '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">'  +   moment(lastme.fecha).format('LT')   +' </time>    ' +
+                '         </div> ' +
+                '   </li>');
+            $('#chatcontent'+rec).scrollTop($('#chatcontent'+rec)[0].scrollHeight);
+
+        })
+    };
+
+
+    $scope.actualizarUsers = function () {
+        return $http.get('/conectados').success(function(data){
+            angular.copy(data,$scope.usuariosconectados)
+        });
+    };
+
+    $scope.$on('socket:usuario', function (ev, data) {
+       $scope.actualizarUsers();
+    });
+
+    mySocket.forward('chateando', $scope);
+
+
+        $scope.$on('socket:chateando', function (ev, data) {
+            if(data.envia == $scope.currentUser.username){
+                $scope.obtenerMensajes(data.participan[0],data.participan[1],data.recibe);
+            }else if(data.recibe == $scope.currentUser.username)
+            {
+                if($('#'+data.envia+'chat').length == 0){
+                    $scope.generarChat(data.envia);
+                }else{
+                    $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
+                }
+            }
+        });
+
+
+
+
+var a =
+
+
+
+
+    $scope.numerochats = 1;
+    $scope.generarChat = function (name) {
+        if($('#'+name+'chat').length > 0){
+
+        }   else {
+        var part = [name , $scope.currentUser.username].sort();
+
+        $http.get('/mensajes/'+ part[0] +','+ part[1]).then(function (response) {
+            angular.copy(response.data, $scope.mensajes);
+            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'"});} e.preventDefault();}});' +
+                '$("#closechat'+ name+'").click(function () {$("#'+name+'chat").nextAll(".chatbox").css("right", "-=285");numerodechats--;$("#'+name+'chat").remove();})' +
+                '</script>' +
+                '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
+                '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
+                '<h1> '+name+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+                '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
+                '    <div class="chatboxinput">'+
+                '<input type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> </div> </div>' +
+                '<script>$("#'+name+'chat").css("right",numerodechats*285+"px");' +
+                ' $("#'+name +'chattext2").focus();' +
+                '' +
+                '</script>');
+
+            $scope.numerochats += 1;
+
+            angular.forEach($scope.mensajes, function (mensa) {
+
+                //$('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>');
+                $('#chatcontent'+name).append('<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
+                    ($scope.currentUser.username == mensa.usernameone  ? "" : "<div class=\"avatar\"><img src=\"http://placehold.it/50x50\"> </div>") +
+                    '        <div class="chatboxmessagecontent">    ' +
+                    '           <p>'+mensa.mensaje+'</p>     ' +
+                    '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(mensa.fecha).format('LT')   +'   </time>    ' +
+                    '         </div> ' +
+                    '   </li>');
+
+
+            });
+
+            $('#chatcontent'+name).scrollTop($('#chatcontent'+name)[0].scrollHeight)
+
+        });
+        }
+    };
+
+
+
+    $scope.actualizarUsers();
+
+
+
+
+
+    //$('#enviando').click(function () {
+    //    socket.emit('sok', $('#m').val());
+    //    $('#m').val('');
+    //});
+    //
+    //
+    //mySocket.forward('sok', $scope);
+    //$scope.$on('socket:sok', function (ev, data) {
+    //        $scope.mensajes.push(data);
+    //});
+}]);
+
+app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','auth', function ($scope, formularios,formularior,auth) {
+    $scope.formulario = formularior;
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.data2 = [];
+    angular.forEach($scope.formulario.respuestas, function (respues) {
+        $scope.data2.push(respues.dato);
+    })
+
+    function enumerador(arreglo) {
+        objeto = {};
+        for (var i = 0, j = arreglo.length; i < j; i++) {
+            if(arreglo[i] != false && arreglo[i] != ""){
+            objeto[arreglo[i]] = (objeto[arreglo[i]] || 0) + 1;
+            }
+        }
+        return objeto;
+    }
+    function aD3(dato) {
+        resultado = [];
+        for (var x in dato) {
+            resultado.push({key: x, y: dato[x]});
+        }
+        return resultado;
+    }
 
     $scope.options = {
         chart: {
             type: 'pieChart',
             height: 500,
             donut: true ,
+            color:['#E30613','#4a4a49','#646363','#7c7c7b','#929292','#a8a8a7','#bdbcbc','#d0d0d0'],
+            showLabels: true,
+            labelType: "percent",
             x: function(d){return d.key;},
             y: function(d){return d.y;},
-            showLabels: false,
+
             duration: 500,
             labelThreshold: 0.01,
             labelSunbeamLayout: true,
@@ -540,109 +1083,156 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth',  
         }
     };
 
-    $scope.data = [
-        {
-            key: "One",
-            y: 5
-        },
-        {
-            key: "Two",
-            y: 2
-        },
-        {
-            key: "Three",
-            y: 9
-        },
-        {
-            key: "Four",
-            y: 7
-        },
-        {
-            key: "Five",
-            y: 4
-        },
-        {
-            key: "Six",
-            y: 3
-        },
-        {
-            key: "Seven",
-            y: .5
-        }
-    ];
 
-
-    $scope.data2 = [
-
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"Si"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"Si"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"0":"Musica","2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}],
-        [{"pregunta":"Cual es tu nombre?","respuesta":""},{"2":"Deportes"},"",{"pregunta":"Te ha gustado la encuenta","respuesta":"No"}]
-
-    ];
-    $scope.resultado = [];
-    $scope.resultado2 = [];
-    $scope.resultado3 = [];
     $scope.resultadofinal = [];
-    $scope.resultadofinal2 = [];
     $scope.resultadofinal3 = [];
 
+    for(z=0; z< $scope.data2[0].length;z++) {
 
-    /*  Checkbox */
+        $scope.resultadofinal3 = [];
+        $scope.resultado3 = [];
 
-    angular.forEach($scope.data2, function (dat) {
-        $scope.resultado3.push(dat[1])
-    });
-    $scope.resultadox = [];
-
-    angular.forEach($scope.resultado3, function (dat) {
-        angular.forEach(dat, function (dat2) {
-            $scope.resultadox.push(dat2);
-        })
-    });
-
-    $scope.obj3 = {};
-    for (var i = 0, j = $scope.resultadox.length; i < j; i++) {
-        $scope.obj3[$scope.resultadox[i]] = ($scope.obj3[$scope.resultadox[i]] || 0) + 1;
-    }
-
-    for(var x in $scope.obj3){
-        $scope.resultadofinal3.push({key: x, y: $scope.obj3[x]});
-    }
-
-    /* Radio Button */
-
-    angular.forEach($scope.data2, function (dat) {
-             $scope.resultado.push(dat[2])
-    });
-    $scope.obj = {};
-    for (var i = 0, j = $scope.resultado.length; i < j; i++) {
-        $scope.obj[$scope.resultado[i]] = ($scope.obj[$scope.resultado[i]] || 0) + 1;
-    }
-
-    for(var x in $scope.obj){
-        $scope.resultadofinal.push({key: x, y: $scope.obj[x]});
-    }
+        angular.forEach($scope.data2, function (dat) {
+            $scope.resultado3.push(dat[z].respuesta)
+        });
 
 
-    /*  Interruptor */
-    angular.forEach($scope.data2, function (dat) {
-        $scope.resultado2.push(dat[3].respuesta)
-    });
-    $scope.obj2 = {};
-    for (var i = 0, j = $scope.resultado2.length; i < j; i++) {
-        $scope.obj2[$scope.resultado2[i]] = ($scope.obj2[$scope.resultado2[i]] || 0) + 1;
-    }
 
-    for(var x in $scope.obj2){
-        $scope.resultadofinal2.push({key: x, y: $scope.obj2[x]});
+
+        if(typeof $scope.resultado3[0] === 'object'){
+            $scope.resultadox = [];
+
+            angular.forEach($scope.resultado3, function (dat) {
+                angular.forEach(dat, function (dat2) {
+                    $scope.resultadox.push(dat2);
+                })
+            });
+            $scope.obj3 = enumerador($scope.resultadox);
+        }else{
+            $scope.obj3 = enumerador($scope.resultado3);
+
+        }
+        $scope.resultadofinal3 = aD3($scope.obj3);
+
+
+        $scope.resultadofinal.push($scope.resultadofinal3);
+
     }
 
 }]);
 
+app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth','$state',  function($scope, formularios,formulario,auth,$state){
 
+    $scope.formulario = formulario;
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.valores2 = [];
+    angular.forEach($scope.formulario.preguntas, function (preg) {
+            $scope.valores2.push(
+                ( {pregunta: preg.pregunta,  respuesta:   '' })
+        )
+        }
+
+    );
+
+    $scope.responder = function (idform) {
+        formularios.respon(idform,  {
+            dato: $scope.valores2
+        }).success(function () {
+            $state.go('home');
+        })
+    };
+
+    $scope.options = {
+        chart: {
+            type: 'pieChart',
+            height: 500,
+            donut: true ,
+            color:['#E30613','#575756','#878787'],
+            showLabels: true,
+            labelType: "percent",
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+
+            duration: 500,
+            labelThreshold: 0.01,
+            labelSunbeamLayout: true,
+            legend: {
+                margin: {
+                    top: 5,
+                    right: 35,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
+
+    $scope.data2 = [
+
+            [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"No"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Tarjeta de Identidad"}],
+
+    ];
+
+
+    function enumerador(arreglo) {
+        objeto = {};
+        for (var i = 0, j = arreglo.length; i < j; i++) {
+            objeto[arreglo[i]] = (objeto[arreglo[i]] || 0) + 1;
+        }
+        return objeto;
+    }
+    function aD3(dato) {
+        resultado = [];
+        for (var x in dato) {
+            resultado.push({key: x, y: dato[x]});
+        }
+        return resultado;
+    }
+
+    $scope.resultado = [];
+    $scope.resultado2 = [];
+
+    $scope.resultadofinal = [];
+    $scope.resultadofinal2 = [];
+    $scope.resultadofinal3 = [];
+
+    for(z=0; z< $scope.data2[0].length;z++) {
+
+        $scope.resultadofinal3 = [];
+        $scope.resultado3 = [];
+
+        angular.forEach($scope.data2, function (dat) {
+            $scope.resultado3.push(dat[z].respuesta)
+        });
+
+        console.log();
+        //console.log(Object.keys());
+
+if(typeof $scope.resultado3[0] === 'object'){
+    $scope.resultadox = [];
+
+        angular.forEach($scope.resultado3, function (dat) {
+            angular.forEach(dat, function (dat2) {
+                $scope.resultadox.push(dat2);
+            })
+        });
+    $scope.obj3 = enumerador($scope.resultadox);
+}else{
+    $scope.obj3 = enumerador($scope.resultado3);
+
+}
+        $scope.resultadofinal3 = aD3($scope.obj3);
+
+
+        $scope.resultadofinal.push($scope.resultadofinal3);
+
+    }
+    console.log($scope.resultadofinal);
+
+}]);
 
 app.controller('CalendarbarCtrl',['$scope', function ($scope) {
     $scope.hola = 'Hello World';
@@ -673,6 +1263,7 @@ app.controller('CalendarbarCtrl',['$scope', function ($scope) {
         }
     };
 }]);
+
 app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,Upload,$timeout,$http, fotos,foto,auth){
 
     $scope.foto = foto;
@@ -731,7 +1322,6 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
     };
 }]);
 
-
 app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function ($scope,fotos,Upload,$http,auth) {
     $scope.hola = "Hello World";
 
@@ -750,16 +1340,58 @@ app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function (
 
 }]);
 
-app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', function ($scope,Upload,posts,auth,$timeout,$http) {
+app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout','$http','users', function ($scope,Upload,mySocket,posts,auth,$timeout,$http,users) {
 
 
     $scope.posts = posts.posts;
     $scope.bodyc = {val:''};
+    $scope.currentUser = auth.currentUser();
+
+
+
+
+    $scope.fotoperfil = '';
+    //console.log($scope.fotoperfil);
+    //$scope.getUser = function (id) {
+    //    return $http.get('/users/' + id).then(function(res){
+    //        console.log(res.fotoperfil)
+    //    });
+    //};
+    //$scope.bodyc = {val:''};
+    //$scope.currentUser = auth.currentUser();
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+    });
+
+
+     //users.get($scope.currentUser._id);
+
+    //$scope.fotoperfil = $scope.usuario.fotoperfil;
+
+
+    $scope.selectthing = function(idx, form) {
+        if ($scope.selectedIndex == idx  ){
+            form ? $scope.selectedIndex = idx : $scope.selectedIndex = undefined
+
+        }else{
+            $scope.selectedIndex = idx;
+        }
+    };
 
     console.log($scope.posts);
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.remove = function(post) {
         return $http.delete('/posts/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                posts.getAll()
+
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+    $scope.removeComment = function(comment) {
+        return $http.delete('/comments/' + comment._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
             .success(function(data) {
                 posts.getAll()
 
@@ -782,14 +1414,22 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
         posts.addComment(idpost, {
             body: $scope.bodyc.val,
             author: 'user'
+
         }).success(function(comment) {
             posts.getAll();
         });
         $scope.bodyc.val = '';
     };
 
+    mySocket.forward('pubs', $scope);
+
 
     $scope.uploadPic = function(file) {
+
+
+
+
+
 
         if(file==undefined)
         {
@@ -832,11 +1472,17 @@ app.controller('MainCtrl',['$scope','Upload','posts','auth','$timeout','$http', 
             $scope.link = '';
             $scope.picFile = '';
             console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
-            posts.getAll()
+            socket.emit('pubs', 'update');
+            posts.getAll();
+
         });
 
     };
+    $scope.$on('socket:pubs', function (ev, data) {
+        console.log('hola')
+        posts.getAll();
 
+    });
     $scope.incrementUpvotes = function(post) {
         posts.upvote(post)
     };

@@ -60,8 +60,8 @@
     }
     .boxnewdocument
     {
-        position: relative;
-        width: 30vw;
+        margin-top: 3vh;
+        width: auto;
         height: auto;
         left: 48%;
     }
@@ -141,6 +141,18 @@
         width: auto;
         display: none;
     }
+    .botonuno
+    {
+        height: 5vh;
+        margin-left: 47%;
+    }
+    .botondos
+    {
+        margin-left: 2%;
+        width: 12vw;
+        height: 5vh;
+        left: 16vw;
+    }
 
 
 </style>
@@ -154,8 +166,8 @@
 
     <!--button new document and folder-->
     <div class="boxnewdocument">
-       <img src="img/icono-documento-n.png" id="btn1" style="height: 5%;  margin-left: 4%">
-       <img src="img/icono-carpeta-n.png"id="btn2"style="position: absolute;width: 12vw;height: 5vh; left: 16vw; ">
+       <img src="img/icono-documento-n.png" id="btn1" class="botonuno">
+       <img src="img/icono-carpeta-n.png"id="btn2" class="botondos">
     </div>
 
     <div class="contac">
@@ -239,7 +251,7 @@
 
     <div ng-repeat="doc in document.carpetas" style="display:flex">
         <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 85%;margin-top: 2%; margin-left: 35%"></div>
-        <div class="enlinea tab2" ><p class="mi"><a href="#/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
+        <div class="enlinea tab2" ><p class="mi"><a href="#/root/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
         <div class="enlinea tab3" ><p class="mi"> -- </p></div>
         <div class="enlinea tab4" ></div>
     </div>

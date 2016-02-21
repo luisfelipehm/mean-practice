@@ -29,7 +29,7 @@
     }
     #calendar2 .fc-today{
         color: white;
-        background-color: #01539c;
+        background-color: #575756;
         /*background: url('http://localhost:3000/assets/icono-calendario-d-28122440dd50b54b10baf83c2ad129800d735f747b8b73a58aa05ce0a59fede4.png') no-repeat;*/
         background-size: 3vh;
         background-position:100% 100%;
@@ -178,9 +178,9 @@
     .cajamenu
     {
         position: relative;
-        margin-top: 20%;
+        top: 10vh;
         margin-left: 1.2%;
-
+        margin-bottom: 20%;
         width: 19vw;
         z-index: 1;
     }
@@ -188,7 +188,7 @@
     {
         position: relative;
         top: 1.2vh;
-        font-size: 1vw;
+        font-size: 1.2vw;
         color: black;
         margin-left: 16%;
     }
@@ -209,17 +209,44 @@
     {
         text-decoration: none
     }
+    .fondobarraizq
+    {
+        position:absolute;
+        height:100%;
+        min-height: 100%;
+        width: 22%;
+        top: 42vh;
+        background-image: url("../img/textura.png");
+        background-size:25px 25px ;
+        -webkit-box-shadow: inset 0px 0px 50px -8px ;
+        -moz-box-shadow: inset 0px 0px 50px -8px ;
+        box-shadow: inset 0px 0px 50px -8px;
+    }
 
 </style>
+<script>
+    $(document).ready(function () {
+        function getDocHeight() {
+            return Math.max(
+                    document.body.scrollHeight, document.documentElement.scrollHeight,
+                    document.body.offsetHeight, document.documentElement.offsetHeight,
+                    document.body.clientHeight, document.documentElement.clientHeight
+            );
 
-<div style="position:absolute;height:50vh; width: 22%; top: 60vh;">
+        }
+        $('.fondobarraizq').scrollTop(getDocHeight());
+    })
+
+</script>
+
+<div class="fondobarraizq">
 
         <div class="cajamenu">
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Departamento</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="fotos" class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="fotos"  class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">PQRSF</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Asociados</span></a> </li>

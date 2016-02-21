@@ -1,24 +1,35 @@
-
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var mongoose = require('mongoose');
 var moment = require('moment');
 var Post = mongoose.model('Post');
+var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
+var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
+var Conectado = mongoose.model('Conectado');
+var Conversation = mongoose.model('Conversation');
 var Pregunta = mongoose.model('Pregunta');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
 var Folder = mongoose.model('Folder');
 var Formulario = mongoose.model('Formulario');
 
+
+
+
+
 var jwt = require('express-jwt');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
+
+
+
 router.get('/posts', function(req, res, next) {
+
   Post.find().populate('comments').exec(function (err,posts) {
     if(err){ return next(err); }
     res.json(posts);
@@ -42,6 +53,41 @@ router.get('/formularios', function(req, res, next) {
     res.json(formularios);
   });
 });
+
+
+router.post('/conectados',auth, function(req, res, next) {
+  var conectado = new Conectado(req.body);
+  //formulario.author = req.payload.username;
+  conectado.save(function(err, conectado){
+    if(err){ return next(err); }
+    res.json(conectado);
+  });
+});
+
+router.get('/conectados', function(req, res, next) {
+
+  User.find(function(err, conectados){
+
+    if(err){ return next(err); }
+    res.json(conectados);
+  });
+
+});
+
+router.get('/mensajes/:mes', function(req, res, next) {
+
+var sabe = req.params.mes.split(',').sort();
+
+      Conversation.find({ usernametwo: sabe }, function(err,mensa){
+        if(err){ return next(err); }
+        console.log(mensa);
+        res.json(mensa);
+          });
+});
+
+
+
+
 router.post('/formularios',auth, function(req, res, next) {
   var formulario = new Formulario(req.body);
   formulario.author = req.payload.username;
@@ -68,7 +114,29 @@ router.param('formulario', function(req, res, next, id) {
 });
 
 
+router.post('/formularios/:formulario/responder',auth, function(req, res, next) {
+  var comment = new Respuesta(req.body);
+  comment.author = req.payload.username;
+  comment.save(function(err, comment){
+    if(err){ return next(err); }
+    req.formulario.respuestas.push(comment);
+    req.formulario.save(function(err, formulario) {
+      if(err){ return next(err); }
+      res.json(comment);
+    });
+  });
+});
+
 // OBTENER UN FORMULARIO
+router.get('/formularios/:formulario/results', function(req, res, next) {
+
+  req.formulario.populate('respuestas', function(err, formulario) {
+    if (err) { return next(err);   }
+
+
+    res.json(formulario);
+  });
+});
 
 router.get('/formularios/:formulario', function(req, res, next) {
 
@@ -206,8 +274,21 @@ var storage = multer.diskStorage({
     cb(null, './public/uploads2')
   },
   filename: function (req, file, cb) {
-    console.log(file);
-    cb(null, file.originalname )
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if(dd<10){
+      dd='0'+dd
+    }
+    if(mm<10){
+      mm='0'+mm
+    }
+
+  var nombre = file.originalname.split('.');
+    console.log(nombre[0] + '.' + nombre[1]);
+    cb(null, nombre[0] + ' ' +  dd+'-'+mm+'-'+yyyy + '.' + nombre[1]   )
   }
 });
 
@@ -277,6 +358,21 @@ function getReadableFileSizeString(fileSizeInBytes) {
 
  //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 
+
+
+
+router.post('/posts',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.file = '/uploads2/'+req.file.filename;
+  var post = new Post(req.body);
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(post);
+  });
+});
+
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
   console.log('error');
@@ -344,6 +440,16 @@ router.put('/posts/:post/upvote',auth, function(req, res, next) {
 
 //ELIMINAR PUBLICACIONES
 
+router.delete('/conectados/:_id',auth, function(req, res,next){
+
+  Conectado.findById( req.params._id, function ( err, conectado ){
+    conectado.remove( function ( err, conectado ){
+      res.json(conectado);
+    });
+  });
+});
+
+
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Post.findById( req.params._id, function ( err, post ){
@@ -353,27 +459,183 @@ router.delete('/posts/:_id',auth, function(req, res,next){
   });
 });
 
-
-// NUEVOS COMENTARIOS A LAS PUBLICACIONES
-
-router.post('/posts/:post/comments',auth, function(req, res, next) {
-  var comment = new Comment(req.body);
-  comment.post = req.post;
-  comment.author = req.payload.username;
-  comment.save(function(err, comment){
-    if(err){ return next(err); }
-
-    req.post.comments.push(comment);
-    req.post.save(function(err, post) {
-      if(err){ return next(err); }
-
+router.delete('/comments/:_id',auth, function(req, res,next){
+  console.log("Deleting");
+  Comment.findById( req.params._id, function ( err, comment ){
+    comment.remove( function ( err, comment ){
       res.json(comment);
     });
   });
 });
 
 
+// NUEVOS COMENTARIOS A LAS PUBLICACIONES
+
+router.post('/posts/:post/comments',auth, function(req, res, next) {
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+
+  });
+
+
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+    var comment = new Comment(req.body);
+    comment.post = req.post;
+    comment.author = req.payload.username;
+    comment.fotoperfil = name.fotoperfil;
+    comment.save(function(err, comment){
+      if(err){ return next(err); }
+
+      req.post.comments.push(comment);
+      req.post.save(function(err, post) {
+        if(err){ return next(err); }
+
+        res.json(comment);
+      });
+    });
+  });
+
+
+});
+
+
 //CREACION DE USUARIOS
+
+
+router.get('/areas', function(req, res, next) {
+  Area.find(function(err, area){
+    if(err){ return next(err); }
+    res.json(area);
+  });
+});
+router.post('/areas', function(req, res, next){
+  var area = new Area(req.body);
+  area.save(function (err, area){
+    if(err){ return next(err); }
+  });
+});
+
+router.get('/users', function(req, res, next) {
+
+  User.find(function(err, users){
+
+    if(err){ return next(err); }
+    res.json(users);
+  });
+
+});
+router.post('/users', function(req, res, next){
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  var user = new User(req.body);
+
+  user.username = req.body.username;
+
+  user.setPassword(req.body.password);
+  user.save(function (err, user){
+    if(err){ return next(err); }
+
+
+  });
+});
+
+router.post('/users/:_id', function(req, res, next){
+
+  User.findOne({ username: req.body.username  }, function (err, name) {
+
+    name.setPassword(req.body.password);
+    name.nombre =         req.body.nombre;
+    name.email =          req.body.email;
+    name.area =           req.body.area;
+    name.cargo =          req.body.cargo;
+    name.sexo =           req.body.sexo;
+    name.telefono =       req.body.telefono;
+    name.direccion =      req.body.direccion;
+    name.region =         req.body.region;
+    name.documento =      req.body.documento;
+    name.apellido =       req.body.apellido;
+    name.contratacion =   req.body.contratacion;
+    name.adminusers =     req.body.adminusers;
+    name.adminpubli =     req.body.adminpubli;
+    name.admindocs =      req.body.admindocs;
+    name.adminforms =     req.body.adminforms;
+    name.adminfotos =     req.body.adminfotos;
+    name.admincrono =     req.body.admincrono;
+    name.adminpqrsf =     req.body.adminpqrsf;
+    name.save();
+    res.json(name);
+  });
+
+});
+
+
+router.get('/users/:_id', function(req, res, next){
+
+    var user = req.params._id;
+    User.findById( user, function (err, name) {
+      res.json(name);
+    });
+
+
+});
+
+router.post('/usersf/:_id',auth,upload.single('file'), function(req, res, next){
+  console.log('con foto');
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  User.findOne({ username: req.body.username  }, function (err, name) {
+    console.log('subiendo foto');
+    name.setPassword(req.body.password);
+    name.fotoperfil = '/uploads2/'+req.file.filename;
+    console.log('/uploads2/'+req.file.filename);
+    name.nombre =         req.body.nombre;
+    name.email =          req.body.email;
+    name.area =           req.body.area;
+    name.cargo =          req.body.cargo;
+    name.sexo =           req.body.sexo;
+    name.telefono =       req.body.telefono;
+    name.direccion =      req.body.direccion;
+    name.region =         req.body.region;
+    name.documento =      req.body.documento;
+    name.apellido =       req.body.apellido;
+    name.contratacion =   req.body.contratacion;
+    name.adminusers =     req.body.adminusers;
+    name.adminpubli =     req.body.adminpubli;
+    name.admindocs =      req.body.admindocs;
+    name.adminforms =     req.body.adminforms;
+    name.adminfotos =     req.body.adminfotos;
+    name.admincrono =     req.body.admincrono;
+    name.adminpqrsf =     req.body.adminpqrsf;
+    name.save();
+    res.json(name);
+  });
+
+
+});
+
+router.post('/usersf',auth,upload.single('file'), function(req, res, next){
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  var user = new User(req.body);
+  user.fotoperfil = '/uploads2/'+req.file.filename;
+  user.username = req.body.username;
+
+  user.setPassword(req.body.password);
+  user.save(function (err, user){
+    if(err){ return next(err); }
+
+    res.json(user);
+  });
+});
+
+
 
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
@@ -385,7 +647,6 @@ router.post('/register', function(req, res, next){
   user.username = req.body.username;
 
   user.setPassword(req.body.password);
-
   user.save(function (err){
     if(err){ return next(err); }
 
@@ -417,7 +678,10 @@ router.post('/login', function(req, res, next){
 
 
 router.get('/', function(req, res, next) {
+
   res.render('index', { title: 'Express' });
 });
 
-module.exports = router;
+
+
+  module.exports = router;

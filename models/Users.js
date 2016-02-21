@@ -4,7 +4,30 @@ var jwt = require('jsonwebtoken');
 var UserSchema = new mongoose.Schema({
     username: {type: String, lowercase: true, unique: true},
     hash: String,
-    salt: String
+    nombre: String,
+    email: String,
+    admin: Array,
+    cargo: String,
+    sexo: String,
+    telefono: String,
+    direccion: String,
+    fotoperfil: String,
+    region: String,
+    documento: String,
+    apellido: String,
+    contratacion: String,
+    salt: String,
+    sock: String,
+    actual: Boolean,
+    adminusers: Boolean,
+    adminpubli: Boolean,
+    admindocs: Boolean,
+    adminforms: Boolean,
+    adminfotos: Boolean,
+    admincrono: Boolean,
+    adminpqrsf: Boolean,
+    ultimaconexion: Date
+
 });
 
 

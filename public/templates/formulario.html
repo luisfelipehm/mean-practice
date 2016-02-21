@@ -1,8 +1,4 @@
-<p>hola mundo</p>
-{{formulario.nombre}}
 <style>
-
-
 
     md-checkbox.md-checked .md-icon:after {
         left: 7px;
@@ -28,58 +24,153 @@
     md-radio-group.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-group:not([disabled]) .md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-group:not([disabled]) .md-primary.md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-group:not([disabled]).md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-group:not([disabled]).md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-button:not([disabled]) .md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-button:not([disabled]) .md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-button:not([disabled]).md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-button:not([disabled]).md-primary.md-checked .md-off {
         border-color: #E30613;
     }
+
+    .contenedorformulario
+    {
+        width: 90%;
+        margin-left: 5%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+    }
+    .tituloformulario
+    {
+        font-family: Arial;
+        font-size: 2vw;
+        width: 90%;
+        margin-left: 5%;
+        font-weight: bold;
+    }
+    .eliminarpregunta
+    {
+        position: relative;
+        top: .7vh;
+        height:1.5vh;
+        width: auto;
+        float: right;
+        cursor: pointer;
+    }
+
+    .figurarojaf
+    {
+        position: relative;
+        top:.1vh;
+        height: 2vh;
+    }
+    .contenedortituloformulario
+    {
+        width: 99%;
+        margin-bottom: 1vh;
+    }
+    .titulotexto
+    {
+        font-family: Arial;
+        font-size: 1.3vw;
+        color: #1a1a1a;
+    }
+    .encabezadopre
+    {
+        position: relative;
+        top: 2vh;
+        margin-left: 5%;
+        margin-top: 1%;
+        width: 90%;
+    }
+    .bottonenviar
+    {
+        top: 10vh;
+        margin-top: 2%;
+        margin-left: 5%;
+        width: 90%;
+    }
+    .lineformulario
+    {
+        position: relative;
+        top: 1vh;
+        background:#575756 ;
+        height: .1vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+    .botonsuelo{
+        margin-bottom:2vh;
+        background-color: #E30613 !important;
+        color: white !important;
+        position: relative;
+        left: 88%;
+        font-weight: bold;
+    }
+
+
 </style>
 
-{{formulario.preguntas}}
-<form>
+    <!--TITULO DEL FORMULARIO-->
+    <p class="tituloformulario"> {{formulario.nombre}} </p>
 
-<div ng-repeat="preg in formulario.preguntas">
+    <div class="contenedorformulario">
 
-    <fieldset>
+        <form ng-submit="responder(formulario._id)">
+            <div ng-repeat="preg in formulario.preguntas">
 
-    <div ng-if="preg.tipo == 'checkbox'">
-        {{preg.pregunta}}
-        <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" >
-            <div flex-xs flex="50">
-                <md-checkbox ng-model="valores2[$parent.$index][$index]" aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
-                    {{opt}}
-                </md-checkbox>
+                <div class="encabezadopre">
+                    <!--EN CASO DE QUE SEA UN CHECKBOX-->
+                    <div ng-if="preg.tipo == 'checkbox'">
+                    <!--PREG PREGUNTA ES EL NOMBRE DE LA PREGUNTA-->
+                        <div class="contenedortituloformulario">
+                            <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
+                        </div>
+                        <!--CADA CHECKBOX-->
+                        <div ng-repeat="opt in preg.opciones" class="checkboxdemoSyncing" style="color: #737374;" >
+
+                            <div flex-xs flex="50" style="margin-left: 2.5%">
+                                <md-checkbox ng-model="valores2[$parent.$index].respuesta[opt]"  aria-label="{{opt}}" class="red"  ng-true-value="'{{opt}}'"   >
+                                    {{opt}}
+                                </md-checkbox>
+                            </div>
+                    </div>
+                </div>
+
+                    <!--EN CASO DE QUE SEA UN RADIO BUTTON -->
+                <div ng-if="preg.tipo == 'radio'">
+                    <div class="contenedortituloformulario">
+                        <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}}</label>
+                    </div>
+                    <md-radio-group ng-model="valores2[$index].respuesta" ng-required="true" required>
+                        <!--CADA RADIO BUTTON-->
+                    <div ng-repeat="opt in preg.opciones" style="margin-left: 4.5%; color: #737374;">
+                        <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
+                    </div>
+                    </md-radio-group>
+                </div>
+                    <!--EN CASO DE QUE SEA UN CAMPO DE TEXTO-->
+                <div ng-if="preg.tipo == 'text'">
+                    <md-input-container flex>
+                        <label>{{preg.pregunta}}</label>
+                        <input type="text" ng-model="valores2[$index].respuesta"/>
+                    </md-input-container>
+                </div>
+                    <!--EN CASO DE QUE SEA UN INTERRUPTOR-->
+                <div ng-if="preg.tipo == 'interruptor'">
+                    <div class="contenedortituloformulario">
+                        <img class="figurarojaf" src="/img/icono-rojo.png"> <label class="titulotexto">{{preg.pregunta}} </label>
+                    </div>
+                    <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn" style="margin-left: 4.5%">
+
+                    </md-switch>
+                </div>
             </div>
-        </div>
+            </div>
+                <div class="lineformulario"></div>
+                <!--BOTON DE ENVIAR-->
+                <div class="bottonenviar" >
+                    <md-button type="submit"  class=" md-warn botonsuelo md-raised">Enviar</md-button>
+                </div>
+
+
+        </form>
+
     </div>
-    <div ng-if="preg.tipo == 'radio'">
-        {{preg.pregunta}}
-        <md-radio-group ng-model="valores2[$index]" ng-required="true">
-
-        <div ng-repeat="opt in preg.opciones">
-            <md-radio-button value="{{opt}}" class="md-primary">{{opt}}</md-radio-button>
-        </div>
-        </md-radio-group>
-    </div>
-    <div ng-if="preg.tipo == 'text'">
-        <md-input-container flex>
-            <label>{{preg.pregunta}}</label>
-            <input type="text" ng-model="valores2[$index].respuesta"/>
-        </md-input-container>
-    </div>
-    <div ng-if="preg.tipo == 'interruptor'">
-        {{preg.pregunta}}
-        <md-switch ng-model="valores2[$index].respuesta" aria-label="Switch 2" ng-true-value="'Si'" ng-false-value="'No'" class="md-warn">
-
-        </md-switch>
-    </div>
-</fieldset>
-</div>
-</form>
-
-{{valores2}}
 
 
 
-<nvd3 options="options" data="resultadofinal"></nvd3>
-{{resultado2}}<br>
-{{obj2}}<br>
-{{resultado3}}<br>
-{{obj3}}
-<nvd3 options="options" data="resultadofinal2"></nvd3>
-<nvd3 options="options" data="resultadofinal3"></nvd3>

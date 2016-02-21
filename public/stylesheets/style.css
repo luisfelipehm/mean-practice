@@ -1,8 +1,45 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+  /* Arrows */
+  .slick-prev
+  {
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    display: block;
+    margin-top: -10px;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  .slick-next
+  {
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    display: block;
+    margin-top: -10px;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
 
-a {
-  color: #00B7FF;
-}
+  }
+
+  .slick-prev:hover,
+  .slick-prev:focus,
+  .slick-next:hover,
+  .slick-next:focus
+  {
+    color: transparent;
+    outline: none;
+    background: transparent;
+  }
+  .slick-prev:before, .slick-next:before {
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+    opacity: .75;
+    color: red;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }

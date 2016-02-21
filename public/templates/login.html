@@ -1,12 +1,14 @@
 <!--comentario de david-->
+
 <style>
-    barrader{display: none}
-    barraizq{display: none}
-    barranav{display: none}
-    .content{position: absolute;
+    .content
+    {
+        position: absolute;
         top: 0;
         left: 0;
-        width: 100%;}
+        width: 100%;
+        height: 97vh;
+    }
     .imgfa
     {
         width: auto;
@@ -40,8 +42,8 @@
         position: absolute;
         width: 33.5vw;
         height: 50vh;
-        top: 15vh;
-        left: 57vw;
+        top: 13vh;
+        left: 56.5vw;
     }
     .saw
     {
@@ -51,17 +53,16 @@
     .barrainf
     {
         position: absolute;
-        background: #ce0a31;
+        background: #3c474d;
         mix-blend-mode: multiply;
         height: 13vh ;
         width: 100%;
         top: 84vh;
+        opacity: 0.5;
     }
     .boxfon
     {
-        height: 97vh;
-        width: 100%;
-        overflow: hidden;
+
     }
     .endred
     {
@@ -73,13 +74,13 @@
     }
     .imgsvg
     {
-        fill: #E30613;
+        fill:#e3152d;
         mix-blend-mode: multiply;
     }
     #Capa_1
     {
         transform: rotate(-90deg);
-        mix-blend-mode: multiply;
+        opacity: 0.85;
     }
 
     .txt
@@ -202,7 +203,6 @@
     md-input-container.md-default-theme .md-input, md-input-container .md-input {
         color: white;
         border-color: white;
-
     }
     md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label
     {
@@ -235,17 +235,30 @@
     {
         width: 5.5vw;
     }
-    input[type=submit]
+    .imgClass
     {
-        background: url(/img/icono-login.b.png);
-        border: 0;
-        display: block;
+        position: absolute;
+        top: 0;
+        width: 5.5vw;
+        height: 3.2vh;
+        background: transparent;
+        border: 0px;
     }
+    .ficharoja
+    {
+        position: relative;
+        height: 53vh;
+        width: auto;
+        transform: rotate(-90deg);
+
+    }
+
 
 </style>
 
 
 <!--Esta es la imagen de fondo-->
+
 <div class="boxfon">
     <img class="imgfon" src="/img/fondo.jpg">
 </div>
@@ -258,6 +271,8 @@
     <path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1
 	c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
     </svg>
+
+    <!--<img class="ficharoja" src="/img/ficha.png">-->
 
 </div>
 
@@ -327,7 +342,7 @@
 
     <div class="button">
         <img class="icologin" src="/img/icono-login.b.png">
-        <input type="submit" value="" class="imgClass" />
+        <input type="submit" value="" class="imgClass"/>
     </div>
 
 </form>
