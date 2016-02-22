@@ -5,13 +5,13 @@
     .chatty
     {
         position: fixed;
-        width: 250px;
-        height: 30vh;
+        width: 15vw;
+        height: 40vh;
         bottom: 4vh;
         right: 0;
-        border: 1px solid black;
+        border: 1px solid white;
         z-index: 1000;
-        background-color: #b2b2b2;
+        background-color: white;
 
     }
     .conectchat
@@ -27,7 +27,7 @@
     }
 
     .chatboxhead {
-        background: #E30613;
+        background: #e3152d;
         color: white;
         padding: 0.5rem;
         overflow: hidden;
@@ -177,7 +177,6 @@
     .chatboxinfo {
         margin-left: -1em;
         color: #666666;
-
     }
 
     .chatboxoptions {
@@ -199,39 +198,67 @@
         bottom: 0;
         right: 0;
         height: 4vh;
-        width: 250px;
-        background-color: #E30613;
-        border: 1px solid #E30613;
+        width: 15VW;
+        background-color: #e3152d;
+        border: 1px solid #e3152d;
     }
     #searchUserBox input
     {
-        margin: .6vh 0 .3vh 40px;
+        margin: .6vh 0 .3vh 3vw;
         font-size: 2vh;
-        width: 200px;
-
+        width: 11vw;
+    }
+    .iconochatnofi
+    {
+        position: absolute;
+        font-size: 2.5vh;
+        top: .8vh;
+        left: .7vw;
+        color: white;
+    }
+    .imguserchat
+    {
+        margin-top: .4vh;
+        margin-left: .4vw;
+        border-radius: 50%;
+        height: 4.1vh;
+        width: 4.1vh;
+        overflow: hidden;
+        display:inline-block;
     }
 </style>
 
 <div ng-controller="ChatCtrl" id="chap">
 
-
+    <!--buscadode chat-->
     <div id="searchUserBox">
+        <i class="fa fa-comments iconochatnofi" ></i>
         <input type="text" ng-model="search" required>
     </div>
 
-    <div class="chatty" ng-show="search.length > 0">
+    <!--Caja de chatr gris ng-show="search.length > 0"-->
+    <div class="chatty" >
+        <div style="background-color: #e3152d; width: 100%; height: 3vh;border: solid 1px #e3152d ">
 
-
-
-        <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'">
-
-            <p ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))"  >
-
-                <img src="/img/chat-conectado.png" class="conectchat" ng-show="users.actual">
-                <img src="/img/chat-desconectado.png" class="conectchat" ng-show="!users.actual" >
-                {{titleize(users.apellido)}} {{titleize(users.nombre)}}</p>
         </div>
+        <div style="background-color: #e5e5e5; width: 90%; min-height:88%; margin-left: 5%">
+            <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'">
 
+                <div style="margin-top: 1.7vh" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
+                    <div class="imguserchat">
+                        <img style=" width:2vw; height: 2vw;" src="/img/homer.jpg">
+                    </div>
+                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw";>
+                        {{titleize(users.apellido)}} {{titleize(users.nombre)}}
+                    </div>
+                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: 7vw">
+                        <img src="/img/chat-conectado.png" class="conectchat" ng-show="users.actual">
+                        <img src="/img/chat-desconectado.png" class="conectchat" ng-show="!users.actual" >
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
 </div>
