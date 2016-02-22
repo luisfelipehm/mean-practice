@@ -23,6 +23,30 @@ app.directive('barranav', function() {
         templateUrl: '/templates/_barra.html'
     };
 });
+app.directive('resolveLoadernum', function($rootScope, $timeout) {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: 'templates/spinner.html',
+        link: function(scope, element) {
+
+            $rootScope.$on('$routeChangeStart', function(event, currentRoute, previousRoute) {
+                if (previousRoute) return;
+                console.log('aqui1')
+                $timeout(function() {
+                    console.log('aqui2')
+                    element.removeClass('ng-hide');
+                });
+            });
+
+            $rootScope.$on('$routeChangeSuccess', function() {
+                console.log('success');
+                element.addClass('ng-hide');
+            });
+        }
+    };
+});
 app.factory('mySocket', function (socketFactory) {
     return socketFactory();
 });
@@ -202,7 +226,7 @@ app.factory('users', ['$http','auth',function($http,auth){
     o.get = function(id) {
         return $http.get('/users/' + id).then(function(data){
             return data;
-            console.log(data);
+
         });
     };
 
@@ -239,8 +263,7 @@ app.factory('formularios', ['$http','auth',function($http,auth){
         });
     };
     o.addPregunta = function(id, pregunta) {
-        console.log(pregunta);
-        console.log('hola mundo');
+
 
         return $http.post('/formularios/' + id + '/preguntas', pregunta, {
             headers: {Authorization: 'Bearer '+auth.getToken()}
@@ -676,18 +699,18 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
         });
 
         file.upload.then(function (response) {
-            console.log("paso1 error");
+
             $timeout(function () {
                 file.result = response.data;
             });
         }, function (response) {
-            console.log("paso1 otro");
+
             if (response.status > 0)
                 $scope.errorMsg = response.status + ': ' + response.data;
         });
 
         file.upload.progress(function (evt) {
-            console.log("paso2 error");
+
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
@@ -778,7 +801,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
 
 
         angular.forEach(files, function(file) {
-            console.log(file);
+
             file.upload = Upload.upload({
                 url: '/documents/'+ $scope.document._id + '/files',
 
@@ -901,6 +924,7 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function
     $scope.mensajes = [];
     $scope.usuariosconectados = [];
     $scope.currentUser = auth.currentUser();
+
     $scope.isLoggedIn = auth.isLoggedIn;
 
     if ($scope.isLoggedIn) {
@@ -932,6 +956,12 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function
 
         })
     };
+
+    $scope.titleize = function (text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    };
+
+
 
 
     $scope.actualizarUsers = function () {
@@ -969,7 +999,7 @@ var a =
 
 
     $scope.numerochats = 1;
-    $scope.generarChat = function (name) {
+    $scope.generarChat = function (name , titulochat) {
         if($('#'+name+'chat').length > 0){
 
         }   else {
@@ -982,7 +1012,7 @@ var a =
                 '</script>' +
                 '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
                 '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
-                '<h1> '+name+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+                '<h1> '+titulochat+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
                 '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
                 '    <div class="chatboxinput">'+
                 '<input type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> </div> </div>' +
@@ -1208,7 +1238,7 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth','$
             $scope.resultado3.push(dat[z].respuesta)
         });
 
-        console.log();
+
         //console.log(Object.keys());
 
 if(typeof $scope.resultado3[0] === 'object'){
@@ -1230,7 +1260,7 @@ if(typeof $scope.resultado3[0] === 'object'){
         $scope.resultadofinal.push($scope.resultadofinal3);
 
     }
-    console.log($scope.resultadofinal);
+
 
 }]);
 
@@ -1284,7 +1314,7 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
 
 
         angular.forEach(files, function(file) {
-            console.log(file);
+
             file.upload = Upload.upload({
                 url: '/fotos/'+ $scope.foto._id + '/files',
 
@@ -1326,7 +1356,7 @@ app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function (
     $scope.hola = "Hello World";
 
     $scope.fotos = fotos.fotos;
-    console.log($scope.fotos);
+
 
 
     $scope.crearAlbum = function(){
@@ -1347,10 +1377,10 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
     $scope.bodyc = {val:''};
     $scope.currentUser = auth.currentUser();
 
+    console.log($scope.currentUser);
 
 
-
-    $scope.fotoperfil = '';
+    //$scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
     //$scope.getUser = function (id) {
     //    return $http.get('/users/' + id).then(function(res){
@@ -1359,6 +1389,10 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
     //};
     //$scope.bodyc = {val:''};
     //$scope.currentUser = auth.currentUser();
+
+
+    //OBTENER DATOS DE UN GET CON UNA PROMESA
+
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
     });
@@ -1378,7 +1412,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         }
     };
 
-    console.log($scope.posts);
+
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.remove = function(post) {
         return $http.delete('/posts/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
@@ -1440,9 +1474,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
             $scope.title = '';
             $scope.link = '';
         }
-        console.log(file);
-        console.log($scope.link);
-        console.log($scope.title);
+
         file.upload = Upload.upload({
             url: '/posts',
             data: {title:$scope.title,link:$scope.link},
@@ -1479,7 +1511,6 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
     };
     $scope.$on('socket:pubs', function (ev, data) {
-        console.log('hola')
         posts.getAll();
 
     });

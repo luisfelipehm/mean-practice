@@ -25,7 +25,9 @@ var jwt = require('express-jwt');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
-
+ var titleize =function(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
 
 
 router.get('/posts', function(req, res, next) {
@@ -471,6 +473,7 @@ router.delete('/comments/:_id',auth, function(req, res,next){
 
 // NUEVOS COMENTARIOS A LAS PUBLICACIONES
 
+
 router.post('/posts/:post/comments',auth, function(req, res, next) {
   User.findOne({ username: req.payload.username  }, function (err, name) {
 
@@ -480,8 +483,9 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
   User.findOne({ username: req.payload.username  }, function (err, name) {
     var comment = new Comment(req.body);
     comment.post = req.post;
-    comment.author = req.payload.username;
-    comment.fotoperfil = name.fotoperfil;
+    comment.author = titleize(name.nombre) +' ' + titleize(name.apellido);
+    comment.author2 = req.payload.username;
+    comment.fotoperfil = (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil);
     comment.save(function(err, comment){
       if(err){ return next(err); }
 
@@ -589,6 +593,11 @@ router.post('/usersf/:_id',auth,upload.single('file'), function(req, res, next){
 
   User.findOne({ username: req.body.username  }, function (err, name) {
     console.log('subiendo foto');
+    var query = { author2: name.username };
+    Comment.update(query, {fotoperfil: '/uploads2/'+req.file.filename}, {multi: true}, function(err) {
+      console.log('update done')
+    });
+
     name.setPassword(req.body.password);
     name.fotoperfil = '/uploads2/'+req.file.filename;
     console.log('/uploads2/'+req.file.filename);

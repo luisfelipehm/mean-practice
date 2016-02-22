@@ -2,6 +2,7 @@
 <head>
   <title>My Angular App!</title>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
   <link rel="stylesheet" href="/libs/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/libs/fullcalendar/dist/fullcalendar.css">
   <link rel="stylesheet" href="/libs/ngGallery/src/css/screen.css">
@@ -24,8 +25,8 @@
   <script src="/libs/angular-socket-io/socket.js"></script>
   <script>
     //var socket = io('ws://192.168.0.24');
-    var socket = io('ws://192.168.0.24:3000');
-    //var socket = io();
+//    var socket = io('ws://192.168.0.24:3000');
+    var socket = io();
   </script>
   <script src="/libs/moment/min/moment.min.js"></script>
   <script src="/libs/angular-moment/angular-moment.min.js"></script>
@@ -115,7 +116,7 @@
   <!--<img style="width:100%; height: 51vh" src="/img/foto_mundo.png">-->
 <!--</div>-->
 
-
+    <resolve-loadernum></resolve-loadernum>
     <div class="vwer" ui-view="main"></div>
 
 

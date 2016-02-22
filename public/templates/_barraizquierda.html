@@ -245,7 +245,7 @@
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Departamento</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="fotos"  class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">PQRSF</span></a> </li>
@@ -277,6 +277,37 @@
         var last = total*100/cien;
         return last;
     }
+    moment.locale('es', {
+        months : "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split("_"),
+//        monthsShort : "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
+        weekdays : "Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado".split("_"),
+        //weekdaysShort : "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
+        //weekdaysMin : "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
+
+//        relativeTime : {
+//            future : "dans %s",
+//            past : "il y a %s",
+//            s : "quelques secondes",
+//            m : "une minute",
+//            mm : "%d minutes",
+//            h : "une heure",
+//            hh : "%d heures",
+//            d : "un jour",
+//            dd : "%d jours",
+//            M : "un mois",
+//            MM : "%d mois",
+//            y : "une année",
+//            yy : "%d années"
+//        },
+
+        // in case the meridiem units are not separated around 12, then implement
+        // this function (look at locale/id.js for an example)
+        // meridiemHour : function (hour, meridiem) {
+        //     return /* 0-23 hour, given meridiem token and hour 1-12 */
+        // },
+
+
+        });
     $('table.calendar2 > tbody > tr > td:nth-child(-n+2)').addClass('weekend');
 
     $('.fc-row').click(function () {
@@ -294,7 +325,7 @@
 
     });
 
-    $('.diacalendar').html(moment().format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
-    $('.dianumcalendar').html(moment().format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
-    $('.mescalendar').html(moment().format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
+    $('.diacalendar').html(moment().locale('es').format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
+    $('.dianumcalendar').html(moment().locale('es').format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
+    $('.mescalendar').html(moment().locale('es').format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
 </script>
