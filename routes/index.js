@@ -9,6 +9,8 @@ var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
+var Pqrsf = mongoose.model('Pqrsf');
+var Pqrsffile = mongoose.model('Pqrsffile');
 var Conectado = mongoose.model('Conectado');
 var Conversation = mongoose.model('Conversation');
 var Pregunta = mongoose.model('Pregunta');
@@ -169,6 +171,18 @@ router.post('/formularios/:formulario/preguntas',auth, function(req, res, next) 
   });
 });
 
+
+//INDEX DE PQRSF
+
+router.get('/pqrsf', function(req, res, next) {
+
+  Pqrsf.find(function(err, pqrsf){
+    if(err){ return next(err); }
+    res.json(pqrsf);
+  });
+
+});
+
 // INDEX DE ALBUMS
 
 router.get('/fotos', function(req, res, next) {
@@ -296,6 +310,55 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
+
+
+//ANADIR ARCHIVOS A LA PQRSF
+
+router.post('/pqrsf', function(req, res, next){
+  console.log('error1');
+
+  var pqrsf = new Pqrsf(req.body);
+  pqrsf.encargado = [req.body.encargado];
+  pqrsf.save(function (err, pq){
+    console.log(err);
+    console.log('error2');
+    if(err){ return next(err); }
+    res.json(pq)
+  });
+});
+
+router.param('pqrsf', function(req, res, next, id) {
+  var query = Pqrsf.findById(id);
+
+  query.exec(function (err, pqrsf){
+    if (err) { return next(err); }
+    if (!pqrsf) { return next(new Error('can\'t find post')); }
+
+    req.pqrsf = pqrsf;
+    return next();
+  });
+});
+
+
+router.post('/pqrsfs/:pqrsf/files',auth, upload.single('file'), function(req, res, next) {
+
+
+  var file = new Pqrsffile();
+  file.nombre = req.body.nombre;
+  file.filename = req.body.nombre;
+  file.adjunto = '/uploads2/'+req.file.filename;
+  file.save(function(err, files){
+    if(err){ return next(err); }
+
+    req.pqrsf.files.push(file);
+    req.pqrsf.save(function(err, document) {
+      if(err){ return next(err); }
+      console.log('done');
+      res.json(req.body);
+    });
+
+  });
+});
 
 
 //ANADIR FOTOS A LOS ALBUMS
