@@ -18,7 +18,7 @@
     }
     .conectchat
     {
-        height: 20px;
+        height: .7vh;
     }
 
     .chatbox {
@@ -209,6 +209,7 @@
         margin: .6vh 0 .3vh 3vw;
         font-size: 2vh;
         width: 11vw;
+        height: 3vh;
     }
     .iconochatnofi
     {
@@ -244,21 +245,19 @@
 
         </div>
         <div style="background-color: #e5e5e5; width: 90%; min-height:88%; margin-left: 5%">
-            <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'">
-
+            <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'"style="">
                 <div style="margin-top: 1.7vh" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
                     <div class="imguserchat">
                         <img style=" width:2vw; height: 2vw;" src="{{users.fotoperfil == undefined ? '/img/iconouser.jpg' : users.fotoperfil}}">
                     </div>
-                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw";>
+                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw;font-size: 1.1vh";>
                         {{titleize(users.apellido)}} {{titleize(users.nombre)}}
                     </div>
-                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: 7vw">
-                        <img src="/img/chat-conectado.png" class="conectchat" ng-show="users.actual">
-                        <img src="/img/chat-desconectado.png" class="conectchat" ng-show="!users.actual" >
+                    <div style="display: inline-block; position: absolute; margin-top: 2vh; margin-left: 7vw">
+                        <img src="/img/conectado.png" class="conectchat" ng-show="users.actual">
+                        <img src="/img/desconectado.png" class="conectchat" ng-show="!users.actual" >
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
