@@ -12,6 +12,8 @@
         border: 1px solid white;
         z-index: 1000;
         background-color: white;
+        overflow-y: scroll;
+        overflow-x: hidden;
 
     }
     .conectchat
@@ -246,7 +248,7 @@
             <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'"style="">
                 <div style="margin-top: 1.7vh" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
                     <div class="imguserchat">
-                        <img style=" width:2vw; height: 2vw;" src="/img/homer.jpg">
+                        <img style=" width:2vw; height: 2vw;" src="{{users.fotoperfil == undefined ? '/img/iconouser.jpg' : users.fotoperfil}}">
                     </div>
                     <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw;font-size: 1.1vh";>
                         {{titleize(users.apellido)}} {{titleize(users.nombre)}}

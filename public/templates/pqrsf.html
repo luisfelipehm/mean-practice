@@ -1,0 +1,115 @@
+<br>
+<br>
+<br>
+
+<style>
+    .pqnav
+    {
+        display: inline-block;
+        color: #E30613;
+    }
+</style>
+<h1 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h1>
+
+<h1 class="pqnav" style="float: right" ng-click="mispq = true">Mis PQRSF</h1>
+
+<div ng-show="mispq">
+    <div ng-repeat="pq in pqrsf" class="boxpubli">
+        <img class="tipodepqrsf" ng-if="">
+        <img class="tipodepqrsf" ng-if="">
+        <img class="tipodepqrsf" ng-if="">
+        <img class="tipodepqrsf" ng-if="">
+        <img class="tipodepqrsf" ng-if="">
+
+        {{pq}}
+    </div>
+</div>
+
+
+<div ng-show="mispq == false">
+    <form name="myForm2" ng-submit="uploadPic(picFile)">
+    <md-input-container>
+        <label>Nombres y Apellidos</label>
+        <input type="text" ng-model="nombre" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <md-select  placeholder="Tipo de documento" ng-model="tdocumento">
+            <md-option ng-repeat="tipos in tdocumentos" value="{{tipos.nombre}}">
+                {{tipos.nombre}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+{{ciudad}}
+    <md-input-container>
+        <label>Documento</label>
+        <input type="text" ng-model="ndocumento" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <label>Empresa</label>
+        <input type="text" ng-model="empresa" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <label>Profesion</label>
+        <input type="text" ng-model="cargo" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <label>Lugar</label>
+        <input type="text" ng-model="ciudad2" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <md-select  placeholder="PQRSF" ng-model="tipopq">
+            <md-option ng-repeat="t in tipospq" value="{{t.nombre}}">
+                {{t.nombre}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <label>Comentario</label>
+        <input type="text" ng-model="comentario" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <label>Correo</label>
+        <input type="text" ng-model="email" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <label>Celular / Telefono</label>
+        <input type="text" ng-model="celular" required md-maxlength="200">
+    </md-input-container>
+    <md-input-container>
+        <label>Direccion</label>
+        <input type="text" ng-model="direccion" required md-maxlength="200">
+    </md-input-container>
+
+
+
+
+
+        <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+        <br>
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+        <br>
+        Files:
+        <ul>
+            <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"
+             ng-bind="f.progress + '%'"></div>
+      </span>
+            </li>
+            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+            </li>
+        </ul>
+        {{errorMsg}}
+
+
+
+        <md-button type="submit"  class="md-raised"> Enviar </md-button>
+
+</form>
+</div>

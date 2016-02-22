@@ -17,6 +17,7 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 }]);
+
 app.directive('barranav', function() {
     return {
         restrict: 'E',
@@ -49,28 +50,31 @@ app.directive('barranav', function() {
 //    };
 //});
 
-
 app.factory('mySocket', function (socketFactory) {
     return socketFactory();
 });
+
 app.directive('fullbars', function() {
     return {
         restrict: 'E',
         templateUrl: '/templates/_fullbars.html'
     };
 });
+
 app.directive('barrader', function() {
     return {
         restrict: 'E',
         templateUrl: '/templates/_barraderecha.html'
     };
 });
+
 app.directive('chat', function() {
     return {
         restrict: 'E',
         templateUrl: '/templates/_chat.html'
     };
 });
+
 app.directive('barraizq', function() {
     return {
         restrict: 'E',
@@ -117,7 +121,6 @@ app.factory('posts', ['$http','auth',function($http,auth){
 
     return o;
 }]);
-
 
 app.factory('documents', ['$http','auth',function($http,auth){
     var o = {
@@ -173,6 +176,37 @@ app.factory('fotos', ['$http','auth',function($http,auth){
 
     o.get = function(id) {
         return $http.get('/fotos/' + id).then(function(res){
+            return res.data;
+        });
+    };
+
+    return o;
+}]);
+
+app.factory('pqrsf', ['$http','auth',function($http,auth){
+    var o = {
+        pqrsf:[],
+        pq:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/pqrsf').success(function(data){
+            angular.copy(data, o.pqrsf);
+        });
+    };
+    o.create = function(pqrsf) {
+
+        return $http.post('/pqrsf', pqrsf, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.pqrsf.push(data);
+            console.log(data);
+            angular.copy(data, o.pq)
+        });
+    };
+
+    o.get = function(id) {
+        return $http.get('/pqrsf/' + id).then(function(res){
             return res.data;
         });
     };
@@ -372,6 +406,23 @@ app.config([
 
                 }
             })
+            .state('pqrsf', {
+                parent: 'root',
+                url: '/pqrsf',
+                templateUrl: 'templates/pqrsf.html',
+                controller: 'PqrsfCtrl',
+                resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
+                    postPromise: ['pqrsf', function(pqrsf){
+                        return pqrsf.getAll();
+                    }]
+
+                }
+            })
+
             .state('documentos', {
                 parent: 'root',
                 url: '/documentos',
@@ -803,6 +854,124 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
 }]);
 
 app.controller('RootCtrl', ['$scope', function ($scope) { }]);
+
+app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','auth','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,auth,users) {
+    $scope.pqrsf = pqrsf.pqrsf;
+
+
+    $scope.currentUser = auth.currentUser();
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+        console.log($scope.usuario);
+        $scope.nombre = $scope.usuario.data.nombre + ' ' +$scope.usuario.data.apellido;
+        $scope.tdocumento = 'Cedula de Ciudadania';
+        $scope.ndocumento = $scope.usuario.data.documento;
+        $scope.ciudad2 = $scope.usuario.data.region;
+        console.log($scope.ciudad)
+        $scope.empresa = 'Soluciones';
+        $scope.cargo = $scope.usuario.data.cargo;
+        $scope.ciudad = $scope.usuario.data.ciudad;
+        $scope.email = $scope.usuario.data.email;
+        $scope.celular = $scope.usuario.data.telefono;
+        $scope.direccion = $scope.usuario.data.direccion;
+    });
+
+
+
+
+    $scope.mispq = true;
+
+    $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
+    $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
+
+    $scope.uploadPic = function(files) {
+
+        return $http.post('/pqrsf', {
+            nombre: $scope.nombre,
+            tdocumento: $scope.tdocumento,
+            ndocumento: $scope.ndocumento,
+            empresa: $scope.empresa,
+            cargo: $scope.cargo,
+            ciudad: $scope.ciudad,
+            tipopq: $scope.tipopq,
+            comentario: $scope.comentario,
+            email: $scope.email,
+            celular: $scope.celular,
+            direccion: $scope.direccion,
+            estado: 'En Espera',
+            encargado: 'ivantrips'
+        }, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+
+            $scope.total = files.length;
+            $scope.cont = 0;
+            angular.forEach(files, function(file) {
+                $scope.cont++;
+
+
+
+                file.upload = Upload.upload({
+                    url: '/pqrsfs/'+ data._id + '/files',
+
+                    data:{id: data._id,file:file,nombre: file.name},
+
+                    headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+                });
+
+                file.upload.then(function (response) {
+
+                    $timeout(function () {
+                        file.result = response.data;
+                    });
+                }, function (response) {
+                    if (response.status > 0)
+                        $scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                    file.progress = Math.min(100, parseInt(100.0 *
+                        evt.loaded / evt.total));
+                });
+                file.upload.progress(function (evt) {
+                    // Math.min is to fix IE which reports 200% sometimes
+                    file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                    console.log("PostController: upload progress " + file.progress);
+                });
+                file.upload.success(function (data, status, headers, config) {
+                    if($scope.cont == $scope.total){
+                        $scope.nombre = '';
+                        $scope.tdocumento = '';
+                        $scope.ndocumento = '';
+                        $scope.empresa = '';
+                        $scope.cargo = '';
+                        $scope.ciudad = '';
+                        $scope.tipopq = '';
+                        $scope.comentario = '';
+                        $scope.email = '';
+                        $scope.celular = '';
+                        $scope.direccion = '';
+                        $scope.picFile = '';
+                        $scope.mispq = true;
+                        pqrsf.getAll();
+                    }
+
+                });
+
+
+            });
+
+
+        });
+
+
+
+
+
+    };
+
+
+
+
+}]);
 
 app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
 
@@ -1404,7 +1573,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
     console.log($scope.currentUser);
 
 
-    $scope.cristian = '';
+
 
     //$scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
@@ -1418,6 +1587,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
 
     //OBTENER DATOS DE UN GET CON UNA PROMESA
+
 
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
