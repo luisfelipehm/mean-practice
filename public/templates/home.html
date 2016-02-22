@@ -34,6 +34,7 @@
 
     .boxpubli
     {
+        position: relative;
         margin-bottom: 2vh;
         width: 90%;
         margin-left: 5%;
@@ -60,9 +61,9 @@
     }
     .boxiconremove
     {
-        margin-top: 2vh;
+        top: 2vh;
         position: absolute;
-        left: 50.5vw;
+        right: 2vw;
     }
     .imgtx
     {
@@ -253,6 +254,7 @@
 
     .autorcomentario
     {
+        position: relative;
         font-size: .9vw;
         font-family: Arial;
         font-weight: bold;
@@ -275,7 +277,7 @@
         width: 4vw;
         height: 4vw;
         position: absolute;
-        left: 6vw;
+        left: 3vw;
         overflow: hidden
     }
     .imgtxcomentario
@@ -340,6 +342,36 @@
         outline: none;
         border: 0;
     }
+    .eliminarBox
+    {
+        position: absolute;
+        width: 10vw;
+        height: 8vh;
+        background-color: white;
+        top: -4vh;
+        right: -5vw;
+        z-index: 10;
+        -webkit-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+    }
+    .eliminarBox.ng-hide {
+        opacity:0;
+    }
+    .eliminarBoxcomment
+    {
+        position: absolute;
+        width: 10vw;
+        height: 8vh;
+        background-color: white;
+        top: -4vh;
+        right: -5vw;
+        z-index: 10;
+        -webkit-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+    }
+    .eliminarBoxcomment.ng-hide {
+        opacity:0;
+    }
 
 </style>
 
@@ -361,11 +393,11 @@
 
     <!--Formulario para publicacion-->
 
-    <div class="contenedorpubli" ng-show="usuario.data.adminpubli">
+    <div class="contenedorpubli" ng-if="currentUser.adminpubli">
 
         <!--Imagen user-->
         <div class="imguser">
-            <img style="width: 10.6vw; height: auto;" src="{{usuario.data.fotoperfil}}">
+            <img style="width: 100%; height: auto;" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
         </div>
 
         <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
@@ -387,6 +419,13 @@
             </div>
 
             <!--adjuntar archivos para publicar-->
+            <!--<md-button class=" right" aria-label="Photos">-->
+                <!--<md-icon md-svg-src="img/camara.png" style="width: 24px; height: 24px;"></md-icon>-->
+                <!--<md-tooltip>-->
+                    <!--Subir un archivo-->
+                <!--</md-tooltip>-->
+            <!--</md-button>-->
+
 
             <div class="containerfoto">
                 <span class="select-wrapper">
@@ -429,15 +468,15 @@
 
     </div>
 
-
-
     <!--Publicación-->
     <div>
 
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
-            <div class="boxpubli">
-                <span class="boxiconremove"><a ng-click="remove(post)"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></a></span>
+            <div class="boxpubli" ng-init="deleting = false">
+                <div class="eliminarBox" ng-show="deleting" >Desea eliminar La publicacion
+                    <a ng-click="remove(post)">Eliminar</a> <p ng-click="deleting = false">Cancelar</p></div>
+                <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
                     <p class="tittlepli">{{post.title}}
 
                     </p>
@@ -464,11 +503,14 @@
                         <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
                             <!--<p class="autorcomentario">{{comentario.author}}</p>-->
                             <!--<p class="comentariouser" >{{comentario.body}}</p>-->
-                            <div class="autorcomentario" >
+                            <div class="autorcomentario"  ng-init="deletingcomment = false">
                                 <div class="imgusercoment">
-                                 <img style="width: 2vw; height: auto" src="{{comentario.fotoperfil}}">
+                                 <img style="width: 100%; height: auto" src="{{comentario.fotoperfil}}">
                                 </div>
-                                <img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-click="removeComment(comentario)" ng-if="currentUser.username == comentario.author">
+                                <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
+                                    <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
+                                </div>
+                                <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
                                 <span class="comentarioautor">{{comentario.author}}</span> <br>
                                 <p class="comentariouser"> {{comentario.body}}</p>
                             </div>
@@ -480,7 +522,7 @@
                     <div class="inferior" >
                         <div class="boxcomentario">
                             <div class="imgusercoment2">
-                                <img style="width: 5vw; height: auto" src="{{usuario.data.fotoperfil}}">
+                                <img style="width: 100%; height: auto" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
                             </div>
                             <form ng-submit="addComment(post._id , fotoperfil);selectthing($index, true)">
                                 <md-input-container class="tittleboxcomentario">

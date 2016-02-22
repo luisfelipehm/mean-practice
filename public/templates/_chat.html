@@ -5,9 +5,9 @@
     .chatty
     {
         position: fixed;
-        width: 300px;
+        width: 250px;
         height: 30vh;
-        bottom: 0;
+        bottom: 4vh;
         right: 0;
         border: 1px solid black;
         z-index: 1000;
@@ -60,7 +60,7 @@
         border-right: 1px solid #cccccc;
         border-bottom: 1px solid #eeeeee;
         background: #e5e5e5;
-        line-height: 1.3em;
+        line-height: .8em;
         list-style: none;
     }
 
@@ -142,6 +142,8 @@
     .chatboxmessagecontent time {
         font-size: 9px;
         color: #ccc;
+        float: right;
+
     }
 
     .chatboxinput {
@@ -191,27 +193,45 @@
     .chatboxtitle {
         float: left;
     }
+    #searchUserBox
+    {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        height: 4vh;
+        width: 250px;
+        background-color: #E30613;
+        border: 1px solid #E30613;
+    }
+    #searchUserBox input
+    {
+        margin: .6vh 0 .3vh 40px;
+        font-size: 2vh;
+        width: 200px;
+
+    }
 </style>
 
 <div ng-controller="ChatCtrl" id="chap">
 
 
+    <div id="searchUserBox">
+        <input type="text" ng-model="search" required>
+    </div>
+
+    <div class="chatty" ng-show="search.length > 0">
 
 
-    <div class="chatty">
 
+        <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'">
 
-
-        <div ng-repeat="users in usuariosconectados">
-            <p ng-click="generarChat(users.username)" >
+            <p ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))"  >
 
                 <img src="/img/chat-conectado.png" class="conectchat" ng-show="users.actual">
                 <img src="/img/chat-desconectado.png" class="conectchat" ng-show="!users.actual" >
-                {{users.username}}</p>
+                {{titleize(users.apellido)}} {{titleize(users.nombre)}}</p>
         </div>
 
-        <form action="" id="chati">
-            <input id="m" autocomplete="off" /><p id="enviando">Send</p>
-        </form>
     </div>
+
 </div>

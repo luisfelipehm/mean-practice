@@ -1,10 +1,17 @@
-Desde este Proyecto intentaremos trabajar la intranet
-y Trabajaremos desde 0 algunas cosas por hacer son
+Este es un checklist de las cosas que quedan por hacer en la Intranet
 
-    * Buscar como migrar los Usuarios
-    * Manejar y Validar la Subida de Documentos
-    * Adaptar la Logica de la creacion de formularios 
-    * Mejorar lo que tenemos de diseño en la antigua
-    * Precompilar los Assets
-    * Adaptar la Logica de Carpetas y Subcarpetas
-    * Aprender Angular y Node.js Para poder realizar todas estas Tareas
+    * Manejar publicaciones de video, documentos e imagenes, tambien dependiendo del largo de la descripcion, en cuanto a video deben ser convertidos a .avi
+    * Revisar el link de Fotos para que funcione correctamente
+    * Finalizar el diseño del panel de usuarios
+    * Crear los departamentos
+    * Revisar como mostrar las preguntas abiertas de los formularios y añadir los titulos de las preguntas todo esto en respuestas
+    * En el link de Documentos deberia dirigir a la carpeta padre
+    * En documentos y fotos actualizar en cuanto se suban y no con F5
+    * Actualizar diseño del modulo Cronograma
+    * Terminar la funcionalidad y diseño del modulo de PQRSF
+    * Hacer un checklist de los eliminar que no funcionan
+    * Mostrar foto de perfil entre otros en el chat    
+    * Permisos formularios, fotos, documentos, pqrsf, cronograma, areas y terminar el usuarios
+
+
+

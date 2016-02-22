@@ -53,6 +53,17 @@ UserSchema.methods.generateJWT = function() {
     return jwt.sign({
         _id: this._id,
         username: this.username,
+        apellido: this.apellido,
+        nombre: this.nombre,
+        fotoperfil: this.fotoperfil,
+        adminusers: this.adminusers,
+        adminpubli: this.adminpubli,
+        admindocs: this.admindocs,
+        adminforms: this.adminforms,
+        adminfotos: this.adminfotos,
+        admincrono: this.admincrono,
+        adminpqrsf: this.adminpqrsf,
+
         exp: parseInt(exp.getTime() / 1000),
     }, 'SECRET');
 };
