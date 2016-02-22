@@ -1,5 +1,5 @@
 
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore']);
 
 
 app.config(['$httpProvider', function($httpProvider) {
@@ -23,30 +23,33 @@ app.directive('barranav', function() {
         templateUrl: '/templates/_barra.html'
     };
 });
-app.directive('resolveLoadernum', function($rootScope, $timeout) {
 
-    return {
-        restrict: 'E',
-        replace: true,
-        templateUrl: 'templates/spinner.html',
-        link: function(scope, element) {
+//app.directive('resolveLoadernum', function($rootScope, $timeout) {
+//
+//    return {
+//        restrict: 'E',
+//        replace: true,
+//        templateUrl: 'templates/spinner.html',
+//        link: function(scope, element) {
+//
+//            $rootScope.$on('$routeChangeStart', function(event, currentRoute, previousRoute) {
+//                if (previousRoute) return;
+//                console.log('aqui1')
+//                $timeout(function() {
+//                    console.log('aqui2')
+//                    element.removeClass('ng-hide');
+//                });
+//            });
+//
+//            $rootScope.$on('$routeChangeSuccess', function() {
+//                console.log('success');
+//                element.addClass('ng-hide');
+//            });
+//        }
+//    };
+//});
 
-            $rootScope.$on('$routeChangeStart', function(event, currentRoute, previousRoute) {
-                if (previousRoute) return;
-                console.log('aqui1')
-                $timeout(function() {
-                    console.log('aqui2')
-                    element.removeClass('ng-hide');
-                });
-            });
 
-            $rootScope.$on('$routeChangeSuccess', function() {
-                console.log('success');
-                element.addClass('ng-hide');
-            });
-        }
-    };
-});
 app.factory('mySocket', function (socketFactory) {
     return socketFactory();
 });
@@ -533,7 +536,28 @@ app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,area
 
 app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout','$http', function ($scope,auth,users,areas,Upload,$timeout,$http) {
 
-     $scope.users = users.users;
+
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.users = users.users;
+
+        $scope.usuario =  user;
+        if(!$scope.usuario.data.adminusers){
+            $scope.users = $scope.users.filter(function( obj ) {
+                return obj._id == $scope.usuario.data._id;
+            });
+        }
+    });
+
+
+
+
+
+
+
+
+
 
 
      $scope.loadAreas = function() {
@@ -571,7 +595,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
         {
             users.edit({
                 username:       datos[0],
-                password:       datos[1],
+                password:       (datos[1] == undefined ? "unpasswordquenadienuncaenlavidacolocaria" : datos[1]),
                 nombre:         datos[2],
                 email:          datos[3],
                 area:           datos[4],
@@ -598,7 +622,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 url: '/usersf/'+ id,
                 data: {
                     username:       datos[0],
-                    password:       datos[1],
+                    password:       (datos[1] == undefined ? "unpasswordquenadienuncaenlavidacolocaria" : datos[1]),
                     nombre:         datos[2],
                     email:          datos[3],
                     area:           datos[4],
@@ -1380,6 +1404,8 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
     console.log($scope.currentUser);
 
 
+    $scope.cristian = '';
+
     //$scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
     //$scope.getUser = function (id) {
@@ -1500,6 +1526,8 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         });
 
         file.upload.success(function (data, status, headers, config) {
+            console.log('terminado')
+
             $scope.title = '';
             $scope.link = '';
             $scope.picFile = '';

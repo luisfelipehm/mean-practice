@@ -393,7 +393,7 @@
 
     <!--Formulario para publicacion-->
 
-    <div class="contenedorpubli" ng-if="currentUser.adminpubli">
+    <div class="contenedorpubli" ng-show="usuario.data.adminpubli">
 
         <!--Imagen user-->
         <div class="imguser">
@@ -527,7 +527,7 @@
                             <form ng-submit="addComment(post._id , fotoperfil);selectthing($index, true)">
                                 <md-input-container class="tittleboxcomentario">
                                     <label>Comentario..</label>
-                                    <input type="text" ng-model="bodyc.val" >
+                                    <input type="text" ng-model="bodyc.val" required>
 
                                 </md-input-container>
 
