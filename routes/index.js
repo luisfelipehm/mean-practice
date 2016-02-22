@@ -358,15 +358,15 @@ function getReadableFileSizeString(fileSizeInBytes) {
 }
 
 
- //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 
 
-
+// CREAR PUBLICACION QUE INCLUYE SUBIDA DE ARCHIVOS
 
 router.post('/posts',auth, upload.single('file'), function(req, res, next) {
-
+  console.log(req.params);
   req.body.file = '/uploads2/'+req.file.filename;
   var post = new Post(req.body);
+
   post.author = req.payload.username;
   post.save(function(err, post){
     if(err){ return next(err); }
@@ -374,6 +374,9 @@ router.post('/posts',auth, upload.single('file'), function(req, res, next) {
     res.json(post);
   });
 });
+
+
+//ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
@@ -399,19 +402,6 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
     });
 });
 
-// CREAR PUBLICACION QUE INCLUYE SUBIDA DE ARCHIVOS
-
-router.post('/posts',auth, upload.single('file'), function(req, res, next) {
-
-  req.body.file = '/uploads2/'+req.file.filename;
-  var post = new Post(req.body);
-  post.author = req.payload.username;
-  post.save(function(err, post){
-    if(err){ return next(err); }
-
-    res.json(post);
-  });
-});
 
 // PARAMETRO DE PUBLICACION
 
@@ -549,7 +539,7 @@ router.post('/users/:_id', function(req, res, next){
 
   User.findOne({ username: req.body.username  }, function (err, name) {
 
-    name.setPassword(req.body.password);
+    (req.body.password == "unpasswordquenadienuncaenlavidacolocaria" ? console.log('No cambio el password') : name.setPassword(req.body.password));
     name.nombre =         req.body.nombre;
     name.email =          req.body.email;
     name.area =           req.body.area;
@@ -598,7 +588,7 @@ router.post('/usersf/:_id',auth,upload.single('file'), function(req, res, next){
       console.log('update done')
     });
 
-    name.setPassword(req.body.password);
+    (req.body.password == "unpasswordquenadienuncaenlavidacolocaria" ? console.log('No cambio el password') : name.setPassword(req.body.password));
     name.fotoperfil = '/uploads2/'+req.file.filename;
     console.log('/uploads2/'+req.file.filename);
     name.nombre =         req.body.nombre;
