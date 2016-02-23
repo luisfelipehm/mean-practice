@@ -319,6 +319,7 @@ router.post('/pqrsf', function(req, res, next){
 
   var pqrsf = new Pqrsf(req.body);
   pqrsf.encargado = [req.body.encargado];
+  pqrsf.fechainicio = Date.now();
   pqrsf.save(function (err, pq){
     console.log(err);
     console.log('error2');

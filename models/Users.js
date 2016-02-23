@@ -27,6 +27,7 @@ var UserSchema = new mongoose.Schema({
     adminfotos: Boolean,
     admincrono: Boolean,
     adminpqrsf: Boolean,
+    tramitepqrsf: Boolean,
     ultimaconexion: Date
 
 });

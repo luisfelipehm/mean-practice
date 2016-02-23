@@ -54,7 +54,14 @@
     -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
     box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);"
   }
-
+  div:focus {
+    outline: none;
+    border: 0;
+  }
+  h1:focus{
+    outline: none;
+    border: 0;
+  }
 
   /*SPINNER */
 

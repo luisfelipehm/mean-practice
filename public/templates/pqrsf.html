@@ -7,27 +7,35 @@
     {
         display: inline-block;
         color: #E30613;
+        cursor: pointer;
     }
 </style>
-<h1 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h1>
 
-<h1 class="pqnav" style="float: right" ng-click="mispq = true">Mis PQRSF</h1>
+<!--{{usuario.data}}-->
+<div ng-show="!usuario.data.adminpqrsf">
+    <h1 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h1>
+    <h1 class="pqnav" style="float: right" ng-click="mispq = true">Mis PQRSF</h1>
 
-<div ng-show="mispq">
+    <div ng-show="mispq">
     <div ng-repeat="pq in pqrsf" class="boxpubli">
-        <img class="tipodepqrsf" ng-if="">
-        <img class="tipodepqrsf" ng-if="">
-        <img class="tipodepqrsf" ng-if="">
-        <img class="tipodepqrsf" ng-if="">
-        <img class="tipodepqrsf" ng-if="">
+        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
+        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
+        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
+        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
+        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
+        Fecha de recibido: {{pq.fechainicio}}
+        Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}
 
-        {{pq}}
+        <img class="tipodepqrsf" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
+        <img class="tipodepqrsf" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
+        <img class="tipodepqrsf" ng-if="pq.estado == 'Cerrado'" src="/img/cerrado.png">
+
     </div>
 </div>
 
 
-<div ng-show="mispq == false">
-    <form name="myForm2" ng-submit="uploadPic(picFile)">
+    <div ng-show="mispq == false">
+        <form name="myForm2" ng-submit="uploadPic(picFile)">
     <md-input-container>
         <label>Nombres y Apellidos</label>
         <input type="text" ng-model="nombre" required md-maxlength="200">
@@ -112,4 +120,63 @@
         <md-button type="submit"  class="md-raised"> Enviar </md-button>
 
 </form>
+    </div>
+
+</div>
+
+<div ng-show="usuario.data.adminpqrsf">
+    <div style="width:100%">
+    <h1 class="pqnav" ng-click="mispqadmin = 1">Nuevo</h1>
+    <h1 class="pqnav" style="text-align: center" ng-click="mispqadmin = 2">Tramite</h1>
+    <h1 class="pqnav" style="text-align: right" ng-click="mispqadmin = 3">Cerrado</h1>
+    </div>
+
+    <div ng-show="mispqadmin == 1">
+        <div ng-repeat="pq in pqnuevo" class="boxpubli">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
+            Fecha de recibido: {{pq.fechainicio}}
+            Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}
+
+            <img class="tipodepqrsf" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
+            <img class="tipodepqrsf" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
+            <img class="tipodepqrsf" ng-if="pq.estado == 'Cerrado'" src="/img/cerrado.png">
+
+        </div>
+    </div>
+    <div ng-show="mispqadmin == 2">
+        <div ng-repeat="pq in pqtramite" class="boxpubli">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
+            Fecha de recibido: {{pq.fechainicio}}
+            Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}
+
+            <img class="tipodepqrsf" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
+            <img class="tipodepqrsf" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
+            <img class="tipodepqrsf" ng-if="pq.estado == 'Cerrado'" src="/img/cerrado.png">
+
+        </div>
+    </div>
+    <div ng-show="mispqadmin == 3">
+        <div ng-repeat="pq in pqcerrado" class="boxpubli">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
+            Fecha de recibido: {{pq.fechainicio}}
+            Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}
+
+            <img class="tipodepqrsf" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
+            <img class="tipodepqrsf" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
+            <img class="tipodepqrsf" ng-if="pq.estado == 'Cerrado'" src="/img/cerrado.png">
+
+        </div>
+    </div>
 </div>
