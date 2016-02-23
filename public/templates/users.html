@@ -12,6 +12,18 @@
         border: solid transparent;
         border-radius: 5px 5px 5px 5px;
     }
+    .boxpubliuser
+    {
+        position: relative;
+        margin-bottom: 2vh;
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 8%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);"
+    }
     .iconoeditaruser
     {
         width: 1vw;
@@ -79,11 +91,7 @@
         width: 1vw;
         vertical-align:middle
     }
-    .abc
-    {
-        margin-top: 5vh;
-    }
-    .lineahgris
+        .lineahgris
     {
         border: solid #d0d0cf .1vw;
         width: 40%;
@@ -101,7 +109,6 @@
     }
     .loginedit
     {
-
         width: 23%;
         height: 4vh;
     }
@@ -114,6 +121,56 @@
     md-checkbox.md-checked.red .md-icon {
         background-color: #e3152d ;
     }
+    .tittleregistrar
+    {
+        color: #e3152d;
+        padding-top:2.5%;
+    }
+    .lupita
+    {
+        left: 47.5vw;
+        position: relative;
+        width: 1vw;
+        height: auto;
+    }
+    .cajabuscar
+    {
+        margin-left: 2.5%;
+        margin-left: 0%;
+        width: 90%;
+    }
+    .select-wrapper
+    {
+        background: url(img/camara.png) no-repeat;
+        background-size:contain;
+        display: block;
+        position: relative;
+        height: auto;
+    }
+    #image_src
+    {
+
+        margin-right: 100px;
+        opacity: 0;
+        filter: alpha(opacity=0); /* IE 5-7 */
+    }
+    .iconcamera
+    {
+        margin-left: 91.5%;
+        width: 10%;
+    }
+    .botonpublicar
+    {
+        height: auto;
+        width: 6vw;
+        margin-left: 83.5%;
+        opacity: 0.6;
+        cursor: pointer;
+    }
+    .botonpublicar:hover
+    {
+        opacity: 1;
+    }
 
 </style>
 
@@ -122,109 +179,130 @@
 </div>
 
 
-    <!--Registrar Usuario-->
-<div class="boxpubli abc" ng-if="usuario.data.adminusers">
-    <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
+    <!--REGISTRAR USUARIO-->
+<div class="boxpubliuser" ng-if="usuario.data.adminusers" >
 
-    <h3>Registrar nuevo usuario</h3>
+    <div class="boxinuseredit">
+        <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
 
-
-    <md-input-container>
-        <label>Login</label>
-        <input type="text" ng-model="username" required md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>Contraseña</label>
-        <input type="password" ng-model="password" required md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>nombre</label>
-        <input type="text" ng-model="nombre" required md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>apellido</label>
-        <input type="text" ng-model="apellido" required md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>email</label>
-        <input type="text" ng-model="email" required md-maxlength="30">
-    </md-input-container>
-
-    <md-input-container>
+        <h3 class="tittleregistrar">Registrar nuevo usuario</h3>
 
 
-        <md-select  placeholder="Area" ng-model="area" md-on-open="loadAreas()">
-            <md-option ng-repeat="area in areas" value="{{area.nombre}}">
-                {{area.nombre}}
-            </md-option>
-        </md-select>
-    </md-input-container>
+        <md-input-container class="loginedit">
+            <label>Login</label>
+            <input type="text" ng-model="username">
+        </md-input-container>
 
-    <md-input-container>
-        <label>cargo</label>
-        <input type="text" ng-model="cargo" required md-maxlength="30">
-    </md-input-container>
-    <md-radio-group ng-model="sexo" ng-required="true" required>
-            <md-radio-button value="Masculino" class="md-primary">Masculino</md-radio-button>
-            <md-radio-button value="Femenino" class="md-primary">Femenino</md-radio-button>
-    </md-radio-group>
+        <md-input-container class="loginedit">
+            <label>Contraseña</label>
+            <input type="password" ng-model="password">
+        </md-input-container >
 
-    <md-input-container>
-        <label>telefono</label>
-        <input type="text" ng-model="telefono" md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>direccion</label>
-        <input type="text" ng-model="direccion" md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>region</label>
-        <input type="text" ng-model="region" md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>documento</label>
-        <input type="text" ng-model="documento" required md-maxlength="30">
-    </md-input-container>
-    <md-input-container>
-        <label>contratacion</label>
-        <input type="text" ng-model="contratacion" md-maxlength="30">
-    </md-input-container>
+        <md-input-container class="loginedit">
+            <label>nombre</label>
+            <input type="text" ng-model="nombre">
+        </md-input-container>
 
+        <md-input-container class="loginedit">
+            <label>apellido</label>
+            <input type="text" ng-model="apellido">
+        </md-input-container>
 
+        <md-input-container class="emailedit">
+            <label>email</label>
+            <input type="text" ng-model="email">
+        </md-input-container>
 
+        <md-input-container class="emailedit">
+            <md-select  placeholder="Area" ng-model="area" md-on-open="loadAreas()">
+                <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                    {{area.nombre}}
+                </md-option>
+            </md-select>
+        </md-input-container>
 
-    <div class="container">
-                <span class="select-wrapper">
-                    <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
-                </span>
-    </div>
+        <md-input-container class="emailedit">
+            <label>cargo</label>
+            <input type="text" ng-model="cargo">
+        </md-input-container>
 
-    <br>
+            <md-input-container class="emailedit">
+                <md-select  placeholder="Sexo" ng-model="sexo">
+                    <md-option  value="Masculino">Masculino</md-option>
+                    <md-option  value="Femenino">Femenino</md-option>
+                </md-select>
+            </md-input-container>
 
-    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+        <md-input-container class="emailedit">
+            <label>telefono</label>
+            <input type="text" ng-model="telefono">
+        </md-input-container>
 
-    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+        <md-input-container class="emailedit">
+            <label>direccion</label>
+            <input type="text" ng-model="direccion">
+        </md-input-container>
 
-    <br>
+        <md-input-container class="emailedit">
+            <label>region</label>
+            <input type="text" ng-model="region">
+        </md-input-container>
 
-    <!--Linea Horizontal-->
-    <div class="li"></div>
+        <md-input-container class="emailedit">
+            <label>documento</label>
+            <input type="text" ng-model="documento">
+        </md-input-container>
 
-            <span class="progress" ng-show="picFile.progress >= 0">
-              <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+        <md-input-container class="emailedit">
+            <label>contratacion</label>
+            <input type="text" ng-model="contratacion">
+        </md-input-container>
+
+            <!--SELECCIONAR ARICHIVO-->
+
+        <div class="iconcamera">
+            <span class="select-wrapper">
+               <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
             </span>
+        </div>
 
-    <span ng-show="picFile.result">Upload Successful</span>
-    <md-button type="submit" class="md-raised"> Registrar </md-button>
-    </form>
+        <br>
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+        <br>
+
+        <!--Linea Horizontal-->
+        <div class="li"></div>
+
+                <span class="progress" ng-show="picFile.progress >= 0">
+                  <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+                </span>
+        <span ng-show="picFile.result">Upload Successful</span>
+
+        <!--<md-button type="submit" class="md-raised"> Registrar </md-button>-->
+
+        <div >
+            <img class="botonpublicar" src="/img/registrar.png">
+            <input type="submit" class="md-raised">  </input>
+        </div>
+
+        </form>
+     </div>
 </div>
+
 
 <!--BUSCADOR DE USUARIOS-->
 
-<md-input-container>
-    <label>Buscar Usuario</label>
-    <input type="text" ng-model="search" required md-maxlength="30">
-</md-input-container>
+<div class="cajabuscar">
+    <img class="lupita" src="/img/lupa.png">
+    <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+        <label>Buscar</label>
+        <input type="text" ng-model="search" required>
+    </md-input-container>
+</div>
 
 
 <!--TODOS LOS USUARIOS-->
@@ -249,7 +327,6 @@
 
                  <div class=" lineahgris"></div>
                  <h3 class="tittleedit">Editar</h3>
-
 
 
                  <md-input-container class="loginedit">
@@ -399,7 +476,3 @@
 
 
 </div>
-
-
-
-
