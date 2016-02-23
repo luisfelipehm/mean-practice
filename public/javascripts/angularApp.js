@@ -664,7 +664,8 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 adminfotos:     datos[16],
                 admincrono:     datos[17],
                 adminpqrsf:     datos[18],
-                adminusers:     datos[19]
+                adminusers:     datos[19],
+                tramitepqrsf:   datos[20]
             },id);
             users.getAll();
         }else{
@@ -691,7 +692,8 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                     adminfotos:     datos[16],
                     admincrono:     datos[17],
                     adminpqrsf:     datos[18],
-                    adminusers:     datos[19]},
+                    adminusers:     datos[19],
+                    tramitepqrsf:   datos[20]},
 
                 file: file,
                 headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
