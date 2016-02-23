@@ -622,6 +622,7 @@ router.post('/users/:_id', function(req, res, next){
     name.adminfotos =     req.body.adminfotos;
     name.admincrono =     req.body.admincrono;
     name.adminpqrsf =     req.body.adminpqrsf;
+    name.tramitepqrsf =   req.body.tramitepqrsf;
     name.save();
     res.json(name);
   });
