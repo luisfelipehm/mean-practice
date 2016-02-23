@@ -856,10 +856,14 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
 app.controller('RootCtrl', ['$scope', function ($scope) { }]);
 
 app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','auth','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,auth,users) {
-    $scope.pqrsf = pqrsf.pqrsf;
+
+
 
 
     $scope.currentUser = auth.currentUser();
+
+
+
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
         console.log($scope.usuario);
@@ -867,19 +871,36 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
         $scope.tdocumento = 'Cedula de Ciudadania';
         $scope.ndocumento = $scope.usuario.data.documento;
         $scope.ciudad2 = $scope.usuario.data.region;
-        console.log($scope.ciudad)
+        console.log($scope.ciudad);
         $scope.empresa = 'Soluciones';
         $scope.cargo = $scope.usuario.data.cargo;
         $scope.ciudad = $scope.usuario.data.ciudad;
         $scope.email = $scope.usuario.data.email;
         $scope.celular = $scope.usuario.data.telefono;
         $scope.direccion = $scope.usuario.data.direccion;
+        $scope.pqrsf = pqrsf.pqrsf;
+        $scope.pqnuevo = $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+            return obj.estado == 'En espera';
+        });
+        $scope.pqtramite = $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+            return obj.estado == 'En tramite';
+        });
+        $scope.pqcerrado = $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+            return obj.estado == 'Cerrado';
+        });
+
+        if(!$scope.usuario.data.adminpqrsf){
+            $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+                return obj.creadopor == $scope.usuario.data.username;
+            });
+        }
     });
 
 
 
 
     $scope.mispq = true;
+    $scope.mispqadmin = 1;
 
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
@@ -893,12 +914,13 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
             empresa: $scope.empresa,
             cargo: $scope.cargo,
             ciudad: $scope.ciudad,
+            creadopor: $scope.usuario.data.username,
             tipopq: $scope.tipopq,
             comentario: $scope.comentario,
             email: $scope.email,
             celular: $scope.celular,
             direccion: $scope.direccion,
-            estado: 'En Espera',
+            estado: 'En espera',
             encargado: 'ivantrips'
         }, {
             headers: {Authorization: 'Bearer '+auth.getToken()}
@@ -952,6 +974,11 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
                         $scope.picFile = '';
                         $scope.mispq = true;
                         pqrsf.getAll();
+                        $scope.pqrsf = pqrsf.pqrsf;
+                        $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+                            return obj.creadopor == $scope.usuario.data.username;
+                        });
+
                     }
 
                 });
@@ -1100,7 +1127,7 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
 
 }]);
 
-app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function ($scope,mySocket,auth,$http,moment) {
+app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment','users', function ($scope,mySocket,auth,$http,moment,users) {
 
     //Array.prototype.remove = function() {
     //    var what, a = arguments, L = a.length, ax;
@@ -1117,6 +1144,15 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function
     $scope.mensajes = [];
     $scope.usuariosconectados = [];
     $scope.currentUser = auth.currentUser();
+
+    $scope.currentUser = auth.currentUser();
+
+
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
     $scope.isLoggedIn = auth.isLoggedIn;
 
@@ -1176,7 +1212,7 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment', function
             }else if(data.recibe == $scope.currentUser.username)
             {
                 if($('#'+data.envia+'chat').length == 0){
-                    $scope.generarChat(data.envia);
+                    $scope.generarChat(data.envia, data.nombrec);
                 }else{
                     $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
                 }
@@ -1200,7 +1236,7 @@ var a =
 
         $http.get('/mensajes/'+ part[0] +','+ part[1]).then(function (response) {
             angular.copy(response.data, $scope.mensajes);
-            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'"});} e.preventDefault();}});' +
+            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'", nombrec: "'  + $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] +'" });} e.preventDefault();}});' +
                 '$("#closechat'+ name+'").click(function () {$("#'+name+'chat").nextAll(".chatbox").css("right", "-=285");numerodechats--;$("#'+name+'chat").remove();})' +
                 '</script>' +
                 '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
