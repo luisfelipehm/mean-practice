@@ -244,6 +244,11 @@ app.factory('users', ['$http','auth',function($http,auth){
             angular.copy(data, o.users);
         });
     };
+    o.asignables = function() {
+        return $http.get('/asignables').then(function(data){
+            return data;
+        });
+    };
     o.create = function(user) {
 
         return $http.post('/users', user, {
@@ -725,6 +730,9 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
 
         if(file==undefined)
         {
+            console.log($scope.username);
+            console.log($scope.password);
+
             users.create({
                 username:       $scope.username,
                 password:       $scope.password,
@@ -898,11 +906,18 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
         }
     });
 
+    $scope.loadasignables = function() {
+        users.asignables().then(function (asig) {
+            $scope.asignables = asig;
+            console.log($scope.asignables);
+        });
 
+    };
 
 
     $scope.mispq = true;
     $scope.mispqadmin = 1;
+    $scope.mispqtramite = 1;
 
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
@@ -915,7 +930,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
             ndocumento: $scope.ndocumento,
             empresa: $scope.empresa,
             cargo: $scope.cargo,
-            ciudad: $scope.ciudad,
+            ciudad2: $scope.ciudad2,
             creadopor: $scope.usuario.data.username,
             tipopq: $scope.tipopq,
             comentario: $scope.comentario,

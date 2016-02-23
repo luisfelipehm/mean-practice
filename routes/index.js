@@ -175,13 +175,15 @@ router.post('/formularios/:formulario/preguntas',auth, function(req, res, next) 
 //INDEX DE PQRSF
 
 router.get('/pqrsf', function(req, res, next) {
-
-  Pqrsf.find(function(err, pqrsf){
+  Pqrsf.find().populate('files').exec(function(err, pqrsf){
     if(err){ return next(err); }
     res.json(pqrsf);
   });
-
 });
+
+
+
+
 
 // INDEX DE ALBUMS
 
@@ -290,21 +292,11 @@ var storage = multer.diskStorage({
     cb(null, './public/uploads2')
   },
   filename: function (req, file, cb) {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
 
-    var yyyy = today.getFullYear();
-    if(dd<10){
-      dd='0'+dd
-    }
-    if(mm<10){
-      mm='0'+mm
-    }
 
   var nombre = file.originalname.split('.');
     console.log(nombre[0] + '.' + nombre[1]);
-    cb(null, nombre[0] + ' ' +  dd+'-'+mm+'-'+yyyy + '.' + nombre[1]   )
+    cb(null, nombre[0] + '-' +  Date.now() + '.' + nombre[1]   )
   }
 });
 
@@ -581,9 +573,21 @@ router.get('/users', function(req, res, next) {
   });
 
 });
-router.post('/users', function(req, res, next){
 
+router.get('/asignables', function(req, res, next) {
+
+  User.find({ tramitepqrsf: true  }, function (err, name) {
+    res.json(name);
+  });
+
+});
+
+
+
+router.post('/users', function(req, res, next){
+console.log(req.body);
   if(!req.body.username || !req.body.password){
+    console.log('hola');
     return res.status(400).json({message: 'Please fill out all fields'});
   }
 
@@ -598,6 +602,8 @@ router.post('/users', function(req, res, next){
 
   });
 });
+
+
 
 router.post('/users/:_id', function(req, res, next){
 
