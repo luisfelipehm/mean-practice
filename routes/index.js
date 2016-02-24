@@ -175,13 +175,15 @@ router.post('/formularios/:formulario/preguntas',auth, function(req, res, next) 
 //INDEX DE PQRSF
 
 router.get('/pqrsf', function(req, res, next) {
-
-  Pqrsf.find(function(err, pqrsf){
+  Pqrsf.find().populate('files').exec(function(err, pqrsf){
     if(err){ return next(err); }
     res.json(pqrsf);
   });
-
 });
+
+
+
+
 
 // INDEX DE ALBUMS
 
@@ -290,21 +292,11 @@ var storage = multer.diskStorage({
     cb(null, './public/uploads2')
   },
   filename: function (req, file, cb) {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
 
-    var yyyy = today.getFullYear();
-    if(dd<10){
-      dd='0'+dd
-    }
-    if(mm<10){
-      mm='0'+mm
-    }
 
   var nombre = file.originalname.split('.');
     console.log(nombre[0] + '.' + nombre[1]);
-    cb(null, nombre[0] + ' ' +  dd+'-'+mm+'-'+yyyy + '.' + nombre[1]   )
+    cb(null, nombre[0] + '-' +  Date.now() + '.' + nombre[1]   )
   }
 });
 
@@ -320,6 +312,7 @@ router.post('/pqrsf', function(req, res, next){
   var pqrsf = new Pqrsf(req.body);
   pqrsf.encargado = [req.body.encargado];
   pqrsf.fechainicio = Date.now();
+  pqrsf.fase = 1;
   pqrsf.save(function (err, pq){
     console.log(err);
     console.log('error2');
@@ -340,11 +333,44 @@ router.param('pqrsf', function(req, res, next, id) {
   });
 });
 
+function removeA(arr) {
+  var what, a = arguments, L = a.length, ax;
+  while (L > 1 && arr.length) {
+    what = a[--L];
+    while ((ax= arr.indexOf(what)) !== -1) {
+      arr.splice(ax, 1);
+    }
+  }
+  return arr;
+}
+
+
+
+router.post('/pqrsf/:pqrsf', function(req, res, next){
+  console.log('error1');
+
+  console.log(req.pqrsf);
+  req.pqrsf.fase += 1;
+  req.pqrsf.comentarios.push(req.body.comentario);
+  req.pqrsf.estado = req.body.estado;
+  (req.body.estado == 'Cerrado' ? req.pqrsf.fechacierre : '')
+  ((req.body.tramitando != 'tramitando') ? req.pqrsf.encargados.push(req.body.responsable) : removeA(req.pqrsf.encargados, req.body.responsable));
+  console.log(req.pqrsf.encargados);
+
+  req.pqrsf.save(function (err, pq){
+    console.log(err);
+    console.log('error2');
+    if(err){ return next(err); }
+    res.json(pq)
+  });
+});
+
 
 router.post('/pqrsfs/:pqrsf/files',auth, upload.single('file'), function(req, res, next) {
 
 
   var file = new Pqrsffile();
+  file.fase = req.pqrsf.fase;
   file.nombre = req.body.nombre;
   file.filename = req.body.nombre;
   file.adjunto = '/uploads2/'+req.file.filename;
@@ -581,9 +607,21 @@ router.get('/users', function(req, res, next) {
   });
 
 });
-router.post('/users', function(req, res, next){
 
+router.get('/asignables', function(req, res, next) {
+
+  User.find({ tramitepqrsf: true  }, function (err, name) {
+    res.json(name);
+  });
+
+});
+
+
+
+router.post('/users', function(req, res, next){
+console.log(req.body);
   if(!req.body.username || !req.body.password){
+    console.log('hola');
     return res.status(400).json({message: 'Please fill out all fields'});
   }
 
@@ -598,6 +636,8 @@ router.post('/users', function(req, res, next){
 
   });
 });
+
+
 
 router.post('/users/:_id', function(req, res, next){
 

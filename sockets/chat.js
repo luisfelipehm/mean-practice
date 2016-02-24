@@ -12,7 +12,7 @@ module.exports = function(io) {
 
 
         socket.on('chateando', function (msg) {
-            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: msg.mesj,receptor: msg.recibe, fecha: Date.now() });
+            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: msg.mesj,receptor: msg.recibe, fecha: Date.now(),fotoperfil: msg.fotoperfil });
             conv.save(function(){
 
                 //var sabe = [{usernameone: msg.envia,usernametwo: msg.recibe},{usernametwo: msg.recibe,usernameone: msg.envia}];

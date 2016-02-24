@@ -6,8 +6,9 @@ var PqrsfSchema = new mongoose.Schema({
     ndocumento: String,
     empresa: String,
     cargo: String,
-    ciudad: String,
+    ciudad2: String,
     tipopq: String,
+    fase: Number,
     comentario:String,
     email: String,
     creadopor: String,
@@ -16,8 +17,9 @@ var PqrsfSchema = new mongoose.Schema({
     estado: String,
     fechainicio: Date,
     fechacierre: Date,
+    comentarios: [{ type: mongoose.Schema.Types.Mixed }],
     files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pqrsffile' }],
-    encargados: Array
+    encargados: [String]
 
 
 });
