@@ -99,7 +99,8 @@
     }
     .tittleedit
     {
-        color: #e3152d;
+        font-size: 1.5vw;
+        color: #323231;
         margin-top: 4%;
     }
     .boxinuseredit
@@ -121,9 +122,11 @@
     md-checkbox.md-checked.red .md-icon {
         background-color: #e3152d ;
     }
+
     .tittleregistrar
     {
-        color: #e3152d;
+        font-size: 1.5vw;
+        color: #323231;
         padding-top:2.5%;
     }
     .lupita
@@ -139,24 +142,9 @@
         margin-left: 0%;
         width: 90%;
     }
-    .select-wrapper
-    {
-        background: url(img/camara.png) no-repeat;
-        background-size:contain;
-        display: block;
-        position: relative;
-        height: auto;
-    }
-    #image_src
-    {
 
-        margin-right: 100px;
-        opacity: 0;
-        filter: alpha(opacity=0); /* IE 5-7 */
-    }
-    .iconcamera
+    .boxexaminar
     {
-        margin-left: 91.5%;
         width: 10%;
     }
     .botonpublicar
@@ -166,8 +154,33 @@
         margin-left: 83.5%;
         opacity: 0.6;
         cursor: pointer;
+        margin-bottom: 2vh;
     }
     .botonpublicar:hover
+    {
+        opacity: 1;
+    }
+    .btnactualizar
+    {
+        width: 6vw;
+        height: 3.2vh;
+        margin-left: 83.5%;
+        margin-bottom: 2vh;
+        opacity: 0.6;
+    }
+    .btnactualizar:hover
+    {
+        opacity: 1;
+    }
+    .btnregistrar2
+    {
+        width: 6vw;
+        height: 3.2vh;
+        margin-left: 83.5%;
+        margin-bottom: 2vh;
+        opacity: 0.6;
+    }
+    .btnregistrar2:hover
     {
         opacity: 1;
     }
@@ -258,12 +271,16 @@
             <input type="text" ng-model="contratacion">
         </md-input-container>
 
-            <!--SELECCIONAR ARICHIVO-->
+            <!--SELECCIONAR ARICHIVO FOTO-->
 
-        <div class="iconcamera">
-            <span class="select-wrapper">
-               <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
-            </span>
+        <div class="boxexaminar">
+
+            <label for="file-input">
+                <img src="/img/boton-examinar.png"/>
+            </label>
+            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
+            <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />-->
+
         </div>
 
         <br>
@@ -282,11 +299,11 @@
                 </span>
         <span ng-show="picFile.result">Upload Successful</span>
 
-        <!--<md-button type="submit" class="md-raised"> Registrar </md-button>-->
-
+            <!--BOTON REGISTRAR -->
         <div >
-            <img class="botonpublicar" src="/img/registrar.png">
-            <input type="submit" class="md-raised">  </input>
+            <!--<img class="botonpublicar" src="/img/registrar.png">-->
+            <!--<button  value="" type="submit" class="btnregistrar">  </button>-->
+            <input type="image" src="/img/registrar.png" class="btnregistrar2" >  </input>
         </div>
 
         </form>
@@ -310,7 +327,7 @@
  <div ng-repeat="user in users | filter:search">
 
      <div class="boxallusers">
-        <div> <img class="imguseredit" src="/img/user_chat.png"> </div>
+        <div> <img class="imguseredit" src="/img/boton-examinar.png"> </div>
         <div class="boximgusersedit" ng-hide="editing" ng-click="editing = true"> <img class="iconoeditaruser" src="/img/icono-editar.png"> </div>
         <div class="boximguserseli"> <img class="iconoeditaruser" src="/img/icono-eliminar-g.png"> </div>
         <p class="editdatosusername">{{user.nombre}} {{user.apellido}}</p>
@@ -402,7 +419,7 @@
 
                  <div ng-if="usuario.data.adminusers">
 
-                     <div style="width: 28%;display: inline-block;">
+                     <div style="width: 28%;display: inline-block; margin-top: 1vh">
                          <md-checkbox ng-model="user.adminusers"  aria-label="Modificar Usuarios" class="red" >
                              Modificar Usuarios
                          </md-checkbox>
@@ -417,7 +434,7 @@
                      </div>
 
 
-                     <div style="width: 32%;display: inline-block; float: right">
+                     <div style="width: 32%;display: inline-block; float: right;margin-top: 1vh">
 
                          <md-checkbox ng-model="user.adminforms" class="red" >
                              Crear Formularios
@@ -428,7 +445,7 @@
                          </md-checkbox>
                      </div>
 
-                     <div style="width: 32%;display: inline-block; float: right">
+                     <div style="width: 32%;display: inline-block; float: right; margin-top: 1vh">
                          <md-checkbox ng-model="user.admincrono" class="red" >
                              Crear Eventos de Cronograma
                          </md-checkbox>
@@ -445,9 +462,7 @@
                  </div>
 
                  <div class="container" style="text-align: right; margin-right: 4.8%">
-                    <span class="select-wrapper">
                         <input type="file" ngf-select ng-model="user.picFile" id="image_src2" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
-                    </span>
                  </div>
 
                  <br>
@@ -466,7 +481,13 @@
                 </span>
 
                  <span ng-show="user.picFile.result">Upload Successful</span>
-                 <md-button type="submit" class="md-raised"> Actualizar </md-button>
+
+                 <div>
+                     <input type="image" src="/img/boton_actualizar.png" class="btnactualizar" >  </input>
+                     <!--<md-button type="submit" class="md-raised"> Actualizar </md-button>-->
+                 </div>
+
+
              </form>
          </div>
 
