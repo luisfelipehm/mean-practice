@@ -5,7 +5,8 @@ var ConversationSchema = new mongoose.Schema({
     mensaje: String,
     usernametwo: Array,
     receptor: String,
-    fecha: Date
+    fecha: Date,
+    fotoperfil: String
 });
 
 mongoose.model('Conversation', ConversationSchema);

@@ -141,7 +141,8 @@
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
             Fecha de recibido: {{pq.fechainicio}}
-            <div>
+            <div  ng-click="editing = true">ver mas</div>
+            <div ng-show="editing">
                 <!--TITULO-->
                 <h1>{{pq.tipopq}}</h1>
                 <!--DESCRIPCION PEQUEñA-->
@@ -152,11 +153,22 @@
                 <h1>Datos Personales</h1>
                 <p>{{pq.celular}} </p>
                 <p>{{pq.email}}</p>
-                <a ng-repeat="f in pq.files" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
 
-                <form ng-submit="addCiclo(post._id , fotoperfil);selectthing($index, true)">
+                    <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
+
+                <h1>Proceso</h1>
+
+                <div ng-repeat="cm in pq.comentarios">
+                    <p>{{cm.u}}</p>
+                    <p>{{cm.c}}</p>
+
+                    <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
+                </div>
+
+
+                <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
                     <md-input-container>
-                        <label>Escribe tus comentarios</label>
+                        <label>Observacion</label>
                         <textarea ng-model="pq.newcomentario" md-maxlength="250" rows="5" md-select-on-focus></textarea>
                     </md-input-container>
 
@@ -167,6 +179,33 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+
+                    <input type="file"  ngf-select ng-model="pq.picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+                    <br>
+
+                    <i ng-show="myForm.file.$error.maxSize">File too large {{pq.picFile.size / 1000000|number:1}}MB: max {{pq.picFile.$errorParam}}</i>
+
+                    <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
+
+                    <br>
+                    Files:
+                    <ul>
+                        <li ng-repeat="f in pq.picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                         <span class="progress" ng-show="f.progress >= 0">
+                         <div style="width:{{f.progress}}%"
+                            ng-bind="f.progress + '%'"></div>
+                         </span>
+                        </li>
+                        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                        </li>
+                    </ul>
+                    {{errorMsg}}
+
+
+
+                    <md-button type="submit"  class="md-raised"> Redirigir </md-button>
+                    <md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>
                     <!--<input type="text" ng-model="bodyc.val">-->
                 </form>
 
@@ -176,9 +215,79 @@
     </div>
     <div ng-show="mispqadmin == 2">
         <div ng-repeat="pq in pqtramite" class="boxpubli">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png" >
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
             Fecha de recibido: {{pq.fechainicio}}
+            <div  ng-click="editing = true">ver mas</div>
+            <div ng-show="editing">
+                <!--TITULO-->
+                <h1>{{pq.tipopq}}</h1>
+                <!--DESCRIPCION PEQUEñA-->
+                <p>El dia <b>{{pq.fechainicio}}</b> yo <b>{{pq.nombre}}</b> identificado con C.C. No. <b>{{pq.ndocumento}}</b> hago parte de <b>{{pq.empresa}}</b> con el cargo
+                    de <b>{{pq.cargo}}</b> ciudad <b>{{pq.ciudad2}}</b> presento una <b>{{pq.tipopq}}</b></p>
+                <!--EL COMENTARIO-->
+                <p>{{pq.comentario}}</p>
+                <h1>Datos Personales</h1>
+                <p>{{pq.celular}} </p>
+                <p>{{pq.email}}</p>
+
+                <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
+
+                <h1>Proceso</h1>
+
+                <div ng-repeat="cm in pq.comentarios">
+                    <p>{{cm.u}}</p>
+                    <p>{{cm.c}}</p>
+
+                    <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
+                </div>
+
+
+                <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
+                    <md-input-container>
+                        <label>Observacion</label>
+                        <textarea ng-model="pq.newcomentario" md-maxlength="250" rows="5" md-select-on-focus></textarea>
+                    </md-input-container>
+
+                    <md-input-container class="emailedit">
+                        <md-select  placeholder="Dirigir" ng-model="pq.newresponsable" md-on-open="loadasignables()">
+                            <md-option ng-repeat="u in asignables.data" value="{{u.username}}">
+                                {{u.nombre}} {{u.apellido}} - {{u.cargo}} - {{u.area}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <input type="file"  ngf-select ng-model="pq.picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+                    <br>
+
+                    <i ng-show="myForm.file.$error.maxSize">File too large {{pq.picFile.size / 1000000|number:1}}MB: max {{pq.picFile.$errorParam}}</i>
+
+                    <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
+
+                    <br>
+                    Files:
+                    <ul>
+                        <li ng-repeat="f in pq.picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                         <span class="progress" ng-show="f.progress >= 0">
+                         <div style="width:{{f.progress}}%"
+                              ng-bind="f.progress + '%'"></div>
+                         </span>
+                        </li>
+                        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                        </li>
+                    </ul>
+                    {{errorMsg}}
+
+
+
+                    <md-button type="submit"  class="md-raised"> Redirigir </md-button>
+                    <md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>
+                    <!--<input type="text" ng-model="bodyc.val">-->
+                </form>
+
+
+            </div>
         </div>
     </div>
     <div ng-show="mispqadmin == 3">
@@ -198,6 +307,82 @@
 <div ng-show="usuario.data.tramitepqrsf">
     <h1 class="pqnav" ng-click="mispqtramite = 1">Nuevo</h1>
     <h1 class="pqnav" style="text-align: right" ng-click="mispqtramite = 2">Cerrado</h1>
-    <div ng-show="mispqtramite == 1">Hola</div>
+    <div ng-show="mispqtramite == 1">
+        <div ng-repeat="pq in pqasignados" class="boxpubli">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png" >
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
+            Fecha de recibido: {{pq.fechainicio}}
+            <div  ng-click="editing = true">ver mas</div>
+            <div ng-show="editing">
+                <!--TITULO-->
+                <h1>{{pq.tipopq}}</h1>
+                <!--DESCRIPCION PEQUEñA-->
+                <p>El dia <b>{{pq.fechainicio}}</b> yo <b>{{pq.nombre}}</b> identificado con C.C. No. <b>{{pq.ndocumento}}</b> hago parte de <b>{{pq.empresa}}</b> con el cargo
+                    de <b>{{pq.cargo}}</b> ciudad <b>{{pq.ciudad2}}</b> presento una <b>{{pq.tipopq}}</b></p>
+                <!--EL COMENTARIO-->
+                <p>{{pq.comentario}}</p>
+                <h1>Datos Personales</h1>
+                <p>{{pq.celular}} </p>
+                <p>{{pq.email}}</p>
+
+                <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
+
+                <h1>Proceso</h1>
+
+                <div ng-repeat="cm in pq.comentarios">
+                    <p>{{cm.u}}</p>
+                    <p>{{cm.c}}</p>
+
+                    <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
+                </div>
+
+
+                <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','tramitando',false);editing = false;">
+                    <md-input-container>
+                        <label>Observacion</label>
+                        <textarea ng-model="pq.newcomentario" md-maxlength="250" rows="5" md-select-on-focus></textarea>
+                    </md-input-container>
+
+                    <md-input-container class="emailedit">
+                        <md-select  placeholder="Dirigir" ng-model="pq.newresponsable" md-on-open="loadasignables()">
+                            <md-option ng-repeat="u in asignables.data" value="{{u.username}}">
+                                {{u.nombre}} {{u.apellido}} - {{u.cargo}} - {{u.area}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <input type="file"  ngf-select ng-model="pq.picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+                    <br>
+
+                    <i ng-show="myForm.file.$error.maxSize">File too large {{pq.picFile.size / 1000000|number:1}}MB: max {{pq.picFile.$errorParam}}</i>
+
+                    <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
+
+                    <br>
+                    Files:
+                    <ul>
+                        <li ng-repeat="f in pq.picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                         <span class="progress" ng-show="f.progress >= 0">
+                         <div style="width:{{f.progress}}%"
+                              ng-bind="f.progress + '%'"></div>
+                         </span>
+                        </li>
+                        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                        </li>
+                    </ul>
+                    {{errorMsg}}
+
+
+
+
+                    <md-button type="submit" >Cerrar Proceso</md-button>
+                    <!--<input type="text" ng-model="bodyc.val">-->
+                </form>
+
+
+            </div>
+        </div>
+    </div>
     <div ng-show="mispqtramite == 2">XDS</div>
 </div>

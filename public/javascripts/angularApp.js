@@ -872,7 +872,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 
     $scope.currentUser = auth.currentUser();
 
-
+    $scope.pqrsf = pqrsf.pqrsf;
 
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
@@ -888,21 +888,27 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
         $scope.email = $scope.usuario.data.email;
         $scope.celular = $scope.usuario.data.telefono;
         $scope.direccion = $scope.usuario.data.direccion;
-        $scope.pqrsf = pqrsf.pqrsf;
-        $scope.pqnuevo = $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
-            return obj.estado == 'En espera';
+
+        $scope.pqnuevo = $scope.pqrsf.filter(function( obj ) {
+            return obj.encargados == 'En espera';
         });
-        $scope.pqtramite = $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+        $scope.pqasignados = $scope.pqrsf.filter(function( obj ) {
+            return obj.encargados.indexOf($scope.usuario.data.username) > -1;
+        });
+        $scope.pqtramite = $scope.pqrsf.filter(function( obj ) {
             return obj.estado == 'En tramite';
         });
-        $scope.pqcerrado = $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+        $scope.pqcerrado = $scope.pqrsf.filter(function( obj ) {
             return obj.estado == 'Cerrado';
         });
 
         if(!$scope.usuario.data.adminpqrsf){
+            console.log('filtro');
             $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+
                 return obj.creadopor == $scope.usuario.data.username;
             });
+
         }
     });
 
@@ -915,12 +921,108 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
     };
 
 
+        
+
+    
+    
+
+
     $scope.mispq = true;
     $scope.mispqadmin = 1;
     $scope.mispqtramite = 1;
 
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
+    
+    $scope.addCiclo = function (files,comentario,id,fase,responsable,estado,tramitando) {
+        if(files==undefined)
+        {
+            return $http.post('/pqrsf/'+ id, {
+                comentario: {c: comentario,f: fase+1, u: $scope.usuario.data.nombre + ' ' + $scope.usuario.data.nombre},
+                responsable: responsable,
+                estado: estado,
+                tramitando: tramitando
+
+            }, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            })
+
+        }else{
+            return $http.post('/pqrsf/'+ id, {
+                comentario: {c: comentario,f: fase+1, u: $scope.usuario.data.nombre + ' ' + $scope.usuario.data.apellido},
+                responsable: responsable,
+                estado: estado,
+                tramitando: tramitando
+            }, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            }).success(function(data){
+
+                $scope.total = files.length;
+                $scope.cont = 0;
+                angular.forEach(files, function(file) {
+                    $scope.cont++;
+
+
+
+                    file.upload = Upload.upload({
+                        url: '/pqrsfs/'+ data._id + '/files',
+
+                        data:{id: data._id,file:file,nombre: file.name},
+
+                        headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+                    });
+
+                    file.upload.then(function (response) {
+
+                        $timeout(function () {
+                            file.result = response.data;
+                        });
+                    }, function (response) {
+                        if (response.status > 0)
+                            $scope.errorMsg = response.status + ': ' + response.data;
+                    }, function (evt) {
+                        file.progress = Math.min(100, parseInt(100.0 *
+                            evt.loaded / evt.total));
+                    });
+                    file.upload.progress(function (evt) {
+                        // Math.min is to fix IE which reports 200% sometimes
+                        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                        console.log("PostController: upload progress " + file.progress);
+                    });
+                    file.upload.success(function (data, status, headers, config) {
+                        if($scope.cont == $scope.total){
+                            pqrsf.getAll();
+                            $scope.pqrsf = pqrsf.pqrsf;
+
+                            $scope.pqnuevo = $scope.pqrsf.filter(function( obj ) {
+                                return obj.estado == 'En espera';
+                            });
+                            $scope.pqtramite = $scope.pqrsf.filter(function( obj ) {
+                                return obj.estado == 'En tramite';
+                            });
+                            $scope.pqcerrado = $scope.pqrsf.filter(function( obj ) {
+                                return obj.estado == 'Cerrado';
+                            });
+                            if(!$scope.usuario.data.adminpqrsf){
+                                console.log('filtro');
+                                $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+                                    return obj.creadopor == $scope.usuario.data.username;
+                                });
+
+                            }
+
+                        }
+
+                    });
+
+
+                });
+
+
+            });
+
+
+    }};
 
     $scope.uploadPic = function(files) {
 
@@ -1162,10 +1264,6 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment','users', 
     $scope.usuariosconectados = [];
     $scope.currentUser = auth.currentUser();
 
-    $scope.currentUser = auth.currentUser();
-
-
-
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
 
@@ -1192,7 +1290,7 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment','users', 
 
             //$('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>');
             $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
-                ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\"http://placehold.it/50x50\"> </div>") +
+                ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ lastme.fotoperfil +"\"> </div>") +
                 '        <div class="chatboxmessagecontent">    ' +
                 '           <p>'+lastme.mensaje+'</p>     ' +
                 '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">'  +   moment(lastme.fecha).format('LT')   +' </time>    ' +
@@ -1253,7 +1351,7 @@ var a =
 
         $http.get('/mensajes/'+ part[0] +','+ part[1]).then(function (response) {
             angular.copy(response.data, $scope.mensajes);
-            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'", nombrec: "'  + $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] +'" });} e.preventDefault();}});' +
+            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'", nombrec: "'  + $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] +'",fotoperfil: "'+ (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil) +'" });} e.preventDefault();}});' +
                 '$("#closechat'+ name+'").click(function () {$("#'+name+'chat").nextAll(".chatbox").css("right", "-=285");numerodechats--;$("#'+name+'chat").remove();})' +
                 '</script>' +
                 '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
@@ -1273,7 +1371,7 @@ var a =
 
                 //$('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>');
                 $('#chatcontent'+name).append('<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
-                    ($scope.currentUser.username == mensa.usernameone  ? "" : "<div class=\"avatar\"><img src=\"http://placehold.it/50x50\"> </div>") +
+                    ($scope.currentUser.username == mensa.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ mensa.fotoperfil +"\"> </div>") +
                     '        <div class="chatboxmessagecontent">    ' +
                     '           <p>'+mensa.mensaje+'</p>     ' +
                     '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(mensa.fecha).format('LT')   +'   </time>    ' +
