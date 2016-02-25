@@ -20,6 +20,7 @@ require('./models/Conectados');
 require('./models/Conversations');
 require('./models/Areas');
 require('./models/Pqrsfs');
+require('./models/Eventos');
 require('./models/Pqrsffiles');
 require('./models/Respuestas');
 require('./config/passport');

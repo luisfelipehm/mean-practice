@@ -221,7 +221,10 @@
     <div >
         <a href="#/root/formularios/{{forma._id}}/results"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
     </div>
-
+    <h3 style="margin-left: 22%">Preguntas</h3>
+    <div ng-repeat="pp in forma.preguntas">
+        <p style="margin: 4px 0 0 25%">{{pp.pregunta}}</p>
+    </div>
 
     <div class="preguntasformulario">
         <form ng-submit="addPregunta(forma._id)" >
@@ -246,20 +249,20 @@
             <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
 
                 <md-input-container style="height: 3vh">
-                    <label>Titulo Pregunta</label>
+                    <label>Opcion</label>
                     <input type="text" ng-model="opcion.valor">
                 </md-input-container>
 
 
                 <!--<input type="text" ng-model="opcion.valor">-->
                 <div style="width: 6vw; border: 0; margin-bottom: 1vh" ng-click="addOpcion()">
-                <img class="anadir" src="/img/boton_resultados.png">
+                    <img class="anadir" src="/img/botones_anadir.png">
                 </div>
 
 
-                <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh">
+                <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh;cursor: pointer">
                     {{opt}}
-                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%" ng-click="removerOpcion($index)">
+                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%;cursor: pointer" ng-click="removerOpcion($index)">
                 </div>
 
             </div>
@@ -269,6 +272,7 @@
             </div>
 
         </form>
+
     </div>
 
 
