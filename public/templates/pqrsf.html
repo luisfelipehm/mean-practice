@@ -8,122 +8,309 @@
         display: inline-block;
         color: #E30613;
         cursor: pointer;
+        margin-left: 30%;
     }
+    .boxpqnav
+    {
+
+    }
+    .pqline
+    {
+        width: 49%;
+        display:inline-block;
+    }
+    .boxformulariopqr
+    {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 2vh;
+        position: relative;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+    }
+    .tx1
+    {
+        position: relative;
+        text-align: right;
+        color: black;
+        font-size: 3vw;
+        font-weight: bold;
+        padding-top:5vh;
+        margin-right: 5vw;
+    }
+    .tx2
+    {
+        position: relative;
+        text-align: right;
+        color: #575756;
+        font-size: 2vw;
+        margin-right: 7vw;
+    }
+    .comilla1
+    {
+        position: absolute;
+        height: 4vh;
+        top:4.8vh;
+        left:26.5vw;
+    }
+    .comilla2
+    {
+        position: absolute;
+        height: 3vh;
+        top:13vh;
+        left:43vw;
+    }
+    .inftextobli
+    {
+        margin-left: 5%;
+        margin-top: 5%;
+        width: 45vw;
+    }
+    .asterisco
+    {
+        color: #e3152d;
+    }
+    .nombreuser
+    {
+        width: 99%;
+        height: 6vh
+    }
+    .md-select-value .md-select-icon:after
+    {
+        color: #e3152d;
+    }
+    .titlepersonales
+    {
+        font-size: 2vw;
+        color: #575756;
+        margin-bottom: 3vh;
+    }
+    .inpt
+    {
+        border-radius: .3vw .3vw .3vw .3vw;
+        border: 0;
+        height: 2.5vh;
+        width: 12vw;
+        margin-left: .5vw;
+        font-size: .8vw;
+    }
+    .adjunta
+    {
+        display: none;
+    }
+    md-input-container .md-input
+    {
+        font-weight: bold;
+        font-size: 1vw;
+    }
+    .md-select-value :first-child
+    {
+        font-weight: bold;
+        font-size: 1vw;
+    }
+    .listdat
+    {
+       font-size: .8vw;
+    }
+    label
+    {
+        font-size: 1vw;
+    }
+    .iconadjun
+    {
+        width: 3vw;
+    }
+    .tipodepqrsf
+    {
+        display: inline-block;
+
+        height: 5vh;
+        margin-left: 3%;
+    }
+    .fechas
+    {
+        display: inline-block;
+        width: 35vw;
+        margin-left: 2%;
+    }
+    .estadopqrs
+    {
+        display: inline-block;
+        height: 6vh;
+        margin-left: 3%;
+    }
+    .tittlemypqrs
+    {
+        font-weight:bold;
+        font-size: 1.1vw;
+        margin-bottom: 2%;
+        margin-top: 0;
+    }
+    .fpqrs
+    {
+        font-size: 1vw;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
 </style>
 
 <!--{{usuario.data}}-->
 
     <!-- USUARIO NORMAL -->
 <div ng-show="!usuario.data.adminpqrsf && !usuario.data.tramitepqrsf">
-    <h1 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h1>
-    <h1 class="pqnav" style="float: right" ng-click="mispq = true">Mis PQRSF</h1>
 
-    <div ng-show="mispq">
+
+    <!--BARRA SUPERIOR PQRS-->
+    <div class="boxpqnav">
+        <div class="pqline"><h2 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h2></div>
+        <div class="pqline"><h2 class="pqnav" ng-click="mispq = true">Mis PQRSF</h2></div>
+    </div>
+
+    <!--MIS PQRS-->
+    <div ng-show="mispq" style="margin-top: 2vh">
         <div ng-repeat="pq in pqrsf" class="boxpubli">
-        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
-        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
-        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
-        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
-        <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
-        Fecha de recibido: {{pq.fechainicio}}
-        Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}
-
-        <img class="tipodepqrsf" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
-        <img class="tipodepqrsf" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
-        <img class="tipodepqrsf" ng-if="pq.estado == 'Cerrado'" src="/img/cerrado.png">
-
+            <div> <img style="width: 1.5vh;margin-top: 0.5vh; margin-left: 97% " src="/img/icono-eliminar-g.png"></div>
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
+            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
+        <div class="fechas">
+            <p class="tittlemypqrs">{{pq.tipopq}}</p>
+            <p class="fpqrs">Fecha de recibido: {{pq.fechainicio}}</p>
+            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}</p>
+        </div>
+            <img class="estadopqrs" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
+            <img class="estadopqrs" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
+            <img class="estadopqrs" ng-if="pq.estado == 'Cerrado'" src="/img/cerrado.png">
+        </div>
     </div>
-    </div>
 
+<!--FORMULARIO CREAR PQRS-->
 
-    <div ng-show="mispq == false">
+    <div class="boxformulariopqr" ng-show="mispq == false">
         <form name="myForm2" ng-submit="uploadPic(picFile)">
-    <md-input-container>
-        <label>Nombres y Apellidos</label>
-        <input type="text" ng-model="nombre" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <md-select  placeholder="Tipo de documento" ng-model="tdocumento">
-            <md-option ng-repeat="tipos in tdocumentos" value="{{tipos.nombre}}">
-                {{tipos.nombre}}
-            </md-option>
-        </md-select>
-    </md-input-container>
+            <img class="comilla1" src="/img/icono-comillas1.png">
+            <div class="tx1">Formulario</div>
+            <div class="tx2">PQRSF</div>
+            <img class="comilla2" src="/img/icono-comillas2.png">
 
-{{ciudad}}
-    <md-input-container>
-        <label>Documento</label>
-        <input type="text" ng-model="ndocumento" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <label>Empresa</label>
-        <input type="text" ng-model="empresa" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <label>Profesion</label>
-        <input type="text" ng-model="cargo" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <label>Lugar</label>
-        <input type="text" ng-model="ciudad2" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <md-select  placeholder="PQRSF" ng-model="tipopq">
-            <md-option ng-repeat="t in tipospq" value="{{t.nombre}}">
-                {{t.nombre}}
-            </md-option>
-        </md-select>
-    </md-input-container>
+         <div class="inftextobli"> <label>Los campos con aspectos (*) son campos que se deben llenar obligatoriamente.</label>
 
-            <md-input-container class="md-block">
-                <label>Comentario</label>
-                <textarea ng-model="comentario" md-maxlength="250" rows="5" md-select-on-focus required></textarea>
-            </md-input-container>
+             <div class="nombreuser"> <label style="vertical-align: 40%"> Al día 23 de Febrero 2016 Yo </label> <span class="asterisco">*</span>
+                <md-input-container style="width: 29.8vw; height: auto">
+                    <label></label>
+                    <input type="text" ng-model="nombre" placeholder="Nombres y Apellidos">
+                </md-input-container>
+             </div>
 
-    <md-input-container>
-        <label>Correo</label>
-        <input type="text" ng-model="email" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <label>Celular / Telefono</label>
-        <input type="text" ng-model="celular" required md-maxlength="200">
-    </md-input-container>
-    <md-input-container>
-        <label>Direccion</label>
-        <input type="text" ng-model="direccion" required md-maxlength="200">
-    </md-input-container>
+             <div>
+               <label style="vertical-align: 0">Identificado con </label> <span class="asterisco">*</span>
+                <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0;">
+                    <md-select placeholder="Tipo Documento" ng-model="tdocumento" style="width: 15vw">
+                        <md-option ng-repeat="tipos in tdocumentos" value="{{tipos.nombre}}">
+                            {{tipos.nombre}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                     <label> No. <span class="asterisco">*</span> </label>
+                 <!--&lt;!&ndash;{{ciudad}}&ndash;&gt;-->
+                <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 18vw">
+                    <label></label>
+                     <input type="text" ng-model="ndocumento" placeholder="Documento">
+                </md-input-container>
+             </div>
 
+             <div>
+                   <label>hago parte de la empresa </label><span class="asterisco">*</span>
+                     <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 12vw">
+                         <label></label>
+                         <input type="text" ng-model="empresa" placeholder="Empresa">
+                     </md-input-container>
+                        <label>en el cargo de <span class="asterisco">*</span></label>
+                     <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 11.5vw">
+                         <label></label>
+                         <input type="text" ng-model="cargo" placeholder="Cargo">
+                     </md-input-container>,
+             </div>
+             <div>
+                   <label>en la Ciudad de <span class="asterisco">*</span></label>
+                     <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 8vw">
+                         <label></label>
+                         <input type="text" ng-model="ciudad2" placeholder="ciudad">
+                     </md-input-container>
+                   <label>presento</label><span class="asterisco">*</span>
+                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0;">
+                         <md-select  placeholder="PQRSF" ng-model="tipopq" style="width: 8vw" required>
+                             <md-option ng-repeat="t in tipospq" value="{{t.nombre}}">
+                                 {{t.nombre}}
+                             </md-option>
+                         </md-select>
+                     </md-input-container>
+             </div>
 
+             <div style="margin-top:3vh">
+                    <textarea style="width: 44vw; border-radius: .5vw .5vw .5vw .5vw;resize: none; " ng-model="comentario"  rows="5"  placeholder="Comentarios..."></textarea>
+             </div>
 
+             <div style="margin-top: 1vh">
+                 <p class="titlepersonales">Datos Personales</p>
+                 <p class="listdat">Correo Personal <input class="inpt" type="text" ng-model="email" > </p>
+                 <p class="listdat">Celular/Teléfono <input class="inpt" type="text" ng-model="celular"> </p>
+                 <p class="listdat">Dirección <input style="margin-left: 3vw" class="inpt" type="text" ng-model="direccion"> </p>
+             </div>
 
-
-        <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
-
-        <br>
-
-        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
-
-        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
-
-        <br>
-        Files:
-        <ul>
-            <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-      <span class="progress" ng-show="f.progress >= 0">
-        <div style="width:{{f.progress}}%"
-             ng-bind="f.progress + '%'"></div>
-      </span>
-            </li>
-            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-            </li>
-        </ul>
-        {{errorMsg}}
+             <div style="position: relative; left: 70%;width: 12vw" >
+                 <label for="file-input">
+                 <img class="iconadjun" src="/img/iconoadjdoc.jpg">
+                 </label>
+                 <input type="file" class="adjunta" ngf-select ng-model="picFile"  id="file-input" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+                 <!--BOTON ENVIAR-->
+                 <input type="image" src="/img/botones-enviar.png" style="width: 6.8vw; margin-left: 6%" >  </input>
+             </div>
 
 
 
-        <md-button type="submit"  class="md-raised"> Enviar </md-button>
+             <div style="position: absolute; top: 70%; left: 65%">
+                <img style="height: 7.5vh" src="/img/icono-fomulario.png">
+             </div>
 
-</form>
+             <div style="width: 8vw;position: absolute;top: 70%; left:75% ">
+                 <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">7Kb</p>
+             </div>
+
+
+             <div ng-repeat="f in picFile" style="display:inline-block">
+                 <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
+                     <!--<li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}-->
+                      <!--<span class="progress" ng-show="f.progress >= 0">-->
+                      <!--<div style="width:{{f.progress}}%"-->
+                             <!--ng-bind="f.progress + '%'"></div>-->
+                      <!--</span>-->
+             </div>
+
+                 <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
+                 <!--</li>-->
+
+
+
+
+                <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+                <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+                <br>
+
+                {{errorMsg}}
+
+         </div>
+
+        </form>
     </div>
 
 </div>
