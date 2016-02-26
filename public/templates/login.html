@@ -1,6 +1,9 @@
 <!--comentario de david-->
 
 <style>
+    md-input-container.md-default-theme ng-messages :not(.md-char-counter), md-input-container ng-messages :not(.md-char-counter), md-input-container.md-default-theme [ng-messages] :not(.md-char-counter), md-input-container [ng-messages] :not(.md-char-counter), md-input-container.md-default-theme ng-message :not(.md-char-counter), md-input-container ng-message :not(.md-char-counter), md-input-container.md-default-theme data-ng-message :not(.md-char-counter), md-input-container data-ng-message :not(.md-char-counter), md-input-container.md-default-theme x-ng-message :not(.md-char-counter), md-input-container x-ng-message :not(.md-char-counter), md-input-container.md-default-theme [ng-message] :not(.md-char-counter), md-input-container [ng-message] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message] :not(.md-char-counter), md-input-container [data-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message] :not(.md-char-counter), md-input-container [x-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [ng-message-exp] :not(.md-char-counter), md-input-container [ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message-exp] :not(.md-char-counter), md-input-container [data-ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message-exp] :not(.md-char-counter), md-input-container [x-ng-message-exp] :not(.md-char-counter) {
+        color: yellow;
+    }
     .content
     {
         position: absolute;
@@ -323,7 +326,7 @@
 </div>
 
 <form ng-submit="usuario.logIn()"
-      style="margin-top:30px;">
+      style="margin-top:30px;" name="loginForm">
     <!--<h3 >Iniciar Sesion</h3>-->
 
     <div class="user">
@@ -336,8 +339,14 @@
     <div class="pwd">
         <md-input-container class="infouser">
             <label>Contraseña</label>
-            <input type="password" ng-model="usuario.user.password" required >
+            <input type="password" ng-model="usuario.user.password" required  name="paswsr">
+            <p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>
+            <!--<div ng-messages="loginForm.paswsr.$error">-->
+                <!--<div ng-message="required">This is required.</div>-->
+                <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+            <!--</div>-->
         </md-input-container>
+
     </div>
 
     <div class="button">

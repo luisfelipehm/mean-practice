@@ -14,6 +14,7 @@ var Pqrsffile = mongoose.model('Pqrsffile');
 var Conectado = mongoose.model('Conectado');
 var Conversation = mongoose.model('Conversation');
 var Pregunta = mongoose.model('Pregunta');
+var Evento = mongoose.model('Evento');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
 var Folder = mongoose.model('Folder');
@@ -38,6 +39,25 @@ router.get('/posts', function(req, res, next) {
     if(err){ return next(err); }
     res.json(posts);
   })
+});
+
+router.get('/eventos', function(req, res, next) {
+
+  Evento.find(function(err, even){
+    if(err){ return next(err); }
+    res.json(even);
+  });
+
+});
+router.post('/eventos', function(req, res, next) {
+
+  var evento = new Evento(req.body);
+  //formulario.author = req.payload.username;
+  evento.save(function(err, even){
+    if(err){ return next(err); }
+    res.json(even);
+  });
+
 });
 
 
