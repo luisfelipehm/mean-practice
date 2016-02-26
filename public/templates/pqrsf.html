@@ -180,8 +180,8 @@
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
         <div class="fechas">
             <p class="tittlemypqrs">{{pq.tipopq}}</p>
-            <p class="fpqrs">Fecha de recibido: {{pq.fechainicio}}</p>
-            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}</p>
+            <p class="fpqrs">Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
+            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{ !pq.fechacierre ? '--/--/--' : (pq.fechacierre | moment:'DD' + ' de ' +  pq.fechainicio | moment:'MMMM' + ' ' + pq.fechainicio | moment:'YYYY')}}</p>
         </div>
             <img class="estadopqrs" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
             <img class="estadopqrs" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
@@ -331,8 +331,14 @@
         <div ng-repeat="pq in pqnuevo" class="boxpubli">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
-            Fecha de recibido: {{pq.fechainicio}}
+            <h1>{{pq.tipopq}}</h1>
+            Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}
             <div  ng-click="editing = true">ver mas</div>
+
+
+
+
+
             <div ng-show="editing">
                 <!--TITULO-->
                 <h1>{{pq.tipopq}}</h1>

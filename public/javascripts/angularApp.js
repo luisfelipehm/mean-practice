@@ -2,6 +2,14 @@
 var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore','ngMessages','ui.timepicker']);
 
 
+
+app.filter('moment', function() {
+    return function(dateString, format) {
+            return moment(dateString).locale("es").format(format);
+    };
+});
+
+
 app.config(['$httpProvider', function($httpProvider) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
