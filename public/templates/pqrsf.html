@@ -263,6 +263,33 @@
                  <p class="listdat">Dirección <input style="margin-left: 3vw" class="inpt" type="text" ng-model="direccion"> </p>
              </div>
 
+             <div style="position: absolute; top: 65vh; left: 65%">
+                 <img style="height: 7.5vh" src="/img/icono-fomulario.png">
+             </div>
+
+             <div style="width: 8vw;position: absolute;top: 65vh; left:75% ">
+                 <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">7Kb</p>
+             </div>
+
+
+             <div style="margin-left: 32vw; margin-top: -4vh; margin-bottom: 1vh">
+                 <div ng-repeat="f in picFile" style="display:inline-block;position: relative;margin-bottom: 2%;">
+                     <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
+                     <!--<li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}-->
+                     <!--<span class="progress" ng-show="f.progress >= 0">-->
+                     <!--<div style="width:{{f.progress}}%"-->
+                     <!--ng-bind="f.progress + '%'"></div>-->
+                     <!--</span>-->
+                 </div>
+             </div>
+
+
+             <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
+             <!--</li>-->
+
              <div style="position: relative; left: 70%;width: 12vw" >
                  <label for="file-input">
                  <img class="iconadjun" src="/img/iconoadjdoc.jpg">
@@ -274,29 +301,6 @@
 
 
 
-             <div style="position: absolute; top: 70%; left: 65%">
-                <img style="height: 7.5vh" src="/img/icono-fomulario.png">
-             </div>
-
-             <div style="width: 8vw;position: absolute;top: 70%; left:75% ">
-                 <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
-                 <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
-                 <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
-                 <p style="margin: 0; font-size: .7vw;color: #575756">7Kb</p>
-             </div>
-
-
-             <div ng-repeat="f in picFile" style="display:inline-block">
-                 <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
-                     <!--<li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}-->
-                      <!--<span class="progress" ng-show="f.progress >= 0">-->
-                      <!--<div style="width:{{f.progress}}%"-->
-                             <!--ng-bind="f.progress + '%'"></div>-->
-                      <!--</span>-->
-             </div>
-
-                 <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
-                 <!--</li>-->
 
 
 
