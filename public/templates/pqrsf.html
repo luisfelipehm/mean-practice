@@ -10,10 +10,7 @@
         cursor: pointer;
         margin-left: 30%;
     }
-    .boxpqnav
-    {
 
-    }
     .pqline
     {
         width: 49%;
@@ -125,9 +122,14 @@
     .tipodepqrsf
     {
         display: inline-block;
-
         height: 5vh;
         margin-left: 3%;
+    }
+    .tipodepqrsf2
+    {
+        display: inline-block;
+        height: 6vh;
+        margin-left: 20%;
     }
     .fechas
     {
@@ -153,6 +155,81 @@
         font-size: 1vw;
         margin-top: 0;
         margin-bottom: 0;
+    }
+    .barracorespon
+    {
+        width: 32%;
+        display: inline-block;
+        text-align: left;
+    }
+    .textcorrespo
+    {
+        color: #e3152d;
+        text-align: center;
+    }
+    .cajabuscador
+    {
+        width: 90%;
+        margin-left: 5%;
+    }
+    .btnbuscar
+    {
+        width: 6vw;
+        height: 3.2vh;
+        vertical-align: -60%;
+        margin-left: 10%;
+    }
+    .buscador
+    {
+        width: 20vw;
+        padding: 8px 8px 8px 40px;
+        border-radius: .3vw .3vw .3vw .3vw;
+        border: 0;
+    }
+    .titlerespon
+    {
+        font-weight: bold;
+        font-size: 1.1vw;
+        margin-bottom: 0;
+    }
+    md-checkbox.md-checked.red .md-icon {
+        background-color: rgba(227, 6, 19, 1);
+    }
+    .cajaredirije
+    {
+        margin-left: 5%;
+        width: 90%;
+
+    }
+    .imgredirige
+    {
+        margin-left: 4vw;
+        width: 4vw;
+    }
+    .txtpqrsf
+    {
+        color: #e3152d;
+        font-size: 1.5vw;
+        font-weight: bold;
+    }
+    .btnenviarediri
+    {
+        width: 6vw;
+        margin-bottom: 3vh;
+        border-radius:.4vw;
+        margin-left: 88%;
+    }
+    .boxbrnrenvi
+    {
+        width: 90%;
+        margin-left: 5%;
+        opacity: .7;
+        cursor: pointer;
+        
+    }
+    .boxbrnrenvi:hover
+    {
+        opacity: 1;
     }
 
 </style>
@@ -322,22 +399,79 @@
 <!--CORRESPONDENCIA PQRSF-->
 <div ng-show="usuario.data.adminpqrsf">
 
-    <h1 class="pqnav" ng-click="mispqadmin = 1">Nuevo</h1>
-    <h1 class="pqnav" style="text-align: center" ng-click="mispqadmin = 2">Tramite</h1>
-    <h1 class="pqnav" style="text-align: right" ng-click="mispqadmin = 3">Cerrado</h1>
+    <div>
+        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 1">Nuevo 120</h2></div>
+        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 2">Tramite 120</h2></div>
+        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 3">Cerrado 120</h2></div>
+    </div>
 
+    <div style="border:solid red .1vw; margin-left: 5%; width: 90%;margin-bottom: 1vh"></div>
 
+    <!--BUSCADOR-->
+    <div class="cajabuscador" >
+        <div style="display: inline-block;"> <input class="buscador" type="text" placeholder="Escribe tu Busqueda..."></div>
+        <div style="display: inline-block;">
+            <md-input-container style="width: 10vw">
+                <md-select ng-model="tipospqrs" placeholder="Tipo">
+                    <md-option  value="peticion">Petición</md-option>
+                    <md-option  value="queja">Queja</md-option>
+                    <md-option  value="reclamo">Reclamo</md-option>
+                    <md-option  value="felicitacion">Felicitacón</md-option>
+                    <md-option  value="sugerencia">Sugerencia</md-option>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div style="display: inline-block;">
+            <md-input-container style="width: 10vw">
+                <md-select ng-model="estadopqrs" placeholder="Estado">
+                    <md-option  value="cerrado">Cerrado</md-option>
+                    <md-option  value="espera">Espera</md-option>
+                    <md-option  value="tramite">Tramite</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div style="display: inline-block;">
+            <input type="image" src="/img/botones_buscar.png" class="btnbuscar" >  </input>
+        </div>
+    </div>
+
+    <!--REDIRIGIR-->
+    <div class="cajaredirije">
+        <div style="display: inline-block; margin-left: 2vw"><P class="txtpqrsf">PQRSF</P></div>
+        <div style="display: inline-block; border: solid #e3152d .1vw; height: 4vh; margin-left: 31vw"></div>
+        <div style="display: inline-block; "> <img class="imgredirige" src="/img/redirigir.png"></div>
+        <!--<div style="display: inline-block; border: solid crimson">-->
+            <!--<md-checkbox ng-model="datos" class="red" style="margin-bottom: 0" >-->
+            <!--</md-checkbox>-->
+        <!--</div>-->
+    </div>
+
+    <!--PRIMERA VISTA-->
     <div ng-show="mispqadmin == 1">
-        <div ng-repeat="pq in pqnuevo" class="boxpubli">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
-            <h1>{{pq.tipopq}}</h1>
-            Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}
-            <div  ng-click="editing = true">ver mas</div>
+        <div ng-repeat="pq in pqnuevo" class="boxpubli" style="border-radius: .5vw ">
 
+            <div >
+                <div style="width: 5vw; display: inline-block">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Queja'" src="/img/adminqueja.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Peticion'" src="/img/adminpeticion.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Solicitud'" src="/img/adminsolicitud.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Reclamo'" src="/img/adminreclamo.png">
+                </div>
+                <div style="display: inline-block; width: 30vw;"><p class="titlerespon">{{pq.tipopq}}</p>
+                    <p style="margin: 0; font-size: 1vw"> Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
+                    <div style="margin-bottom: 2vh;color: #e3152d; " ng-click="editing = true">ver mas</div>
+                </div>
 
+                <div style="border: solid #a5a5a4 .1vw; display: inline-block; margin-left: 3vw;height: 7vh; vertical-align: -1vh"></div>
 
+                <div style=" display:inline-block; vertical-align: 1.5vw;margin-left: 2.5vw ">
+                    <md-checkbox ng-model="datos" class="red" >
+                    </md-checkbox>
+                </div>
 
+            </div>
 
             <div ng-show="editing">
                 <!--TITULO-->
@@ -399,8 +533,6 @@
                     </ul>
                     {{errorMsg}}
 
-
-
                     <md-button type="submit"  class="md-raised"> Redirigir </md-button>
                     <md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>
                     <!--<input type="text" ng-model="bodyc.val">-->
@@ -409,13 +541,16 @@
 
             </div>
         </div>
+        <!--ENVIAR REDIRIGIDO-->
+        <div class="boxbrnrenvi"> <img class="btnenviarediri" src="/img/enviarediri.png"> </div>
     </div>
+
     <div ng-show="mispqadmin == 2">
         <div ng-repeat="pq in pqtramite" class="boxpubli">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png" >
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
             Fecha de recibido: {{pq.fechainicio}}
-            <div  ng-click="editing = true">ver mas</div>
+            <div ng-click="editing = true">ver mas</div>
             <div ng-show="editing">
                 <!--TITULO-->
                 <h1>{{pq.tipopq}}</h1>
@@ -494,8 +629,6 @@
             Fecha de recibido: {{pq.fechainicio}}
             Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}
 
-
-
         </div>
     </div>
 </div>
@@ -505,7 +638,7 @@
     <h1 class="pqnav" ng-click="mispqtramite = 1">Nuevo</h1>
     <h1 class="pqnav" style="text-align: right" ng-click="mispqtramite = 2">Cerrado</h1>
     <div ng-show="mispqtramite == 1">
-        <div ng-repeat="pq in pqasignados" class="boxpubli">
+        <div ng-repeat="pq in pqasignados" class="boxpubli" >
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png" >
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
             Fecha de recibido: {{pq.fechainicio}}
