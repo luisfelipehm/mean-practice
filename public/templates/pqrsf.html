@@ -180,8 +180,8 @@
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
         <div class="fechas">
             <p class="tittlemypqrs">{{pq.tipopq}}</p>
-            <p class="fpqrs">Fecha de recibido: {{pq.fechainicio}}</p>
-            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{!pq.fechacierre ? '--/--/--' : pq.fechacierre}}</p>
+            <p class="fpqrs">Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
+            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{ !pq.fechacierre ? '--/--/--' : (pq.fechacierre | moment:'DD' + ' de ' +  pq.fechainicio | moment:'MMMM' + ' ' + pq.fechainicio | moment:'YYYY')}}</p>
         </div>
             <img class="estadopqrs" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
             <img class="estadopqrs" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">
@@ -263,6 +263,33 @@
                  <p class="listdat">Dirección <input style="margin-left: 3vw" class="inpt" type="text" ng-model="direccion"> </p>
              </div>
 
+             <div style="position: absolute; top: 65vh; left: 65%">
+                 <img style="height: 7.5vh" src="/img/icono-fomulario.png">
+             </div>
+
+             <div style="width: 8vw;position: absolute;top: 65vh; left:75% ">
+                 <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
+                 <p style="margin: 0; font-size: .7vw;color: #575756">7Kb</p>
+             </div>
+
+
+             <div style="margin-left: 32vw; margin-top: -4vh; margin-bottom: 1vh">
+                 <div ng-repeat="f in picFile" style="display:inline-block;position: relative;margin-bottom: 2%;">
+                     <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
+                     <!--<li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}-->
+                     <!--<span class="progress" ng-show="f.progress >= 0">-->
+                     <!--<div style="width:{{f.progress}}%"-->
+                     <!--ng-bind="f.progress + '%'"></div>-->
+                     <!--</span>-->
+                 </div>
+             </div>
+
+
+             <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
+             <!--</li>-->
+
              <div style="position: relative; left: 70%;width: 12vw" >
                  <label for="file-input">
                  <img class="iconadjun" src="/img/iconoadjdoc.jpg">
@@ -274,29 +301,6 @@
 
 
 
-             <div style="position: absolute; top: 70%; left: 65%">
-                <img style="height: 7.5vh" src="/img/icono-fomulario.png">
-             </div>
-
-             <div style="width: 8vw;position: absolute;top: 70%; left:75% ">
-                 <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
-                 <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
-                 <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
-                 <p style="margin: 0; font-size: .7vw;color: #575756">7Kb</p>
-             </div>
-
-
-             <div ng-repeat="f in picFile" style="display:inline-block">
-                 <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
-                     <!--<li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}-->
-                      <!--<span class="progress" ng-show="f.progress >= 0">-->
-                      <!--<div style="width:{{f.progress}}%"-->
-                             <!--ng-bind="f.progress + '%'"></div>-->
-                      <!--</span>-->
-             </div>
-
-                 <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
-                 <!--</li>-->
 
 
 
@@ -327,8 +331,14 @@
         <div ng-repeat="pq in pqnuevo" class="boxpubli">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
-            Fecha de recibido: {{pq.fechainicio}}
+            <h1>{{pq.tipopq}}</h1>
+            Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}
             <div  ng-click="editing = true">ver mas</div>
+
+
+
+
+
             <div ng-show="editing">
                 <!--TITULO-->
                 <h1>{{pq.tipopq}}</h1>
