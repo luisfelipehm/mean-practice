@@ -309,8 +309,9 @@
 
     .eliminarBox
     {
+        border: 1px solid #878787;
         position: absolute;
-        width: 10vw;
+        width: 15vw;
         height: 8vh;
         background-color: white;
         top: -4vh;
@@ -458,8 +459,8 @@
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
             <div class="boxpubli" ng-init="deleting = false">
-                <div class="eliminarBox" ng-show="deleting" >Desea eliminar La publicacion
-                    <a ng-click="remove(post)">Eliminar</a> <p ng-click="deleting = false">Cancelar</p></div>
+                <div class="eliminarBox" ng-show="deleting" ><p style="text-align: center;margin: 2px 0 0 0">Desea eliminar la publicacion</p>
+                    <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom: 10%;width: 10%;left: 25%"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 10%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p></div>
                 <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
                     <p class="tittlepli">{{post.title}}
 

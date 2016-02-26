@@ -1,5 +1,5 @@
 
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore']);
+var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore','ngMessages','ui.timepicker']);
 
 
 app.config(['$httpProvider', function($httpProvider) {
@@ -229,6 +229,26 @@ app.factory('areas', ['$http','auth',function($http,auth){
             headers: {Authorization: 'Bearer '+auth.getToken()}
         }).success(function(data){
             o.areas.push(data);
+        });
+    };
+    return o;
+}]);
+
+app.factory('eventos', ['$http','auth',function($http,auth){
+    var o = {
+        eventos:[]
+    };
+    o.getAll = function() {
+        return $http.get('/eventos').success(function(data){
+            angular.copy(data, o.eventos);
+        });
+    };
+    o.create = function(even) {
+
+        return $http.post('/eventos', even, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.eventos.push(data);
         });
     };
     return o;
@@ -518,6 +538,11 @@ app.config([
                 url: '/calendar',
                 templateUrl: 'templates/calendar.html',
                 controller: 'CalendarCtrl',
+                resolve: {
+                    postPromise: ['eventos', function (eventos) {
+                        return eventos.getAll();
+                    }]
+                }
 
             })
             .state('formularios',{
@@ -865,7 +890,7 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
 
 app.controller('RootCtrl', ['$scope', function ($scope) { }]);
 
-app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','auth','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,auth,users) {
+app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,users) {
 
 
 
@@ -890,8 +915,9 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
         $scope.direccion = $scope.usuario.data.direccion;
 
         $scope.pqnuevo = $scope.pqrsf.filter(function( obj ) {
-            return obj.encargados == 'En espera';
+            return obj.estado == 'En espera';
         });
+        console.log($scope.pqnuevo);
         $scope.pqasignados = $scope.pqrsf.filter(function( obj ) {
             return obj.encargados.indexOf($scope.usuario.data.username) > -1;
         });
@@ -1178,23 +1204,108 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
     };
 }]);
 
-app.controller('CalendarCtrl',['$scope', function ($scope) {
+app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
+
+    $scope.eventos = eventos.eventos;
+    $scope.manejadordeeventos = [];
+
+    angular.forEach($scope.eventos, function (evento) {
+
+
+
+        $scope.manejadordeeventos.push({fecha: moment(evento.fechainicio).format('YYYY') +'-'+ moment(evento.fechainicio).format('MM')+'-'+moment(evento.fechainicio).format('DD'), num:1, frame: evento.fechainicio})
+    });
+    console.log($scope.manejadordeeventos);
+
+
+    $(document).ready(function () {
+
+        setTimeout(
+            function() {
+                angular.forEach($scope.manejadordeeventos, function (evento) {
+                    if ($('#calendar .fc-day[data-date="'+evento.fecha+'"]').find(".cuentaeventos").length > 0){
+                        var x = Number($('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text());
+                        x+=1;
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text(x);
+                    }else{
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]').append('<div class="cuentaeventos"><img src="/img/evento.png" class="iconodeevento"> <div class="numev"><p>'+evento.num+'</p></div></div>');
+                    }
+                });
+
+                console.log($('body').find('.fc-day[data-date="2016-02-23"]').length);
+            }, 1000);
+    });
+
+
+
+
+    //$('#calendar .fc-day[data-date="2016-02-23"]').append('hola mundo');
+
+    //$.each(iconosfinal, function (key,value) {
+    //    if ($('#calendar .fc-day[data-date="'+value.fecha+'"]').find(".cuentaeventos").length > 0){
+    //        var x = Number($('#calendar .fc-day[data-date="'+value.fecha+'"]  p').text());
+    //        x+=1;
+    //        $('#calendar .fc-day[data-date="'+value.fecha+'"]  p').text(x);
+    //    }else{
+    //        $('#calendar .fc-day[data-date="'+value.fecha+'"]').append('<a href="/eventos/'+ value.id+'" data-remote="true"><div class="cuentaeventos"><%= raw image_tag 'icono-e.png', class: 'iconodeevento' %><div class="numev"><p>'+value.num+'</p></div></div></a>');
+    //    }
+    //});
+
+    $scope.crearEvento = function (nombre,descripcion,fechainicio,fechafinal,horainicio,horafinal) {
+        eventos.create({
+            nombre: nombre,
+            descripcion: descripcion,
+            fechainicio: moment(fechainicio).format(),
+            fechafinal: moment(fechafinal).format(),
+            horainicio: moment(horainicio).subtract(5, 'hours').format(),
+            horafinal: moment(horafinal).subtract(5, 'hours').format()
+        });
+        eventos.getAll();
+        $scope.eventos = eventos.eventos;
+        setTimeout(
+            function() {
+        $scope.nuevoev = $scope.eventos[$scope.eventos.length - 1];
+
+
+        $scope.manejadordeeventos.push({fecha: moment($scope.nuevoev.fechainicio).format('YYYY') +'-'+ moment($scope.nuevoev.fechainicio).format('MM')+'-'+moment($scope.nuevoev.fechainicio).format('DD'), num:1, frame: $scope.nuevoev.fechainicio})
+        console.log($scope.manejadordeeventos);
+        if ($('#calendar .fc-day[data-date="'+$scope.manejadordeeventos[$scope.manejadordeeventos.length - 1].fecha+'"]').find(".cuentaeventos").length > 0){
+                var x = Number($('#calendar .fc-day[data-date="'+$scope.manejadordeeventos[$scope.manejadordeeventos.length - 1].fecha+'"]  p').text());
+                x+=1;
+                $('#calendar .fc-day[data-date="'+$scope.manejadordeeventos[$scope.manejadordeeventos.length - 1].fecha+'"]  p').text(x);
+            }else{
+                $('#calendar .fc-day[data-date="'+$scope.manejadordeeventos[$scope.manejadordeeventos.length - 1].fecha+'"]').append('<div class="cuentaeventos"><img src="/img/evento.png" class="iconodeevento"> <div class="numev"><p>'+$scope.manejadordeeventos[$scope.manejadordeeventos.length - 1].num+'</p></div></div>');
+            }
+            }, 500);
+    };
+
     $scope.hola = 'Hello World';
     $scope.eventSources = [];
     $scope.uiConfig = {
         calendar:{
+
             height: 450,
             editable: true,
             header:{
-                left: 'month basicWeek basicDay agendaWeek agendaDay',
-                center: 'title',
-                right: 'today prev,next'
+                left: '',
+                center: '',
+                right: ''
             },
+            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miercoles','Jueves', 'Viernes', 'Sabado'],
+            dayNamesShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
             dayClick: $scope.alertEventOnClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize
         }
     };
+
+
+    console.log(moment("2016-02-25T05:00:00.000Z").subtract(5, 'hours').format());
+
+
+
 }]);
 
 app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scope,auth,formularios) {
@@ -1874,6 +1985,7 @@ app.controller('AuthCtrl', [
     function( $state, auth){
         var usuario = this;
         usuario.user = {};
+        usuario.loginfallido = false ;
         usuario.viendo = true;
         usuario.register = function(){
             auth.register(usuario.user).error(function(error){
@@ -1885,6 +1997,7 @@ app.controller('AuthCtrl', [
 
         usuario.logIn = function(){
             auth.logIn(usuario.user).error(function(error){
+                usuario.loginfallido = true ;
                 usuario.error = error;
             }).then(function(){
                 $state.go('home');

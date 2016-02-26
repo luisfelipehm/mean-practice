@@ -1,6 +1,6 @@
 <style>
 
-    .fc-basic-view .fc-body .fc-row {
+    #calendar2 .fc-basic-view .fc-body .fc-row {
         min-height: 1vh !important;
     }
     #calendar2 .fc-widget-header{
@@ -11,7 +11,7 @@
         padding-top: 1%;
         border:0;
     }
-    table
+    #calendar2 table
     {
         border: 1px transparent;
     }
@@ -86,7 +86,7 @@
         width: 88%;
         left: 5%;
     }
-    .fc-scroller {
+    #calendar2 .fc-scroller {
         overflow-y: hidden !important;
     }
     .siguiente
@@ -150,7 +150,7 @@
     {
         color: transparent; !important;
     }
-    .fc-view-container
+    #calendar2  .fc-view-container
     {
         position: absolute;
         top: 0vh;
@@ -209,6 +209,9 @@
     {
         text-decoration: none
     }
+    #calendar2 .fc-scroller{
+        height: 32vh !important;
+    }
     .fondobarraizq
     {
         position:absolute;
@@ -247,7 +250,7 @@
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/fotos/"  class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="pqrsf" class="linkmenu"><span class="txtmenu">PQRSF</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Asociados</span></a> </li>
         </div>
@@ -313,7 +316,7 @@
     $('.fc-row').click(function () {
         $alert('hola');
     });
-    $('.fc-scroller').css('height','32vh');
+//    $('.fc-scroller').css('height','32vh');
 
 
     $('.siguiente').click(function(){
