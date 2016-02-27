@@ -37,7 +37,7 @@
     {
         width: 90%;
         margin-left: 5%;
-        height: auto;
+
 
     }
     .tittlepli
@@ -382,7 +382,7 @@
 
         <!--Imagen user-->
         <div class="imguser">
-            <img style="width: 100%; height: auto;" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+            <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
         </div>
 
         <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
@@ -490,7 +490,7 @@
                             <!--<p class="comentariouser" >{{comentario.body}}</p>-->
                             <div class="autorcomentario"  ng-init="deletingcomment = false">
                                 <div class="imgusercoment">
-                                 <img style="width: 100%; height: auto" src="{{comentario.fotoperfil}}">
+                                 <img style=" height: 100%" src="{{comentario.fotoperfil}}">
                                 </div>
                                 <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
                                     <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
@@ -507,12 +507,12 @@
                     <div class="inferior" >
                         <div class="boxcomentario">
                             <div class="imgusercoment2">
-                                <img style="width: 100%; height: auto" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+                                <img style="height: 100%" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
                             </div>
-                            <form ng-submit="addComment(post._id , fotoperfil);selectthing($index, true)">
+                            <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
                                 <md-input-container class="tittleboxcomentario">
                                     <label>Comentario..</label>
-                                    <input type="text" ng-model="bodyc.val" required>
+                                    <input type="text" ng-model="post.come" required>
 
                                 </md-input-container>
 

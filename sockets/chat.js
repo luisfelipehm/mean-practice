@@ -39,6 +39,7 @@ module.exports = function(io) {
         socket.on('usuario', function (user) {
 
             User.findOne({ username: user }, function (err, name) {
+                if(!name){return err}
                 name.sock = socket.id;
                 name.actual = true;
                 name.ultimaconexion = Date.now();
