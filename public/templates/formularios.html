@@ -145,17 +145,30 @@
     {
         opacity: 1;
     }
+    .lupita
+    {
+        left: 47.5vw;
+        position: relative;
+        width: 1vw;
+        height: auto;
+    }
+    .cajabuscar
+    {
+        margin-left: 5%;
+        width: 90%;
+        margin-top: 5vh;
+    }
 
 </style>
 
 
-<div class="fondoformulario">
+<div class="fondoformulario" ng-show="usuario.data.adminforms">
 
     <div class="imguserformulario">
-        <img style="width: 10.6vw; height: auto;" src="/img/perro.jpg">
+        <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
     </div>
 
-    <form ng-show="usuario.adminforms" name="myForm" ng-submit="crearFormulario()">
+    <form name="myForm" ng-submit="crearFormulario()">
 
         <div class="tx1">
             <md-input-container style="width: 100%">
@@ -181,21 +194,29 @@
 
 </div>
 
+<div class="cajabuscar">
+    <img class="lupita" src="/img/lupa.png">
+    <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+        <label>Buscar</label>
+        <input type="text" ng-model="search" required>
+    </md-input-container>
+</div>
 
+<div ng-repeat="forma in formularios | filter:search | orderBy:'-'" class="boxformularios">
 
-<div ng-repeat="forma in formularios | orderBy:'-'" class="boxformularios">
     <!--{{forma}}-->
     <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
-        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.adminforms">
-        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png"  ng-show="usuario.adminforms">
+        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.data.adminforms">
+
+        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png"  ng-show="!usuario.data.adminforms">
     </div>
 
     <div>
         <label class="tituloformulario" >{{forma.nombre}}</label>
     </div >
 
-    <div class="boximgresultado"  ng-show="usuario.adminforms">
+    <div class="boximgresultado">
         <a href="#/root/formularios/{{forma._id}}">
             <img class="iconoresponderformulario" src="/img/icono-fomulario.png">
         </a>
@@ -220,7 +241,7 @@
     </div>
 
     <div>
-        <a href="#/root/formularios/{{forma._id}}/results"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
+        <a href="#/root/formularios/{{forma._id}}/results" ng-show="usuario.data.adminforms"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
     </div>
     <div ng-show="editing">
     <h3 style="margin-left: 22%">Preguntas</h3>

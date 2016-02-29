@@ -8,7 +8,7 @@
         display: inline-block;
     }
 </style>
-{{formulario.preguntas}}
+
 <div ng-repeat="resu in resultadofinal" class="graficasform">
     <h1>{{formulario.preguntas[$index].pregunta}}</h1>
     <nvd3 options="options" data="resu"></nvd3>

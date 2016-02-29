@@ -654,11 +654,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             $scope.areas = areas.areas;
      };
 
-    //$scope.seed = [
-    //    { nombre: "JUAN JOSE",email: "\N",area: "GESTION DE INFRAESTRUCTURA TECNOLOGICA",cargo: "INGENIERO DE SISTEMAS",sexo: "\N",telefono: "\N",direccion: "\N",region: "CUNDINAMARCA",documento: "12746250",apellido: "OBANDO CABRERA",contratacion: "PLANTA",username: "jjobandocb",password: "12746250" },
-    //    { nombre: "DIEGO FERNANDO",email: "dfapolinarm@solucionescyf.com.co",area: "Gestion de Infraestructura Tecnologica",cargo: "DIRECTOR DE SISTEMAS",sexo: "Masculino",telefono: "07/01/1967",direccion: "cra 13 37 37 piso 8",region: "CUNDINAMARCA",documento: "16743751",apellido: "APOLINAR MARTINEZ",contratacion: "PLANTA",username: "dfapolinarmb",password: "16743751" },
-    //    { nombre: "JONATHAN",email: "jlopezb@saludcoop.com.co",area: "Gestion de Infraestructura Tecnologica",cargo: "TECNICO DE SISTEMAS",sexo: "Masculino",telefono: "304 243 2837",direccion: "\N",region: "CUNDINAMARCA",documento: "80160929",apellido: "LOPEZ BETANCOURT",contratacion: "PLANTA",username: "jlopezbb",password: "80160929" },
-    //];
+
     //
     //angular.forEach($scope.seed, function (us) {
     //    users.create({
@@ -1324,8 +1320,17 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
 
 }]);
 
-app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scope,auth,formularios) {
+app.controller('FormulariosCtrl',['$scope','auth','users','formularios', function ($scope,auth,users,formularios) {
     $scope.isLoggedIn = auth.isLoggedIn;
+
+
+
+    $scope.currentUser = auth.currentUser();
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
+
     $scope.formularios = formularios.formularios;
     $scope.pregunta = {valor:''};
     $scope.tipo = {valor:''};
