@@ -868,6 +868,7 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser();
+    console.log(nav.currentUser)
 
         nav.logOut = function (user) {
             socket.emit('disusuario', user );
@@ -1164,7 +1165,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
             nombre: $scope.nombre,
             padre: $scope.id
         }).success(function(doc) {
-            $scope.document.carpetas.push(doc);
+            $scope.document = doc;
         });
         $scope.nombre = '';
     };
@@ -1201,6 +1202,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
                 console.log("PostController: upload progress " + file.progress);
             });
             file.upload.success(function (data, status, headers, config) {
+                $scope.document = data;
                 $scope.picFile = '';
 
 
@@ -1331,7 +1333,9 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
     $scope.crearFormulario = function(){
         if(!$scope.nombre || $scope.nombre === '') { return; }
         formularios.create({
-            nombre: $scope.nombre
+            nombre: $scope.nombre,
+            descripcion: $scope.descripcion,
+            fecha: Date.now()
         });
         $scope.nombre = '';
     };
@@ -1804,8 +1808,9 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
                 console.log("PostController: upload progress " + file.progress);
             });
             file.upload.success(function (data, status, headers, config) {
+                $scope.foto = data;
+
                 $scope.picFile = '';
-                fotos.get($scope.foto._id);
 
             });
 
@@ -1900,8 +1905,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
                 console.log('Error: ' + data);
             });
     };
-    $scope.addComment = function(idpost){
-        if($scope.body === '') { return; }
+    $scope.addComment = function(idpost,com){
 
         //$http.post('/posts/' + idpost + '/comments', comment, {
         //    headers: {Authorization: 'Bearer '+auth.getToken()}
@@ -1912,7 +1916,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         //});
 
         posts.addComment(idpost, {
-            body: $scope.bodyc.val,
+            body: com,
             author: 'user'
 
         }).success(function(comment) {

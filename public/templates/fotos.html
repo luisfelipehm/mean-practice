@@ -9,7 +9,47 @@
 
     </form>
 
+<style>
+    .hovernegro
+    {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .hovernegro:hover > .hovertitulo
+    {
+        transform: translateY(20vh);
+        transition: all 0.3s ease-in-out;
+    }
+    .hovertitulo
+    {
+        position: absolute;
+        top: -20vh;
+        left: 0;
+        width: 100%;
+        height: 20vh;
+        z-index: 2;
+        background-color: rgba(227,21,45,.8);
+    }
+    .titulosalbums
+    {
+        font-size: 4vh;
+        text-align: center;
+        color: white;
+        margin-top: 7vh;
+        line-height: 4vh;
+    }
+</style>
 
-    <div ng-repeat="album in fotos">
-        <a href="#/root/fotos/{{album._id}}">{{album.nombre}}</a>
+
+    <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 6%">
+
+        <a href="#/root/fotos/{{album._id}}">
+            <div class="hovernegro">
+                <div class="hovertitulo">
+                    <p class="titulosalbums">{{album.nombre}}</p>
+                </div>
+                <img src="{{(!album.files[0] ? '/img/adminfelicitacion.png' : album.files[0].adjunto)}}" style="height: 100%">
+            </div>
+        </a>
     </div>

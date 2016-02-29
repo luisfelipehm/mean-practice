@@ -15,6 +15,7 @@
         background: #ebebeb;
         width: 90%;
         height: auto;
+        min-height: 25vh;
         margin-left: 5%;
         margin-top: 2%;
         margin-bottom: 2%;
@@ -166,7 +167,7 @@
         <div class="dx1">
             <md-input-container style="width: 100%">
                 <label>Descripcion</label>
-                <input type="text" >
+                <input type="text" ng-model="descripcion">
             </md-input-container>
         </div>
         <div>
@@ -182,11 +183,11 @@
 
 
 
-<div ng-repeat="forma in formularios" class="boxformularios">
+<div ng-repeat="forma in formularios | orderBy:'-'" class="boxformularios">
     <!--{{forma}}-->
     <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
-        <img class="iconossuperioruno" src="/img/icono-editar.png">
+        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true">
         <img class="iconossuperiordos" src="/img/icono-eliminar-g.png">
     </div>
 
@@ -202,25 +203,26 @@
 
     <div>
         <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
-            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>18 Febrero 2016</span>
+            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>{{forma.fecha | moment:'DD'}} de {{forma.fecha | moment:'MMMM'}} {{forma.fecha | moment:'YYYY'}}</span>
         </p>
     </div>
 
     <div>
         <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
-            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>Formulario de salud</span>
+            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>{{forma.descripcion}}</span>
         </p>
     </div>
 
     <div>
         <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
-            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>0 personas encuestadas</span>
+            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>{{forma.respuestas.length}} personas encuestadas</span>
         </p>
     </div>
 
-    <div >
+    <div>
         <a href="#/root/formularios/{{forma._id}}/results"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
     </div>
+    <div ng-show="editing">
     <h3 style="margin-left: 22%">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
         <p style="margin: 4px 0 0 25%">{{pp.pregunta}}</p>
@@ -274,6 +276,6 @@
         </form>
 
     </div>
-
+    </div>
 
 </div>
