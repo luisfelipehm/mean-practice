@@ -154,7 +154,7 @@ router.post('/formularios/:formulario/responder',auth, function(req, res, next) 
 // OBTENER UN FORMULARIO
 router.get('/formularios/:formulario/results', function(req, res, next) {
 
-  req.formulario.populate('respuestas', function(err, formulario) {
+  req.formulario.populate('preguntas').populate('respuestas',function(err, formulario) {
     if (err) { return next(err);   }
 
 

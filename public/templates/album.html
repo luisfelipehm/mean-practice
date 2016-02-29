@@ -3,7 +3,7 @@
 <br>
 <br>
 
-<form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+<form  ng-show="usuario.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
     <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />

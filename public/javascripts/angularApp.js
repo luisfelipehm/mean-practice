@@ -1154,10 +1154,16 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 
 }]);
 
-app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
+app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
     $scope.document = document;
     $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
     $scope.CarpenCarp = function(id){
         if($scope.nombre === '') { return; }
@@ -1530,10 +1536,16 @@ var a =
     //});
 }]);
 
-app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','auth', function ($scope, formularios,formularior,auth) {
+app.controller('FormularioresultsCtrl',['$scope','formularios','users','formularior','auth', function ($scope, formularios,users,formularior,auth) {
     $scope.formulario = formularior;
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.data2 = [];
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
     angular.forEach($scope.formulario.respuestas, function (respues) {
         $scope.data2.push(respues.dato);
     })
@@ -1622,6 +1634,7 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth','$
 
     $scope.formulario = formulario;
     $scope.isLoggedIn = auth.isLoggedIn;
+
     $scope.valores2 = [];
     angular.forEach($scope.formulario.preguntas, function (preg) {
             $scope.valores2.push(
@@ -1761,10 +1774,18 @@ app.controller('CalendarbarCtrl',['$scope', function ($scope) {
     };
 }]);
 
-app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,Upload,$timeout,$http, fotos,foto,auth){
+app.controller('FotoCtrl', ['$scope','users','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,users,Upload,$timeout,$http, fotos,foto,auth){
 
     $scope.foto = foto;
     $scope.isLoggedIn = auth.isLoggedIn;
+
+
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
     $scope.images = [];
     angular.forEach(foto.files, function (adj) {
@@ -1820,10 +1841,17 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
     };
 }]);
 
-app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function ($scope,fotos,Upload,$http,auth) {
+app.controller('FotosCtrl',['$scope','users','fotos','Upload','$http','auth', function ($scope,users,fotos,Upload,$http,auth) {
     $scope.hola = "Hello World";
 
     $scope.fotos = fotos.fotos;
+
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
 
 
