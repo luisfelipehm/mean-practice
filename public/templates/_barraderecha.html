@@ -50,16 +50,18 @@
 </style>
 
 
-<div class="fondobarradercha">
-
+<div class="fondobarradercha" ng-controller="FotosCtrl as fft">
+{{fft.hola}}
     <div class="barraderechaimg">
         <p class="dtittle1">Actividades</p>
 
       <!--IMAGENES BARRA DERECHA-->
         <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades">
-            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-f.png"></div>
-            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-t.png"></div>
-            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro.jpg"></div>
+            <div ng-repeat="album in fotos" class="imagencuadro">
+                <a href="#/root/fotos/{{album._id}}">
+                        <img data-lazy="{{(!album.files[0] ? '/img/adminfelicitacion.png' : album.files[0].adjunto)}}" class="imgactiva">
+                </a>
+            </div>
             <!--<div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro2.jpg"></div>-->
         </slick>
 
