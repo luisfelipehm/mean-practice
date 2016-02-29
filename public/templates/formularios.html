@@ -155,7 +155,7 @@
         <img style="width: 10.6vw; height: auto;" src="/img/perro.jpg">
     </div>
 
-    <form name="myForm" ng-submit="crearFormulario()">
+    <form ng-show="usuario.adminforms" name="myForm" ng-submit="crearFormulario()">
 
         <div class="tx1">
             <md-input-container style="width: 100%">
@@ -187,15 +187,15 @@
     <!--{{forma}}-->
     <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
-        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true">
-        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png">
+        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.adminforms">
+        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png"  ng-show="usuario.adminforms">
     </div>
 
     <div>
         <label class="tituloformulario" >{{forma.nombre}}</label>
     </div >
 
-    <div class="boximgresultado">
+    <div class="boximgresultado"  ng-show="usuario.adminforms">
         <a href="#/root/formularios/{{forma._id}}">
             <img class="iconoresponderformulario" src="/img/icono-fomulario.png">
         </a>

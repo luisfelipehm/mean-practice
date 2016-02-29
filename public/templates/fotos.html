@@ -1,5 +1,5 @@
 
-    <form name="myForm" ng-submit="crearAlbum()">
+    <form ng-show="usuario.adminfotos" name="myForm" ng-submit="crearAlbum()">
         <md-input-container>
             <label>Nombre del Album</label>
             <input type="text" ng-model="nombre" required md-maxlength="20">
