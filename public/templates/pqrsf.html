@@ -233,6 +233,11 @@
         margin-bottom: 3vh;
         border-radius:.4vw;
         margin-left: 88%;
+        opacity: 0.7;
+    }
+    .btnenviarediri:hover
+    {
+        opacity: 1;
     }
     .boxbrnrenvi
     {
@@ -242,7 +247,7 @@
         cursor: pointer;
 
     }
-    .boxbrnrenvi:hover|
+    .boxbrnrenvi:hover
     {
         opacity: 1;
     }
@@ -612,26 +617,28 @@
                         </div>
 
                         <img style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png">
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw;" >Adjunto:</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 40%" >Por el Solicitante</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 80%" >Adobe Pdf</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; " >Adjunto:</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 35%" >Por el Solicitante</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 69%" >Adobe Pdf</p>
 
                     </div>
 
-                    <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
-
+                    <div style="position: relative; display: inline-block; margin-top: 3vh; margin-left: 31vw">
+                        <a style="margin-left: .5vw" ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;"></div></a>
+                    </div>
 
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
 
                     <h1>Proceso</h1>
-                    <div style=" border: solid black 1px; position: relative"  ng-repeat="cm in pq.comentarios">
 
+                    <div style="position: relative"  ng-repeat="cm in pq.comentarios">
 
                         <img style=" width: 1.5vw; vertical-align:middle;" src="/img/chat-conectado.png">
-                        <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}</span>
-                        <p style="font-size: 1vw; margin-top: 0;margin-left: 1.8vw">{{cm.c}}</p>
+                        <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}  <img style="display: inline-block; width: 2vw; margin-left: 15.5vw" src="/img/adjunto_rojo.png">  </span>
+                        <p style="font-size: 1vw;margin-left: 1.8vw;word-wrap: break-word; border-right: solid #575756 .1vw;width: 85%">{{cm.c}}</p>
 
-                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}"> <img style=" width: 1.5vw;" src="/img/icono-fomulario.png"></a>
+
+                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
                     </div>
 
 
