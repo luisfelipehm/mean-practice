@@ -602,9 +602,10 @@
                         de <b>{{pq.cargo}}</b> ciudad <b>{{pq.ciudad2}}</b> presento una <b>{{pq.tipopq}}</b></p>
                     <!--EL COMENTARIO-->
                     <p style="text-align: justify">{{pq.comentario}}</p>
-                    <h1 style="margin-bottom: 0">Datos Personales</h1>
+                    <h1 style="margin-bottom: 0; margin-bottom: 1vh">Datos Personales</h1>
 
                     <div style="position:relative;width: 100%">
+
                         <div style=" display: inline-block">
                             <p style="margin-bottom: 0; margin-top: 0;">{{pq.celular}} </p>
                             <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
@@ -612,23 +613,25 @@
 
                         <img style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png">
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw;" >Adjunto:</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 30%" >Por el Solicitante</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 60%" >Abobe Pdf</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 40%" >Por el Solicitante</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 80%" >Adobe Pdf</p>
 
                     </div>
 
                     <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
 
+
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
 
                     <h1>Proceso</h1>
-                    <div  ng-repeat="cm in pq.comentarios">
+                    <div style=" border: solid black 1px; position: relative"  ng-repeat="cm in pq.comentarios">
+
 
                         <img style=" width: 1.5vw; vertical-align:middle;" src="/img/chat-conectado.png">
                         <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}</span>
-                        <p style="font-size: 1vw; margin-top: 0;margin-left: 2vw">{{cm.c}}</p>
+                        <p style="font-size: 1vw; margin-top: 0;margin-left: 1.8vw">{{cm.c}}</p>
 
-                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
+                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}"> <img style=" width: 1.5vw;" src="/img/icono-fomulario.png"></a>
                     </div>
 
 
