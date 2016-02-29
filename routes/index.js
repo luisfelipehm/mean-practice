@@ -154,7 +154,7 @@ router.post('/formularios/:formulario/responder',auth, function(req, res, next) 
 // OBTENER UN FORMULARIO
 router.get('/formularios/:formulario/results', function(req, res, next) {
 
-  req.formulario.populate('respuestas', function(err, formulario) {
+  req.formulario.populate('preguntas').populate('respuestas',function(err, formulario) {
     if (err) { return next(err);   }
 
 
@@ -209,7 +209,7 @@ router.get('/pqrsf', function(req, res, next) {
 
 router.get('/fotos', function(req, res, next) {
 
-  Foto.find(function(err, fotos){
+  Foto.find().populate('files').exec(function(err, fotos){
     if(err){ return next(err); }
     res.json(fotos);
   });
@@ -221,7 +221,7 @@ router.get('/fotos', function(req, res, next) {
 router.post('/fotos',auth, function(req, res, next) {
   var foto = new Foto(req.body);
   foto.author = req.payload.username;
-  foto.save(function(err, post){
+  foto.save(function(err, foto){
     if(err){ return next(err); }
     res.json(foto);
   });
@@ -254,9 +254,9 @@ router.get('/posts/:post', function(req, res, next) {
 // PARAMETRO DE ALBUM PARA SHOW
 
 router.param('foto', function(req, res, next, id) {
-  var query = Foto.findById(id);
 
-  query.exec(function (err, foto){
+  var query = Foto.findById(id);
+  query.populate('files').populate('adjunto').exec(function (err, foto){
     if (err) { return next(err); }
     if (!foto) { return next(new Error('can\'t find post')); }
 
@@ -264,12 +264,26 @@ router.param('foto', function(req, res, next, id) {
     return next();
   });
 });
+
+
 // PARAMETRO DE DOCUMENTO PARA SHOW
 
 router.param('document', function(req, res, next, id) {
+
+  //Folder.find({_id: id}).populate('files').populate('carpetas','nombre', function (err,document) {
+  //  if (err) { return next(err);   }
+  //  console.log('sadsa');
+  //  if (!document) { return next(new Error('can\'t find post')); }
+  //  console.log('sadsa2');
+  //  req.document = document;
+  //  console.log('sadsa3');
+  //  return next();
+  //  console.log('sadsa4');
+  //});
+
   var query = Folder.findById(id);
 
-  query.exec(function (err, document){
+  query.populate('files').populate('carpetas').exec(function (err, document){
     if (err) { return next(err); }
     if (!document) { return next(new Error('can\'t find post')); }
 
@@ -371,11 +385,15 @@ router.post('/pqrsf/:pqrsf', function(req, res, next){
 
   console.log(req.pqrsf);
   req.pqrsf.fase += 1;
+  console.log('error2');
   req.pqrsf.comentarios.push(req.body.comentario);
+  console.log('error3');
   req.pqrsf.estado = req.body.estado;
-  (req.body.estado == 'Cerrado' ? req.pqrsf.fechacierre : '')
-
+  console.log('error4');
+  ((req.body.estado == 'Cerrado') ? req.pqrsf.fechacierre = Date.now() : '');
+  console.log('error5');
   ((req.body.tramitando != 'tramitando') ? req.pqrsf.encargados.push(req.body.responsable) : removeA(req.pqrsf.encargados, req.body.responsable));
+
   console.log(req.pqrsf.encargados);
 
   req.pqrsf.save(function (err, pq){
@@ -423,10 +441,9 @@ router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res,
     if(err){ return next(err); }
 
     req.foto.files.push(file);
-    req.foto.save(function(err, document) {
+    req.foto.save(function(err, foto) {
       if(err){ return next(err); }
-
-      res.json(req.body);
+      res.json(foto);
     });
 
   });
@@ -448,7 +465,7 @@ router.post('/documents/:document/documents',auth, function(req, res, next) {
     req.document.save(function(err, document) {
       if(err){ return next(err); }
 
-      res.json(req.body);
+      res.json(document);
     });
   });
 });
@@ -488,7 +505,6 @@ router.post('/posts',auth, upload.single('file'), function(req, res, next) {
 
 
 //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
-
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
   console.log('error');
@@ -507,15 +523,12 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
       req.document.save(function(err, document) {
         if(err){ return next(err); }
 
-        res.json(req.body);
+        res.json(document);
       });
 
     });
 });
-
-
 // PARAMETRO DE PUBLICACION
-
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
 
@@ -527,7 +540,6 @@ router.param('post', function(req, res, next, id) {
     return next();
   });
 });
-
 
 
 //ME GUSTA

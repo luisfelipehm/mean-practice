@@ -868,6 +868,7 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser();
+    console.log(nav.currentUser)
 
         nav.logOut = function (user) {
             socket.emit('disusuario', user );
@@ -1153,10 +1154,16 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 
 }]);
 
-app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents','document','auth',  function($scope,Upload,$timeout,$http,  documents,document,auth){
+app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
     $scope.document = document;
     $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
     $scope.CarpenCarp = function(id){
         if($scope.nombre === '') { return; }
@@ -1164,7 +1171,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
             nombre: $scope.nombre,
             padre: $scope.id
         }).success(function(doc) {
-            $scope.document.carpetas.push(doc);
+            $scope.document = doc;
         });
         $scope.nombre = '';
     };
@@ -1201,6 +1208,7 @@ app.controller('DocumentCtrl', ['$scope','Upload','$timeout','$http', 'documents
                 console.log("PostController: upload progress " + file.progress);
             });
             file.upload.success(function (data, status, headers, config) {
+                $scope.document = data;
                 $scope.picFile = '';
 
 
@@ -1331,7 +1339,9 @@ app.controller('FormulariosCtrl',['$scope','auth','formularios', function ($scop
     $scope.crearFormulario = function(){
         if(!$scope.nombre || $scope.nombre === '') { return; }
         formularios.create({
-            nombre: $scope.nombre
+            nombre: $scope.nombre,
+            descripcion: $scope.descripcion,
+            fecha: Date.now()
         });
         $scope.nombre = '';
     };
@@ -1526,10 +1536,16 @@ var a =
     //});
 }]);
 
-app.controller('FormularioresultsCtrl',['$scope','formularios','formularior','auth', function ($scope, formularios,formularior,auth) {
+app.controller('FormularioresultsCtrl',['$scope','formularios','users','formularior','auth', function ($scope, formularios,users,formularior,auth) {
     $scope.formulario = formularior;
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.data2 = [];
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
     angular.forEach($scope.formulario.respuestas, function (respues) {
         $scope.data2.push(respues.dato);
     })
@@ -1618,6 +1634,7 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth','$
 
     $scope.formulario = formulario;
     $scope.isLoggedIn = auth.isLoggedIn;
+
     $scope.valores2 = [];
     angular.forEach($scope.formulario.preguntas, function (preg) {
             $scope.valores2.push(
@@ -1757,10 +1774,18 @@ app.controller('CalendarbarCtrl',['$scope', function ($scope) {
     };
 }]);
 
-app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,Upload,$timeout,$http, fotos,foto,auth){
+app.controller('FotoCtrl', ['$scope','users','Upload','$timeout','$http', 'fotos','foto','auth',  function($scope,users,Upload,$timeout,$http, fotos,foto,auth){
 
     $scope.foto = foto;
     $scope.isLoggedIn = auth.isLoggedIn;
+
+
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
     $scope.images = [];
     angular.forEach(foto.files, function (adj) {
@@ -1804,8 +1829,9 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
                 console.log("PostController: upload progress " + file.progress);
             });
             file.upload.success(function (data, status, headers, config) {
+                $scope.foto = data;
+
                 $scope.picFile = '';
-                fotos.get($scope.foto._id);
 
             });
 
@@ -1815,10 +1841,17 @@ app.controller('FotoCtrl', ['$scope','Upload','$timeout','$http', 'fotos','foto'
     };
 }]);
 
-app.controller('FotosCtrl',['$scope','fotos','Upload','$http','auth', function ($scope,fotos,Upload,$http,auth) {
+app.controller('FotosCtrl',['$scope','users','fotos','Upload','$http','auth', function ($scope,users,fotos,Upload,$http,auth) {
     $scope.hola = "Hello World";
 
     $scope.fotos = fotos.fotos;
+
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+
+    });
 
 
 
@@ -1900,8 +1933,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
                 console.log('Error: ' + data);
             });
     };
-    $scope.addComment = function(idpost){
-        if($scope.body === '') { return; }
+    $scope.addComment = function(idpost,com){
 
         //$http.post('/posts/' + idpost + '/comments', comment, {
         //    headers: {Authorization: 'Bearer '+auth.getToken()}
@@ -1912,7 +1944,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         //});
 
         posts.addComment(idpost, {
-            body: $scope.bodyc.val,
+            body: com,
             author: 'user'
 
         }).success(function(comment) {

@@ -258,7 +258,7 @@
         <div class="fechas">
             <p class="tittlemypqrs">{{pq.tipopq}}</p>
             <p class="fpqrs">Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
-            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{ !pq.fechacierre ? '--/--/--' : (pq.fechacierre | moment:'DD' + ' de ' +  pq.fechainicio | moment:'MMMM' + ' ' + pq.fechainicio | moment:'YYYY')}}</p>
+            <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{ !pq.fechacierre ? '--/--/--' : (pq.fechacierre | moment:'DD') + ' de ' +  (pq.fechainicio | moment:'MMMM') + ' ' + (pq.fechainicio | moment:'YYYY')}}</p>
         </div>
             <img class="estadopqrs" ng-if="pq.estado == 'En espera'" src="/img/espera.png">
             <img class="estadopqrs" ng-if="pq.estado == 'En tramite'" src="/img/tramite.png">

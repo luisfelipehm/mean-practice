@@ -184,6 +184,16 @@
     {
         opacity: 1;
     }
+    .imguser
+    {
+        position: relative;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        left: 1vw;
+        top: 1vh;
+        overflow: hidden;
+    }
 
 </style>
 
@@ -276,9 +286,11 @@
         <div class="boxexaminar">
 
             <label for="file-input">
-                <img src="/img/boton-examinar.png"/>
+                <div class="imguser">
+                    <img style="height: 100%" ng-show="myForm.file.$valid" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
+                </div>
             </label>
-            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
+            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" ng-hide="true" />
             <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />-->
 
         </div>
@@ -287,7 +299,7 @@
 
         <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
-        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
 
         <br>
 
@@ -469,7 +481,7 @@
 
                  <i ng-show="myForm.file.$error.maxSize">File too large {{user.picFile.size / 1000000|number:1}}MB: max {{user.picFile.$errorParam}}</i>
 
-                 <img ng-show="myForm.file.$valid" ngf-src="!user.picFile.$error && user.picFile" class="thumb">
+                 <img style="max-width: 8vw" ng-show="myForm.file.$valid" ngf-src="!user.picFile.$error && user.picFile" class="thumb">
 
                  <br>
 
