@@ -9,6 +9,7 @@ var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
+var Postarea = mongoose.model('Postarea');
 var Pqrsf = mongoose.model('Pqrsf');
 var Pqrsffile = mongoose.model('Pqrsffile');
 var Conectado = mongoose.model('Conectado');
@@ -304,6 +305,36 @@ console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
   });
 });
 
+
+router.param('area', function(req, res, next, id) {
+
+
+
+  var query = Area.findById(id);
+
+  query.populate('posts').exec(function (err, area){
+    if (err) { return next(err); }
+    if (!area) { return next(new Error('can\'t find post')); }
+
+    req.area = area;
+    return next();
+  });
+});
+
+
+router.get('/areas/:area', function(req, res, next) {
+
+  req.area.populate('posts', function(err, area) {
+    if (err) { return next(err);   }
+
+
+    res.json(area);
+  });
+});
+
+
+
+
 // OBTENER UNA CARPETA
 
 router.get('/documents/:document', function(req, res, next) {
@@ -352,6 +383,25 @@ router.post('/pqrsf', function(req, res, next){
     console.log('error2');
     if(err){ return next(err); }
     res.json(pq)
+  });
+});
+
+router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.file = '/uploads2/'+req.file.filename;
+  var post = new Postarea(req.body);
+
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    req.area.posts.push(post);
+    req.area.save(function(err, document) {
+      if(err){ return next(err); }
+
+      res.json(document);
+    });
+
   });
 });
 
