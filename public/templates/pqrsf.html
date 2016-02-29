@@ -59,6 +59,21 @@
         top:13vh;
         left:43vw;
     }
+    .comillatramite1
+    {
+        vertical-align:middle;
+        height: 3vh;
+        top:12vh;
+        left:2.5vw;
+    }
+    .comillatramite2
+    {
+        vertical-align:middle;
+        height: 3vh;
+        top:15.5vh;
+        left:19.5vw;
+    }
+
     .inftextobli
     {
         margin-left: 5%;
@@ -225,9 +240,9 @@
         margin-left: 5%;
         opacity: .7;
         cursor: pointer;
-        
+
     }
-    .boxbrnrenvi:hover
+    .boxbrnrenvi:hover|
     {
         opacity: 1;
     }
@@ -451,7 +466,7 @@
     <div ng-show="mispqadmin == 1">
         <div ng-repeat="pq in pqnuevo" class="boxpubli" style="border-radius: .5vw ">
 
-            <div >
+            <div>
                 <div style="width: 5vw; display: inline-block">
                     <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Queja'" src="/img/adminqueja.png">
                     <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
@@ -545,79 +560,121 @@
         <div class="boxbrnrenvi"> <img class="btnenviarediri" src="/img/enviarediri.png"> </div>
     </div>
 
+    <!--TRAMITE-->
     <div ng-show="mispqadmin == 2">
-        <div ng-repeat="pq in pqtramite" class="boxpubli">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion' || pq.tipopq == 'Solicitud' || pq.tipopq == 'Reclamo' || pq.tipopq == 'Queja'" src="/img/adminsolicitud.png" >
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/adminfelicitacion.png">
-            Fecha de recibido: {{pq.fechainicio}}
-            <div ng-click="editing = true">ver mas</div>
-            <div ng-show="editing">
-                <!--TITULO-->
-                <h1>{{pq.tipopq}}</h1>
-                <!--DESCRIPCION PEQUEñA-->
-                <p>El dia <b>{{pq.fechainicio}}</b> yo <b>{{pq.nombre}}</b> identificado con C.C. No. <b>{{pq.ndocumento}}</b> hago parte de <b>{{pq.empresa}}</b> con el cargo
-                    de <b>{{pq.cargo}}</b> ciudad <b>{{pq.ciudad2}}</b> presento una <b>{{pq.tipopq}}</b></p>
-                <!--EL COMENTARIO-->
-                <p>{{pq.comentario}}</p>
-                <h1>Datos Personales</h1>
-                <p>{{pq.celular}} </p>
-                <p>{{pq.email}}</p>
+        <div ng-repeat="pq in pqtramite" class="boxpubli" style="border-radius: .5vw ">
 
-                <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
+            <div>
 
-                <h1>Proceso</h1>
-
-                <div ng-repeat="cm in pq.comentarios">
-                    <p>{{cm.u}}</p>
-                    <p>{{cm.c}}</p>
-
-                    <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
+                <div style="width: 5vw; display: inline-block">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Queja'" src="/img/adminqueja.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Felicitacion'"  src="/img/adminfelicitacion.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Peticion'" src="/img/adminpeticion.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Solicitud'" src="/img/adminsolicitud.png">
+                    <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Reclamo'" src="/img/adminreclamo.png">
                 </div>
+                <div style="display: inline-block; width: 30vw;"><p class="titlerespon"style=" color: transparent">. </p>
+                    <p style="margin: 0; font-size: 1vw">Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
+                    <div style="margin-bottom: 2vh;color: #e3152d; " ng-click="editing = true">ver mas</div>
+                </div>
+                <div style="border: solid #a5a5a4 .1vw; display: inline-block; margin-left: 3vw;height: 7vh; vertical-align: -1vh"></div>
+
+                <div style=" display:inline-block; vertical-align: 1.5vw;margin-left: 2.5vw ">
+                    <md-checkbox ng-model="datos" class="red" >
+                    </md-checkbox>
+                </div>
+            </div>
+
+            <div  ng-show="editing">
 
 
-                <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
-                    <md-input-container>
-                        <label>Observacion</label>
-                        <textarea ng-model="pq.newcomentario" md-maxlength="250" rows="5" md-select-on-focus></textarea>
-                    </md-input-container>
+                <div style="margin-left: 5%; width: 90%">
 
-                    <md-input-container class="emailedit">
-                        <md-select  placeholder="Dirigir" ng-model="pq.newresponsable" md-on-open="loadasignables()">
-                            <md-option ng-repeat="u in asignables.data" value="{{u.username}}">
-                                {{u.nombre}} {{u.apellido}} - {{u.cargo}} - {{u.area}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
+                    <div style="width: 100%; border: solid #a5a5a4 .1vw"></div>
+                    <!--TITULO-->
+                    <div style="margin-top: 2vh">
+                        <img class="comillatramite1" src="/img/icono-comillas1.png">
+                         <span style=" font-size: 2.5vw; font-weight: bold;">{{pq.tipopq}} </span>
+                        <img class="comillatramite2" src="/img/icono-comillas2.png">
+                    </div>
+                    <!--DESCRIPCION PEQUEÑA-->
+                    <p>El dia <b>{{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</b> yo <b>{{pq.nombre}}</b> identificado con C.C. No. <b>{{pq.ndocumento}}</b> hago parte de <b>{{pq.empresa}}</b> con el cargo
+                        de <b>{{pq.cargo}}</b> ciudad <b>{{pq.ciudad2}}</b> presento una <b>{{pq.tipopq}}</b></p>
+                    <!--EL COMENTARIO-->
+                    <p style="text-align: justify">{{pq.comentario}}</p>
+                    <h1 style="margin-bottom: 0">Datos Personales</h1>
 
-                    <input type="file"  ngf-select ng-model="pq.picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+                    <div style="position:relative;width: 100%">
+                        <div style=" display: inline-block">
+                            <p style="margin-bottom: 0; margin-top: 0;">{{pq.celular}} </p>
+                            <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
+                        </div>
 
-                    <br>
+                        <img style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png">
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw;" >Adjunto:</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 30%" >Por el Solicitante</p>
+                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; font-size: 1vw; top: 60%" >Abobe Pdf</p>
 
-                    <i ng-show="myForm.file.$error.maxSize">File too large {{pq.picFile.size / 1000000|number:1}}MB: max {{pq.picFile.$errorParam}}</i>
+                    </div>
 
-                    <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
+                    <a ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px;background-color: #E30613"></div>{{f.adjunto.split('/')[2]}}</a>
 
-                    <br>
-                    Files:
-                    <ul>
-                        <li ng-repeat="f in pq.picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-                         <span class="progress" ng-show="f.progress >= 0">
-                         <div style="width:{{f.progress}}%"
-                              ng-bind="f.progress + '%'"></div>
-                         </span>
-                        </li>
-                        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                        </li>
-                    </ul>
-                    {{errorMsg}}
+                    <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
+
+                    <h1>Proceso</h1>
+                    <div  ng-repeat="cm in pq.comentarios">
+
+                        <img style=" width: 1.5vw; vertical-align:middle;" src="/img/chat-conectado.png">
+                        <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}</span>
+                        <p style="font-size: 1vw; margin-top: 0;margin-left: 2vw">{{cm.c}}</p>
+
+                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}">{{f.adjunto.split('/')[2]}}</a>
+                    </div>
 
 
+                    <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
+                        <md-input-container>
+                            <label>Observacion</label>
+                            <textarea ng-model="pq.newcomentario" md-maxlength="250" rows="5" md-select-on-focus></textarea>
+                        </md-input-container>
 
-                    <md-button type="submit"  class="md-raised"> Redirigir </md-button>
-                    <md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>
-                    <!--<input type="text" ng-model="bodyc.val">-->
-                </form>
+                        <md-input-container class="emailedit">
+                            <md-select  placeholder="Dirigir" ng-model="pq.newresponsable" md-on-open="loadasignables()">
+                                <md-option ng-repeat="u in asignables.data" value="{{u.username}}">
+                                    {{u.nombre}} {{u.apellido}} - {{u.cargo}} - {{u.area}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
 
+                        <input type="file"  ngf-select ng-model="pq.picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+
+                        <br>
+
+                        <i ng-show="myForm.file.$error.maxSize">File too large {{pq.picFile.size / 1000000|number:1}}MB: max {{pq.picFile.$errorParam}}</i>
+
+                        <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
+
+                        <br>
+                        Files:
+                        <ul>
+                            <li ng-repeat="f in pq.picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                             <span class="progress" ng-show="f.progress >= 0">
+                             <div style="width:{{f.progress}}%"
+                                  ng-bind="f.progress + '%'"></div>
+                             </span>
+                            </li>
+                            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                            </li>
+                        </ul>
+                        {{errorMsg}}
+
+
+
+                        <md-button type="submit"  class="md-raised"> Redirigir </md-button>
+                        <md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>
+                        <!--<input type="text" ng-model="bodyc.val">-->
+                    </form>
+                </div>
 
             </div>
         </div>
