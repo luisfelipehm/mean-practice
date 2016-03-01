@@ -340,7 +340,7 @@
                          <input type="text" ng-model="ciudad2" placeholder="ciudad">
                      </md-input-container>
                    <label>presento</label><span class="asterisco">*</span>
-                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0;">
+                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0; ">
                          <md-select  placeholder="PQRSF" ng-model="tipopq" style="width: 8vw" required>
                              <md-option ng-repeat="t in tipospq" value="{{t.nombre}}">
                                  {{t.nombre}}
@@ -387,7 +387,7 @@
              <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
              <!--</li>-->
 
-             <div style="position: relative; left: 70%;width: 12vw" >
+             <div style="position: relative; left: 70%;width: 12vw;" >
                  <label for="file-input">
                  <img class="iconadjun" src="/img/iconoadjdoc.jpg">
                  </label>
@@ -395,11 +395,6 @@
                  <!--BOTON ENVIAR-->
                  <input type="image" src="/img/botones-enviar.png" style="width: 6.8vw; margin-left: 6%" >  </input>
              </div>
-
-
-
-
-
 
 
                 <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
@@ -629,59 +624,79 @@
 
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
 
-                    <h1>Proceso</h1>
+                    <div>
+                        <span style="font-size: 2vw;">Proceso</span>
+                        <img style="width: 2vw; vertical-align:middle;margin-left: 33.5vw" src="/img/adjunto_rojo.png">
+                    </div>
 
                     <div style="position: relative"  ng-repeat="cm in pq.comentarios">
 
                         <img style=" width: 1.5vw; vertical-align:middle;" src="/img/chat-conectado.png">
-                        <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}  <img style="display: inline-block; width: 2vw; margin-left: 15.5vw" src="/img/adjunto_rojo.png">  </span>
+                            <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}  </span>
                         <p style="font-size: 1vw;margin-left: 1.8vw;word-wrap: break-word; border-right: solid #575756 .1vw;width: 85%">{{cm.c}}</p>
-
 
                         <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
                     </div>
 
 
                     <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
-                        <md-input-container>
-                            <label>Observacion</label>
-                            <textarea ng-model="pq.newcomentario" md-maxlength="250" rows="5" md-select-on-focus></textarea>
-                        </md-input-container>
 
-                        <md-input-container class="emailedit">
-                            <md-select  placeholder="Dirigir" ng-model="pq.newresponsable" md-on-open="loadasignables()">
-                                <md-option ng-repeat="u in asignables.data" value="{{u.username}}">
-                                    {{u.nombre}} {{u.apellido}} - {{u.cargo}} - {{u.area}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
+                        <div style="margin-top:3vh">
+                            <textarea ng-model="pq.newcomentario" style="width: 44vw;height: 12vh;padding: 10px; border-radius: .5vw .5vw .5vw .5vw;resize: none; " placeholder="Observacion..."></textarea>
+                        </div>
 
-                        <input type="file"  ngf-select ng-model="pq.picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
-                        <br>
+                        <div style="margin-left: 50%">
+                            <div ng-repeat="f in pq.picFile" style="display:inline-block;position: relative;margin-bottom: 2%;">
+                                <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
+                            </div>
+                        </div>
+
+                    <div style="display: inline-block; margin-top: 0vh">
+
+                        <div style="display: inline-block;vertical-align: -1.3vh">
+                            <img style=" width: 5vw; border-radius: .3vw" src="/img/enviarediri.png">
+                        </div>
+
+                        <div style="display: inline-block">
+                            <md-input-container  class="emailedit" style="width: 38vw">
+                                <md-select  placeholder="Dirigir" ng-model="pq.newresponsable" md-on-open="loadasignables()">
+                                    <md-option ng-repeat="u in asignables.data" value="{{u.username}}">
+                                        {{u.nombre}} {{u.apellido}} - {{u.cargo}} - {{u.area}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                    <div style="padding-bottom: 3vh">
+                        <div style="display: inline-block; margin-left: 22vw">
+                            <label for="file-inputtramite{{$index}}">
+                                <img  class="iconadjun" style="vertical-align: -1vh" src="/img/iconoadjdoc.jpg">
+                            </label>
+                            <input type="file"  class="adjunta"   ngf-select ng-model="pq.picFile"  id="file-inputtramite{{$index}}"    ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+                        </div>
+
+                        <div style="display: inline-block">
+                            <input ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;" type="image" src="/img/cerrar_proceso.png" style="width: 9vw; vertical-align: -1vh" >
+                            <!--<md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>-->
+                        </div>
+
+                        <div style="display: inline-block">
+                            <input type="image" src="/img/botones-enviar.png" style="width: 8vw; vertical-align: -1vh">
+                            <!--<md-button type="submit"  class="md-raised"> Redirigir </md-button>-->
+                        </div>
+                    </div>
+
+
 
                         <i ng-show="myForm.file.$error.maxSize">File too large {{pq.picFile.size / 1000000|number:1}}MB: max {{pq.picFile.$errorParam}}</i>
-
                         <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
 
-                        <br>
-                        Files:
-                        <ul>
-                            <li ng-repeat="f in pq.picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-                             <span class="progress" ng-show="f.progress >= 0">
-                             <div style="width:{{f.progress}}%"
-                                  ng-bind="f.progress + '%'"></div>
-                             </span>
-                            </li>
-                            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                            </li>
-                        </ul>
                         {{errorMsg}}
 
 
 
-                        <md-button type="submit"  class="md-raised"> Redirigir </md-button>
-                        <md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>
                         <!--<input type="text" ng-model="bodyc.val">-->
                     </form>
                 </div>
