@@ -3,10 +3,10 @@
     {
         position: fixed;
         background: #e3152d;
-        width: 80%;
+        width: 100%;
         height: 5.5vh;
-        top: 1vh;
-        left: 10%;
+        top: 0vh;
+        left: 0%;
         z-index: 10;
     }
     .username
@@ -14,7 +14,7 @@
         position: absolute;
         font-family: Arial;
         font-size: 2.5vh;
-        right: 25%;
+        right: 7.5%;
         color: white;
         top: 1.5vh;
         margin: 0;
@@ -25,7 +25,7 @@
         position: absolute;
         font-family: Arial;
         font-size: 2.5vh;
-        right: 20%;
+        right: 35%;
         top: 1.5vh;
         margin: 0;
     }
@@ -40,7 +40,7 @@
         height: 3vh;
         width: 1.6vw;
         margin: 0;
-        right: 15%;
+        right: 32%;
         top: 2vh;
         cursor: pointer;
     }
@@ -55,7 +55,7 @@
         height: 3vh;
         width: 1.6vw;
         margin: 0;
-        right: 11%;
+        right: 29.5%;
         top: 2vh;
     }
     .imginb
@@ -80,7 +80,7 @@
     .line
     {
         position: absolute;
-        right: 8%;
+        right: 28%;
         background-color: white;
         top: 1.5vh;
         margin: 0;
@@ -91,10 +91,9 @@
     .line2
     {
         position: absolute;
-        right: 24.3%;
+        right: 34.5%;
         background-color: white;
         top: 1.5vh;
-        margin: 0;
         text-align: right;
         width: .1vw;
         height: 3vh;
@@ -105,8 +104,8 @@
         border: solid #e3152d .2vw;
         width: 15vw;
         height: 19vh;
-        right: 21.8vw;
-        top: 8vh;
+        right: 18vw;
+        top: 6.9vh;
         z-index: 10;
         background: white;
         display: none;
@@ -166,8 +165,8 @@
     .arrow-up
     {
         position: fixed;
-        top: 7.1vh;
-        right: 22.5vw;
+        top: 6.1vh;
+        right: 19.7vw;
         height: 1.5vh;
         width: 1.5vh;
         border-left: solid #E30613 .2vw;
@@ -188,67 +187,146 @@
         overflow-y: scroll;
         height: 12vh;
     }
+    .config
+    {
+        position: fixed;
+        border: solid #e3152d .2vw;
+        width: 15vw;
+        height: 13vh;
+        right: 1vw;
+        top: 6.9vh;
+        z-index: 10;
+        background: white;
+        display: none;
+    }
+    .arrow-upbox
+    {
+        position: fixed;
+        top: 6vh;
+        right: 3.2vw;
+        height: 1.5vh;
+        width: 1.5vh;
+        border-left: solid #E30613 .2vw;
+        border-top: solid #E30613 .2vw;
+        z-index: 11;
+        transform: rotate(45deg);
+        display: none;
+        background-color:white ;
 
+    }
+    .boxinter2
+    {
+        position: absolute;
+        left: 1vw;
+        top: 30%;
+        width: 85%;
+        height: 12vh;
+    }
+    .conf1
+    {
+        margin: 2vh;
+        font-size: .8vw;
+        font-family: Arial;
+        color: #575756;
+        margin-top: 3vh;
+    }
+    .conf2
+    {
+        margin: 2vh;
+        font-size: .8vw;
+        font-family: Arial;
+        color: #575756;
+        margin-top: 0.5vh;
+    }
 </style>
 
 
-
-<div class="barrasup">
-    <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
-        <div>
-            <p class="username" ng-show="nav.isLoggedIn()"><a ui-sref="users" style="color: white">{{ nav.currentUser.nombre }} {{nav.currentUser.apellido}} <div class="line2"></div> </a></p>
-            <p ng-show="nav.isLoggedIn()"><a  style="color:white" href="" ng-click="nav.logOut(nav.currentUser.username)">Cerrar Sesion</a></p>
-
-            <p class="inicio"><a style="color: white" ui-sref="home">Inicio</a></p>
-            <p class="boxnoti"><img class="imgnoti" src="/img/icononoti.png"></p>
-            <p class="boxinb"><img class="imginb" src="/img/iconoinb.png"></p>
-            <div class="line"></div>
-            <!--<p class="boxconfig"><img class="imgconfig" src="/img/iconoconfigurar.png"></p>-->
-            <!--notificaciones-->
-        </div>
-    </nav>
-</div>
-
-
-<!--Cuadro Notificaciones-->
-<div class="notifica ">
-    <div class="notitittle ">
-        <p class="notitxt">Notificaciones</p>
+    <div class="barrasup">
+        <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
+            <div>
+                <!--<p ng-show="nav.isLoggedIn()"><a  style="color:white" href="" ng-click="nav.logOut(nav.currentUser.username)">Cerrar Sesion</a></p>-->
+                <p class="inicio"><a style="color: white" ui-sref="home">Inicio</a></p>
+                <p class="boxnoti"><img class="imgnoti" src="/img/icononoti.png"></p>
+                <p class="boxinb"><img class="imginb" src="/img/iconoinb.png"></p>
+                <div class="line"></div>
+                <p class="username" ng-show="nav.isLoggedIn()"><a style="color: white">{{ nav.currentUser.nombre.split(" ")[0]}} {{nav.currentUser.apellido.split(" ")[0]}} <div class="line2"></div> </a></p>
+                <p class="boxconfig"><img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}"></p>
+                <!--notificaciones-->
+            </div>
+        </nav>
     </div>
-    <div class="lineh"></div>
-    <div class="boxinter " >
 
-        <div class="listnoti">
-            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación</p>
-            <p class="eventhour">06:00AM - 01:00PM </p>
+
+    <!--Cuadro boxconfig-->
+    <div class="config">
+        <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
+            <div class="notitittle ">
+                <p class="notitxt">Configuración</p>
+            </div>
+            <div class="lineh"></div>
+            <div class="boxinter2 " >
+                <div class="listconf">
+                    <p class="conf1"><a ui-sref="users" style="color:#575756;"> Configuración</a></p>
+                </div>
+                <div class="listconf">
+                    <p ng-show="nav.isLoggedIn()" class="conf2"><a style="color: #575756" href="" ng-click="nav.logOut(nav.currentUser.username)"> Cerrar Sesión</a></p>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!--Triangulo boxconfig-->
+
+    <div class="arrow-upbox"></div>
+
+
+    <!--Cuadro Notificaciones-->
+    <div class="notifica ">
+        <div class="notitittle ">
+            <p class="notitxt">Notificaciones</p>
         </div>
-        <div class="listnoti">
-            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación a</p>
-            <p class="eventhour">06:00AM - 01:00PM </p>
-        </div>
-        <div class="listnoti">
-            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación s</p>
-            <p class="eventhour">06:00AM - 01:00PM </p>
-        </div>
-        <div class="listnoti">
-            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación d</p>
-            <p class="eventhour">06:00AM - 01:00PM </p>
-        </div>
-        <div class="listnoti">
-            <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación d</p>
-            <p class="eventhour">06:00AM - 01:00PM </p>
+        <div class="lineh"></div>
+        <div class="boxinter " >
+
+            <div class="listnoti">
+                <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación</p>
+                <p class="eventhour">06:00AM - 01:00PM </p>
+            </div>
+            <div class="listnoti">
+                <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación a</p>
+                <p class="eventhour">06:00AM - 01:00PM </p>
+            </div>
+            <div class="listnoti">
+                <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación s</p>
+                <p class="eventhour">06:00AM - 01:00PM </p>
+            </div>
+            <div class="listnoti">
+                <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación d</p>
+                <p class="eventhour">06:00AM - 01:00PM </p>
+            </div>
+            <div class="listnoti">
+                <p class="event"> <span class="circulo">&#149;</span>Evento: Vacunación d</p>
+                <p class="eventhour">06:00AM - 01:00PM </p>
+            </div>
         </div>
     </div>
-</div>
 
-<!--Triangulo Notificaciones-->
+    <!--Triangulo Notificaciones-->
 
-<div class="arrow-up"></div>
+    <div class="arrow-up"></div>
 
     <script>
         $(".boxnoti").click(function(){
             $( ".notifica" ).toggle("slow");
             $( ".arrow-up" ).toggle("slow");
+        });
+    </script>
+
+
+    <script>
+        $(".boxconfig").click(function(){
+            $( ".config" ).toggle("slow");
+            $( ".arrow-upbox" ).toggle("slow");
         });
     </script>
 
@@ -283,7 +361,6 @@
 
             background:#E30613;
             border-radius: 5px;
-
         }
 
 
