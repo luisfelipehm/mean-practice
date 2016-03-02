@@ -25,7 +25,7 @@
         position: absolute;
         font-family: Arial;
         font-size: 2.5vh;
-        right: 35%;
+        right: 27%;
         top: 1.5vh;
         margin: 0;
     }
@@ -40,7 +40,7 @@
         height: 3vh;
         width: 1.6vw;
         margin: 0;
-        right: 32%;
+        right: 22.5%;
         top: 2vh;
         cursor: pointer;
     }
@@ -55,7 +55,7 @@
         height: 3vh;
         width: 1.6vw;
         margin: 0;
-        right: 29.5%;
+        right: 20%;
         top: 2vh;
     }
     .imginb
@@ -80,10 +80,9 @@
     .line
     {
         position: absolute;
-        right: 28%;
+        right: 19%;
         background-color: white;
         top: 1.5vh;
-        margin: 0;
         text-align: right;
         width: .1vw;
         height: 3vh;
@@ -91,7 +90,7 @@
     .line2
     {
         position: absolute;
-        right: 34.5%;
+        right: 25.5%;
         background-color: white;
         top: 1.5vh;
         text-align: right;
@@ -104,7 +103,7 @@
         border: solid #e3152d .2vw;
         width: 15vw;
         height: 19vh;
-        right: 18vw;
+        right: 21vw;
         top: 6.9vh;
         z-index: 10;
         background: white;
@@ -157,7 +156,7 @@
     }
     .circulo
     {
-        color: #E30613;
+        color: #e3152d;
         margin-right:.6vw;
         font-size: .8vw;
     }
@@ -166,15 +165,15 @@
     {
         position: fixed;
         top: 6.1vh;
-        right: 19.7vw;
+        right: 22.5vw;
         height: 1.5vh;
         width: 1.5vh;
-        border-left: solid #E30613 .2vw;
-        border-top: solid #E30613 .2vw;
+        border-left: solid #e3152d .2vw;
+        border-top: solid #e3152d .2vw;
         z-index: 11;
         transform: rotate(45deg);
         display: none;
-        background-color:white ;
+        background-color:white;
 
     }
     .boxinter
@@ -202,12 +201,12 @@
     .arrow-upbox
     {
         position: fixed;
-        top: 6vh;
+        top: 6.1vh;
         right: 3.2vw;
         height: 1.5vh;
         width: 1.5vh;
-        border-left: solid #E30613 .2vw;
-        border-top: solid #E30613 .2vw;
+        border-left: solid #e3152d .2vw;
+        border-top: solid #e3152d .2vw;
         z-index: 11;
         transform: rotate(45deg);
         display: none;
@@ -246,8 +245,8 @@
             <div>
                 <!--<p ng-show="nav.isLoggedIn()"><a  style="color:white" href="" ng-click="nav.logOut(nav.currentUser.username)">Cerrar Sesion</a></p>-->
                 <p class="inicio"><a style="color: white" ui-sref="home">Inicio</a></p>
-                <p class="boxnoti"><img class="imgnoti" src="/img/icononoti.png"></p>
-                <p class="boxinb"><img class="imginb" src="/img/iconoinb.png"></p>
+                <!--<p class="boxinb"><img class="imgnoti" src="/img/icononoti.png"></p>-->
+                <p class="boxnoti"><img class="imginb" src="/img/iconoinb.png"></p>
                 <div class="line"></div>
                 <p class="username" ng-show="nav.isLoggedIn()"><a style="color: white">{{ nav.currentUser.nombre.split(" ")[0]}} {{nav.currentUser.apellido.split(" ")[0]}} <div class="line2"></div> </a></p>
                 <p class="boxconfig"><img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}"></p>
@@ -331,8 +330,6 @@
     </script>
 
 
-
-
     <script>
         $(document).ready(function(){
             $('.mainMenu').children('li').on('click', function() {
@@ -359,7 +356,7 @@
 
         .boxinter::-webkit-scrollbar-thumb{
 
-            background:#E30613;
+            background:#e3152d;
             border-radius: 5px;
         }
 

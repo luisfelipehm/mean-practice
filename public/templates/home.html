@@ -95,7 +95,6 @@
         margin-left: 5%;
         margin-top: 2vh;
         position: relative;
-        height: 172px;
         background: #e3e3e3;
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
         -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
@@ -129,7 +128,7 @@
     {
         position: absolute;
         right: 31%;
-        top: 120px;
+        top: 12.6vh;
         opacity: 0.7;
     }
     .containerfoto:hover
@@ -157,7 +156,7 @@
     .btnselect
     {
         position: absolute;
-        top: 120px;
+        top: 12.5vh;
         left: 35vw;
     }
     .selec
@@ -310,13 +309,13 @@
 
     .eliminarBox
     {
-        border: 1px solid #878787;
+        border: 1px solid #e3152d;
         position: absolute;
         width: 15vw;
-        height: 8vh;
+        height: 11vh;
         background-color: white;
-        top: -4vh;
-        right: -5vw;
+        top: -12vh;
+        left: 46vw;
         z-index: 10;
         -webkit-transition:all linear 0.5s;
         transition:all linear 0.5s;
@@ -326,12 +325,13 @@
     }
     .eliminarBoxcomment
     {
+        border: 1px solid #e3152d;
         position: absolute;
         width: 10vw;
         height: 8vh;
         background-color: white;
-        top: -4vh;
-        right: -5vw;
+        top: -10vh;
+        left: 39vw;
         z-index: 10;
         -webkit-transition:all linear 0.5s;
         transition:all linear 0.5s;
@@ -354,9 +354,41 @@
     .boxbtnpubli
     {
         position: absolute;
+        top: 0;
         left: 41.5vw;
-        top: 120px;
+        top: 12.3vh;
     }
+    .treli
+    {
+        position: absolute;
+        top: 10.5vh;
+        left: 1vw;
+        height: 1.4vh;
+        width: 1.5vh;
+        border-left: solid #e3152d .1vw;
+        border-top: solid #e3152d .1vw;
+        z-index: 11;
+        transform: rotate(225deg);
+        background-color:white ;
+        -webkit-transition:all linear 2s;
+        transition:all linear 2s;
+    }
+    .treli2
+    {
+        position: absolute;
+        top: 7.5vh;
+        left: 1vw;
+        height: 1.4vh;
+        width: 1.5vh;
+        border-left: solid #e3152d .1vw;
+        border-top: solid #e3152d .1vw;
+        z-index: 11;
+        transform: rotate(225deg);
+        background-color:white ;
+        -webkit-transition:all linear 2s;
+        transition:all linear 2s;
+    }
+
 
 </style>
 
@@ -389,7 +421,7 @@
 
             <!--titulo del formulario para publicar-->
             <div class="tittlebox">
-                <md-input-container style="width: 100%;">
+                <md-input-container style="width: 100%">
                     <label>Título</label>
                     <input type="text" ng-model="title">
                 </md-input-container>
@@ -397,7 +429,7 @@
 
             <!--Descripcion del formulario para publicar-->
             <div class="descriptionbox">
-                <md-input-container style="width: 100%;">
+                <md-input-container style="width: 100%">
                     <label>Descripción</label>
                     <input type="text" ng-model="link">
                 </md-input-container>
@@ -459,8 +491,14 @@
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
             <div class="boxpubli" ng-init="deleting = false">
-                <div class="eliminarBox" ng-show="deleting" ><p style="text-align: center;margin: 2px 0 0 0">Desea eliminar la publicacion</p>
-                    <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom: 10%;width: 10%;left: 25%"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 10%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p></div>
+
+                <div class="eliminarBox" ng-show="deleting" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold">Desea eliminar la publicación</p>
+                    <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
+                    <div class="treli" ng-show="deleting"></div>
+                </div>
+
+
+
                 <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
                     <p class="tittlepli">{{post.title}}
 
@@ -481,7 +519,7 @@
                 <div style="margin-top: 2vh;">
                     <div class="superior">
                         <div class="supcoment"  ng-click="selectthing($index)">
-                            <img style="display: inline-block" class="imgcoment" src="/img/iconocomen.png">
+                            <img class="imgcoment" src="/img/iconocomen.png">
                             <span>Comentarios {{post.comments.length}}</span>
                         </div>
                     <!--COMENTARIOS-->
@@ -492,9 +530,16 @@
                                 <div class="imgusercoment">
                                  <img style=" height: 100%" src="{{comentario.fotoperfil}}">
                                 </div>
-                                <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
-                                    <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
-                                </div>
+
+
+                                    <div class="eliminarBoxcomment" ng-show="deletingcomment" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold">Desea eliminar el comentario</p>
+                                        <a ng-click="removeComment(comentario)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a>
+                                        <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
+                                        <div class="treli2" ng-show="deletingcomment"></div>
+                                    </div>
+
+
+
                                 <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
                                 <span class="comentarioautor">{{comentario.author}}</span> <br>
                                 <p class="comentariouser"> {{comentario.body}}</p>
