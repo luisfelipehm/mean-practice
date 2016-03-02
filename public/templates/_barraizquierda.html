@@ -1,6 +1,6 @@
 <style>
 
-    .fc-basic-view .fc-body .fc-row {
+    #calendar2 .fc-basic-view .fc-body .fc-row {
         min-height: 1vh !important;
     }
     #calendar2 .fc-widget-header{
@@ -11,7 +11,7 @@
         padding-top: 1%;
         border:0;
     }
-    table
+    #calendar2 table
     {
         border: 1px transparent;
     }
@@ -29,7 +29,7 @@
     }
     #calendar2 .fc-today{
         color: white;
-        background-color: #01539c;
+        background-color: #575756;
         /*background: url('http://localhost:3000/assets/icono-calendario-d-28122440dd50b54b10baf83c2ad129800d735f747b8b73a58aa05ce0a59fede4.png') no-repeat;*/
         background-size: 3vh;
         background-position:100% 100%;
@@ -86,7 +86,7 @@
         width: 88%;
         left: 5%;
     }
-    .fc-scroller {
+    #calendar2 .fc-scroller {
         overflow-y: hidden !important;
     }
     .siguiente
@@ -150,7 +150,7 @@
     {
         color: transparent; !important;
     }
-    .fc-view-container
+    #calendar2  .fc-view-container
     {
         position: absolute;
         top: 0vh;
@@ -172,15 +172,21 @@
         position: relative;
         top: 1.2vh;
         left: 2vw;
-        height: 1.9vh;
+        height: 1.6vh;
+        width: auto;
+    }
+    .iconogris
+    {
+        position: relative;
+        height: 1.3vh;
         width: auto;
     }
     .cajamenu
     {
         position: relative;
-        margin-top: 20%;
+        top: 10vh;
         margin-left: 1.2%;
-
+        margin-bottom: 20%;
         width: 19vw;
         z-index: 1;
     }
@@ -188,7 +194,7 @@
     {
         position: relative;
         top: 1.2vh;
-        font-size: 1vw;
+        font-size: 1.3vw;
         color: black;
         margin-left: 16%;
     }
@@ -209,19 +215,58 @@
     {
         text-decoration: none
     }
+    #calendar2 .fc-scroller{
+        height: 32vh !important;
+    }
+    .fondobarraizq
+    {
+        position:absolute;
+        height:100%;
+        min-height: 100%;
+        width: 22%;
+        top: 42vh;
+        background-image: url("../img/textura_30.png");
+        background-size:40px 40px ;
+        -webkit-box-shadow: inset 0px 0px 50px -8px ;
+        -moz-box-shadow: inset 0px 0px 50px -8px ;
+        box-shadow: inset 0px 0px 50px -8px;
+    }
+    .departamentoslinks:hover
+    {
+        color: #E30613;
+    }
 
 </style>
+<script>
+    $(document).ready(function () {
+        function getDocHeight() {
+            return Math.max(
+                    document.body.scrollHeight, document.documentElement.scrollHeight,
+                    document.body.offsetHeight, document.documentElement.offsetHeight,
+                    document.body.clientHeight, document.documentElement.clientHeight
+            );
 
-<div style="position:absolute;height:50vh; width: 22%; top: 60vh;">
+        }
+        $('.fondobarraizq').scrollTop(getDocHeight());
+    })
+
+</script>
+
+<div class="fondobarraizq">
 
         <div class="cajamenu">
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Departamento</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="fotos" class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
-             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">PQRSF</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
+             <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false"><img class="iconorojo" src="/img/icono-rojo.png"> <a style="margin: 0" class="linkmenu"><span class="txtmenu">Departamentos</span></a> </li>
+            <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
+
+                <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>
+
+            </div>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"><span class="txtmenu">Documentos</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/fotos/"  class="linkmenu"><span class="txtmenu">Fotos</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu"><span class="txtmenu">Cronograma</span></a> </li>
+             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="pqrsf" class="linkmenu"><span class="txtmenu">PQRSF</span></a> </li>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#" class="linkmenu"><span class="txtmenu">Asociados</span></a> </li>
         </div>
 
@@ -250,12 +295,43 @@
         var last = total*100/cien;
         return last;
     }
+    moment.locale('es', {
+        months : "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split("_"),
+//        monthsShort : "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
+        weekdays : "Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado".split("_"),
+        //weekdaysShort : "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
+        //weekdaysMin : "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
+
+//        relativeTime : {
+//            future : "dans %s",
+//            past : "il y a %s",
+//            s : "quelques secondes",
+//            m : "une minute",
+//            mm : "%d minutes",
+//            h : "une heure",
+//            hh : "%d heures",
+//            d : "un jour",
+//            dd : "%d jours",
+//            M : "un mois",
+//            MM : "%d mois",
+//            y : "une année",
+//            yy : "%d années"
+//        },
+
+        // in case the meridiem units are not separated around 12, then implement
+        // this function (look at locale/id.js for an example)
+        // meridiemHour : function (hour, meridiem) {
+        //     return /* 0-23 hour, given meridiem token and hour 1-12 */
+        // },
+
+
+        });
     $('table.calendar2 > tbody > tr > td:nth-child(-n+2)').addClass('weekend');
 
     $('.fc-row').click(function () {
         $alert('hola');
     });
-    $('.fc-scroller').css('height','32vh');
+//    $('.fc-scroller').css('height','32vh');
 
 
     $('.siguiente').click(function(){
@@ -267,7 +343,7 @@
 
     });
 
-    $('.diacalendar').html(moment().format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
-    $('.dianumcalendar').html(moment().format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
-    $('.mescalendar').html(moment().format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
+    $('.diacalendar').html(moment().locale('es').format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
+    $('.dianumcalendar').html(moment().locale('es').format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
+    $('.mescalendar').html(moment().locale('es').format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
 </script>

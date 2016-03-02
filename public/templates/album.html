@@ -1,34 +1,9 @@
-<style>
-    div.ng-gallery div
-    {
-        width: 30%;
-        display: inline-block;
-        overflow: hidden;
-        height: 30vh;
-        margin: 1.5%;
-        position: relative;
-    }
-    img.ng-thumb
-    {
-        position: absolute;
-        height: 100%;
+<br>
+<br>
+<br>
+<br>
 
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        margin: auto;
-    }
-    img
-    {
-        cursor: pointer;
-    }
-
-
-</style>
-
-
-<form  enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+<form  ng-show="usuario.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
     <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />

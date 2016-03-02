@@ -1,8 +1,166 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+  /* Arrows */
+  .slick-prev
+  {
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    display: block;
+    margin-top: -10px;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  .slick-next
+  {
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    display: block;
+    margin-top: -10px;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
 
-a {
-  color: #00B7FF;
-}
+  }
+
+  .slick-prev:hover,
+  .slick-prev:focus,
+  .slick-next:hover,
+  .slick-next:focus
+  {
+    color: transparent;
+    outline: none;
+    background: transparent;
+  }
+  .slick-prev:before, .slick-next:before {
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+    opacity: .75;
+    color: red;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .boxpubli
+  {
+    position: relative;
+    margin-bottom: 2vh;
+    width: 90%;
+    margin-left: 5%;
+    background: #e3e3e3;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);"
+  }
+  div:focus {
+    outline: none;
+    border: 0;
+  }
+  h1:focus{
+    outline: none;
+    border: 0;
+  }
+  div.ng-gallery div
+  {
+    width: 30%;
+    display: inline-block;
+    overflow: hidden;
+    height: 30vh;
+    margin: 1.5%;
+    position: relative;
+  }
+  img.ng-thumb
+  {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+  img
+  {
+    cursor: pointer;
+  }
+
+  /*SPINNER */
+
+  .sk-folding-cube {
+    z-index: -1;
+    margin: 40px auto;
+    width: 40px;
+    height: 40px;
+    top:50vh;
+    left: calc(50% - 40px);
+    position: absolute;
+    -webkit-transform: rotateZ(45deg);
+    transform: rotateZ(45deg); }
+  .sk-folding-cube .sk-cube {
+    float: left;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1); }
+  .sk-folding-cube .sk-cube:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #E30613;
+    -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+    animation: sk-foldCubeAngle 2.4s infinite linear both;
+    -webkit-transform-origin: 100% 100%;
+    -ms-transform-origin: 100% 100%;
+    transform-origin: 100% 100%; }
+  .sk-folding-cube .sk-cube2 {
+    -webkit-transform: scale(1.1) rotateZ(90deg);
+    transform: scale(1.1) rotateZ(90deg); }
+  .sk-folding-cube .sk-cube3 {
+    -webkit-transform: scale(1.1) rotateZ(180deg);
+    transform: scale(1.1) rotateZ(180deg); }
+  .sk-folding-cube .sk-cube4 {
+    -webkit-transform: scale(1.1) rotateZ(270deg);
+    transform: scale(1.1) rotateZ(270deg); }
+  .sk-folding-cube .sk-cube2:before {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s; }
+  .sk-folding-cube .sk-cube3:before {
+    -webkit-animation-delay: 0.6s;
+    animation-delay: 0.6s; }
+  .sk-folding-cube .sk-cube4:before {
+    -webkit-animation-delay: 0.9s;
+    animation-delay: 0.9s; }
+  @-webkit-keyframes sk-foldCubeAngle {
+    0%, 10% {
+      -webkit-transform: perspective(140px) rotateX(-180deg);
+      transform: perspective(140px) rotateX(-180deg);
+      opacity: 0; }
+    25%, 75% {
+      -webkit-transform: perspective(140px) rotateX(0deg);
+      transform: perspective(140px) rotateX(0deg);
+      opacity: 1; }
+    90%, 100% {
+      -webkit-transform: perspective(140px) rotateY(180deg);
+      transform: perspective(140px) rotateY(180deg);
+      opacity: 0; } }
+  @keyframes sk-foldCubeAngle {
+    0%, 10% {
+      -webkit-transform: perspective(140px) rotateX(-180deg);
+      transform: perspective(140px) rotateX(-180deg);
+      opacity: 0; }
+    25%, 75% {
+      -webkit-transform: perspective(140px) rotateX(0deg);
+      transform: perspective(140px) rotateX(0deg);
+      opacity: 1; }
+    90%, 100% {
+      -webkit-transform: perspective(140px) rotateY(180deg);
+      transform: perspective(140px) rotateY(180deg);
+      opacity: 0; } }
+

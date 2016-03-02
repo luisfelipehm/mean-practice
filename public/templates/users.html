@@ -1,0 +1,511 @@
+<style>
+    .boxallusers
+    {
+        position: relative;
+        margin-bottom: 2vh;
+        width: 90%;
+        margin-left: 5%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        border: solid transparent;
+        border-radius: 5px 5px 5px 5px;
+    }
+    .boxpubliuser
+    {
+        position: relative;
+        margin-bottom: 2vh;
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 8%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);"
+    }
+    .iconoeditaruser
+    {
+        width: 1vw;
+        margin-left: 1vw;
+        float: right;
+    }
+    .boximgusersedit
+    {
+        position: absolute;
+        height: auto;
+        right: 0;
+        margin-right: 2vw;
+        margin-top: .5vh;
+    }
+    .boximguserseli
+    {
+        position: absolute;
+        height: auto;
+        right: 0;
+        margin-right: .5vw;
+        margin-top: .5vh;
+    }
+    .imguseredit
+    {
+        position: absolute;
+        height: 13vh;
+        width: auto;
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 4vh;
+        margin-bottom: 1.5vh;
+    }
+    .editdatosusername
+    {
+        width: 66%;
+        margin-left: 17%;
+        font-weight: bold;
+        font-size: 1.5vw;
+        margin-bottom: 0;
+    }
+    .editdatosusercargo
+    {
+        width: 66%;
+        margin-left: 17%;
+        font-size: .9vw;
+    }
+    .editdatosuserarea
+    {
+        width: 66%;
+        margin-left: 17%;
+        font-size: .9vw;
+    }
+    .editdatosuseremail
+    {
+        width: 66%;
+        margin-left: 17%;
+        font-size: .9vw;
+    }
+    .negrita
+    {
+        font-weight: bold;
+    }
+    .iconomail
+    {
+        width: 1vw;
+        vertical-align:middle
+    }
+        .lineahgris
+    {
+        border: solid #d0d0cf .1vw;
+        width: 40%;
+        margin-top: 4.8%;
+    }
+    .tittleedit
+    {
+        font-size: 1.5vw;
+        color: #323231;
+        margin-top: 4%;
+    }
+    .boxinuseredit
+    {
+        margin-left: 2.5%;
+
+    }
+    .loginedit
+    {
+        width: 23%;
+        height: 4vh;
+    }
+    .emailedit
+    {
+
+        width: 31.2%;
+        height: 4vh;
+    }
+    md-checkbox.md-checked.red .md-icon {
+        background-color: #e3152d ;
+    }
+
+    .tittleregistrar
+    {
+        font-size: 1.5vw;
+        color: #323231;
+        padding-top:2.5%;
+    }
+    .lupita
+    {
+        left: 47.5vw;
+        position: relative;
+        width: 1vw;
+        height: auto;
+    }
+    .cajabuscar
+    {
+        margin-left: 2.5%;
+        margin-left: 0%;
+        width: 90%;
+    }
+
+    .boxexaminar
+    {
+        width: 10%;
+    }
+    .botonpublicar
+    {
+        height: auto;
+        width: 6vw;
+        margin-left: 83.5%;
+        opacity: 0.6;
+        cursor: pointer;
+        margin-bottom: 2vh;
+    }
+    .botonpublicar:hover
+    {
+        opacity: 1;
+    }
+    .btnactualizar
+    {
+        width: 6vw;
+        height: 3.2vh;
+        margin-left: 83.5%;
+        margin-bottom: 2vh;
+        opacity: 0.6;
+    }
+    .btnactualizar:hover
+    {
+        opacity: 1;
+    }
+    .btnregistrar2
+    {
+        width: 6vw;
+        height: 3.2vh;
+        margin-left: 83.5%;
+        margin-bottom: 2vh;
+        opacity: .7;
+    }
+    .btnregistrar2:hover
+    {
+        opacity: 1;
+    }
+    .imguser
+    {
+        position: relative;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        left: 1vw;
+        top: 1vh;
+        overflow: hidden;
+    }
+
+</style>
+
+<div ng-show="error" class="">
+    <span>{{ error.message }}</span>
+</div>
+
+
+    <!--REGISTRAR USUARIO-->
+<div class="boxpubliuser" ng-show="usuario.data.adminusers" >
+
+    <div class="boxinuseredit">
+        <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
+
+        <h3 class="tittleregistrar">Registrar nuevo usuario</h3>
+
+
+        <md-input-container class="loginedit">
+            <label>Login</label>
+            <input type="text" ng-model="username">
+        </md-input-container>
+
+        <md-input-container class="loginedit">
+            <label>Contraseña</label>
+            <input type="password" ng-model="password">
+        </md-input-container >
+
+        <md-input-container class="loginedit">
+            <label>nombre</label>
+            <input type="text" ng-model="nombre">
+        </md-input-container>
+
+        <md-input-container class="loginedit">
+            <label>apellido</label>
+            <input type="text" ng-model="apellido">
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>email</label>
+            <input type="text" ng-model="email">
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <md-select  placeholder="Area" ng-model="area" md-on-open="loadAreas()">
+                <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                    {{area.nombre}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>cargo</label>
+            <input type="text" ng-model="cargo">
+        </md-input-container>
+
+            <md-input-container class="emailedit">
+                <md-select  placeholder="Sexo" ng-model="sexo">
+                    <md-option  value="Masculino">Masculino</md-option>
+                    <md-option  value="Femenino">Femenino</md-option>
+                </md-select>
+            </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>telefono</label>
+            <input type="text" ng-model="telefono">
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>direccion</label>
+            <input type="text" ng-model="direccion">
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>region</label>
+            <input type="text" ng-model="region">
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>documento</label>
+            <input type="text" ng-model="documento">
+        </md-input-container>
+
+        <md-input-container class="emailedit">
+            <label>contratacion</label>
+            <input type="text" ng-model="contratacion">
+        </md-input-container>
+
+            <!--SELECCIONAR ARICHIVO FOTO-->
+
+        <div class="boxexaminar">
+
+            <label for="file-input">
+                <div class="imguser">
+                    <img style="height: 100%" ng-show="myForm.file.$valid" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
+                </div>
+            </label>
+            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" ng-hide="true" />
+            <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />-->
+
+        </div>
+
+        <br>
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+
+
+        <br>
+
+        <!--Linea Horizontal-->
+        <div class="li"></div>
+
+                <span class="progress" ng-show="picFile.progress >= 0">
+                  <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+                </span>
+        <span ng-show="picFile.result">Upload Successful</span>
+
+            <!--BOTON REGISTRAR -->
+        <div >
+            <!--<img class="botonpublicar" src="/img/registrar.png">-->
+            <!--<button  value="" type="submit" class="btnregistrar">  </button>-->
+            <input type="image" src="/img/registrar.png" class="btnregistrar2" >  </input>
+        </div>
+
+        </form>
+     </div>
+</div>
+
+
+<!--BUSCADOR DE USUARIOS-->
+
+<div class="cajabuscar">
+    <img class="lupita" src="/img/lupa.png">
+    <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+        <label>Buscar</label>
+        <input type="text" ng-model="search" required>
+    </md-input-container>
+</div>
+
+
+<!--TODOS LOS USUARIOS-->
+
+ <div ng-repeat="user in users | filter:search">
+
+     <div class="boxallusers">
+        <div> <img class="imguseredit" src="/img/boton-examinar.png"> </div>
+        <div class="boximgusersedit" ng-hide="editing" ng-click="editing = true"> <img class="iconoeditaruser" src="/img/icono-editar.png"> </div>
+        <div class="boximguserseli"> <img class="iconoeditaruser" src="/img/icono-eliminar-g.png"> </div>
+        <p class="editdatosusername">{{user.nombre}} {{user.apellido}}</p>
+        <p class="editdatosusercargo"><span class="negrita">Cargo: </span>{{user.cargo}}</p>
+        <p class="editdatosuserarea"><span class="negrita">Area:</span>{{user.area}}</p>
+        <p class="editdatosuseremail"><img class="iconomail" src="/img/icono-mail.png"> {{user.email}}</p>
+
+         <!--EDITAR USUARIO-->
+
+         <div class="boxinuseredit">
+
+             <form ng-if="editing" enctype="multipart/form-data" name="myForm"
+                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf],user._id);editing = false;">
+
+                 <div class=" lineahgris"></div>
+                 <h3 class="tittleedit">Editar</h3>
+
+
+                 <md-input-container class="loginedit">
+                     <label>Login</label>
+                     <input type="text" ng-model="user.username" >
+                 </md-input-container>
+
+                 <md-input-container class="loginedit">
+                     <label>Contraseña</label>
+                     <input type="password" ng-model="user.password" >
+                 </md-input-container>
+
+                 <md-input-container class="loginedit">
+                     <label>nombre</label>
+                     <input type="text" ng-model="user.nombre" >
+                 </md-input-container>
+
+                 <md-input-container class="loginedit">
+                     <label>apellido</label>
+                     <input type="text" ng-model="user.apellido" >
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>email</label>
+                     <input type="text" ng-model="user.email" >
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <md-select  placeholder="Area" ng-model="user.area" md-on-open="loadAreas()">
+                         <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                             {{area.nombre}}
+                         </md-option>
+                     </md-select>
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>cargo</label>
+                     <input type="text" ng-model="user.cargo">
+                 </md-input-container>
+
+                <md-input-container class="emailedit">
+                    <md-select  placeholder="Sexo" ng-model="user.sexo">
+                        <md-option  value="Masculino">Masculino</md-option>
+                        <md-option  value="Femenino">Femenino</md-option>
+                    </md-select>
+                </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>telefono</label>
+                     <input type="text" ng-model="user.telefono">
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>direccion</label>
+                     <input type="text" ng-model="user.direccion">
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>region</label>
+                     <input type="text" ng-model="user.region">
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>documento</label>
+                     <input type="text" ng-model="user.documento">
+                 </md-input-container>
+
+                 <md-input-container class="emailedit">
+                     <label>contratacion</label>
+                     <input type="text" ng-model="user.contratacion">
+                 </md-input-container>
+
+
+                 <div ng-if="usuario.data.adminusers">
+
+                     <div style="width: 28%;display: inline-block; margin-top: 1vh">
+                         <md-checkbox ng-model="user.adminusers"  aria-label="Modificar Usuarios" class="red" >
+                             Modificar Usuarios
+                         </md-checkbox>
+
+                         <md-checkbox ng-model="user.adminpubli"   class="red" >
+                             Publicar
+                         </md-checkbox>
+
+                         <md-checkbox ng-model="user.admindocs" class="red" >
+                             Subir Documentos
+                         </md-checkbox>
+                     </div>
+
+
+                     <div style="width: 32%;display: inline-block; float: right;margin-top: 1vh">
+
+                         <md-checkbox ng-model="user.adminforms" class="red" >
+                             Crear Formularios
+                         </md-checkbox>
+
+                         <md-checkbox ng-model="user.adminfotos" class="red" >
+                             Crear Albums de fotos
+                         </md-checkbox>
+                     </div>
+
+                     <div style="width: 32%;display: inline-block; float: right; margin-top: 1vh">
+                         <md-checkbox ng-model="user.admincrono" class="red" >
+                             Crear Eventos de Cronograma
+                         </md-checkbox>
+
+                         <md-checkbox ng-model="user.adminpqrsf" class="red" >
+                             Correspondencia de PQRSF
+                         </md-checkbox>
+
+                         <md-checkbox ng-model="user.tramitepqrsf" class="red" >
+                             Tramite de PQRSF
+                         </md-checkbox>
+                     </div>
+
+                 </div>
+
+                 <div class="container" style="text-align: right; margin-right: 4.8%">
+                        <input type="file" ngf-select ng-model="user.picFile" id="image_src2" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />
+                 </div>
+
+                 <br>
+
+                 <i ng-show="myForm.file.$error.maxSize">File too large {{user.picFile.size / 1000000|number:1}}MB: max {{user.picFile.$errorParam}}</i>
+
+                 <img style="max-width: 8vw" ng-show="myForm.file.$valid" ngf-src="!user.picFile.$error && user.picFile" class="thumb">
+
+                 <br>
+
+                 <!--Linea Horizontal-->
+                 <div class="li"></div>
+
+                <span class="progress" ng-show="user.picFile.progress >= 0">
+                  <div style="width:{{picFile.progress}}%" ng-bind="user.picFile.progress + '%'" class="ng-binding"></div>
+                </span>
+
+                 <span ng-show="user.picFile.result">Upload Successful</span>
+
+                 <div>
+                     <input type="image" src="/img/boton_actualizar.png" class="btnactualizar" >  </input>
+                     <!--<md-button type="submit" class="md-raised"> Actualizar </md-button>-->
+                 </div>
+
+
+             </form>
+         </div>
+
+     </div>
+
+
+
+
+</div>

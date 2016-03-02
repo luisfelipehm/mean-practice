@@ -1,17 +1,356 @@
 <style>
-    .calendarcontainer
+    .calendarcontainer2
     {
         position: absolute;
-        top: 32vh;
-        width: 90%;
-        left: 5%;
+        top: 5vh;
+        width: 55%;
+        left: 40%;
     }
+    #calendar  .fc-scroller {
+        height: 70vh !important;
+    }
+    .numev > p
+    {
+        font-size: 1.5vh;
+        margin: 0;
+        margin-left: .8vh;
+    }
+    .numev
+    {
+        width: 2.3vh;
+        height: 2.3vh;
+        border-radius: 50%;
+        border: 1px solid #f39200;
+        color: black;
+        background-color: white;
+        position: absolute;
+        z-index: 5;
+        top: 22%;
+        left: 63%;
+
+
+    }
+    .cuentaeventos
+    {
+        position: relative;
+    }
+    .eventoo
+    {
+        background-color: rgba(243,146,0,.5);
+        border: none;
+        border-radius: 0 ;
+        height: .5vh;
+        margin-top: .5vh;
+    }
+    .eventoo:hover
+    {
+        background-color: rgba(243,146,0,1);
+    }
+    .iconodeevento
+    {
+        height: 4vh;
+        margin: 30% 0 0 30%;
+    }
+    .fc-other-month > .cuentaeventos > .numev
+    {
+        display: none;
+    }
+    .fc-other-month > a > .cuentaeventos
+    {
+        display:none
+    }
+
+    #calendar .fc th, .fc td {
+        border: 1px solid transparent;
+
+        padding: 0;
+        vertical-align: top;
+    }
+    #calendar  td.fc-day
+    {
+        border: 1px solid #575757;
+    }
+    #calendar  td.fc-day:nth-child(-n+2)
+    {
+        border-left: 1px solid transparent ;
+    }
+    #calendar   td.fc-day-number
+    {
+        font-size: 2.8vh;
+        text-align: left;
+        vertical-align: bottom;
+        font-family: Museo, arial, sans-serif;
+        color: #575757;
+        opacity: .5;
+    }
+
+    #calendar .fc-widget-header{
+        font-family: Openregular , arial, sans-serif;
+        background-color: #E30613;
+        height: 30px;
+        color: white;
+        font-size: 2.2vh;
+        padding-top: 1%;
+        border: none;
+    }
+
+    .leftcal
+    {
+        top: 5vh;
+        width: 33%;
+        left: 4%;
+
+    }
+    .rightcal
+    {
+        top: 5vh;
+        width: 55%;
+        left: 39%;
+        /*border: 1px solid #f39200;*/
+    }
+    #calendar .fc-day-grid-container
+    {
+        margin-top: 10px;
+    }
+
+    .messup
+    {
+        width: 100%;
+        height: 7vh;
+
+    }
+    .onlymes
+    {
+        color: #575756;
+        font-size: 4vh;
+        position: absolute;
+        margin: 0;
+        top: 1vh;
+    }
+    .siguiente2
+    {
+        height: 1px;
+        width: 1px;
+        border: 15px solid transparent;
+        border-left: 20px solid #E30613;
+        cursor: pointer ;
+        position: absolute;
+        top: .8vh;
+        right: 1%;
+    }
+    .anterior2
+    {
+        height: 1px;
+        width: 1px;
+        border: 15px solid transparent;
+        border-right: 20px solid #E30613;
+        cursor: pointer ;
+        position: absolute;
+        top: .8vh;
+        left: 1%;
+    }
+    #calendar td.fc-today
+    {
+        color: #E30613;
+        opacity: 1;
+    }
+    #calendar td.fc-sun
+    {
+        color: #E30613;
+        opacity: 1;
+        padding-top: 1vh;
+        padding-left: 1vh;
+    }
+    #calendar  td.fc-other-month
+    {
+        color: transparent;
+    }
+    .fc-unthemed .fc-today {
+        background: url(/assets/icono-calendario-d.png);
+        background-position: bottom right;
+        background-size: 30%;
+        background-repeat: no-repeat;
+
+    }
+    #calendar .fc-view-container
+    {
+
+        width: 100%;
+    }
+    #calendar .fc-row{height:9vh !important;}
+    #calendar .fc-widget-header{height:3.5vh !important;}
+    .neweventicon{display: inline-block;float: right; height: 7vh;margin-left: 1vw }
+    .newevent{display: inline-block;float: right; color: #01539c;font-size: 3vh}
+    #formularioeventos
+    {
+        position: absolute;
+        top: 70vh;
+        left: 30vw;
+    }
+    .numev > p
+    {
+        font-size: 1.5vh;
+        margin: 0;
+        margin-left: .8vh;
+    }
+    .numev
+    {
+        width: 2.3vh;
+        height: 2.3vh;
+        border-radius: 50%;
+        border: 1px solid #E30613;
+        color: black;
+        background-color: white;
+        position: absolute;
+        z-index: 5;
+        top: 22%;
+        left: 63%;
+
+
+    }
+    .cuentaeventos
+    {
+        position: relative;
+    }
+    .iconodeevento
+    {
+        height: 4vh;
+        margin: 30% 0 0 30%;
+    }
+    .leftcal
+    {
+        top: 5vh;
+        width: 33%;
+        left: 4%;
+
+    }
+    .showndia
+    {
+        color: #E30613;
+        font-size: 6vh;
+        display: inline-block;
+        margin: 2vh 5px 0 0;
+    }
+    .showldia
+    {
+        font-size: 2.5vh;
+        display: inline-block;
+        margin: 2vh 0 0 0;
+    }
+    .horaround
+    {
+        display: inline-block;
+        vertical-align: -30%;
+        font-size: 1vh;
+        color: #878787;
+    }
+    .titsub
+    {
+        display: inline-block;
+        padding-bottom: .5vh ;
+        border-bottom: 1px solid #878787;
+        width: 80%;
+        color: #878787;
+        font-size: 2vh;
+        margin-left: 2%;
+        margin-top: 3vh;
+    }
+    .desplegarev
+    {
+        margin-top: .5vh;
+        float: right;
+        height: 1.5vh;
+        opacity: .7;
+        cursor: pointer;
+    }
+    .desplegarev:hover
+    {
+        opacity: 1;
+    }
+    .infoevshow
+    {
+        display: none;
+        width: 70%;
+        margin-left: 19%;
+    }
+    .titsub2
+    {
+        display: inline-block;
+        padding-bottom: .5vh ;
+        width: 80%;
+        color: #575756;
+        font-size: 2vh;
+        margin: 0;
+        margin-left: 2%;
+        opacity: 0;
+    }
+    .labelshowevdes
+    {
+        margin: 0;
+        color: #E30613;
+        font-size: 1.7vh;
+    }
+    .datoshowevdes
+    {
+        margin-top: 0vh;
+        color: #575756;
+        font-size: 1.5vh;
+        margin-left: 1.3vh;
+    }
+
 
 </style>
 
 <div ng-controller="CalendarbarCtrl">
 
-    <div class="calendarcontainer">
-    <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+    <div class="leftcal ab">
+        <script>
+
+//        $(document).ready(function(){
+//            var ndia = moment("2016-03-11",'YYYY-MM-DD').format('DD'),
+//                    ldia = moment("2016-03-11",'YYYY-MM-DD').format('dddd');
+//
+//            $('.cut').prepend('<p class="showldia">'+ldia+' </p>');
+//            $('.cut').prepend('<p class="showndia">'+ndia+' </p>');
+//
+//        });
+
+
+    </script>
+
+        </div>
+
+
+
+    <div class="calendarcontainer2">
+        <div class="messup">
+            <div class="siguiente2"></div>
+            <div class="anterior2"></div>
+            <p class="onlymes"></p>
+        </div>
+    <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
+    </div>
+    <div id="formularioeventos">
+
+        <form ng-submit="crearEvento(nombre,descripcion,fechainicio,fechafinal,horainicio,horafinal)">
+            <md-input-container>
+                <label>Nombre</label>
+                <input type="text" ng-model="nombre" required md-maxlength="200">
+            </md-input-container><br>
+            <md-input-container>
+                <label>Descripcion</label>
+                <input type="text" ng-model="descripcion" required md-maxlength="200">
+            </md-input-container><br>
+
+            <md-datepicker ng-model="fechainicio" md-placeholder="Fecha de inicio"></md-datepicker><br>
+
+            <md-datepicker ng-model="fechafinal" md-placeholder="Fecha final"></md-datepicker><br>
+
+            <input ui-timepicker ng-model="horainicio"><br>
+
+            <input ui-timepicker ng-model="horafinal"><br>
+
+            <md-button type="submit" class="md-raised"> Crear Evento </md-button>
+        </form>
     </div>
 </div>

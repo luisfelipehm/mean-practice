@@ -4,7 +4,32 @@ var jwt = require('jsonwebtoken');
 var UserSchema = new mongoose.Schema({
     username: {type: String, lowercase: true, unique: true},
     hash: String,
-    salt: String
+    nombre: String,
+    email: String,
+    admin: Array,
+    cargo: String,
+    area: String,
+    sexo: String,
+    telefono: String,
+    direccion: String,
+    fotoperfil: String,
+    region: String,
+    documento: String,
+    apellido: String,
+    contratacion: String,
+    salt: String,
+    sock: String,
+    actual: Boolean,
+    adminusers: Boolean,
+    adminpubli: Boolean,
+    admindocs: Boolean,
+    adminforms: Boolean,
+    adminfotos: Boolean,
+    admincrono: Boolean,
+    adminpqrsf: Boolean,
+    tramitepqrsf: Boolean,
+    ultimaconexion: Date
+
 });
 
 
@@ -30,6 +55,17 @@ UserSchema.methods.generateJWT = function() {
     return jwt.sign({
         _id: this._id,
         username: this.username,
+        apellido: this.apellido,
+        nombre: this.nombre,
+        fotoperfil: this.fotoperfil,
+        adminusers: this.adminusers,
+        adminpubli: this.adminpubli,
+        admindocs: this.admindocs,
+        adminforms: this.adminforms,
+        adminfotos: this.adminfotos,
+        admincrono: this.admincrono,
+        adminpqrsf: this.adminpqrsf,
+
         exp: parseInt(exp.getTime() / 1000),
     }, 'SECRET');
 };

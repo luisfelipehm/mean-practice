@@ -1,0 +1,18 @@
+<br>
+<br>
+<br>
+<br>
+
+<form ng-submit="crearArea()">
+    <md-input-container>
+        <label>Nombre del Area</label>
+        <input type="text" ng-model="nombre" required md-maxlength="200">
+    </md-input-container>
+    <md-button type="submit" class="md-raised"> Crear Area </md-button>
+</form>
+
+
+<div ng-repeat="a in areas">
+<a href="#/root/areas/{{a._id}}">{{a.nombre}}</a>
+
+</div>

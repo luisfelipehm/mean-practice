@@ -1,34 +1,69 @@
 
-
 <style>
     .dtittle1
     {
         color: #575756;
         font-size: 1.5vw;
-        margin-left: 35%;
+        margin-left: 7.5vw;
     }
-    .slider
+    .imagenesactividades
     {
-        border: solid red;
-        background-color: black;
-        width: 20vw;
-        height: 20vh;
+        width: 15vw;
+        position: absolute;
+        left: 4vw;
+        autoHeight: true
+    }
+    .imgactiva
+    {
+        margin-left: auto;
+        margin-right: auto;
+        autoHeight: true;
+        width: 10vw;
 
     }
+    .imagencuadro
+    {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    .barraderechaimg
+    {
+        position: absolute;
+        height:50vh;
+        width: 22%;
+        top: 15vh;
+    }
+    .fondobarradercha
+    {
+        position: absolute;
+        background-image: url("../img/textura_30.png");
+        background-size:40px 40px;
+        height: 100vh;
+        width: 21.9vw;
+        top: 42vh;
+        right: 0vw;
+        -webkit-box-shadow: inset 0px 0px 50px -8px ;
+        -moz-box-shadow: inset 0px 0px 50px -8px ;
+        box-shadow: inset 0px 0px 50px -8px;
+    }
+
 </style>
 
-<script>
-    $('.single-item').slick();
-</script>
 
-<div style="position: absolute; height:50vh; width: 22%; top: 57vh; left: 77.9%; ">
-    <p class="dtittle1">Actividades</p>
+<div class="fondobarradercha" ng-controller="FotosCtrl as fft">
+{{fft.hola}}
+    <div class="barraderechaimg">
+        <p class="dtittle1">Actividades</p>
 
-  <!--imagenes que cambian-->
-    <slick lazy-load='ondemand' slides-to-show=1 slides-to-scroll=1 class="slider lazy">
-        <div><div class="image"><img data-lazy="/img/icono-f.png"></div></div>
-        <div><div class="image"><img data-lazy="/img/icono-i.png"></div></div>
-        <div><div class="image"><img data-lazy="/img/icono-t.png"></div></div>
-    </slick>
+      <!--IMAGENES BARRA DERECHA-->
+        <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades">
+            <div ng-repeat="album in fotos" class="imagencuadro">
+                <a href="#/root/fotos/{{album._id}}">
+                        <img data-lazy="{{(!album.files[0] ? '/img/adminfelicitacion.png' : album.files[0].adjunto)}}" class="imgactiva">
+                </a>
+            </div>
+            <!--<div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro2.jpg"></div>-->
+        </slick>
 
+    </div>
 </div>

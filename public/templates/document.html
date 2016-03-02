@@ -60,8 +60,8 @@
     }
     .boxnewdocument
     {
-        position: relative;
-        width: 30vw;
+        margin-top: 3vh;
+        width: auto;
         height: auto;
         left: 48%;
     }
@@ -141,6 +141,18 @@
         width: auto;
         display: none;
     }
+    .botonuno
+    {
+        height: 5vh;
+        margin-left: 47%;
+    }
+    .botondos
+    {
+        margin-left: 2%;
+        width: 12vw;
+        height: 5vh;
+        left: 16vw;
+    }
 
 
 </style>
@@ -153,9 +165,9 @@
 
 
     <!--button new document and folder-->
-    <div class="boxnewdocument">
-       <img src="img/icono-documento-n.png" id="btn1" style="height: 5%;  margin-left: 4%">
-       <img src="img/icono-carpeta-n.png"id="btn2"style="position: absolute;width: 12vw;height: 5vh; left: 16vw; ">
+    <div class="boxnewdocument" ng-show="usuario.data.admindocs">
+       <img src="img/icono-documento-n.png" id="btn1" class="botonuno">
+       <img src="img/icono-carpeta-n.png"id="btn2" class="botondos">
     </div>
 
     <div class="contac">
@@ -176,7 +188,6 @@
 
                 <p style="margin: 0; font-size: 1vw">Files:</p>
 
-
                         <div ng-repeat="f in picFile" style="font:smaller; display:inline-block;margin-left: 1vw; margin-top: 1vh ">
                             <div style="border: solid darkcyan; width: 7.5vw;height: 12vh;margin-bottom: 1vh">
                                 {{f.name}} {{f.$errorParam}}
@@ -185,7 +196,6 @@
                             <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
                           </span>
                         </div>
-
 
                             <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
                             </li>
@@ -230,37 +240,38 @@
     <br>
 
     <!--Titulo de la tabla-->
-    <div class="conthead">
-        <div class="enlinea tab1" id="tab11"></div>
-        <div class="enlinea tab2" id="tab22"> <p>Nombre</p></div>
-        <div class="enlinea tab3" id="tab33"> <p>Tamaño</p></div>
-        <div class="enlinea tab4" id="tab44"></div>
+    <div class="boxpubli">
+        <div class="conthead">
+            <div class="enlinea tab1" id="tab11"></div>
+            <div class="enlinea tab2" id="tab22"> <p>Nombre</p></div>
+            <div class="enlinea tab3" id="tab33"> <p>Tamaño</p></div>
+            <div class="enlinea tab4" id="tab44"></div>
+        </div>
+
+        <div ng-repeat="doc in document.carpetas" style="display:flex">
+            <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 85%;margin-top: 2%; margin-left: 35%"></div>
+            <div class="enlinea tab2" ><p class="mi"><a href="#/root/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
+            <div class="enlinea tab3" ><p class="mi"> -- </p></div>
+            <div class="enlinea tab4" ></div>
+        </div>
+
+        <!--info de los documentos y carpetas-->
+        <div ng-repeat="archivo in document.files" style="display: flex;" ng-class="{'last':$last}">
+
+        <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%; margin-top: 1%; margin-left: 38%"></div>
+            <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}">{{archivo.nombre}}</a></p></div>
+            <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
+        <div class="enlinea tab4">
+            <p class="mi">
+                <img src="img/icono-editar.png"style="height: 2vh;margin-left: .7vw">
+                <img src="img/iconox.png"style="height: 2vh;margin-left: .2vw">
+            </p>
+
+        </div>
+
+
+        </div>
     </div>
-
-    <div ng-repeat="doc in document.carpetas" style="display:flex">
-        <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 85%;margin-top: 2%; margin-left: 35%"></div>
-        <div class="enlinea tab2" ><p class="mi"><a href="#/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
-        <div class="enlinea tab3" ><p class="mi"> -- </p></div>
-        <div class="enlinea tab4" ></div>
-    </div>
-
-    <!--info de los documentos y carpetas-->
-    <div ng-repeat="archivo in document.files" style="display: flex;" ng-class="{'last':$last}">
-
-    <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%; margin-top: 1%; margin-left: 38%"></div>
-        <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}">{{archivo.nombre}}</a></p></div>
-        <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
-    <div class="enlinea tab4">
-        <p class="mi">
-            <img src="img/icono-editar.png"style="height: 2vh;margin-left: .7vw">
-            <img src="img/iconox.png"style="height: 2vh;margin-left: .2vw">
-        </p>
-
-    </div>
-
-
-    </div>
-
 
 
 

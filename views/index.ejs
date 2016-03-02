@@ -1,7 +1,8 @@
 <html>
 <head>
-  <title>My Angular App!</title>
-
+  <title>Intranet Soluciones</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
   <link rel="stylesheet" href="/libs/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/libs/fullcalendar/dist/fullcalendar.css">
   <link rel="stylesheet" href="/libs/ngGallery/src/css/screen.css">
@@ -9,13 +10,31 @@
   <!--carousel-->
   <link rel="stylesheet" href="/libs/slick-carousel/slick/slick.css">
   <link rel="stylesheet" href="/libs/slick-carousel/slick/slick-theme.css">
-
+  <link rel="stylesheet" href="/libs/nvd3/build/nv.d3.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/fafa.min.css">
+  <link rel="stylesheet" href="/libs/jquery-timepicker-jt/jquery.timepicker.css">
+  <script src="/socket.io/socket.io.js"></script>
 
 
 
   <script src="/libs/jquery/dist/jquery.min.js"></script>
-  <script src="/libs/moment/min/moment.min.js"></script>
+
+
   <script src="/libs/angular/angular.min.js"></script>
+  <script src="/libs/angular-socket-io/socket.js"></script>
+  <script>
+    //var socket = io('ws://192.168.0.24');
+    var socket = io('ws://192.168.0.24:3000');
+//    var socket = io();
+  </script>
+  <script src="/libs/moment/min/moment.min.js"></script>
+  <script src="/libs/moment/locale/es.js"></script>
+  <script src="/libs/underscore/underscore-min.js"></script>
+  <script src="/libs/angular-underscore-module/angular-underscore-module.js"></script>
+  <script src="/libs/angular-moment/angular-moment.min.js"></script>
+  <script src="/libs/jquery-timepicker-jt/jquery.timepicker.min.js"></script>
+  <script src="/libs/angular-jquery-timepicker/src/timepickerdirective.min.js"></script>
   <script src="/libs/angular-animate/angular-animate.min.js"></script>
   <script src="/libs/angular-aria/angular-aria.min.js"></script>
   <script src="/libs/angular-messages/angular-messages.min.js"></script>
@@ -23,6 +42,9 @@
   <script src="/libs/ng-file-upload/ng-file-upload-shim.min.js"></script>
   <script src="/libs/ng-file-upload/ng-file-upload.min.js"></script>
   <script src="/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="/libs/d3/d3.min.js"></script>
+  <script src="/libs/nvd3/build/nv.d3.min.js"></script>
+  <script src="/libs/angular-nvd3/dist/angular-nvd3.min.js"></script>
   <script src="/libs/ngGallery/src/js/ngGallery.js"></script>
   <script src="/libs/angular-ui-calendar/src/calendar.js"></script>
   <script src="/libs/fullcalendar/dist/fullcalendar.min.js"></script>
@@ -34,60 +56,73 @@
 
 
 
-
-
   <script src="/javascripts/angularApp.js"></script>
   <style>
+
+    html {
+      height: 100%;
+    }
+    body {
+      min-height: 100%;
+    }
+    html,
+    body {
+      height: 100%;
+    }
     .content
     {
       position: absolute;
-      top: 55vh;
+      top: 44vh;
       left: 22%;
       width: 56%;
+      z-index: 9 ;
+      background-image: url("img/fondo_centro_50.png");
+      background-size: 40px 40px;
+      min-height: 100% ;
+      height: auto;
+      margin-top: 0;
+      -webkit-box-shadow: inset 0px 0px 30px -8px ;
+      -moz-box-shadow: inset 0px 0px 30px -8px ;
+      box-shadow: inset 0px 0px 30px -8px;
+    }
+    form.new_message
+    {
+      margin-bottom: 0;
     }
     .linearedtop
     {
       fill: #E30613;
       mix-blend-mode: multiply;
+      margin-left: 0;
+    }
+    .linearedtop2
+    {
+      fill: #E30613;
+    }
+    .svgrojo
+    {
+      position: absolute;
+      top: 27.6vh;
+      z-index: 1;
+      left: 0;
+      width: 100%;
+    }
+    .vwer
+    {
+      height: 100%;
+      min-height: 100%;
     }
   </style>
 </head>
 <body ng-app="flapperNews" >
 
-<div style="position: absolute;top:0;left: 0;width: 100% ">
-  <img style="width:100%;" src="/img/foto_mundo.png">
-</div>
 
-<div style="position: absolute;top:45vh; width: 100%;">
-  <!--<img style="width:100%" src="/img/fondo_barra_izq.png">-->
-</div>
+<!--<div style="position: absolute;top: 0;left: 0;width: 100% ">-->
+  <!--<img style="width:100%; height: 51vh" src="/img/foto_mundo.png">-->
+<!--</div>-->
 
-  <div style="position: relative; top: 7%">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 1594.8 522.9" enable-background="new 0 0 1594.8 522.9" xml:space="preserve">
-      <linearGradient id="SVGID_52_" gradientUnits="userSpaceOnUse" x1="36.6315" y1="265.1648" x2="1572.6389" y2="493.1659">
-        <stop offset="0" style="stop-color:#E3152D"/>
-        <stop offset="0.2524" style="stop-color:#E41F2E"/>
-        <stop offset="0.9126" style="stop-color:#C11625"/>
-        <stop offset="0.9903" style="stop-color:#E3152D"/>
-      </linearGradient>
-      <path fill="url(#SVGID_52_)" d="M-1.8,366.2c615.3-95,1600.1,42.7,1600.1,42.7l0.6-27.6c0,0-1127.4-153.2-1601.4-77.8l-1.5,71.5l2,0  L-1.8,366.2z"/>
-      <linearGradient id="SVGID_53_" gradientUnits="userSpaceOnUse" x1="33.9895" y1="235.6784" x2="1573.395" y2="464.1839">
-        <stop offset="0" style="stop-color:#E3152D"/>
-        <stop offset="0.2524" style="stop-color:#E41F2E"/>
-        <stop offset="0.9126" style="stop-color:#C11625"/>
-        <stop offset="0.9903" style="stop-color:#E3152D"/>
-      </linearGradient>
-      <path class="linearedtop" d="M-1.8,336.3c615.3-95,1600.7,45,1600.7,45l-0.3-28.2c0,0-1126.6-175.8-1600.6-100.3l-2,92.4l2,0  L-1.8,336.3z"/>
-    </svg>
-  </div>
 
-<barranav></barranav>
-<barraizq></barraizq>
-<barrader></barrader>
-  <div class="content">
-    <ui-view>
-    </ui-view>
-  </div>
+    <div class="vwer" ui-view="main"></div>
 
 
 

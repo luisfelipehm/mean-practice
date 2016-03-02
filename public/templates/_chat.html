@@ -1,0 +1,265 @@
+<script>
+    var numerodechats = 0;
+</script>
+<style>
+    .chatty
+    {
+        position: fixed;
+        width: 15vw;
+        height: 40vh;
+        bottom: 4vh;
+        right: 0;
+        border: 1px solid white;
+        z-index: 1000;
+        background-color: white;
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+    }
+    .conectchat
+    {
+        height: .7vh;
+    }
+
+    .chatbox {
+        position: fixed;
+        z-index: 900;
+        width: 280px;
+        display: none;
+    }
+
+    .chatboxhead {
+        background: #e3152d;
+        color: white;
+        padding: 0.5rem;
+        overflow: hidden;
+
+        border-right: 1px solid rgba(85, 85, 85, 0.87);
+        border-left: 1px solid rgba(85, 85, 85, 0.87);
+    }
+
+    .chatboxhead h1 {
+        display: inline;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .chatboxblink {
+        background-color: #176689;
+        border-right: 1px solid #176689;
+        border-left: 1px solid #176689;
+    }
+
+    .chatboxcontent {
+        font-family: arial, sans-serif;
+        height: 278px;
+        width: 278px;
+        max-height: 280px;
+        max-width: 280px;
+        overflow-y: auto;
+        padding: 0px;
+        border-left: 1px solid #cccccc;
+        border-right: 1px solid #cccccc;
+        border-bottom: 1px solid #eeeeee;
+        background: #e5e5e5;
+        line-height: .8em;
+        list-style: none;
+    }
+
+    .chatboxcontent li {
+        padding: 0.5rem;
+        overflow: hidden;
+        display: flex;
+    }
+
+    .chatboxcontent .avatar {
+        width: 40px;
+        position: relative;
+    }
+
+    .chatboxcontent .avatar img {
+        display: block;
+        width: 100%;
+    }
+
+    .other .avatar:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border: 5px solid white;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+    }
+
+    .self {
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+
+    .self .chatboxmessagecontent {
+        order: 2;
+        border-bottom-right-radius: 0;
+    }
+
+    .self .avatar {
+        order: 1;
+    }
+
+    .self .avatar:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border: 5px solid white;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .chatboxmessagecontent {
+        background: white;
+        padding: 10px;
+        border-radius: 2px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .chatboxmessagecontent p {
+        font-size: 12px;
+        margin: 0 0 0.2rem 0;
+        -ms-word-break: break-all;
+
+        /* Non standard for webkit */
+        word-break: break-word;
+
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
+    }
+
+    .chatboxmessagecontent time {
+        font-size: 9px;
+        color: #ccc;
+        float: right;
+
+    }
+
+    .chatboxinput {
+        padding: 5px;
+        background-color: #575756;
+        border-left: 1px solid #cccccc;
+        border-right: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+    }
+
+    .chatboxtextarea {
+        width: 262px;
+        height: 20px;
+        padding: 3px 0pt 3px 3px;
+        border: 1px solid #eeeeee;
+        margin: 1px;
+        overflow: hidden;
+        resize: none !important;
+        font-family: Arial;
+    }
+
+    .chatboxtextareaselected {
+        border: 2px solid #878787;
+        margin: 0;
+    }
+
+    .chatboxmessage {
+        margin-left: 1em;
+    }
+
+    .chatboxinfo {
+        margin-left: -1em;
+        color: #666666;
+    }
+
+    .chatboxoptions {
+        float: right;
+    }
+
+    .chatboxoptions a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+    }
+
+    .chatboxtitle {
+        float: left;
+    }
+    #searchUserBox
+    {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        height: 4vh;
+        width: 15VW;
+        background-color: #e3152d;
+        border: 1px solid #e3152d;
+    }
+    #searchUserBox input
+    {
+        margin: .6vh 0 .3vh 3vw;
+        font-size: 2vh;
+        width: 11vw;
+        height: 3vh;
+    }
+    .iconochatnofi
+    {
+        position: absolute;
+        font-size: 2.5vh;
+        top: .8vh;
+        left: .7vw;
+        color: white;
+    }
+    .imguserchat
+    {
+        margin-top: .4vh;
+        margin-left: .4vw;
+        border-radius: 50%;
+        height: 4.1vh;
+        width: 4.1vh;
+        overflow: hidden;
+        display:inline-block;
+    }
+</style>
+
+<div ng-controller="ChatCtrl" id="chap">
+
+    <!--buscadode chat-->
+    <div id="searchUserBox">
+        <i class="fa fa-comments iconochatnofi" ></i>
+        <input type="text" ng-model="search" required>
+    </div>
+
+    <!--Caja de chatr gris "-->
+    <div class="chatty" ng-show="search.length > 0">
+        <div style="background-color: #e3152d; width: 100%; height: 3vh;border: solid 1px #e3152d ">
+
+        </div>
+        <div style="background-color: #e5e5e5; width: 90%; min-height:88%; margin-left: 5%">
+            <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'"style="">
+                <div style="margin-top: 1.7vh" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
+                    <div class="imguserchat">
+                        <img style=" width:2vw; height: 2vw;" src="{{users.fotoperfil == undefined ? '/img/user_chat.png' : users.fotoperfil}}">
+                    </div>
+                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw;font-size: 1.1vh";>
+                        {{titleize(users.apellido)}} {{titleize(users.nombre)}}
+                    </div>
+                    <div style="display: inline-block; position: absolute; margin-top: 2vh; margin-left: 7vw">
+                        <img src="/img/conectado.png" class="conectchat" ng-show="users.actual">
+                        <img src="/img/desconectado.png" class="conectchat" ng-show="!users.actual" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

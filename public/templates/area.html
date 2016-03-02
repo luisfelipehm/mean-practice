@@ -1,0 +1,527 @@
+
+
+<style>
+    /*Barra de carga*/
+    .thumb
+    {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+    form .progress
+    {
+        line-height: 15px;
+    }
+    .progress
+    {
+        display: inline-block;
+        width: 100%;
+        height: 10%;
+        border: 3px groove #CCC;
+    }
+    .progress div
+    {
+        font-size: smaller;
+        background: red;
+        width: 0;
+    }
+
+
+
+    /*Cuado Publicacion*/
+
+
+    .imgpublica
+    {
+        width: 90%;
+        margin-left: 5%;
+
+
+    }
+    .tittlepli
+    {
+        font-family: Arial;
+        font-size: 1.5vw;
+        color: red;
+        width: 90%;
+        margin-left: 5%;
+        padding-top: 4%;
+    }
+    .boxiconremove
+    {
+        top: 2vh;
+        position: absolute;
+        right: 2vw;
+    }
+    .imgtx
+    {
+        width: 2vh;
+        height: auto;
+    }
+
+    div.transbox
+    {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.7);
+        height: 8vh;
+        bottom: 0;
+        width: 90%;
+        margin-left: 5%;
+    }
+    div.transbox p
+    {
+        font-family: Arial;
+        font-size: 1vw;
+        font-weight: bold;
+        color: white;
+    }
+    .description
+    {
+        margin: 0;
+        width: 80%;
+        margin-left: 10%;
+        text-align: center;
+        padding-top: 1.5vh;
+    }
+    .boxdescrip
+    {
+        position: relative;
+    }
+    .contenedorpubli
+    {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 2vh;
+        position: relative;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+    }
+    .imguser
+    {
+        position: relative;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        left: 1vw;
+        top: 1vh;
+        overflow: hidden;
+    }
+    .tittlebox
+    {
+        position: absolute;
+        top: 1%;
+        left: 22%;
+        width: 36.5vw;
+    }
+    .descriptionbox
+    {
+        position: absolute;
+        top: 29%;
+        left: 22%;
+        width: 36.5vw;
+    }
+    .containerfoto
+    {
+        position: absolute;
+        right: 31%;
+        top: 12.6vh;
+        opacity: 0.7;
+    }
+    .containerfoto:hover
+    {
+        opacity: 1;
+    }
+    .select-wrapper
+    {
+        background: url(img/camara.png) no-repeat;
+        background-size:contain;
+        display: block;
+        position: relative;
+        width: 2.5vw;
+        height: auto;
+    }
+    #image_src
+    {
+        width: 26px;
+        height: 26px;
+        margin-right: 100px;
+        opacity: 0;
+        filter: alpha(opacity=0); /* IE 5-7 */
+    }
+
+    .btnselect
+    {
+        position: absolute;
+        top: 12.5vh;
+        left: 35vw;
+    }
+    .selec
+    {
+        color: #E30613;
+        width: 6vw;
+        height: 3vh;
+        font-size: .8vw;
+        margin: 0;
+        padding: 0;
+    }
+
+    button
+    {
+        color: grey;
+        background-color: transparent;
+        -webkit-appearance: none;
+        padding: 0;
+    }
+    #blanco:hover
+    {
+        color: white;
+    }
+    .boxcomentario
+    {
+
+    }
+    .superior
+    {
+        position: relative;
+        width: 90%;
+        margin-left: 5%;
+        min-height:3vh;
+        border-radius: 1vw 1vw 0 0;
+    }
+    .inferior
+    {
+        width: 90%;
+        margin-left: 5%;
+        height: 8vh;
+        border-radius:0 0 1vw 1vw;
+        margin-bottom: 2%;
+    }
+    .tittleboxcomentario
+    {
+        position: relative;
+        left: 12%;
+        width: 86%;
+    }
+    .comentariouser
+    {
+        font-size: .6vw;
+        font-family: Arial;
+        font-weight: normal;
+        color: #575756;
+        margin-left:5% ;
+        margin-top: 0;
+    }
+    .comentarioautor
+    {
+        margin-left: 5%;
+    }
+
+    .autorcomentario
+    {
+        position: relative;
+        font-size: .9vw;
+        font-family: Arial;
+        font-weight: bold;
+        color: #575756;
+        margin-left: 3%;
+        margin-top: 2%;
+        width: 94%;
+    }
+    .imgusercoment
+    {
+        border-radius: 50%;
+        width: 1.6vw;
+        height: 3vh;
+        position: absolute;
+        overflow: hidden
+    }
+    .imgusercoment2
+    {
+        border-radius: 50%;
+        width: 4vw;
+        height: 4vw;
+        position: absolute;
+        left: 3vw;
+        overflow: hidden
+    }
+    .imgtxcomentario
+    {
+        position: absolute;
+        width: 1vh;
+        height: auto;
+        right: 2.5%;
+
+    }
+    .supcoment
+    {
+        position: relative;
+        top: 1.5vh;
+        left: 1.5vw;
+        width: 15%;
+        font-family: Arial;
+        font-size: .8vw;
+        margin-bottom: 5%;
+        cursor: pointer;
+    }
+    .imgcoment
+    {
+        width: 2vh;
+        height: auto;
+        float: left;
+        margin-right: .8vw;
+    }
+    .imgmas
+    {
+        width: 1.6vh;
+        height: auto;
+        float: left;
+        margin-right: .8vw;
+    }
+    .lineadivide
+    {
+        position: relative;
+        border-bottom: solid .1vw #bebebe;
+        width: 86%;
+        margin-left: 7%;
+        top: 2.8vh;
+        margin-bottom: 5vh;
+    }
+    md-input-container.md-default-theme .md-input, md-input-container .md-input {
+        border-color: black;
+    }
+    .cajabuscar
+    {
+        margin-left: 5%;
+        width: 90%;
+        margin-top: 5vh;
+    }
+    .lupita
+    {
+        left: 47.5vw;
+        position: relative;
+        width: 1vw;
+        height: auto;
+    }
+
+    .eliminarBox
+    {
+        border: 1px solid #878787;
+        position: absolute;
+        width: 15vw;
+        height: 8vh;
+        background-color: white;
+        top: -4vh;
+        right: -5vw;
+        z-index: 10;
+        -webkit-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+    }
+    .eliminarBox.ng-hide {
+        opacity:0;
+    }
+    .eliminarBoxcomment
+    {
+        position: absolute;
+        width: 10vw;
+        height: 8vh;
+        background-color: white;
+        top: -4vh;
+        right: -5vw;
+        z-index: 10;
+        -webkit-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+    }
+    .eliminarBoxcomment.ng-hide
+    {
+        opacity:0;
+    }
+    .btnpublicar
+    {
+        width: 6vw;
+        height: 3.2vh;
+        opacity: 0.6;
+    }
+    .btnpublicar:hover
+    {
+        opacity: 1;
+    }
+
+    .boxbtnpubli
+    {
+        position: absolute;
+        top: 0;
+        left: 41.5vw;
+        top: 12.3vh;
+    }
+
+</style>
+<img src="/img/Iconos-83.png" style="width: 100%;margin-top: 3vh">
+<div class="cajabuscar">
+    <img class="lupita" src="/img/lupa.png">
+    <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+        <label>Buscar</label>
+        <input type="text" ng-model="search" required>
+    </md-input-container>
+</div>
+
+
+<!--Formulario para publicacion-->
+
+<div class="contenedorpubli" ng-show="usuario.data.adminpubli">
+
+    <!--Imagen user-->
+    <div class="imguser">
+        <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
+    </div>
+
+    <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile, area._id)">
+
+        <!--titulo del formulario para publicar-->
+        <div class="tittlebox">
+            <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
+                <label>Título</label>
+                <input type="text" ng-model="title">
+            </md-input-container>
+        </div>
+
+        <!--Descripcion del formulario para publicar-->
+        <div class="descriptionbox">
+            <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
+                <label>Descripción</label>
+                <input type="text" ng-model="link">
+            </md-input-container>
+        </div>
+
+        <!--adjuntar archivos para publicar-->
+        <!--<md-button class=" right" aria-label="Photos">-->
+        <!--<md-icon md-svg-src="img/camara.png" style="width: 24px; height: 24px;"></md-icon>-->
+        <!--<md-tooltip>-->
+        <!--Subir un archivo-->
+        <!--</md-tooltip>-->
+        <!--</md-button>-->
+
+
+        <div class="containerfoto">
+                <span class="select-wrapper">
+                    <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>
+                </span>
+        </div>
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+        <br>
+
+
+            <span class="progress" ng-show="picFile.progress >= 0">
+              <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+            </span>
+
+        <span ng-show="picFile.result">Upload Successful</span>
+
+        <!--button select-->
+        <div class="btnselect">
+            <select class="selec">
+                <option selected>Privacidad</option>
+                <option >Example1</option>
+                <option >Example2</option>
+                <option >Example3</option>
+            </select>
+        </div>
+
+        <!--button publicar-->
+
+        <div class="boxbtnpubli">
+            <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>
+        </div>
+
+
+
+    </form>
+
+</div>
+
+<!--Publicación-->
+<div>
+
+    <div ng-repeat="post in area.posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
+
+        <div class="boxpubli" ng-init="deleting = false">
+            <div class="eliminarBox" ng-show="deleting" ><p style="text-align: center;margin: 2px 0 0 0">Desea eliminar la publicacion</p>
+                <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom: 10%;width: 10%;left: 25%"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 10%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p></div>
+            <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
+            <p class="tittlepli">{{post.title}}
+
+            </p>
+
+            <div class="boxdescrip">
+                <img class="imgpublica" src="{{post.file}}">
+                <!--<a ng-click="remove(post)">Remove</a>-->
+                <div class="transbox">
+                    <p class="description">{{post.link}}</p>
+                </div>
+            </div>
+
+
+            <!--posted by <a>{{post.author}}</a> |-->
+
+            <!--Formulario Comentarios-->
+            <div style="margin-top: 2vh;">
+                <div class="superior">
+                    <div class="supcoment"  ng-click="selectthing($index)">
+                        <img class="imgcoment" src="/img/iconocomen.png">
+                        <span>Comentarios {{post.comments.length}}</span>
+                    </div>
+                    <!--COMENTARIOS-->
+                    <div ng-repeat="comentario in post.comentarios" ng-show="$parent.$index===selectedIndex">
+                        <!--<p class="autorcomentario">{{comentario.author}}</p>-->
+                        <!--<p class="comentariouser" >{{comentario.body}}</p>-->
+                        <div class="autorcomentario"  ng-init="deletingcomment = false">
+                            <div class="imgusercoment">
+                                <img style=" height: 100%" src="{{comentario.fotoperfil}}">
+                            </div>
+                            <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
+                                <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
+                            </div>
+                            <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
+                            <span class="comentarioautor">{{comentario.author}}</span> <br>
+                            <p class="comentariouser"> {{comentario.body}}</p>
+                        </div>
+                        <!--<p>{{comentario.upvotes}}</p>-->
+                    </div>
+
+                </div>
+                <div class="lineadivide"></div>
+                <div class="inferior" >
+                    <div class="boxcomentario">
+                        <div class="imgusercoment2">
+                            <img style="height: 100%" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+                        </div>
+                        <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
+                            <md-input-container class="tittleboxcomentario">
+                                <label>Comentario..</label>
+                                <input type="text" ng-model="post.come" required>
+
+                            </md-input-container>
+
+                            <!--<input type="text" ng-model="bodyc.val">-->
+                        </form>
+                    </div>
+                </div>
+
+                <div style="border: solid transparent;"></div>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+</div>
