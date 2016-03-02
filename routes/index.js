@@ -487,8 +487,9 @@ router.post('/pqrsf/:pqrsf', function(req, res, next){
   console.log('error4');
   ((req.body.estado == 'Cerrado') ? req.pqrsf.fechacierre = Date.now() : '');
   console.log('error5');
-  ((req.body.tramitando != 'tramitando') ? req.pqrsf.encargados.push(req.body.responsable) : removeA(req.pqrsf.encargados, req.body.responsable));
-
+  console.log(req.body.responsable);
+  if(  req.body.tramitando != 'tramitando'){  req.pqrsf.encargados.push(req.body.responsable)}else{  removeA(req.pqrsf.encargados, req.body.responsable)}
+console.log(req.pqrsf.encargados);
   console.log(req.pqrsf.encargados);
 
   req.pqrsf.save(function (err, pq){
