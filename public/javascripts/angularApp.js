@@ -431,7 +431,12 @@ app.config([
                     if(auth.isLoggedIn() == false){
                         $state.go('login');
                     }
-                }]
+                }],
+                resolve: {
+                    postPromise: ['fotos', function(fotos){
+                        return fotos.getAll();
+                    }]}
+
             })
 
             .state('home', {
@@ -638,6 +643,27 @@ app.controller('AreaxCtrl', ['$scope','areas', function ($scope,areas) {
     areas.getAll();
     $scope.areas = areas.areas;
     $scope.hola = 'Hola mundo';
+}]);
+
+app.controller('FoticosCtrl', ['$scope','fotos', function ($scope,fotos) {
+
+    $scope.fotos = fotos.fotos;
+
+    $scope.awesomeThings = [];
+    //setTimeout(
+    //    function() {
+    //angular.forEach($scope.fotos, function (foto) {
+    //    $scope.awesomeThings.push(foto.files[0].adjunto);
+    //})
+    //        angular.forEach($scope.awesomeThings, function (im) {
+    //
+    //
+    //            $('#slicking').append('<div aria-live="polite" class="slick-list draggable" tabindex="0"><div class="slick-track" style="opacity: 1; width: 288px; transform: translate3d(0px, 0px, 0px);">' +
+    //                '<div class="imagencuadro slick-slide slick-active" data-slick-index="0" aria-hidden="false" style="width: 288px;"><img class="imgactiva" src="'+im +'"  style="opacity: 1;">' +
+    //                '</div></div></div>')
+    //        })
+    //    }, 1000);
+
 }]);
 
 app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,areas) {
@@ -1089,7 +1115,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
         {
             return $http.post('/pqrsf/'+ id, {
                 comentario: {c: comentario,f: fase+1, u: $scope.usuario.data.nombre + ' ' + $scope.usuario.data.nombre},
-                responsable: responsable,
+                responsable: ((tramitando == 'tramitando')? $scope.usuario.data.username : responsable),
                 estado: estado,
                 tramitando: tramitando
 
@@ -1100,7 +1126,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
         }else{
             return $http.post('/pqrsf/'+ id, {
                 comentario: {c: comentario,f: fase+1, u: $scope.usuario.data.nombre + ' ' + $scope.usuario.data.apellido},
-                responsable: responsable,
+                responsable: ((tramitando == 'tramitando')? $scope.usuario.data.username : responsable),
                 estado: estado,
                 tramitando: tramitando
             }, {
@@ -1740,6 +1766,13 @@ app.controller('FormularioresultsCtrl',['$scope','formularios','users','formular
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.data2 = [];
     $scope.currentUser = auth.currentUser();
+
+    $scope.exportData = function () {
+        var blob = new Blob([document.getElementById('exportable').innerHTML], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+        });
+        saveAs(blob, "Report.xls");
+    };
 
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
