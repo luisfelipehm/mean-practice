@@ -3,8 +3,8 @@
     {
         position: absolute;
         top: 5vh;
-        width: 60%;
-        left: 35%;
+        width: 55%;
+        left: 40%;
     }
     #calendar  .fc-scroller {
         height: 70vh !important;
@@ -132,7 +132,7 @@
         height: 1px;
         width: 1px;
         border: 15px solid transparent;
-        border-left: 20px solid #f39200;
+        border-left: 20px solid #E30613;
         cursor: pointer ;
         position: absolute;
         top: .8vh;
@@ -143,7 +143,7 @@
         height: 1px;
         width: 1px;
         border: 15px solid transparent;
-        border-right: 20px solid #f39200;
+        border-right: 20px solid #E30613;
         cursor: pointer ;
         position: absolute;
         top: .8vh;
@@ -183,7 +183,9 @@
     .newevent{display: inline-block;float: right; color: #01539c;font-size: 3vh}
     #formularioeventos
     {
-        margin-top: 5vh;
+        position: absolute;
+        top: 70vh;
+        left: 30vw;
     }
     .numev > p
     {
@@ -215,12 +217,117 @@
         height: 4vh;
         margin: 30% 0 0 30%;
     }
+    .leftcal
+    {
+        top: 5vh;
+        width: 33%;
+        left: 4%;
+
+    }
+    .showndia
+    {
+        color: #E30613;
+        font-size: 6vh;
+        display: inline-block;
+        margin: 2vh 5px 0 0;
+    }
+    .showldia
+    {
+        font-size: 2.5vh;
+        display: inline-block;
+        margin: 2vh 0 0 0;
+    }
+    .horaround
+    {
+        display: inline-block;
+        vertical-align: -30%;
+        font-size: 1vh;
+        color: #878787;
+    }
+    .titsub
+    {
+        display: inline-block;
+        padding-bottom: .5vh ;
+        border-bottom: 1px solid #878787;
+        width: 80%;
+        color: #878787;
+        font-size: 2vh;
+        margin-left: 2%;
+        margin-top: 3vh;
+    }
+    .desplegarev
+    {
+        margin-top: .5vh;
+        float: right;
+        height: 1.5vh;
+        opacity: .7;
+        cursor: pointer;
+    }
+    .desplegarev:hover
+    {
+        opacity: 1;
+    }
+    .infoevshow
+    {
+        display: none;
+        width: 70%;
+        margin-left: 19%;
+    }
+    .titsub2
+    {
+        display: inline-block;
+        padding-bottom: .5vh ;
+        width: 80%;
+        color: #575756;
+        font-size: 2vh;
+        margin: 0;
+        margin-left: 2%;
+        opacity: 0;
+    }
+    .labelshowevdes
+    {
+        margin: 0;
+        color: #E30613;
+        font-size: 1.7vh;
+    }
+    .datoshowevdes
+    {
+        margin-top: 0vh;
+        color: #575756;
+        font-size: 1.5vh;
+        margin-left: 1.3vh;
+    }
+
 
 </style>
 
 <div ng-controller="CalendarbarCtrl">
 
+    <div class="leftcal ab">
+        <script>
+
+//        $(document).ready(function(){
+//            var ndia = moment("2016-03-11",'YYYY-MM-DD').format('DD'),
+//                    ldia = moment("2016-03-11",'YYYY-MM-DD').format('dddd');
+//
+//            $('.cut').prepend('<p class="showldia">'+ldia+' </p>');
+//            $('.cut').prepend('<p class="showndia">'+ndia+' </p>');
+//
+//        });
+
+
+    </script>
+
+        </div>
+
+
+
     <div class="calendarcontainer2">
+        <div class="messup">
+            <div class="siguiente2"></div>
+            <div class="anterior2"></div>
+            <p class="onlymes"></p>
+        </div>
     <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
     </div>
     <div id="formularioeventos">

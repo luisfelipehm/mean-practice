@@ -231,12 +231,23 @@ app.factory('areas', ['$http','auth',function($http,auth){
             angular.copy(data, o.areas);
         });
     };
+    o.addComment = function(id, comment) {
+        return $http.post('/areas/' + id + '/comments', comment, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
     o.create = function(area) {
 
         return $http.post('/areas', area, {
             headers: {Authorization: 'Bearer '+auth.getToken()}
         }).success(function(data){
             o.areas.push(data);
+        });
+    };
+    o.get = function(id) {
+        return $http.get('/areas/' + id).then(function(res){
+            return res.data;
+
         });
     };
     return o;
@@ -455,7 +466,6 @@ app.config([
 
                 }
             })
-
             .state('documentos', {
                 parent: 'root',
                 url: '/documentos',
@@ -586,6 +596,17 @@ app.config([
                     }]
                 }
             })
+            .state('area', {
+                parent: 'root',
+                url: '/areas/{id}',
+                templateUrl: 'templates/area.html',
+                controller: 'AreaCtrl',
+                resolve: {
+                    area: ['$stateParams', 'areas', function($stateParams, areas) {
+                        return areas.get($stateParams.id);
+                    }]}
+
+            })
             .state('formularioresults', {
                 parent: 'root',
                 url: '/formularios/{id}/results',
@@ -613,14 +634,112 @@ app.config([
         $urlRouterProvider.otherwise('/root/home');
     }]);
 
+app.controller('AreaxCtrl', ['$scope','areas', function ($scope,areas) {
+    areas.getAll();
+    $scope.areas = areas.areas;
+    $scope.hola = 'Hola mundo';
+}]);
+
 app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,areas) {
     $scope.areas = areas.areas;
     $scope.crearArea = function () {
         if(!$scope.nombre || $scope.nombre === '') { return; }
         areas.create({
             nombre: $scope.nombre
-        })
+        });
+        $scope.nombre = '';
+        areas.getAll();
+        $scope.areas = areas.areas;
     }
+}]);
+
+app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth', function ($scope,users,Upload,$timeout,$http,areas,area,auth) {
+    $scope.area = area;
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+    });
+
+    $scope.selectthing = function(idx, form) {
+        if ($scope.selectedIndex == idx  ){
+            form ? $scope.selectedIndex = idx : $scope.selectedIndex = undefined
+
+        }else{
+            $scope.selectedIndex = idx;
+        }
+    };
+
+
+    //comment.author = titleize(name.nombre) +' ' + titleize(name.apellido);
+    //comment.author2 = req.payload.username;
+    //comment.fotoperfil = (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil);
+
+
+
+
+    $scope.addComment = function(idpost,com){
+
+        areas.addComment(idpost, {
+            body: com,
+            idarea: $scope.area._id
+        }).success(function(area) {
+            $scope.area = area;
+        });
+    };
+
+
+    $scope.uploadPic = function(file, id) {
+        if(file==undefined)
+        {
+            //posts.create({
+            //    title: $scope.title,
+            //    link: $scope.link
+            //});
+            //$scope.title = '';
+            //$scope.link = '';
+        }
+
+        file.upload = Upload.upload({
+            url: '/areas/' + id +'/posts',
+            data: {title:$scope.title,link:$scope.link},
+            file: file,
+            headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+
+        });
+
+        file.upload.then(function (response) {
+            console.log("Postcontroller: upload then ");
+            $timeout(function () {
+                file.result = response.data;
+            });
+        }, function (response) {
+            if (response.status > 0)
+                $scope.errorMsg = response.status + ': ' + response.data;
+        });
+
+        file.upload.progress(function (evt) {
+            // Math.min is to fix IE which reports 200% sometimes
+            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            console.log("PostController: upload progress " + file.progress);
+        });
+
+        file.upload.success(function (data, status, headers, config) {
+            console.log('terminado')
+
+            $scope.title = '';
+            $scope.link = '';
+            $scope.picFile = '';
+            console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+            $scope.area = data
+
+        });
+
+    };
+
+
+
 }]);
 
 app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout','$http', function ($scope,auth,users,areas,Upload,$timeout,$http) {
@@ -1219,16 +1338,12 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
 app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
 
     $scope.eventos = eventos.eventos;
+    console.log($scope.eventos)
     $scope.manejadordeeventos = [];
 
     angular.forEach($scope.eventos, function (evento) {
-
-
-
         $scope.manejadordeeventos.push({fecha: moment(evento.fechainicio).format('YYYY') +'-'+ moment(evento.fechainicio).format('MM')+'-'+moment(evento.fechainicio).format('DD'), num:1, frame: evento.fechainicio})
     });
-    console.log($scope.manejadordeeventos);
-
 
     $(document).ready(function () {
 
@@ -1240,28 +1355,14 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
                         x+=1;
                         $('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text(x);
                     }else{
-                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]').append('<div class="cuentaeventos"><img src="/img/evento.png" class="iconodeevento"> <div class="numev"><p>'+evento.num+'</p></div></div>');
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]').append('<div class="cuentaeventos">' +
+                            '<img src="/img/evento.png" class="iconodeevento"> ' +
+                            '<div class="numev"><p>'+evento.num+'</p></div>' +
+                            '</div>');
                     }
                 });
-
-                console.log($('body').find('.fc-day[data-date="2016-02-23"]').length);
             }, 1000);
     });
-
-
-
-
-    //$('#calendar .fc-day[data-date="2016-02-23"]').append('hola mundo');
-
-    //$.each(iconosfinal, function (key,value) {
-    //    if ($('#calendar .fc-day[data-date="'+value.fecha+'"]').find(".cuentaeventos").length > 0){
-    //        var x = Number($('#calendar .fc-day[data-date="'+value.fecha+'"]  p').text());
-    //        x+=1;
-    //        $('#calendar .fc-day[data-date="'+value.fecha+'"]  p').text(x);
-    //    }else{
-    //        $('#calendar .fc-day[data-date="'+value.fecha+'"]').append('<a href="/eventos/'+ value.id+'" data-remote="true"><div class="cuentaeventos"><%= raw image_tag 'icono-e.png', class: 'iconodeevento' %><div class="numev"><p>'+value.num+'</p></div></div></a>');
-    //    }
-    //});
 
     $scope.crearEvento = function (nombre,descripcion,fechainicio,fechafinal,horainicio,horafinal) {
         eventos.create({
@@ -1291,6 +1392,8 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
             }, 500);
     };
 
+
+
     $scope.hola = 'Hello World';
     $scope.eventSources = [];
     $scope.uiConfig = {
@@ -1307,11 +1410,102 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
             monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
             dayNames: ['Domingo', 'Lunes', 'Martes', 'Miercoles','Jueves', 'Viernes', 'Sabado'],
             dayNamesShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-            dayClick: $scope.alertEventOnClick,
+            dayClick: function(date, jsEvent, view) {
+                 $scope.unafehca = $scope.eventos.slice(-1);
+                 console.log(moment($scope.unafehca[0].fechainicio).format());
+                console.log(moment(date).format('DD MM YYYY'));
+                console.log(moment(date).format('DD MM YYYY') == moment($scope.unafehca[0].fechainicio).format('DD MM YYYY'));
+                $('.leftcal').html('')
+                $('.leftcal').append(
+                    '<div class="cut"> ' +
+                        '<p class="showndia">'+moment(date).format('DD')+' </p>' +
+                        '<p class="showldia">'+moment(date).format('dddd')+' </p><br>' +
+                    '</div>')
+
+                angular.forEach($scope.eventos, function (evento) {
+                    if(moment(date).format('DD MM YYYY') == moment(evento.fechainicio).format('DD MM YYYY')){
+                    $('.cut').append('   <p class="horaround">'+moment(evento.horainicio).format('LT')+'</p>' +
+                        '   <div class="titsub"><span>' +
+                        '       <img style="height:2vh;margin-left:4%" src="/img/evento.png">'+evento.nombre+'<img src="img/Iconos-81.png" class="desplegarev"> </span>' +
+                        '       <div class="infoevshow">' +
+                        '       <p class="labelshowevdes">• Descripcion:</p>' +
+                        '       <p class="datoshowevdes">'+evento.descripcion+'</p> ' +
+                        '       <p class="labelshowevdes">• Hora:</p> ' +
+                        '       <p class="datoshowevdes">'+moment(evento.horainicio).format('LT')+' a '+moment(evento.horafinal).format('LT')+'</p>' +
+                        '       <p class="labelshowevdes">• Fecha:</p>' +
+                        '       <p class="datoshowevdes">'+moment(evento.fechainicio).format('DD MM YYYY')+' a '+moment(evento.fechainicio).format('DD-MM-YYYY')+'</p>' +
+                        '       </div>' +
+                        '       </div><br>'  )
+                    }})
+                $('.leftcal').append(
+                    '<script>' +
+                    '$(".desplegarev").click(function(){' +
+                    '    if($(this).parent().next().css("display") == "block"  ) {' +
+                    '    $(this).attr("src", "img/Iconos-81.png");' +
+                    '    $(this).parent().css("color","#878787");' +
+                    '    }else ' +
+                    '    { $(this).attr("src", "img/Iconos-82.png");' +
+                    '    $(this).parent().css("color","#575757");' +
+                    '    } $(this).parent().next().slideToggle( "slow", function() {});});' +
+                    '</script>' )
+
+
+            },
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize
         }
     };
+    function calcularleft(element){var mid = element.outerWidth()/2;var pare = element.parent().outerWidth()/2;var total = pare-mid;var cien = pare*2;var last = total*100/cien;return last;}
+    var meshelper = moment().format('MM');
+    function cambiarmes(date,bol){if( bol ){if (Number(date) == 12 ) {return 1;} else {return Number(date)+1;}}else {if (Number(date) == 1 ) {return 12;} else {return Number(date)-1;}}}
+    $('.onlymes').html(moment().format('MMMM').toUpperCase()).css('left',calcularleft($('.onlymes'))+'%');
+
+
+    $('.siguiente2').click(function(){
+        meshelper= cambiarmes(meshelper,true);
+        $('#calendar').fullCalendar('next');
+
+        setTimeout(
+            function() {
+                angular.forEach($scope.manejadordeeventos, function (evento) {
+                    if ($('#calendar .fc-day[data-date="'+evento.fecha+'"]').find(".cuentaeventos").length > 0){
+                        var x = Number($('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text());
+                        x+=1;
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text(x);
+                    }else{
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]').append('<div class="cuentaeventos">' +
+                            '<img src="/img/evento.png" class="iconodeevento"> ' +
+                            '<div class="numev"><p>'+evento.num+'</p></div>' +
+                            '</div>');
+                    }
+                });
+            }, 1000);
+        $('.onlymes').html(moment("2016-"+meshelper+"-03",'YYYY-MM-DD').format('MMMM').toUpperCase()).css('left',calcularleft($('.onlymes'))+'%');
+
+
+
+    });
+
+    $('.anterior2').click(function(){
+        meshelper = cambiarmes(meshelper,false);
+        $('#calendar').fullCalendar('prev');
+        setTimeout(
+            function() {
+                angular.forEach($scope.manejadordeeventos, function (evento) {
+                    if ($('#calendar .fc-day[data-date="'+evento.fecha+'"]').find(".cuentaeventos").length > 0){
+                        var x = Number($('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text());
+                        x+=1;
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]  p').text(x);
+                    }else{
+                        $('#calendar .fc-day[data-date="'+evento.fecha+'"]').append('<div class="cuentaeventos">' +
+                            '<img src="/img/evento.png" class="iconodeevento"> ' +
+                            '<div class="numev"><p>'+evento.num+'</p></div>' +
+                            '</div>');
+                    }
+                });
+            }, 1000);
+        $('.onlymes').html(moment("2016-"+meshelper+"-03",'YYYY-MM-DD').format('MMMM').toUpperCase()).css('left',calcularleft($('.onlymes'))+'%');
+    });
 
 
     console.log(moment("2016-02-25T05:00:00.000Z").subtract(5, 'hours').format());
@@ -1878,11 +2072,6 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
     $scope.bodyc = {val:''};
     $scope.currentUser = auth.currentUser();
 
-    console.log($scope.currentUser);
-
-
-
-
     //$scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
     //$scope.getUser = function (id) {
@@ -1895,13 +2084,9 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
 
     //OBTENER DATOS DE UN GET CON UNA PROMESA
-
-
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
     });
-
-
      //users.get($scope.currentUser._id);
 
     //$scope.fotoperfil = $scope.usuario.fotoperfil;
@@ -1918,6 +2103,8 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
 
     $scope.isLoggedIn = auth.isLoggedIn;
+
+
     $scope.remove = function(post) {
         return $http.delete('/posts/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
             .success(function(data) {
@@ -1940,14 +2127,6 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
     };
     $scope.addComment = function(idpost,com){
 
-        //$http.post('/posts/' + idpost + '/comments', comment, {
-        //    headers: {Authorization: 'Bearer '+auth.getToken()}
-        //}).success(function (data) {
-        //
-        //}).error(function () {
-        //    console.log('Error: ' + data);
-        //});
-
         posts.addComment(idpost, {
             body: com,
             author: 'user'
@@ -1962,12 +2141,6 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
 
     $scope.uploadPic = function(file) {
-
-
-
-
-
-
         if(file==undefined)
         {
             posts.create({

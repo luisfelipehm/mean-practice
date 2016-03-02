@@ -95,7 +95,6 @@
         margin-left: 5%;
         margin-top: 2vh;
         position: relative;
-        height: 172px;
         background: #e3e3e3;
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
         -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
@@ -129,7 +128,7 @@
     {
         position: absolute;
         right: 31%;
-        top: 120px;
+        top: 12.6vh;
         opacity: 0.7;
     }
     .containerfoto:hover
@@ -157,7 +156,7 @@
     .btnselect
     {
         position: absolute;
-        top: 120px;
+        top: 12.5vh;
         left: 35vw;
     }
     .selec
@@ -216,7 +215,7 @@
         margin-left:5% ;
         margin-top: 0;
     }
-   .comentarioautor
+    .comentarioautor
     {
         margin-left: 5%;
     }
@@ -354,183 +353,175 @@
     .boxbtnpubli
     {
         position: absolute;
+        top: 0;
         left: 41.5vw;
-        top: 120px;
+        top: 12.3vh;
     }
 
 </style>
+<img src="/img/Iconos-83.png" style="width: 100%;margin-top: 3vh">
+<div class="cajabuscar">
+    <img class="lupita" src="/img/lupa.png">
+    <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+        <label>Buscar</label>
+        <input type="text" ng-model="search" required>
+    </md-input-container>
+</div>
 
-    <script>
-        $(".imguser").click(function(){
-            $( "#ocultarpublicacion" ).toggle("slow");
-        });
-    </script>
 
+<!--Formulario para publicacion-->
 
-    <div class="cajabuscar">
-        <img class="lupita" src="/img/lupa.png">
-        <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
-            <label>Buscar</label>
-            <input type="text" ng-model="search" required>
-        </md-input-container>
+<div class="contenedorpubli" ng-show="usuario.data.adminpubli">
+
+    <!--Imagen user-->
+    <div class="imguser">
+        <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
     </div>
 
+    <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile, area._id)">
 
-    <!--Formulario para publicacion-->
-
-    <div class="contenedorpubli" ng-show="usuario.data.adminpubli">
-
-        <!--Imagen user-->
-        <div class="imguser">
-            <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
+        <!--titulo del formulario para publicar-->
+        <div class="tittlebox">
+            <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
+                <label>Título</label>
+                <input type="text" ng-model="title">
+            </md-input-container>
         </div>
 
-        <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
+        <!--Descripcion del formulario para publicar-->
+        <div class="descriptionbox">
+            <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
+                <label>Descripción</label>
+                <input type="text" ng-model="link">
+            </md-input-container>
+        </div>
 
-            <!--titulo del formulario para publicar-->
-            <div class="tittlebox">
-                <md-input-container style="width: 100%;">
-                    <label>Título</label>
-                    <input type="text" ng-model="title">
-                </md-input-container>
-            </div>
-
-            <!--Descripcion del formulario para publicar-->
-            <div class="descriptionbox">
-                <md-input-container style="width: 100%;">
-                    <label>Descripción</label>
-                    <input type="text" ng-model="link">
-                </md-input-container>
-            </div>
-
-            <!--adjuntar archivos para publicar-->
-            <!--<md-button class=" right" aria-label="Photos">-->
-                <!--<md-icon md-svg-src="img/camara.png" style="width: 24px; height: 24px;"></md-icon>-->
-                <!--<md-tooltip>-->
-                    <!--Subir un archivo-->
-                <!--</md-tooltip>-->
-            <!--</md-button>-->
+        <!--adjuntar archivos para publicar-->
+        <!--<md-button class=" right" aria-label="Photos">-->
+        <!--<md-icon md-svg-src="img/camara.png" style="width: 24px; height: 24px;"></md-icon>-->
+        <!--<md-tooltip>-->
+        <!--Subir un archivo-->
+        <!--</md-tooltip>-->
+        <!--</md-button>-->
 
 
-            <div class="containerfoto">
+        <div class="containerfoto">
                 <span class="select-wrapper">
                     <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>
                 </span>
-            </div>
+        </div>
 
-            <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
-            <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+        <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
 
-            <br>
+        <br>
 
 
             <span class="progress" ng-show="picFile.progress >= 0">
               <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
             </span>
 
-            <span ng-show="picFile.result">Upload Successful</span>
+        <span ng-show="picFile.result">Upload Successful</span>
 
-            <!--button select-->
-            <div class="btnselect">
-                <select class="selec">
-                    <option selected>Privacidad</option>
-                    <option >Example1</option>
-                    <option >Example2</option>
-                    <option >Example3</option>
-                </select>
-            </div>
+        <!--button select-->
+        <div class="btnselect">
+            <select class="selec">
+                <option selected>Privacidad</option>
+                <option >Example1</option>
+                <option >Example2</option>
+                <option >Example3</option>
+            </select>
+        </div>
 
-            <!--button publicar-->
+        <!--button publicar-->
 
-            <div class="boxbtnpubli">
-                <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>
-            </div>
+        <div class="boxbtnpubli">
+            <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>
+        </div>
 
 
 
-        </form>
+    </form>
 
-    </div>
+</div>
 
-    <!--Publicación-->
-    <div>
+<!--Publicación-->
+<div>
 
-        <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
+    <div ng-repeat="post in area.posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
-            <div class="boxpubli" ng-init="deleting = false">
-                <div class="eliminarBox" ng-show="deleting" ><p style="text-align: center;margin: 2px 0 0 0">Desea eliminar la publicacion</p>
-                    <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom: 10%;width: 10%;left: 25%"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 10%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p></div>
-                <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
-                    <p class="tittlepli">{{post.title}}
+        <div class="boxpubli" ng-init="deleting = false">
+            <div class="eliminarBox" ng-show="deleting" ><p style="text-align: center;margin: 2px 0 0 0">Desea eliminar la publicacion</p>
+                <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom: 10%;width: 10%;left: 25%"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 10%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p></div>
+            <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
+            <p class="tittlepli">{{post.title}}
 
-                    </p>
+            </p>
 
-                <div class="boxdescrip">
-                    <img class="imgpublica" src="{{post.file}}">
-                    <!--<a ng-click="remove(post)">Remove</a>-->
-                    <div class="transbox">
-                        <p class="description">{{post.link}}</p>
-                    </div>
+            <div class="boxdescrip">
+                <img class="imgpublica" src="{{post.file}}">
+                <!--<a ng-click="remove(post)">Remove</a>-->
+                <div class="transbox">
+                    <p class="description">{{post.link}}</p>
                 </div>
+            </div>
 
 
-                <!--posted by <a>{{post.author}}</a> |-->
+            <!--posted by <a>{{post.author}}</a> |-->
 
-                <!--Formulario Comentarios-->
-                <div style="margin-top: 2vh;">
-                    <div class="superior">
-                        <div class="supcoment"  ng-click="selectthing($index)">
-                            <img style="display: inline-block" class="imgcoment" src="/img/iconocomen.png">
-                            <span>Comentarios {{post.comments.length}}</span>
-                        </div>
+            <!--Formulario Comentarios-->
+            <div style="margin-top: 2vh;">
+                <div class="superior">
+                    <div class="supcoment"  ng-click="selectthing($index)">
+                        <img class="imgcoment" src="/img/iconocomen.png">
+                        <span>Comentarios {{post.comments.length}}</span>
+                    </div>
                     <!--COMENTARIOS-->
-                        <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
-                            <!--<p class="autorcomentario">{{comentario.author}}</p>-->
-                            <!--<p class="comentariouser" >{{comentario.body}}</p>-->
-                            <div class="autorcomentario"  ng-init="deletingcomment = false">
-                                <div class="imgusercoment">
-                                 <img style=" height: 100%" src="{{comentario.fotoperfil}}">
-                                </div>
-                                <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
-                                    <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
-                                </div>
-                                <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
-                                <span class="comentarioautor">{{comentario.author}}</span> <br>
-                                <p class="comentariouser"> {{comentario.body}}</p>
+                    <div ng-repeat="comentario in post.comentarios" ng-show="$parent.$index===selectedIndex">
+                        <!--<p class="autorcomentario">{{comentario.author}}</p>-->
+                        <!--<p class="comentariouser" >{{comentario.body}}</p>-->
+                        <div class="autorcomentario"  ng-init="deletingcomment = false">
+                            <div class="imgusercoment">
+                                <img style=" height: 100%" src="{{comentario.fotoperfil}}">
                             </div>
-                            <!--<p>{{comentario.upvotes}}</p>-->
-                        </div>
-
-                    </div>
-                    <div class="lineadivide"></div>
-                    <div class="inferior" >
-                        <div class="boxcomentario">
-                            <div class="imgusercoment2">
-                                <img style="height: 100%" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+                            <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
+                                <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
                             </div>
-                            <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
-                                <md-input-container class="tittleboxcomentario">
-                                    <label>Comentario..</label>
-                                    <input type="text" ng-model="post.come" required>
-
-                                </md-input-container>
-
-                                <!--<input type="text" ng-model="bodyc.val">-->
-                            </form>
+                            <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
+                            <span class="comentarioautor">{{comentario.author}}</span> <br>
+                            <p class="comentariouser"> {{comentario.body}}</p>
                         </div>
+                        <!--<p>{{comentario.upvotes}}</p>-->
                     </div>
 
-                    <div style="border: solid transparent;"></div>
+                </div>
+                <div class="lineadivide"></div>
+                <div class="inferior" >
+                    <div class="boxcomentario">
+                        <div class="imgusercoment2">
+                            <img style="height: 100%" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+                        </div>
+                        <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
+                            <md-input-container class="tittleboxcomentario">
+                                <label>Comentario..</label>
+                                <input type="text" ng-model="post.come" required>
+
+                            </md-input-container>
+
+                            <!--<input type="text" ng-model="bodyc.val">-->
+                        </form>
+                    </div>
                 </div>
 
-
-
+                <div style="border: solid transparent;"></div>
             </div>
+
 
 
         </div>
 
+
     </div>
 
-
+</div>

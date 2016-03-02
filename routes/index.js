@@ -9,6 +9,7 @@ var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
+var Postarea = mongoose.model('Postarea');
 var Pqrsf = mongoose.model('Pqrsf');
 var Pqrsffile = mongoose.model('Pqrsffile');
 var Conectado = mongoose.model('Conectado');
@@ -304,6 +305,36 @@ console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
   });
 });
 
+
+router.param('area', function(req, res, next, id) {
+
+
+
+  var query = Area.findById(id);
+
+  query.populate('posts').exec(function (err, area){
+    if (err) { return next(err); }
+    if (!area) { return next(new Error('can\'t find post')); }
+
+    req.area = area;
+    return next();
+  });
+});
+
+
+router.get('/areas/:area', function(req, res, next) {
+
+  req.area.populate('posts', function(err, area) {
+    if (err) { return next(err);   }
+
+
+    res.json(area);
+  });
+});
+
+
+
+
 // OBTENER UNA CARPETA
 
 router.get('/documents/:document', function(req, res, next) {
@@ -352,6 +383,70 @@ router.post('/pqrsf', function(req, res, next){
     console.log('error2');
     if(err){ return next(err); }
     res.json(pq)
+  });
+});
+
+
+router.param('postarea', function(req, res, next, id) {
+
+  var query = Postarea.findById(id);
+
+  query.exec(function (err, postarea){
+    if (err) { return next(err); }
+    if (!postarea) { return next(new Error('can\'t find postarea')); }
+
+    req.postarea = postarea;
+    return next();
+  });
+});
+
+
+
+router.post('/areas/:postarea/comments',auth, function(req, res, next) {
+
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+
+      req.postarea.comentarios.push({
+            author: titleize(name.nombre) + ' ' + titleize(name.apellido),
+            author2: req.payload.username,
+            fotoperfil: (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil),
+            body: req.body.body
+          }
+      );
+      req.postarea.save(function(err, postarea) {
+        if(err){ return next(err); }
+
+        var query = Area.findById(req.body.idarea);
+
+        query.populate('posts').exec(function (err, area){
+          if (err) { return next(err); }
+          res.json(area);
+        });
+
+
+      });
+
+  });
+
+
+});
+
+router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.file = '/uploads2/'+req.file.filename;
+  var post = new Postarea(req.body);
+
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    req.area.posts.push(post);
+    req.area.save(function(err, document) {
+      if(err){ return next(err); }
+
+      res.json(document);
+    });
+
   });
 });
 
