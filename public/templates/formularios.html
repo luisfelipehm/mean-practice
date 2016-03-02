@@ -158,6 +158,17 @@
         width: 90%;
         margin-top: 5vh;
     }
+    .btnpublicar
+    {
+        margin-left: 84%;
+        margin-bottom: 5% ;
+        width: 6vw;
+        opacity: 0.6;
+    }
+    .btnpublicar:hover
+    {
+        opacity: 1;
+    }
 
 </style>
 
@@ -183,13 +194,11 @@
                 <input type="text" ng-model="descripcion">
             </md-input-container>
         </div>
-        <div>
-            <img class="btncrear" src="/img/boton-crear.png">
-        </div>
 
-        <div class="lineaform"> </div>
+         <div style="vertical-align: 10vh" >
+            <input type="image" src="/img/boton-crear.png"  class="md-raised btnpublicar">
+         </div>
 
-        <md-button type="submit"  class="md-raised"> Publicar </md-button>
     </form>
 
 </div>
