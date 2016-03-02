@@ -1,15 +1,25 @@
-
+<div class="trolform">
     <form ng-show="usuario.data.adminfotos" name="myForm" ng-submit="crearAlbum()">
-        <md-input-container>
+        <md-input-container style="width: 39vw">
             <label>Nombre del Album</label>
-            <input type="text" ng-model="nombre" required md-maxlength="20">
+            <input type="text" ng-model="nombre" required>
         </md-input-container>
-        <md-button type="submit"  class="md-raised"> Publicar </md-button>
+        <input type="image" src="/img/botones_publicar.png" class="btnpublicarfoto" >  </input>
 
 
     </form>
-
+</div>
 <style>
+    .btnpublicarfoto
+    {
+        width: 15%;
+        margin-left: 5%;
+    }
+    .trolform
+    {
+        margin-top: 5%;
+        margin-left: 4%;
+    }
     .hovernegro
     {
         width: 100%;
@@ -42,7 +52,7 @@
 </style>
 
 
-    <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 6%">
+    <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 4.5%;margin-bottom: 4.5%">
 
         <a href="#/root/fotos/{{album._id}}">
             <div class="hovernegro">

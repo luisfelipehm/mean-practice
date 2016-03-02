@@ -1,22 +1,35 @@
+<style>
+    .adjunta
+    {
+        display: none;
+    }
+    .iconadjun
+    {
+        width: 3vw;
+    }
+    .ng-gallery
+    {
+        width: 52.5vw;
+    }
+
+</style>
 <br>
 <br>
 <br>
 <br>
+{{mierda}}
+<form  ng-show="usuario.data.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
-<form  ng-show="usuario.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
+    <div style="position: relative; left: 18%;width: 12vw;margin-bottom: -3%; margin-top: .8%" >
+        <label for="file-input">
+            <img class="iconadjun" src="/img/iconoadjdoc.jpg">
+        </label>
+        <input type="file" class="adjunta" ngf-select ng-model="picFile"  id="file-input" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
-    <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+    </div>
 
-    <br>
-
-    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
-
-    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
-
-    <br>
-    Files:
-    <ul>
+    <ul style="margin-top: 0%; margin-left: 25%">
         <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
       <span class="progress" ng-show="f.progress >= 0">
         <div style="width:{{f.progress}}%"
@@ -29,12 +42,20 @@
     {{errorMsg}}
 
 
+    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
-    <md-button type="submit"  class="md-raised"> Publicar </md-button>
+    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+    <br>
+
+
+
+
+    <input type="image" src="/img/botones_publicar.png" style="position:absolute;width: 6.8vw;left: 4.5%;top: 10%" >  </input>
 
 </form>
 
 
 
 
-<ng-gallery images="images"></ng-gallery>
+<ng-gallery images="images" style="margin-left: 3%;"></ng-gallery>
