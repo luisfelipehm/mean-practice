@@ -50,6 +50,7 @@ module.exports = function(io) {
         socket.on('disusuario', function (user) {
 
             User.findOne({ username: user }, function (err, name) {
+                if(!name){return err}
                 name.sock = '';
                 name.actual = false;
                 name.save();

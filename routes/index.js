@@ -386,6 +386,51 @@ router.post('/pqrsf', function(req, res, next){
   });
 });
 
+
+router.param('postarea', function(req, res, next, id) {
+
+  var query = Postarea.findById(id);
+
+  query.exec(function (err, postarea){
+    if (err) { return next(err); }
+    if (!postarea) { return next(new Error('can\'t find postarea')); }
+
+    req.postarea = postarea;
+    return next();
+  });
+});
+
+
+
+router.post('/areas/:postarea/comments',auth, function(req, res, next) {
+
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+
+      req.postarea.comentarios.push({
+            author: titleize(name.nombre) + ' ' + titleize(name.apellido),
+            author2: req.payload.username,
+            fotoperfil: (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil),
+            body: req.body.body
+          }
+      );
+      req.postarea.save(function(err, postarea) {
+        if(err){ return next(err); }
+
+        var query = Area.findById(req.body.idarea);
+
+        query.populate('posts').exec(function (err, area){
+          if (err) { return next(err); }
+          res.json(area);
+        });
+
+
+      });
+
+  });
+
+
+});
+
 router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {
 
   req.body.file = '/uploads2/'+req.file.filename;

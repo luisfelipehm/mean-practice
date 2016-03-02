@@ -359,6 +359,7 @@
     }
 
 </style>
+<img src="/img/Iconos-83.png" style="width: 100%;margin-top: 3vh">
 <div class="cajabuscar">
     <img class="lupita" src="/img/lupa.png">
     <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
@@ -381,7 +382,7 @@
 
         <!--titulo del formulario para publicar-->
         <div class="tittlebox">
-            <md-input-container style="width: 100%">
+            <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
                 <label>Título</label>
                 <input type="text" ng-model="title">
             </md-input-container>
@@ -389,7 +390,7 @@
 
         <!--Descripcion del formulario para publicar-->
         <div class="descriptionbox">
-            <md-input-container style="width: 100%">
+            <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
                 <label>Descripción</label>
                 <input type="text" ng-model="link">
             </md-input-container>
@@ -477,7 +478,7 @@
                         <span>Comentarios {{post.comments.length}}</span>
                     </div>
                     <!--COMENTARIOS-->
-                    <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
+                    <div ng-repeat="comentario in post.comentarios" ng-show="$parent.$index===selectedIndex">
                         <!--<p class="autorcomentario">{{comentario.author}}</p>-->
                         <!--<p class="comentariouser" >{{comentario.body}}</p>-->
                         <div class="autorcomentario"  ng-init="deletingcomment = false">

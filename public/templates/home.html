@@ -95,6 +95,7 @@
         margin-left: 5%;
         margin-top: 2vh;
         position: relative;
+        height: 172px;
         background: #e3e3e3;
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
         -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
@@ -128,7 +129,7 @@
     {
         position: absolute;
         right: 31%;
-        top: 12.6vh;
+        top: 120px;
         opacity: 0.7;
     }
     .containerfoto:hover
@@ -156,7 +157,7 @@
     .btnselect
     {
         position: absolute;
-        top: 12.5vh;
+        top: 120px;
         left: 35vw;
     }
     .selec
@@ -353,9 +354,8 @@
     .boxbtnpubli
     {
         position: absolute;
-        top: 0;
         left: 41.5vw;
-        top: 12.3vh;
+        top: 120px;
     }
 
 </style>
@@ -389,7 +389,7 @@
 
             <!--titulo del formulario para publicar-->
             <div class="tittlebox">
-                <md-input-container style="width: 100%">
+                <md-input-container style="width: 100%;">
                     <label>Título</label>
                     <input type="text" ng-model="title">
                 </md-input-container>
@@ -397,7 +397,7 @@
 
             <!--Descripcion del formulario para publicar-->
             <div class="descriptionbox">
-                <md-input-container style="width: 100%">
+                <md-input-container style="width: 100%;">
                     <label>Descripción</label>
                     <input type="text" ng-model="link">
                 </md-input-container>
@@ -481,7 +481,7 @@
                 <div style="margin-top: 2vh;">
                     <div class="superior">
                         <div class="supcoment"  ng-click="selectthing($index)">
-                            <img class="imgcoment" src="/img/iconocomen.png">
+                            <img style="display: inline-block" class="imgcoment" src="/img/iconocomen.png">
                             <span>Comentarios {{post.comments.length}}</span>
                         </div>
                     <!--COMENTARIOS-->
