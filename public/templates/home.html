@@ -354,10 +354,7 @@
 
     .boxbtnpubli
     {
-        position: absolute;
-        top: 0;
-        left: 41.5vw;
-        top: 12.3vh;
+
     }
     .treli
     {
@@ -389,6 +386,14 @@
         -webkit-transition:all linear 2s;
         transition:all linear 2s;
     }
+    .md-select-value .md-select-icon:after
+    {
+        color: #e3152d;
+    }
+    .camera
+    {
+        display: none;
+    }
 
 
 </style>
@@ -411,7 +416,7 @@
 
     <!--Formulario para publicacion-->
 
-    <div class="contenedorpubli" ng-show="usuario.data.adminpubli">
+    <div class="contenedorpubli" style="height: 20vh" ng-show="usuario.data.adminpubli">
 
         <!--Imagen user-->
         <div class="imguser">
@@ -424,7 +429,7 @@
             <div class="tittlebox">
                 <md-input-container style="width: 100%">
                     <label>Título</label>
-                    <input type="text" ng-model="title">
+                    <input type="text" ng-model="title" required>
                 </md-input-container>
             </div>
 
@@ -432,7 +437,7 @@
             <div class="descriptionbox">
                 <md-input-container style="width: 100%">
                     <label>Descripción</label>
-                    <input type="text" ng-model="link">
+                    <input type="text" ng-model="link" required>
                 </md-input-container>
             </div>
 
@@ -444,41 +449,73 @@
                 <!--</md-tooltip>-->
             <!--</md-button>-->
 
+            <div style="position: absolute; display: inline-block; width: 90%; margin-left: 5%; margin-bottom: 3vh; top: 0; right: 1.1vw; top: 66%">
 
-            <div class="containerfoto">
-                <span class="select-wrapper">
-                    <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>
-                </span>
+                    <div style="display: inline-block; margin-left: 20vw">
+                        <label for="file-img">
+                           <img  class="iconadjun" style="vertical-align: -1vh; width: 2vw" src="img/camara.png">
+                        </label>
+                            <input type="file" class="camera" ngf-select ng-model="picFile" id="file-img"  ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>
+                    </div>
+                    <div style="display: inline-block;">
+                        <md-input-container style="width: 15vw; margin: 0">
+                            <md-select ng-model="estadopqrs" placeholder="Privacidad">
+                                <md-option  value="cerrado">Cerrado</md-option>
+                                <md-option  value="espera">Espera</md-option>
+                                <md-option  value="tramite">Tramite</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+
+                <div class="boxbtnpubli" style="display: inline-block;vertical-align: -1.4vh">
+                    <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >
+                </div>
             </div>
 
             <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
-
             <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
 
-            <br>
+
+            <!--<div class="containerfoto">-->
+                <!--<span class="select-wrapper">-->
+                    <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>-->
+                <!--</span>-->
+            <!--</div>-->
 
 
-            <span class="progress" ng-show="picFile.progress >= 0">
-              <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
-            </span>
 
-            <span ng-show="picFile.result">Upload Successful</span>
+            <!--<span class="progress" ng-show="picFile.progress >= 0">-->
+              <!--<div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>-->
+            <!--</span>-->
 
-            <!--button select-->
-            <div class="btnselect">
-                <select class="selec">
-                    <option selected>Privacidad</option>
-                    <option >Example1</option>
-                    <option >Example2</option>
-                    <option >Example3</option>
-                </select>
-            </div>
+            <!--<span ng-show="picFile.result">Upload Successful</span>-->
+
+            <!--&lt;!&ndash;button select&ndash;&gt;-->
+            <!--<div class="selec">-->
+                <!--<md-select ng-model="ctrl.userState">-->
+                    <!--<md-option ng-repeat="" value="Hola">-->
+
+                    <!--</md-option>-->
+                <!--</md-select>-->
+            <!--</div>-->
+
+
+
+
+            <!--<div class="btnselect">-->
+                <!--<select class="selec">-->
+                    <!--<option selected>Privacidad</option>-->
+                    <!--<option >Example1</option>-->
+                    <!--<option >Example2</option>-->
+                    <!--<option >Example3</option>-->
+                <!--</select>-->
+            <!--</div>-->
 
             <!--button publicar-->
 
-            <div class="boxbtnpubli">
-                <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>
-            </div>
+            <!--<div class="boxbtnpubli">-->
+                <!--<input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>-->
+            <!--</div>-->
 
 
 
