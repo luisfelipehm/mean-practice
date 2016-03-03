@@ -2,9 +2,9 @@
     .calendarcontainer2
     {
         position: absolute;
-        top: 5vh;
-        width: 55%;
-        left: 40%;
+        top: 27vh;
+        width: 40%;
+        left: 48%;
     }
     #calendar  .fc-scroller {
         height: 70vh !important;
@@ -86,7 +86,7 @@
 
     #calendar .fc-widget-header{
         font-family: Openregular , arial, sans-serif;
-        background-color: #E30613;
+        background-color: #e3152d;
         height: 30px;
         color: white;
         font-size: 2.2vh;
@@ -132,7 +132,7 @@
         height: 1px;
         width: 1px;
         border: 15px solid transparent;
-        border-left: 20px solid #E30613;
+        border-left: 20px solid #e3152d;
         cursor: pointer ;
         position: absolute;
         top: .8vh;
@@ -143,7 +143,7 @@
         height: 1px;
         width: 1px;
         border: 15px solid transparent;
-        border-right: 20px solid #E30613;
+        border-right: 20px solid #e3152d;
         cursor: pointer ;
         position: absolute;
         top: .8vh;
@@ -151,12 +151,12 @@
     }
     #calendar td.fc-today
     {
-        color: #E30613;
+        color: #e3152d;
         opacity: 1;
     }
     #calendar td.fc-sun
     {
-        color: #E30613;
+        color: #e3152d;
         opacity: 1;
         padding-top: 1vh;
         padding-left: 1vh;
@@ -184,8 +184,8 @@
     #formularioeventos
     {
         position: absolute;
-        top: 70vh;
-        left: 30vw;
+        top: 28vh;
+        left: 43vw;
     }
     .numev > p
     {
@@ -198,12 +198,12 @@
         width: 2.3vh;
         height: 2.3vh;
         border-radius: 50%;
-        border: 1px solid #E30613;
+        border: 1px solid #e3152d;
         color: black;
         background-color: white;
         position: absolute;
         z-index: 5;
-        top: 22%;
+        top: 40%;
         left: 63%;
 
 
@@ -215,18 +215,17 @@
     .iconodeevento
     {
         height: 4vh;
-        margin: 30% 0 0 30%;
+        margin: 70% 0 0 30%;
     }
     .leftcal
     {
-        top: 5vh;
+        top: 44.5vh;
         width: 33%;
-        left: 4%;
-
+        left: 12%;
     }
     .showndia
     {
-        color: #E30613;
+        color: #e3152d;
         font-size: 6vh;
         display: inline-block;
         margin: 2vh 5px 0 0;
@@ -287,7 +286,7 @@
     .labelshowevdes
     {
         margin: 0;
-        color: #E30613;
+        color: #e3152d;
         font-size: 1.7vh;
     }
     .datoshowevdes
@@ -297,60 +296,153 @@
         font-size: 1.5vh;
         margin-left: 1.3vh;
     }
+    .titulocrono
+    {
+        position: absolute;
+        font-size: 7vh;
+        color: white;
+        top: 8%;
+        left: 5%;
+        font-weight: bold;
+    }
+    .horaini
+    {
+        margin-top: 15%;
+        width: 7vw;
+    }
+    .horafin
+    {
+        margin-top: 15%;
+        margin-left: .5vw;
+        width: 7vw;
+    }
+    .btncreareven
+    {
+        margin-top: 15%;
+        margin-bottom: 5% ;
+        width: 8vw;
+        opacity: 0.6;
+    }
+    .btncreareven:hover
+    {
+        opacity: 1;
+    }
+    .fondofalso
+    {
+        position: absolute;
+        margin-bottom: 2vh;
+        top: 25%;
+        width: 90%;
+        height: 73%;
+        margin-left: 5%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);"
+    }
+    #modal
+    {
+        position: fixed;
+        height:100vh;
+        width: 100vw;
+        background-color: rgba(0, 0, 0, 0.5);
+        top: 0;
+        left: 0;
+        z-index: 11;
+    }
 
 
 </style>
 
-<div ng-controller="CalendarbarCtrl">
+<img src="/img/Iconos-83.png" style="width: 100%;margin-top: 3vh">
 
-    <div class="leftcal ab">
-        <script>
+<label class="titulocrono">Cronograma</label>
 
-//        $(document).ready(function(){
-//            var ndia = moment("2016-03-11",'YYYY-MM-DD').format('DD'),
-//                    ldia = moment("2016-03-11",'YYYY-MM-DD').format('dddd');
-//
-//            $('.cut').prepend('<p class="showldia">'+ldia+' </p>');
-//            $('.cut').prepend('<p class="showndia">'+ndia+' </p>');
-//
-//        });
+    <div class="fondofalso"> </div>
+
+    <div ng-controller="CalendarbarCtrl">
+
+        <div class="leftcal ab">
+            <script>
+
+    //        $(document).ready(function(){
+    //            var ndia = moment("2016-03-11",'YYYY-MM-DD').format('DD'),
+    //                    ldia = moment("2016-03-11",'YYYY-MM-DD').format('dddd');
+    //
+    //            $('.cut').prepend('<p class="showldia">'+ldia+' </p>');
+    //            $('.cut').prepend('<p class="showndia">'+ndia+' </p>');
+    //
+    //        });
 
 
-    </script>
+        </script>
 
+            </div>
+
+
+
+
+            <div class="calendarcontainer2">
+                <div class="messup">
+                    <div class="siguiente2"></div>
+                    <div class="anterior2"></div>
+                    <p class="onlymes"></p>
+                </div>
+            <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
+            </div>
+        <div style="margin-left: 10%;margin-top: 14%; position: absolute" class="btncrearevento">
+            <img src="/img/crear-evento-1.png" style="width: 25%">
         </div>
 
-
-
-    <div class="calendarcontainer2">
-        <div class="messup">
-            <div class="siguiente2"></div>
-            <div class="anterior2"></div>
-            <p class="onlymes"></p>
-        </div>
-    <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
     </div>
-    <div id="formularioeventos">
 
-        <form ng-submit="crearEvento(nombre,descripcion,fechainicio,fechafinal,horainicio,horafinal)">
-            <md-input-container>
-                <label>Nombre</label>
-                <input type="text" ng-model="nombre" required md-maxlength="200">
-            </md-input-container><br>
-            <md-input-container>
-                <label>Descripcion</label>
-                <input type="text" ng-model="descripcion" required md-maxlength="200">
-            </md-input-container><br>
 
-            <md-datepicker ng-model="fechainicio" md-placeholder="Fecha de inicio"></md-datepicker><br>
+<div id="modal">
+    <div style="position: absolute; width: 100vw;height: 100vh;" class="cerro">
 
-            <md-datepicker ng-model="fechafinal" md-placeholder="Fecha final"></md-datepicker><br>
+    </div>
+    <div style="background-color: white; width: 30vw;height: 50vh; margin-top: 15%; margin-left: 35%;" class="crearevento">
+                <div id="formularioeventos">
+                    <form ng-submit="crearEvento(nombre,descripcion,fechainicio,fechafinal,horainicio,horafinal)">
+                        <md-input-container style="margin-bottom: 0%">
+                            <label>Nombre</label>
+                            <input type="text" ng-model="nombre" required>
+                        </md-input-container><br>
+                        <md-input-container style="margin-top: 0%; margin-bottom: 0%">
+                            <label>Descripcion</label>
+                            <input type="text" ng-model="descripcion" required>
+                        </md-input-container><br>
 
-            <input ui-timepicker ng-model="horainicio"><br>
+                        <md-datepicker ng-model="fechainicio" md-placeholder="Fecha de inicio"></md-datepicker><br>
 
-            <input ui-timepicker ng-model="horafinal"><br>
+                        <md-datepicker ng-model="fechafinal" md-placeholder="Fecha final"></md-datepicker><br>
 
-            <md-button type="submit" class="md-raised"> Crear Evento </md-button>
-        </form>
+                        <input ui-timepicker ng-model="horainicio" class="horaini">
+
+                        <input ui-timepicker ng-model="horafinal" class="horafin"><br>
+
+                        <div style="vertical-align: 10vh" >
+                            <input type="image" src="/img/crear-evento-1.png"  class="md-raised btncreareven">
+                        </div>
+                    </form>
+                </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $('#modal').hide();
+        $('.crearevento').show();
+
+       $('.btncrearevento').click(function(){
+           $('#modal').show();
+           $('.crearevento').show();
+       }) ;
+        $('.btncreareven').click(function(){
+            $('#modal').hide();
+        });
+
+       $('.cerro').click(function(){
+           $('#modal').hide();
+       });
+    });
+</script>
