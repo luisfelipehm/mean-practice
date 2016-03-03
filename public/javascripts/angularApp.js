@@ -1111,7 +1111,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
     $scope.mispqtramite = 1;
 
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
-    $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
+    $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicit cion').split(' ').map(function (state) { return { nombre: state }; });
     
     $scope.addCiclo = function (files,comentario,id,fase,responsable,estado,tramitando) {
         if(files==undefined)
