@@ -1,4 +1,4 @@
-<div style="position: absolute;top: -10vh;left: 0;width: 100%; z-index: 10 ">
+<div id="imagensuperiormundo" style="position: relative;top: -10vh;left: 0;width: 100%;z-index: 10  ">
     <img style="width:100%; height: auto;" src="/img/foto_mundo.png">
 </div>
 
@@ -47,17 +47,48 @@
         -moz-box-shadow: inset 0px 0px 30px -18px ;
         box-shadow: inset 0px 0px 30px -18px;
     }
+
+    @media (max-width: 600px) {
+        #imagensuperiormundo
+        {
+            top: 0 !important;
+        }
+        barraizq {
+            display: none;
+        }
+        barrader {
+            display: none;
+        }
+        #fondounoi{display: none}
+        #fondotresi{display: none}
+        #fondodosi{width: 100vh;left: 0}
+        .content{width: 100vw;
+        left: 0;
+        top:0}
+        chat{display:none}
+        #espaciodemoderacion{display: none}
+        barranav{display: none}
+        md-input-container{line-height:8px;font-size: 1em;margin-top: 0}
+    }
+
 </style>
+
+
 
 <barranav></barranav>
 <barraizq></barraizq>
-<barrader></barrader>
+<div class="content">
+    <div ui-view=""></div>
+</div>
+<div style="width: 20vw;display: inline-block;vertical-align: top;height: 100vh;position: relative;top: -10vh;z-index: 1">
+
+    <barrader></barrader>
+</div>
+
+
 <chat></chat>
 
 <div id="fondounoi"></div>
 <div id="fondotresi"></div>
 <div id="fondodosi"></div>
-<div class="content">
-    <div style="width: 100%;height: 26vh "></div>
-<div ui-view=""></div>
-</div>
+
