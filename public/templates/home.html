@@ -466,12 +466,11 @@
 
             <!--button select-->
             <div class="btnselect">
-                <select class="selec">
-                    <option selected>Privacidad</option>
-                    <option >Example1</option>
-                    <option >Example2</option>
-                    <option >Example3</option>
-                </select>
+                <md-select  placeholder="Area" ng-model="area" md-on-open="loadAreas()">
+                    <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                        {{area.nombre}}
+                    </md-option>
+                </md-select>
             </div>
 
             <!--button publicar-->

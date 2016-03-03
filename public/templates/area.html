@@ -359,10 +359,10 @@
     }
 
 </style>
-<img src="/img/Iconos-83.png" style="width: 100%;margin-top: 3vh">
+<img src="/img/Iconos-83.png" style="width: 100%;margin-top: -60px">
 
 
-<p style="position: absolute;z-index: 15; top: 32vh;color: white;font-size: 4vh;left: 1vw">{{area.nombre}}</p>
+<p style="position: absolute;z-index: 15; top: -20px;color: white;font-size: 4vh;left: 1vw">{{area.nombre}}</p>
 <div class="cajabuscar">
     <img class="lupita" src="/img/lupa.png">
     <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
@@ -429,12 +429,11 @@
 
         <!--button select-->
         <div class="btnselect">
-            <select class="selec">
-                <option selected>Privacidad</option>
-                <option >Example1</option>
-                <option >Example2</option>
-                <option >Example3</option>
-            </select>
+            <md-select  placeholder="Area" ng-model="areaf" md-on-open="loadAreas()">
+                <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                    {{area.nombre}}
+                </md-option>
+            </md-select>
         </div>
 
         <!--button publicar-->

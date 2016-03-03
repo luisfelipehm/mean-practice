@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 
 var RespuestaSchema = new mongoose.Schema({
     dato: Array,
-    author: String
+    author: String,
+    fecha: Date
 
 });
 

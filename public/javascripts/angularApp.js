@@ -677,13 +677,33 @@ app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,area
 }]);
 
 app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth', function ($scope,users,Upload,$timeout,$http,areas,area,auth) {
-    $scope.area = area;
+
+
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.currentUser = auth.currentUser();
 
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
+        $scope.posts = posts.posts;
     });
+
+
+
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+        $scope.area = area;
+        $scope.area.posts = $scope.area.posts.filter(function( obj ) {
+            return (obj.areaf == $scope.usuario.data.area || !obj.areaf);
+        });
+
+    });
+
+    $scope.loadAreas = function() {
+        areas.getAll();
+        $scope.areas = areas.areas;
+    };
+
 
     $scope.selectthing = function(idx, form) {
         if ($scope.selectedIndex == idx  ){
@@ -726,7 +746,7 @@ app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas
 
         file.upload = Upload.upload({
             url: '/areas/' + id +'/posts',
-            data: {title:$scope.title,link:$scope.link},
+            data: {title:$scope.title,link:$scope.link,areaf:$scope.areaf},
             file: file,
             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 
@@ -2102,12 +2122,27 @@ app.controller('FotosCtrl',['$scope','users','fotos','Upload','$http','auth', fu
 
 }]);
 
-app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout','$http','users', function ($scope,Upload,mySocket,posts,auth,$timeout,$http,users) {
+app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','$timeout','$http','users', function ($scope,areas,Upload,mySocket,posts,auth,$timeout,$http,users) {
 
 
-    $scope.posts = posts.posts;
     $scope.bodyc = {val:''};
     $scope.currentUser = auth.currentUser();
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+        $scope.posts = posts.posts;
+        $scope.posts = $scope.posts.filter(function( obj ) {
+            return (obj.area == $scope.usuario.data.area || !obj.area);
+        });
+    });
+
+
+
+
+
+    $scope.loadAreas = function() {
+        areas.getAll();
+        $scope.areas = areas.areas;
+    };
 
     //$scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
@@ -2121,9 +2156,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
 
     //OBTENER DATOS DE UN GET CON UNA PROMESA
-    users.get($scope.currentUser._id).then(function(user){
-        $scope.usuario =  user;
-    });
+
      //users.get($scope.currentUser._id);
 
     //$scope.fotoperfil = $scope.usuario.fotoperfil;
@@ -2182,15 +2215,17 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         {
             posts.create({
                 title: $scope.title,
-                link: $scope.link
+                link: $scope.link,
+                area: $scope.area
             });
             $scope.title = '';
             $scope.link = '';
+            $scope.area = '';
         }
 
         file.upload = Upload.upload({
             url: '/posts',
-            data: {title:$scope.title,link:$scope.link},
+            data: {title:$scope.title,link:$scope.link,area: $scope.area},
             file: file,
             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 
