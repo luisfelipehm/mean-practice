@@ -1,14 +1,11 @@
 
 var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore','ngMessages','ui.timepicker']);
 
-
-
 app.filter('moment', function() {
     return function(dateString, format) {
             return moment(dateString).locale("es").format(format);
     };
 });
-
 
 app.config(['$httpProvider', function($httpProvider) {
     //initialize get if not there
@@ -1038,7 +1035,13 @@ app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,au
 
 }]);
 
-app.controller('RootCtrl', ['$scope', function ($scope) { }]);
+app.controller('RootCtrl', ['$scope','$rootScope', function ($scope,$rootScope) {
+
+
+
+
+
+}]);
 
 app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,users) {
 
@@ -1372,6 +1375,7 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
     });
 
     $(document).ready(function () {
+
 
         setTimeout(
             function() {
@@ -1710,7 +1714,7 @@ var a =
                 '</script>' +
                 '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
                 '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
-                '<h1> '+titulochat+'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+                '<h1> '+titulochat.split(' ')[2]+' '+ titulochat.split(' ')[0] +'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
                 '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
                 '    <div class="chatboxinput">'+
                 '<input type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> </div> </div>' +

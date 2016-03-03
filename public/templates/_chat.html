@@ -203,6 +203,7 @@
         width: 15VW;
         background-color: #e3152d;
         border: 1px solid #e3152d;
+        z-index: 2;
     }
     #searchUserBox input
     {
@@ -251,7 +252,7 @@
                         <img style=" width:2vw; height: 2vw;" src="{{users.fotoperfil == undefined ? '/img/user_chat.png' : users.fotoperfil}}">
                     </div>
                     <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw;font-size: 1.1vh";>
-                        {{titleize(users.apellido)}} {{titleize(users.nombre)}}
+                         {{titleize(users.nombre.split(' ')[0])}} {{titleize(users.apellido.split(' ')[0])}}
                     </div>
                     <div style="display: inline-block; position: absolute; margin-top: 2vh; margin-left: 7vw">
                         <img src="/img/conectado.png" class="conectchat" ng-show="users.actual">
