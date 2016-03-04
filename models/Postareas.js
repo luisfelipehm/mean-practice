@@ -6,7 +6,8 @@ var PostareaSchema = new mongoose.Schema({
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
     comentarios: [{ type: mongoose.Schema.Types.Mixed }],
     //area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area' },
-    file: String
+    file: String,
+    areaf:String
 
 });
 
