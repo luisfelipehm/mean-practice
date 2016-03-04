@@ -437,14 +437,14 @@
              </div>
              <div>
                    <label>en la Ciudad de <span class="asterisco">*</span></label>
-                     <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 8vw">
+                     <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 15vw">
                          <label></label>
                          <input type="text" ng-model="ciudad2" placeholder="ciudad">
                      </md-input-container>
                    <label>presento</label><span class="asterisco">*</span>
-                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0; ">
+                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0;">
                          <md-select  placeholder="PQRSF" ng-model="tipopq" style="width: 8vw" required>
-                             <md-option ng-repeat="t in tipospq" value="{{t.nombre}}">
+                             <md-option ng-repeat="t in tipospq" value="{{t.nombre}}" required>
                                  {{t.nombre}}
                              </md-option>
                          </md-select>

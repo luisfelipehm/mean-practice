@@ -472,9 +472,10 @@
                 </div>
             </div>
 
-            <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
-            <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
-
+            <div style="position: absolute; top: 60%; left: 22.5%">
+                <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+                <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+            </div>
 
             <!--<div class="containerfoto">-->
                 <!--<span class="select-wrapper">-->
