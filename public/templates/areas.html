@@ -12,7 +12,16 @@
 </form>
 
 
-<div ng-repeat="a in areas">
+<div ng-repeat="a in areas" ng-init="editar = false">
 <a href="#/root/areas/{{a._id}}">{{a.nombre}}</a>
+    <p ng-click="editar = true">editar</p>
+
+    <form ng-submit="editararea(a._id, a.nombre)">
+        <input type="text" ng-model="a.nombre" ng-show="editar">
+        <input type="submit" value="Editar" ng-show="editar">
+    </form>
+
+    <p ng-click="deletearea(a)">eliminar</p>
+
 
 </div>

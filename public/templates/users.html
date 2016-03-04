@@ -51,6 +51,7 @@
         position: absolute;
         height: 13vh;
         width: auto;
+        max-width: 7vw;
         margin-left: 1vw;
         margin-right: 1vw;
         margin-top: 4vh;
@@ -339,7 +340,7 @@
  <div ng-repeat="user in users | filter:search">
 
      <div class="boxallusers">
-        <div> <img class="imguseredit" src="/img/boton-examinar.png"> </div>
+        <div> <img class="imguseredit" ng-src="{{(!user.fotoperfil) ? '/img/boton-examinar.png' : user.fotoperfil}}"> </div>
         <div class="boximgusersedit" ng-hide="editing" ng-click="editing = true"> <img class="iconoeditaruser" src="/img/icono-editar.png"> </div>
         <div class="boximguserseli"> <img class="iconoeditaruser" src="/img/icono-eliminar-g.png"> </div>
         <p class="editdatosusername">{{user.nombre}} {{user.apellido}}</p>

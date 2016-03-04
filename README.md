@@ -12,22 +12,24 @@ Este es un checklist de las cosas que quedan por hacer en la Intranet
     * Hacer un checklist de los eliminar que no funcionan
     * Mostrar foto de perfil entre otros en el chat    
     * Permisos formularios, fotos, documentos, pqrsf, cronograma, areas y terminar el usuarios
+
 copia de departamentos eliminar
 boton eliminar formulario
 boton de remover pregunta editar pregunta
 foto no sale en panel de usuarios
-id pqrsf
 
-evento eliminar
+
+
 login boton
 espacio de ciudad
 diseño pqrsf internet explorer
 
-correos pqrsf
 
+id pqrsf
+evento eliminar
+correos pqrsf
 LINK DE DOCUMENTOS
 SUBIR DOCUMENTOS
-
 dias festivos
 
 

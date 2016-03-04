@@ -431,6 +431,10 @@ router.post('/areas/:postarea/comments',auth, function(req, res, next) {
 
 });
 
+
+
+
+
 router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {
 
   req.body.file = '/uploads2/'+req.file.filename;
@@ -640,6 +644,11 @@ router.param('post', function(req, res, next, id) {
 
 //ME GUSTA
 
+
+
+
+
+
 router.put('/posts/:post/upvote',auth, function(req, res, next) {
   req.post.upvote(function(err, post){
     if (err) { return next(err); }
@@ -656,6 +665,37 @@ router.delete('/conectados/:_id',auth, function(req, res,next){
   Conectado.findById( req.params._id, function ( err, conectado ){
     conectado.remove( function ( err, conectado ){
       res.json(conectado);
+    });
+  });
+});
+
+
+router.post('/areas/:area/editando',auth, function(req, res, next) {
+
+  Area.findById( req.body._id, function ( err, ar ){
+    ar.nombre = req.body.nombre;
+    ar.save(function(err, arc){
+      if(err){ return next(err); }
+        res.json(arc);
+    });
+  });
+});
+
+router.delete('/formularios/:_id',auth, function(req, res,next){
+
+  Formulario.findById( req.params._id, function ( err, ar ){
+    ar.remove( function ( err, arf ){
+      res.json(arf);
+    });
+  });
+});
+
+
+router.delete('/areas/:_id',auth, function(req, res,next){
+
+  Area.findById( req.params._id, function ( err, ar ){
+    ar.remove( function ( err, arf ){
+      res.json(arf);
     });
   });
 });

@@ -415,7 +415,7 @@
 
         <!--Imagen user-->
         <div class="imguser">
-            <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
+            <img style=" height: 100%;" ng-src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
         </div>
 
         <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
@@ -493,7 +493,7 @@
             <div class="boxpubli" ng-init="deleting = false">
 
                 <div class="eliminarBox" ng-show="deleting" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold">Desea eliminar la publicación</p>
-                    <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
+                    <img ng-click="remove(post);deleting =false" src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"><p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
                     <div class="treli" ng-show="deleting"></div>
                 </div>
 
@@ -505,7 +505,7 @@
                     </p>
 
                 <div class="boxdescrip">
-                    <img class="imgpublica" src="{{post.file}}">
+                    <img class="imgpublica" ng-src="{{post.file}}">
                     <!--<a ng-click="remove(post)">Remove</a>-->
                     <div class="transbox">
                         <p class="description">{{post.link}}</p>
@@ -528,7 +528,7 @@
                             <!--<p class="comentariouser" >{{comentario.body}}</p>-->
                             <div class="autorcomentario"  ng-init="deletingcomment = false">
                                 <div class="imgusercoment">
-                                 <img style=" height: 100%" src="{{comentario.fotoperfil}}">
+                                 <img style=" height: 100%" ng-src="{{comentario.fotoperfil}}">
                                 </div>
 
 
@@ -552,7 +552,7 @@
                     <div class="inferior" >
                         <div class="boxcomentario">
                             <div class="imgusercoment2">
-                                <img style="height: 100%" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+                                <img style="height: 100%" ng-src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
                             </div>
                             <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
                                 <md-input-container class="tittleboxcomentario">
