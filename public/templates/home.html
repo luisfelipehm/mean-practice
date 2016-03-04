@@ -459,7 +459,7 @@
                     </div>
                     <div style="display: inline-block;">
                         <md-input-container style="width: 15vw; margin: 0">
-                            <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}">
+                            <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
                                 <md-option ng-repeat="area in areas" value="{{area.nombre}}">
                                     {{area.nombre}}
                                 </md-option>
