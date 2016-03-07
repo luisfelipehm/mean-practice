@@ -141,6 +141,7 @@ router.param('formulario', function(req, res, next, id) {
 
 router.post('/formularios/:formulario/responder',auth, function(req, res, next) {
   var comment = new Respuesta(req.body);
+  comment.fecha = Date.now();
   comment.author = req.payload.username;
   comment.save(function(err, comment){
     if(err){ return next(err); }
@@ -150,6 +151,16 @@ router.post('/formularios/:formulario/responder',auth, function(req, res, next) 
       res.json(comment);
     });
   });
+});
+
+
+router.post('/formularios/:formulario/habilitar',auth, function(req, res, next) {
+    req.formulario.habilitado = req.body.habilitado;
+    req.formulario.save(function(err, formulario) {
+      if(err){ return next(err); }
+      res.json(formulario);
+    });
+
 });
 
 // OBTENER UN FORMULARIO

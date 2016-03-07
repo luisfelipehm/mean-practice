@@ -1591,13 +1591,27 @@ app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http',
 
 
 
+
     $scope.currentUser = auth.currentUser();
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
+        $scope.formularios = formularios.formularios;
+        if(!$scope.usuario.data.adminforms){
+        $scope.formularios = $scope.formularios.filter(function( obj ) {
+            return (obj.habilitado == true);
+        });
+        }
 
     });
 
-    $scope.formularios = formularios.formularios;
+
+    $scope.habilitando = function (hab,id) {
+        return $http.post('/formularios/' + id + '/habilitar', {habilitado: hab}, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+
+
     $scope.pregunta = {valor:''};
     $scope.tipo = {valor:''};
     $scope.opcion = {valor:''};
@@ -1612,9 +1626,11 @@ app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http',
         formularios.create({
             nombre: $scope.nombre,
             descripcion: $scope.descripcion,
-            fecha: Date.now()
+            fecha: Date.now(),
+            habilitado: true
         });
         $scope.nombre = '';
+        $scope.descripcion = '';
     };
 
 
@@ -1737,6 +1753,7 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment','users', 
             }else if(data.recibe == $scope.currentUser.username)
             {
                 if($('#'+data.envia+'chat').length == 0){
+                    console.log(data.nombrec)
                     $scope.generarChat(data.envia, data.nombrec);
                 }else{
                     $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
@@ -1766,7 +1783,7 @@ var a =
                 '</script>' +
                 '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
                 '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
-                '<h1> '+titulochat.split(' ')[2]+' '+ titulochat.split(' ')[0] +'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+                '<h1> '+titulochat.split(' ')[0]+' '+ titulochat.split(' ')[1] +'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
                 '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
                 '    <div class="chatboxinput">'+
                 '<input type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> </div> </div>' +

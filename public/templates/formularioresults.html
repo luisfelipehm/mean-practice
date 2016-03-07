@@ -13,20 +13,21 @@
     <h1>{{formulario.preguntas[$index].pregunta}}</h1>
     <nvd3 options="options" data="resu"></nvd3>
 </div>
-
+{{formulario.respuestas}}
 <div id="exportable">
-<table style="display: none;">
+<table style="display: none">
     <thead>
     <tr>
-        <th>Pregunta</th>
-        <th>Respuestas</th>
-        <th></th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Preguntas y Respuestas</th>
     </tr>
     </thead>
     <tbody >
-    <tr ng-repeat="resu in resultadofinal">
-        <td>{{formulario.preguntas[$index].pregunta}}</td>        
-        <td ng-repeat="r in resu">{{r.key}}: {{r.y}}</td>
+    <tr ng-repeat="resp in formulario.respuestas">
+        <td>{{resp.author}}</td>
+        <td>{{resp.fecha}}</td>
+        <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{r.respuesta}}</td>
     </tr>
     </tbody>
 </table>

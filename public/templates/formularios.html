@@ -224,11 +224,12 @@
     </md-input-container>
 </div>
 
-<div ng-repeat="forma in formularios | filter:search | orderBy:'-'" class="boxformularios">
+<div ng-repeat="forma in formularios | filter:search | orderBy:'-'" class="boxformularios" >
 
     <!--{{forma}}-->
     <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
+
         <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.data.adminforms">
 
         <img class="iconossuperiordos" src="/img/icono-eliminar-g.png" ng-show="usuario.data.adminforms" ng-click="remove(forma)">
@@ -270,6 +271,10 @@
     <div ng-repeat="pp in forma.preguntas">
         <p style="margin: 4px 0 0 25%">{{pp.pregunta}}</p>
     </div>
+
+        <md-switch ng-model="forma.habilitado" aria-label="Switch 1" ng-change="habilitando(forma.habilitado,forma._id)">
+            Habilitado? {{(forma.habilitado == true) ? "SI" :  "NO" }}
+        </md-switch>
 
     <div class="preguntasformulario">
         <form ng-submit="addPregunta(forma._id)" >
