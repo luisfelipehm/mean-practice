@@ -663,7 +663,7 @@ app.controller('FoticosCtrl', ['$scope','fotos', function ($scope,fotos) {
 
 }]);
 
-app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,areas) {
+app.controller('AreasCtrl', ['$scope','auth','areas','$http', function ($scope,auth,areas,$http) {
     $scope.areas = areas.areas;
     $scope.crearArea = function () {
         if(!$scope.nombre || $scope.nombre === '') { return; }
@@ -673,17 +673,58 @@ app.controller('AreasCtrl', ['$scope','auth','areas', function ($scope,auth,area
         $scope.nombre = '';
         areas.getAll();
         $scope.areas = areas.areas;
-    }
+    };
+
+    $scope.editararea= function(id,datico){
+
+        return $http.post('/areas/' + id+'/editando',{_id: id,nombre: datico},{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                areas.getAll();
+                $scope.areas = areas.areas;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+
+
+    };
+    $scope.deletearea = function (ar) {
+        return $http.delete('/areas/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                areas.getAll();
+                $scope.areas = areas.areas;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+
+
+
+
 }]);
 
 app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth', function ($scope,users,Upload,$timeout,$http,areas,area,auth) {
-    $scope.area = area;
+
+
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.currentUser = auth.currentUser();
 
-    users.get($scope.currentUser._id).then(function(user){
+        users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
+        $scope.area = area;
+        $scope.area.posts = $scope.area.posts.filter(function( obj ) {
+            return (obj.areaf == $scope.usuario.data.area || !obj.areaf);
+        });
+
     });
+
+    $scope.loadAreas = function() {
+        areas.getAll();
+        $scope.areas = areas.areas;
+    };
+
 
     $scope.selectthing = function(idx, form) {
         if ($scope.selectedIndex == idx  ){
@@ -726,7 +767,7 @@ app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas
 
         file.upload = Upload.upload({
             url: '/areas/' + id +'/posts',
-            data: {title:$scope.title,link:$scope.link},
+            data: {title:$scope.title,link:$scope.link,areaf:$scope.areaf},
             file: file,
             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 
@@ -1111,7 +1152,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
     $scope.mispqtramite = 1;
 
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
-    $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicit cion').split(' ').map(function (state) { return { nombre: state }; });
+    $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
     
     $scope.addCiclo = function (files,comentario,id,fase,responsable,estado,tramitando) {
         if(files==undefined)
@@ -1311,6 +1352,7 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
 
     $scope.CarpenCarp = function(id){
         if($scope.nombre === '') { return; }
+        console.log($scope.nombre)
         documents.addSubFolder(id, {
             nombre: $scope.nombre,
             padre: $scope.id
@@ -1353,7 +1395,7 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
             });
             file.upload.success(function (data, status, headers, config) {
                 $scope.document = data;
-                $scope.picFile = '';
+
 
 
             });
@@ -1544,7 +1586,7 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
 
 }]);
 
-app.controller('FormulariosCtrl',['$scope','auth','users','formularios', function ($scope,auth,users,formularios) {
+app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http', function ($scope,auth,users,formularios,$http) {
     $scope.isLoggedIn = auth.isLoggedIn;
 
 
@@ -1587,6 +1629,16 @@ app.controller('FormulariosCtrl',['$scope','auth','users','formularios', functio
         $scope.opciones.splice(id, 1);
     };
 
+    $scope.remove = function (ar) {
+        return $http.delete('/formularios/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                formularios.getAll();
+                $scope.formularios = formularios.formularios;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
 
     $scope.addPregunta = function(idformulario){
         if($scope.body === '') { return; }
@@ -2102,12 +2154,27 @@ app.controller('FotosCtrl',['$scope','users','fotos','Upload','$http','auth', fu
 
 }]);
 
-app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout','$http','users', function ($scope,Upload,mySocket,posts,auth,$timeout,$http,users) {
+app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','$timeout','$http','users', function ($scope,areas,Upload,mySocket,posts,auth,$timeout,$http,users) {
 
 
-    $scope.posts = posts.posts;
     $scope.bodyc = {val:''};
     $scope.currentUser = auth.currentUser();
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+        $scope.posts = posts.posts;
+        $scope.posts = $scope.posts.filter(function( obj ) {
+            return (obj.area == $scope.usuario.data.area || !obj.area);
+        });
+    });
+
+
+
+
+
+    $scope.loadAreas = function() {
+        areas.getAll();
+        $scope.areas = areas.areas;
+    };
 
     //$scope.fotoperfil = '';
     //console.log($scope.fotoperfil);
@@ -2121,9 +2188,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
 
 
     //OBTENER DATOS DE UN GET CON UNA PROMESA
-    users.get($scope.currentUser._id).then(function(user){
-        $scope.usuario =  user;
-    });
+
      //users.get($scope.currentUser._id);
 
     //$scope.fotoperfil = $scope.usuario.fotoperfil;
@@ -2146,6 +2211,7 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         return $http.delete('/posts/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
             .success(function(data) {
                 posts.getAll()
+                $scope.posts = posts.posts;
 
             })
             .error(function(data) {
@@ -2182,15 +2248,17 @@ app.controller('MainCtrl',['$scope','Upload','mySocket','posts','auth','$timeout
         {
             posts.create({
                 title: $scope.title,
-                link: $scope.link
+                link: $scope.link,
+                area: $scope.area
             });
             $scope.title = '';
             $scope.link = '';
+            $scope.area = '';
         }
 
         file.upload = Upload.upload({
             url: '/posts',
-            data: {title:$scope.title,link:$scope.link},
+            data: {title:$scope.title,link:$scope.link,area: $scope.area},
             file: file,
             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 

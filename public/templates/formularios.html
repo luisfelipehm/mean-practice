@@ -169,11 +169,24 @@
     {
         opacity: 1;
     }
+    .imgtx
+    {
+        width: 2vh;
+        height: auto;
+    }
+    .boxiconremove
+    {
+        top: 2vh;
+        position: absolute;
+        right: 2vw;
+    }
 
 </style>
 
 
 <div class="fondoformulario" ng-show="usuario.data.adminforms">
+
+
 
     <div class="imguserformulario">
         <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
@@ -218,7 +231,7 @@
     <div class="boxiconossuperiores">
         <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.data.adminforms">
 
-        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png"  ng-show="!usuario.data.adminforms">
+        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png" ng-show="usuario.data.adminforms" ng-click="remove(forma)">
     </div>
 
     <div>
