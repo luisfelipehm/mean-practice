@@ -259,12 +259,12 @@
     <!-- USUARIO NORMAL -->
 <div ng-show="!usuario.data.adminpqrsf && !usuario.data.tramitepqrsf">
 
-
     <!--BARRA SUPERIOR PQRS-->
     <div class="boxpqnav">
         <div class="pqline"><h2 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h2></div>
         <div class="pqline"><h2 class="pqnav" ng-click="mispq = true">Mis PQRSF</h2></div>
     </div>
+
 
     <!--MIS PQRS-->
     <div ng-show="mispq" style="margin-top: 2vh">
@@ -351,8 +351,6 @@
                             </div>
                         </div>
 
-
-
                         <div style="margin-top: 1vh;padding-bottom: 3vh">
 
                             <div style="display: inline-block; margin-left: 30vw">
@@ -376,8 +374,6 @@
                         <img ng-show="myForm.file.$valid" ngf-src="!pq.picFile.$error && pq.picFile" class="thumb">
 
                         {{errorMsg}}
-
-
 
                         <!--<input type="text" ng-model="bodyc.val">-->
                     </form>
@@ -466,7 +462,7 @@
                  <img style="height: 7.5vh" src="/img/icono-fomulario.png">
              </div>
 
-             <div style="width: 8vw;position: absolute;top: 65vh; left:75% ">
+             <div style="width: 8vw;position: absolute;top: 65vh; left:75%;border: solid aqua 1px">
                  <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
                  <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
                  <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
