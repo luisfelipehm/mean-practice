@@ -44,8 +44,21 @@
         margin-top: 7vh;
         line-height: 4vh;
     }
+    .imgeli
+    {
+        width: .9vw;
+        float: right;
+        margin-right: .5vw;
+        margin-top: .7vh;
+        z-index: 500;
+    }
 </style>
 
+<script>
+    function basura() {
+        alert("");
+    }
+</script>
 
 <div class="trolform">
     <form ng-show="usuario.data.adminfotos" name="myForm" ng-submit="crearAlbum()">
@@ -64,6 +77,7 @@
         <a href="#/root/fotos/{{album._id}}">
             <div class="hovernegro">
                 <div class="hovertitulo">
+                    <img class="imgeli" src="/img/basura_blanca.png">
                     <p class="titulosalbums">{{album.nombre}}</p>
                 </div>
                 <img src="{{(!album.files[0] ? '/img/Iconos_no_adjunto-68.png' : album.files[0].adjunto)}}" style="height: 100%;width: 100%">
