@@ -72,19 +72,17 @@
     }
     .content
     {
-      position: absolute;
-      top: 20vh;
-      left: 22%;
+      position: relative;
+      z-index: 1;
+      top: -10vh;
+      display: inline-block;
       width: 56%;
-      z-index: 9 ;
-      background-image: url("img/fondo_centro_50.png");
-      background-size: 40px 40px;
+      background-color: transparent;
       min-height: 100% ;
       height: auto;
       margin-top: 0;
-      -webkit-box-shadow: inset 0px 0px 30px -8px ;
-      -moz-box-shadow: inset 0px 0px 30px -8px ;
-      box-shadow: inset 0px 0px 30px -8px;
+      vertical-align:top;
+
     }
     form.new_message
     {
