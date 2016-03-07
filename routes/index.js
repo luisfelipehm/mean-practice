@@ -555,6 +555,7 @@ router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res,
 
 router.post('/documents/:document/documents',auth, function(req, res, next) {
   var comment = new Folder(req.body);
+  console.log(req.body);
   comment.padre = req.document._id;
   comment.author = req.payload.username;
 

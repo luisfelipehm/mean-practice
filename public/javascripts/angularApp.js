@@ -1352,6 +1352,7 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
 
     $scope.CarpenCarp = function(id){
         if($scope.nombre === '') { return; }
+        console.log($scope.nombre)
         documents.addSubFolder(id, {
             nombre: $scope.nombre,
             padre: $scope.id
@@ -1394,7 +1395,7 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
             });
             file.upload.success(function (data, status, headers, config) {
                 $scope.document = data;
-                $scope.picFile = '';
+
 
 
             });
