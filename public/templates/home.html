@@ -1,5 +1,3 @@
-
-
 <style>
     /*Barra de carga*/
     .thumb
@@ -91,6 +89,7 @@
     }
     .contenedorpubli
     {
+        height: 20vh;
         width: 90%;
         margin-left: 5%;
         margin-top: 2vh;
@@ -351,11 +350,6 @@
     {
         opacity: 1;
     }
-
-    .boxbtnpubli
-    {
-
-    }
     .treli
     {
         position: absolute;
@@ -394,6 +388,147 @@
     {
         display: none;
     }
+    .imguser > img{
+        height: 100%;
+    }
+    #parteinferiorformulario{
+        position: absolute;
+        display: inline-block;
+        width: 90%;
+        margin-left: 5%;
+        margin-bottom: 3vh;
+        right: 1.1vw;
+        top: 66%
+    }
+    #adjuntaralaspublicaciones{
+        display: inline-block; margin-left: 20vw
+    }
+    .iconadjun{
+        vertical-align: -1vh; width: 2vw;
+    }
+    #inputselectformulario{
+        width: 15vw; margin: 0
+    }
+    .boxbtnpubli
+    {
+        display: inline-block;vertical-align: -1.4vh
+    }
+    @media (max-width: 600px) {
+        .imguser
+        {
+            height: 70px;
+            width: 70px;
+            display: inline-block;
+            vertical-align: top;
+            margin: 10px 20px;
+        }
+        .publicarmovil
+        {
+            display: inline-block;
+            width: 100%;
+        }
+        .tittlebox
+        {
+            position: relative;
+            width: 100%;
+            margin-top: 10px;
+            left: 0;
+        }
+        .descriptionbox
+        {
+            position: relative;
+            width: 100%;
+            margin-top: -10px;
+            left: 0;
+        }
+        #formulariodepublicacion
+        {
+            display: inline-block;
+            width: 60%;
+        }
+        md-input-container{
+            margin-bottom: 0;
+            line-height: normal;
+            padding: 0;
+        }
+        #parteinferiorformulario
+        {
+            position: relative;
+            width: 100%;
+            margin-left: 0;
+        }
+        #adjuntaralaspublicaciones{
+            display: inline-block;
+            margin-left: 0;
+
+        }
+        .iconadjun
+        {
+            width: 30px;
+            height: auto;
+            margin-left: -40px;
+        }
+        #inputselectformulario{
+            width: 40%; margin: 0 5px 0 5px;
+        }
+        .boxbtnpubli{
+            width: 30%;
+            height: auto;
+        }
+        .btnpublicar
+        {
+            width: 100%;
+        }
+        .contenedorpubli{
+            padding: 10px 0;
+            height: auto;
+        }
+        .tittlepli
+        {
+            font-size: 20px;
+
+        }
+        div.transbox p {
+            font-family: Helvetica Neue, Helvetica, Arial;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+        .supcoment
+        {
+            position: relative;
+            top: 1.5vh;
+            left: 1.5vw;
+            width: 25%;
+            font-family: Arial;
+            font-size: 15px;
+            margin-bottom: 5%;
+            cursor: pointer;
+        }
+        .imgcoment
+        {
+            width: 30px;
+            height: auto;
+            float: left;
+            margin-right: .8vw;
+            display: inline;
+        }
+        .textocomentariosenlinea
+        {
+            display: inline;
+        }
+        .comentarioautor{
+            font-size: 15px;
+        }
+        .comentariouser{
+            font-size: 15px;
+        }
+
+
+
+    }
+
+
 
 
 </style>
@@ -416,16 +551,20 @@
 
     <!--Formulario para publicacion-->
 
-    <div class="contenedorpubli" style="height: 20vh" ng-show="usuario.data.adminpubli">
+
+
+
+    <div class="contenedorpubli" ng-show="usuario.data.adminpubli">
 
         <!--Imagen user-->
         <div class="imguser">
-            <img style=" height: 100%;" ng-src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
+            <img ng-src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
         </div>
 
-        <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)">
+        <form  enctype="multipart/form-data" name="myForm" ng-submit="uploadPic(picFile)" id="formulariodepublicacion">
 
             <!--titulo del formulario para publicar-->
+            <div class="publicarmovil">
             <div class="tittlebox">
                 <md-input-container style="width: 100%">
                     <label>Título</label>
@@ -437,10 +576,10 @@
             <div class="descriptionbox">
                 <md-input-container style="width: 100%">
                     <label>Descripción</label>
-                    <input type="text" ng-model="link" required>
+                    <input type="text" ng-model="link" >
                 </md-input-container>
             </div>
-
+            </div>
             <!--adjuntar archivos para publicar-->
             <!--<md-button class=" right" aria-label="Photos">-->
                 <!--<md-icon md-svg-src="img/camara.png" style="width: 24px; height: 24px;"></md-icon>-->
@@ -449,16 +588,16 @@
                 <!--</md-tooltip>-->
             <!--</md-button>-->
 
-            <div style="position: absolute; display: inline-block; width: 90%; margin-left: 5%; margin-bottom: 3vh; top: 0; right: 1.1vw; top: 66%">
+            <div id="parteinferiorformulario">
 
-                    <div style="display: inline-block; margin-left: 20vw">
+                    <div id="adjuntaralaspublicaciones">
                         <label for="file-img">
-                           <img  class="iconadjun" style="vertical-align: -1vh; width: 2vw" src="img/camara.png">
+                           <img  class="iconadjun"  src="img/camara.png">
                         </label>
-                            <input type="file" class="camera" ngf-select ng-model="picFile" id="file-img"  ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>
+                            <input type="file" class="camera" ngf-select ng-model="picFile" id="file-img"  ngf-multiple="false" name="file"  ngf-max-size="200MB" />
                     </div>
                     <div style="display: inline-block;">
-                        <md-input-container style="width: 15vw; margin: 0">
+                        <md-input-container id="inputselectformulario">
                             <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
                                 <md-option ng-repeat="area in areas" value="{{area.nombre}}">
                                     {{area.nombre}}
@@ -467,7 +606,7 @@
                         </md-input-container>
                     </div>
 
-                <div class="boxbtnpubli" style="display: inline-block;vertical-align: -1.4vh">
+                <div class="boxbtnpubli" >
                     <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >
                 </div>
             </div>
@@ -477,90 +616,97 @@
                 <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
             </div>
 
-            <!--<div class="containerfoto">-->
-                <!--<span class="select-wrapper">-->
-                    <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>-->
-                <!--</span>-->
-            <!--</div>-->
-
-
-
-            <!--<span class="progress" ng-show="picFile.progress >= 0">-->
-              <!--<div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>-->
-            <!--</span>-->
-
-            <!--<span ng-show="picFile.result">Upload Successful</span>-->
-
-            <!--&lt;!&ndash;button select&ndash;&gt;-->
-            <!--<div class="selec">-->
-                <!--<md-select ng-model="ctrl.userState">-->
-                    <!--<md-option ng-repeat="" value="Hola">-->
-
-                    <!--</md-option>-->
-                <!--</md-select>-->
-            <!--</div>-->
-
-
-
-            <!--button publicar-->
-
-            <!--<div class="boxbtnpubli">-->
-                <!--<input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>-->
-            <!--</div>-->
-
 
 
         </form>
 
     </div>
 
+
+<span class="progress" ng-show="picFile.progress >= 0">
+            <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+            </span>
+
+<span ng-show="picFile.result">Upload Successful</span>
     <!--Publicación-->
     <div>
 
         <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
-            <div class="boxpubli" ng-init="deleting = false">
 
 
-                <div class="eliminarBox" ng-show="deleting" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold; font-size: 1vw">Desea eliminar la publicación</p>
-                    <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a>
-                    <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
-
-                    <div class="treli" ng-show="deleting"></div>
-                </div>
 
 
-                <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
+                <div class="boxpubli" ng-init="deleting = false">
+
+
+                    <div class="eliminarBox" ng-show="deleting" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold; font-size: 1vw">Desea eliminar la publicación</p>
+                        <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a>
+                        <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
+
+                        <div class="treli" ng-show="deleting"></div>
+                    </div>
+
+
+                    <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
                     <p class="tittlepli">{{post.title}}
 
                     </p>
 
-                <div class="boxdescrip">
-                    <img class="imgpublica" ng-src="{{post.file}}">
-                    <!--<a ng-click="remove(post)">Remove</a>-->
-                    <div class="transbox">
-                        <p class="description">{{post.link}}</p>
-                    </div>
-                </div>
 
 
-                <!--posted by <a>{{post.author}}</a> |-->
 
-                <!--Formulario Comentarios-->
-                <div style="margin-top: 2vh;">
-                    <div class="superior">
-                        <div class="supcoment"  ng-click="selectthing($index)">
-                            <img class="imgcoment" src="/img/iconocomen.png">
-                            <span>Comentarios {{post.comments.length}}</span>
+                    <div ng-show="post.file.split('.')[1].toLowerCase() == 'mov' || post.file.split('.')[1].toLowerCase() == 'mp4' || post.file.split('.')[1].toLowerCase() == 'avi' || post.file.split('.')[1].toLowerCase() == 'mpeg4' || post.file.split('.')[1].toLowerCase() == 'wmv'">
+                        <div class="boxdescrip">
+
+
+                            <video controls class="imgpublica">
+                                <source ng-src="{{post.file}}" type="video/{{post.file.split('.')[1]}}">
+                                <p>El video no se ha encontrado o tu navegador no es compatible
+                                </p>
+                                </video>
+                            <!--<a ng-click="remove(post)">Remove</a>-->
+
                         </div>
-                    <!--COMENTARIOS-->
-                        <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
-                            <!--<p class="autorcomentario">{{comentario.author}}</p>-->
-                            <!--<p class="comentariouser" >{{comentario.body}}</p>-->
-                            <div class="autorcomentario"  ng-init="deletingcomment = false">
-                                <div class="imgusercoment">
-                                 <img style=" height: 100%" ng-src="{{comentario.fotoperfil}}">
-                                </div>
+                        <div  ng-if="post.link">
+                            <p class="description" style="color: #575756;font-size: 1.8vh">{{post.link}}</p>
+                        </div>
+                    </div>
+
+
+
+                    <div ng-if="post.file.split('.')[1].toLowerCase() == 'jpg' || post.file.split('.')[1].toLowerCase() == 'png' || post.file.split('.')[1].toLowerCase() == 'gif' || post.file.split('.')[1].toLowerCase() == 'tiff' || post.file.split('.')[1].toLowerCase() == 'jpeg'">
+                        <div class="boxdescrip">
+                            <img class="imgpublica" ng-src="{{post.file}}">
+                            <!--<a ng-click="remove(post)">Remove</a>-->
+                            <div class="transbox" ng-if="post.link">
+                                <p class="description">{{post.link}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="!post.file">
+                        <div  ng-if="post.link">
+                            <p class="description" style="color: #575756;font-size: 1.8vh">{{post.link}}</p>
+                        </div>
+                    </div>
+
+                    <!--posted by <a>{{post.author}}</a> |-->
+
+                    <!--Formulario Comentarios-->
+                    <div style="margin-top: 2vh;">
+                        <div class="superior">
+                            <div class="supcoment"  ng-click="selectthing($index)">
+                                <img class="imgcoment" src="/img/iconocomen.png">
+                                <span class="textocomentariosenlinea">Comentarios {{post.comments.length}}</span>
+                            </div>
+                            <!--COMENTARIOS-->
+                            <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
+                                <!--<p class="autorcomentario">{{comentario.author}}</p>-->
+                                <!--<p class="comentariouser" >{{comentario.body}}</p>-->
+                                <div class="autorcomentario"  ng-init="deletingcomment = false">
+                                    <div class="imgusercoment">
+                                        <img style=" height: 100%" ng-src="{{comentario.fotoperfil}}">
+                                    </div>
 
 
                                     <div class="eliminarBoxcomment" ng-show="deletingcomment" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold">Desea eliminar el comentario</p>
@@ -571,42 +717,47 @@
 
 
 
-                                <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
-                                <span class="comentarioautor">{{comentario.author}}</span> <br>
-                                <p class="comentariouser"> {{comentario.body}}</p>
+                                    <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
+                                    <span class="comentarioautor">{{comentario.author}}</span> <br>
+                                    <p class="comentariouser"> {{comentario.body}}</p>
+                                </div>
+                                <!--<p>{{comentario.upvotes}}</p>-->
                             </div>
-                            <!--<p>{{comentario.upvotes}}</p>-->
+
+                        </div>
+                        <div class="lineadivide"></div>
+                        <div class="inferior" >
+                            <div class="boxcomentario">
+                                <div class="imgusercoment2">
+                                    <img style="height: 100%" ng-src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
+                                </div>
+                                <form ng-submit="addComment(post._id ,bodyc.val );selectthing($index, true)">
+                                    <md-input-container class="tittleboxcomentario">
+                                        <label>Comentario..</label>
+                                        <input type="text" ng-model="bodyc.val" required>
+
+                                    </md-input-container>
+
+                                    <!--<input type="text" ng-model="bodyc.val">-->
+                                </form>
+                            </div>
                         </div>
 
-                    </div>
-                    <div class="lineadivide"></div>
-                    <div class="inferior" >
-                        <div class="boxcomentario">
-                            <div class="imgusercoment2">
-                                <img style="height: 100%" ng-src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
-                            </div>
-                            <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
-                                <md-input-container class="tittleboxcomentario">
-                                    <label>Comentario..</label>
-                                    <input type="text" ng-model="post.come" required>
-
-                                </md-input-container>
-
-                                <!--<input type="text" ng-model="bodyc.val">-->
-                            </form>
-                        </div>
+                        <div style="border: solid transparent;"></div>
                     </div>
 
-                    <div style="border: solid transparent;"></div>
+
+
                 </div>
-
 
 
             </div>
 
 
+
+
         </div>
 
-    </div>
+
 
 

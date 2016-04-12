@@ -451,24 +451,64 @@
 <!--Publicación-->
 <div>
 
-    <div ng-repeat="post in area.posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
+    <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
+
+
+
+
 
         <div class="boxpubli" ng-init="deleting = false">
-            <div class="eliminarBox" ng-show="deleting" ><p style="text-align: center;margin: 2px 0 0 0">Desea eliminar la publicacion</p>
-                <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom: 10%;width: 10%;left: 25%"></a> <p ng-click="deleting = false"><img style="position: absolute;bottom: 10%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p></div>
+
+
+            <div class="eliminarBox" ng-show="deleting" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold; font-size: 1vw">Desea eliminar la publicación</p>
+                <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a>
+                <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
+
+                <div class="treli" ng-show="deleting"></div>
+            </div>
+
+
             <span class="boxiconremove" ng-click="deleting = true ;"><img class="imgtx" src="/img/icono-eliminar-g.png" ng-if="usuario.data.adminpubli"></span>
             <p class="tittlepli">{{post.title}}
 
             </p>
 
-            <div class="boxdescrip">
-                <img class="imgpublica" src="{{post.file}}">
-                <!--<a ng-click="remove(post)">Remove</a>-->
-                <div class="transbox">
-                    <p class="description">{{post.link}}</p>
+
+
+
+            <div ng-show="post.file.split('.')[1].toLowerCase() == 'mov' || post.file.split('.')[1].toLowerCase() == 'mp4' || post.file.split('.')[1].toLowerCase() == 'avi' || post.file.split('.')[1].toLowerCase() == 'mpeg4' || post.file.split('.')[1].toLowerCase() == 'wmv'">
+                <div class="boxdescrip">
+
+
+                    <video controls class="imgpublica">
+                        <source ng-src="{{post.file}}" type="video/{{post.file.split('.')[1]}}">
+                        <p>El video no se ha encontrado o tu navegador no es compatible
+                        </p>
+                    </video>
+                    <!--<a ng-click="remove(post)">Remove</a>-->
+
+                </div>
+                <div  ng-if="post.link">
+                    <p class="description" style="color: #575756;font-size: 1.8vh">{{post.link}}</p>
                 </div>
             </div>
 
+
+
+            <div ng-if="post.file.split('.')[1].toLowerCase() == 'jpg' || post.file.split('.')[1].toLowerCase() == 'png' || post.file.split('.')[1].toLowerCase() == 'gif' || post.file.split('.')[1].toLowerCase() == 'tiff' || post.file.split('.')[1].toLowerCase() == 'jpeg'">
+                <div class="boxdescrip">
+                    <img class="imgpublica" ng-src="{{post.file}}">
+                    <!--<a ng-click="remove(post)">Remove</a>-->
+                    <div class="transbox" ng-if="post.link">
+                        <p class="description">{{post.link}}</p>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!post.file">
+                <div  ng-if="post.link">
+                    <p class="description" style="color: #575756;font-size: 1.8vh">{{post.link}}</p>
+                </div>
+            </div>
 
             <!--posted by <a>{{post.author}}</a> |-->
 
@@ -480,16 +520,23 @@
                         <span>Comentarios {{post.comments.length}}</span>
                     </div>
                     <!--COMENTARIOS-->
-                    <div ng-repeat="comentario in post.comentarios" ng-show="$parent.$index===selectedIndex">
+                    <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
                         <!--<p class="autorcomentario">{{comentario.author}}</p>-->
                         <!--<p class="comentariouser" >{{comentario.body}}</p>-->
                         <div class="autorcomentario"  ng-init="deletingcomment = false">
                             <div class="imgusercoment">
-                                <img style=" height: 100%" src="{{comentario.fotoperfil}}">
+                                <img style=" height: 100%" ng-src="{{comentario.fotoperfil}}">
                             </div>
-                            <div class="eliminarBoxcomment" ng-show="deletingcomment" >Desea eliminar el comentario
-                                <a ng-click="removeComment(comentario)">Eliminar</a> <p ng-click="deletingcomment = false">Cancelar</p>
+
+
+                            <div class="eliminarBoxcomment" ng-show="deletingcomment" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold">Desea eliminar el comentario</p>
+                                <a ng-click="removeComment(comentario)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a>
+                                <p ng-click="deletingcomment = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
+                                <div class="treli2" ng-show="deletingcomment"></div>
                             </div>
+
+
+
                             <span ng-click="deletingcomment = true;"><img class="imgtxcomentario" src="/img/icono-eliminar-g.png" ng-if="currentUser.username == comentario.author2 || curentUser.adminusers"></span>
                             <span class="comentarioautor">{{comentario.author}}</span> <br>
                             <p class="comentariouser"> {{comentario.body}}</p>
@@ -502,7 +549,7 @@
                 <div class="inferior" >
                     <div class="boxcomentario">
                         <div class="imgusercoment2">
-                            <img style="height: 100%" src="{{usuario.data.fotoperfil == undefined ? '/img/iconouser.jpg' : usuario.data.fotoperfil}}">
+                            <img style="height: 100%" ng-src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
                         </div>
                         <form ng-submit="addComment(post._id ,post.come );selectthing($index, true)">
                             <md-input-container class="tittleboxcomentario">
@@ -525,5 +572,8 @@
 
 
     </div>
+
+
+
 
 </div>

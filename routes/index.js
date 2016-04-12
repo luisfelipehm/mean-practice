@@ -18,6 +18,7 @@ var Pregunta = mongoose.model('Pregunta');
 var Evento = mongoose.model('Evento');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
+var Acta = mongoose.model('Acta');
 var Folder = mongoose.model('Folder');
 var Formulario = mongoose.model('Formulario');
 
@@ -117,6 +118,7 @@ router.post('/formularios',auth, function(req, res, next) {
   var formulario = new Formulario(req.body);
   formulario.author = req.payload.username;
   formulario.preguntas = [];
+
   formulario.save(function(err, formulario){
     if(err){ return next(err); }
     res.json(formulario);
@@ -615,6 +617,20 @@ router.post('/posts',auth, upload.single('file'), function(req, res, next) {
   });
 });
 
+router.post('/postssin',auth, function(req, res, next) {
+  var post = new Post(req.body);
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(post);
+  });
+});
+
+
+router.post('/chat/adjuntos',auth, upload.single('file'), function(req, res, next) {
+    res.json('/uploads2/'+req.file.filename);
+});
 
 //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
@@ -681,6 +697,8 @@ router.delete('/conectados/:_id',auth, function(req, res,next){
   });
 });
 
+// ELIMINAR USUARIOS
+
 
 router.post('/areas/:area/editando',auth, function(req, res, next) {
 
@@ -702,11 +720,72 @@ router.delete('/formularios/:_id',auth, function(req, res,next){
   });
 });
 
+router.delete('/folder/:_id',auth, function(req, res,next){
+  //padre
+
+  Folder.findById( req.params._id, function ( err, ar ){
+    var padres = ar.padre;
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      console.log(padres);
+      var query = Folder.findById(padres);
+      query.populate('files').populate('carpetas').exec(function (err, document){
+        if (err) { return next(err); }
+
+        res.json(document)
+      });
+
+    });
+  });
+});
+
+router.delete('/file/:_id/:document',auth, function(req, res,next){
+
+
+
+  //folder
+  File.findById( req.params._id, function ( err, ar ){
+    var padres = req.params.document;
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      console.log(padres);
+      var query = Folder.findById(padres);
+      query.populate('files').populate('carpetas').exec(function (err, document){
+        if (err) { return next(err); }
+
+        res.json(document)
+      });
+    });
+  });
+});
+
+
+router.delete('/fotos/:_id',auth, function(req, res,next){
+console.log(req.params._id)
+  Foto.findById( req.params._id, function ( err, ar ){
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      res.json(arf);
+    });
+  });
+});
+
 
 router.delete('/areas/:_id',auth, function(req, res,next){
 
   Area.findById( req.params._id, function ( err, ar ){
     ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      res.json(arf);
+    });
+  });
+});
+
+router.delete('/eventos/:_id',auth, function(req, res,next){
+
+  Evento.findById( req.params._id, function ( err, ar ){
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
       res.json(arf);
     });
   });
@@ -717,6 +796,7 @@ router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Post.findById( req.params._id, function ( err, post ){
     post.remove( function ( err, post ){
+      if (err) { return next(err); }
       res.json(post);
     });
   });
@@ -726,6 +806,7 @@ router.delete('/comments/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Comment.findById( req.params._id, function ( err, comment ){
     comment.remove( function ( err, comment ){
+      if (err) { return next(err); }
       res.json(comment);
     });
   });
@@ -822,9 +903,11 @@ console.log(req.body);
 
 router.post('/users/:_id', function(req, res, next){
 
-  User.findOne({ username: req.body.username  }, function (err, name) {
+  User.findById(req.body.elid  , function (err, name) {
 
     (req.body.password == "unpasswordquenadienuncaenlavidacolocaria" ? console.log('No cambio el password') : name.setPassword(req.body.password));
+    name.username = req.body.username;
+    console.log(name.username);
     name.nombre =         req.body.nombre;
     name.email =          req.body.email;
     name.area =           req.body.area;
@@ -843,6 +926,7 @@ router.post('/users/:_id', function(req, res, next){
     name.adminfotos =     req.body.adminfotos;
     name.admincrono =     req.body.admincrono;
     name.adminpqrsf =     req.body.adminpqrsf;
+    name.cumpleanos =     req.body.cumpleanos;
     name.tramitepqrsf =   req.body.tramitepqrsf;
     name.save();
     res.json(name);

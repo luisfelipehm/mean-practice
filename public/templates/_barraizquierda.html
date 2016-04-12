@@ -243,20 +243,7 @@
         z-index: 1
     }
 </style>
-<script>
-    $(document).ready(function () {
-        function getDocHeight() {
-            return Math.max(
-                    document.body.scrollHeight, document.documentElement.scrollHeight,
-                    document.body.offsetHeight, document.documentElement.offsetHeight,
-                    document.body.clientHeight, document.documentElement.clientHeight
-            );
 
-        }
-        $('.fondobarraizq').scrollTop(getDocHeight());
-    })
-
-</script>
 
 <div class="fondobarraizq">
 
@@ -265,7 +252,8 @@
              <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false"><img class="iconorojo" src="/img/icono-rojo.png"> <a style="margin: 0" class="linkmenu"><span class="txtmenu">Departamentos</span></a> </li>
             <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
 
-                <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>
+                <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li></a>
+                <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>
 
             </div>
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenu">Formularios</span></a> </li>
@@ -277,7 +265,7 @@
         </div>
 
     <div class="cccalendar" >
-        <img src="/img/calendario_fondo.png" style="left: 6%;position: absolute;top: 8.4vh;width:  89%;">
+        <img src="/img/calendario_fondo.png" style="left: 6%;position: absolute;top: 8.4vh;width:  88.3%;">
             <div class="superiorcalendar ab">
                 <p class="diacalendar ab"></p>
                 <p class="dianumcalendar ab"></p>
@@ -348,6 +336,8 @@
         $('#calendar2').fullCalendar('prev');
 
     });
+
+
 
     $('.diacalendar').html(moment().locale('es').format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
     $('.dianumcalendar').html(moment().locale('es').format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');

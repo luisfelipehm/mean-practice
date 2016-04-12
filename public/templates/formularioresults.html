@@ -13,9 +13,12 @@
     <h1>{{formulario.preguntas[$index].pregunta}}</h1>
     <nvd3 options="options" data="resu"></nvd3>
 </div>
-{{formulario.respuestas}}
-<div id="exportable">
-<table style="display: none">
+
+
+
+<div id="exportable" >
+
+<table style="display: none;">
     <thead>
     <tr>
         <th>Usuario</th>
@@ -24,10 +27,12 @@
     </tr>
     </thead>
     <tbody >
+
     <tr ng-repeat="resp in formulario.respuestas">
+
         <td>{{resp.author}}</td>
         <td>{{resp.fecha}}</td>
-        <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{r.respuesta}}</td>
+        <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{typee(r.respuesta) == "object" ? alegible(r.respuesta) : r.respuesta}}</td>
     </tr>
     </tbody>
 </table>

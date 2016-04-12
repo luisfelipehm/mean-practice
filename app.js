@@ -20,6 +20,7 @@ require('./models/Conectados');
 require('./models/Conversations');
 require('./models/Areas');
 require('./models/Pqrsfs');
+require('./models/Actas');
 require('./models/Eventos');
 require('./models/Postareas');
 require('./models/Pqrsffiles');

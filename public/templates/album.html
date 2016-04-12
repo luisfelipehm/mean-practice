@@ -11,9 +11,14 @@
     {
         width: 52.5vw;
     }
+    .ng-gallery-content > a.close-popup {
+
+        margin-top: 50px;
+    }
 
 </style>
 
+<h1 style="position: absolute;color: #575756;top: 0;left: 40%">{{foto.nombre}}</h1>
 
 <form  ng-show="usuario.data.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
@@ -52,7 +57,7 @@
 
 </form>
 
-
+<div style="margin-top: 78px;width: 100%;height: 1px" ng-show="!usuario.data.adminfotos"></div>
 
 
 <ng-gallery images="images" style="margin-left: 3%;"></ng-gallery>

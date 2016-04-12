@@ -18,7 +18,7 @@
         margin-left: auto;
         margin-right: auto;
         autoHeight: true;
-        width: 10vw;
+        width: 14vw;
 
     }
     .imagencuadro
@@ -43,6 +43,23 @@
         width: 100%;
 
     }
+    #cumpletit
+    {
+        position: relative;
+        top: 70vh;
+        width: 100%;
+        border: solid #e3152d;
+        background-color: #e3152d;
+        border-radius: 10px;
+        margin-top: 7vh;
+    }
+    #cumpletit h2
+    {
+        text-align: center;
+        color: white;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
 
 
 
@@ -59,11 +76,24 @@
             <div ng-repeat="f in fotos" class="imagencuadro">
                 <a href="#/root/fotos/{{f._id}}">
                     <img class="imgactiva" data-lazy="{{((!f.files[0].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                    <img class="imgactiva" data-lazy="{{((!f.files[1].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[1].adjunto)}}">
+                    <img class="imgactiva" data-lazy="{{((!f.files[2].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[2].adjunto)}}">
                 </a>
             </div>
 
         </slick>
 
+    </div>
+    <div ng-controller="CumpleanosCtrl">
+    <div id="cumpletit">
+        <h2>Feliz Cumpleaños</h2>
+
+    </div>
+        <div style="position: relative; top: 48vh">
+    <div ng-repeat="us in users">
+        <img style="display: inline-block; height: 20px" ng-src="{{us.fotoperfil}}">
+        <p style="margin:0;margin-left: 5px;display:inline-block;;font-size: 20px">{{us.nombre}} {{us.apellido}}</p>
+    </div></div>
     </div>
 </div>
 
