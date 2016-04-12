@@ -15,10 +15,9 @@
     }
     .imgactiva
     {
-        margin-left: auto;
-        margin-right: auto;
-        autoHeight: true;
-        width: 10vw;
+        position: relative;
+        margin-top: 12%;
+        width: 14vw;
 
     }
     .imagencuadro
@@ -43,6 +42,29 @@
         width: 100%;
 
     }
+    #cumpletit
+    {
+        position: relative;
+        top: 70vh;
+        width: 100%;
+        border: solid #e3152d;
+        background-color: #e3152d;
+        border-radius: 10px;
+        margin-top: 7vh;
+    }
+    #cumpletit h2
+    {
+        text-align: center;
+        color: white;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
+    .contenedorimagen
+    {
+        margin-left: .5vw;
+        width: 14vw;
+        height: 14vw;
+    }
 
 
 
@@ -54,16 +76,28 @@
     <div class="barraderechaimg">
         <p class="dtittle1">Actividades</p>
 
-      <!--IMAGENES BARRA DERECHA-->
+        <!--IMAGENES BARRA DERECHA-->
         <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades" id="slicking">
             <div ng-repeat="f in fotos" class="imagencuadro">
                 <a href="#/root/fotos/{{f._id}}">
-                    <img class="imgactiva" data-lazy="{{((!f.files[0].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                    <div class="contenedorimagen">
+                        <img class="imgactiva" data-lazy="{{((!f.files[0].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                    </div>
                 </a>
             </div>
 
         </slick>
 
     </div>
-</div>
+    <div ng-controller="CumpleanosCtrl">
+        <div id="cumpletit">
+            <h2>Feliz Cumpleaños</h2>
 
+        </div>
+        <div style="position: relative; top: 48vh">
+            <div ng-repeat="us in users">
+                <img style="display: inline-block; height: 20px" ng-src="{{us.fotoperfil}}">
+                <p style="margin:0;margin-left: 5px;display:inline-block;;font-size: 20px">{{us.nombre}} {{us.apellido}}</p>
+            </div></div>
+    </div>
+</div>
