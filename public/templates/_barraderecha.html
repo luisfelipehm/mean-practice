@@ -15,9 +15,12 @@
     }
     .imgactiva
     {
-        margin-left: auto;
-        margin-right: auto;
-        autoHeight: true;
+        position: relative;
+        top:0;
+        left: 0;
+        bottom: 0;
+        rigth:0;
+        margin: auto;
         width: 14vw;
 
     }
@@ -28,7 +31,7 @@
     }
     .barraderechaimg
     {
-        position: absolute;
+        position: relative;
         height:50vh;
         width: 22%;
         top: 0;
@@ -46,12 +49,11 @@
     #cumpletit
     {
         position: relative;
-        top: 70vh;
-        width: 100%;
         border: solid #e3152d;
         background-color: #e3152d;
         border-radius: 10px;
-        margin-top: 7vh;
+        top: 45vh;
+        left: .6vw;
     }
     #cumpletit h2
     {
@@ -61,6 +63,24 @@
         margin-bottom: 1vh;
     }
 
+    .contenedorimagen
+    {
+        margin-left: .5vw;
+        margin-top: 1vh;
+        width: 14vw;
+        height: 14vw;
+        overflow: hidden;
+    }
+    .circuloimagencumopleanos
+    {
+        position: relative;
+        top:.8vh;
+        border-radius: 10px;
+        width: 25px;
+        overflow: hidden;
+        margin-bottom: .5vh;
+        display: inline-block;
+    }
 
 
 </style>
@@ -71,29 +91,46 @@
     <div class="barraderechaimg">
         <p class="dtittle1">Actividades</p>
 
-      <!--IMAGENES BARRA DERECHA-->
+        <!--IMAGENES BARRA DERECHA-->
         <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades" id="slicking">
             <div ng-repeat="f in fotos" class="imagencuadro">
                 <a href="#/root/fotos/{{f._id}}">
-                    <img class="imgactiva" data-lazy="{{((!f.files[0].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
-                    <img class="imgactiva" data-lazy="{{((!f.files[1].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[1].adjunto)}}">
-                    <img class="imgactiva" data-lazy="{{((!f.files[2].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[2].adjunto)}}">
+
+                        <div class="contenedorimagen">
+                            <img class="imgactiva" data-lazy="{{((!f.files[0].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                        </div>
+
+                        <div class="contenedorimagen">
+                            <img class="imgactiva" data-lazy="{{((!f.files[1].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                        </div>
+
+                        <div class="contenedorimagen">
+                            <img class="imgactiva" data-lazy="{{((!f.files[2].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                        </div>
                 </a>
             </div>
-
         </slick>
 
     </div>
-    <div ng-controller="CumpleanosCtrl">
-    <div id="cumpletit">
-        <h2>Feliz Cumpleaños</h2>
 
-    </div>
-        <div style="position: relative; top: 48vh">
-    <div ng-repeat="us in users">
-        <img style="display: inline-block; height: 20px" ng-src="{{us.fotoperfil}}">
-        <p style="margin:0;margin-left: 5px;display:inline-block;;font-size: 20px">{{us.nombre}} {{us.apellido}}</p>
-    </div></div>
+    <div ng-controller="CumpleanosCtrl">
+        <div id="cumpletit">
+            <h2>Feliz Cumpleaños</h2>
+        </div>
+        <div style="position: relative; top: 46vh">
+            <div style="width: 80%; margin-left: 5%" ng-repeat="us in users" >
+                <div class="circuloimagencumopleanos"> <img style="height: 25px;" ng-src="{{us.fotoperfil}}"> </div>
+              <div style="display: inline-block; margin-left: .5vw; font-size: 18px">{{us.nombre}} {{us.apellido}}</div>
+            </div>
+        </div>
     </div>
 </div>
 
+    <!--</div>-->
+        <!--<div style="position: relative; top: 48vh">-->
+            <!--<div ng-repeat="us in users">-->
+                <!--<img style="display: inline-block; height: 20px" ng-src="{{us.fotoperfil}}">-->
+                <!--<p style="margin:0;margin-left: 5px;display:inline-block;;font-size: 20px">{{us.nombre}} {{us.apellido}}</p>-->
+            <!--</div></div>-->
+    <!--</div>-->
+<!--</div>-->
