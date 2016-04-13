@@ -422,7 +422,7 @@ router.post('/areas/:postarea/comments',auth, function(req, res, next) {
       req.postarea.comentarios.push({
             author: titleize(name.nombre) + ' ' + titleize(name.apellido),
             author2: req.payload.username,
-            fotoperfil: (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil),
+            fotoperfil: (name.fotoperfil == undefined ? '/img/user_chat.png' : name.fotoperfil),
             body: req.body.body
           }
       );
@@ -791,6 +791,16 @@ router.delete('/eventos/:_id',auth, function(req, res,next){
   });
 });
 
+router.delete('/posts/areas/:_id',auth, function(req, res,next){
+  console.log("Deleting");
+  Postarea.findById( req.params._id, function ( err, post ){
+    post.remove( function ( err, post ){
+      if (err) { return next(err); }
+      res.json(post);
+    });
+  });
+});
+
 
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
@@ -827,7 +837,7 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
     comment.post = req.post;
     comment.author = titleize(name.nombre) +' ' + titleize(name.apellido);
     comment.author2 = req.payload.username;
-    comment.fotoperfil = (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil);
+    comment.fotoperfil = (name.fotoperfil == undefined ? '/img/user_chat.png' : name.fotoperfil);
     comment.save(function(err, comment){
       if(err){ return next(err); }
 

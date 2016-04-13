@@ -840,24 +840,39 @@ app.controller('AreasCtrl', ['$scope','auth','areas','$http', function ($scope,a
 
 }]);
 
-app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth', function ($scope,users,Upload,$timeout,$http,areas,area,auth) {
+app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth','$window', function ($scope,users,Upload,$timeout,$http,areas,area,auth,$window) {
 
 
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.currentUser = auth.currentUser();
 
+
         users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
-        $scope.area = area;
+            $scope.area = area;
+
+
         $scope.area.posts = $scope.area.posts.filter(function( obj ) {
             return (obj.areaf == $scope.usuario.data.area || !obj.areaf);
         });
+
+            console.log($scope.area.posts)
 
     });
 
     $scope.loadAreas = function() {
         areas.getAll();
         $scope.areas = areas.areas;
+    };
+
+    $scope.remove = function(post) {
+        return $http.delete('/posts/areas/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $window.location.reload();
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
     };
 
 
@@ -1483,8 +1498,8 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
     });
 
     $scope.cortarlargostring = function (tr) {
-        if(tr.length > 33){
-             return tr.slice(0,33) + "..."
+        if(tr.length > 55){
+             return tr.slice(0,55) + "..."
         }else {
             return tr
         }
