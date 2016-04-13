@@ -30,10 +30,10 @@
         display: inline-block;
     }
 
-    .tab1{ width: 15%;height: 45px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
-    .tab2{ width: 60%;height: 45px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
-    .tab3{ width: 15%;height: 45px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
-    .tab4{ width: 10%;height: 45px;border: .1vw solid #ababab;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
+    .tab1{ width: 15%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
+    .tab2{ width: 60%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
+    .tab3{ width: 15%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
+    .tab4{ width: 10%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
     .last > .tab1{border-bottom: 0}
     .last > .tab2{border-bottom: 0}
     .last > .tab3{border-bottom: 0}
@@ -83,13 +83,16 @@
     }
     .select-wrapper
     {
-        background: url(img/iconoadju.png) no-repeat;
+        background: url(img/adjunto_rojo.png) no-repeat;
+        /*background: url(img/iconoadju.png) no-repeat;*/
         background-size:contain;
         display: block;
         position: relative;
-        width: 4vw;
+        width: 1.5vw;
         height: 3vh;
-        left: 13vw;
+        left: 45vw;
+        top: 3.8vh;
+        overflow: hidden;
     }
     #image_src
     {
@@ -101,7 +104,6 @@
     }
     .btnpubli
     {
-        margin-left:9vw;
         width: 5vw;
         height: 3vh;
         border-radius: .2vw;
@@ -112,6 +114,7 @@
         text-align: center;
         font-size: 1vw;
         margin-bottom: 1vh;
+        margin-left: 47.5vw;
     }
     .btnpubli:hover
     {
@@ -159,13 +162,14 @@
     .prueba
     {
         display: inline-block;
-        width: 30%;
+        width: 52%;
+        margin-left: 5%;
+
     }
     .pr1
     {
         display: inline-block;
         width: 20%;
-        margin-left: 27%;
     }
     .pr2
     {
@@ -185,7 +189,7 @@
     <!--button new document and folder-->
     <div class="boxnewdocument" ng-show="usuario.data.admindocs">
         <div class="prueba">
-            <p style="margin-left: 3vw; font-weight: bold; font-size: 2vw;color: #E30613 "> {{document.nombre}} </p>
+            <p style="font-weight: bold; font-size: 1.5vw;color: #E30613 "> {{document.nombre}} </p>
         </div>
 
         <div class="pr1">
@@ -205,21 +209,21 @@
 
            <form  enctype="multipart/form-data" name="myForm2" style="margin: 0" ng-submit="uploadPic(picFile)">
 
-            <div class="container">
-                <span class="select-wrapper">
-                  <input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="true"  name="file"  ngf-max-size="200MB" required />
-                </span>
-            </div>
+            <!--<div class="container">-->
+                <!--<span class="select-wrapper">-->
+                  <!--<input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="true"  name="file"  ngf-max-size="200MB" required />-->
+                <!--</span>-->
+            <!--</div>-->
 
                 <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
                 <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
 
-                <p style="margin: 0; font-size: 1vw">Files:</p>
+                <p style="margin-left: 3vw; font-size: 1vw; font-weight: bold">Files:</p>
 
-                        <div ng-repeat="f in picFile" style="font:smaller; display:inline-block;margin-left: 1vw; margin-top: 1vh ">
-                            <div style="border: solid darkcyan; width: 7.5vw;height: 12vh;margin-bottom: 1vh">
+                        <div ng-repeat="f in picFile" style="margin-left: 6vw; margin-top: 1vh ">
+                            <li >
                                 {{f.name}} {{f.$errorParam}}
-                            </div>
+                            </li>
                           <span class="progress" ng-show="f.progress >= 0">
                             <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
                           </span>
@@ -233,8 +237,14 @@
 
                 <!--<md-button type="submit"  class="md-raised"> Publicar </md-button>-->
 
-               <div class="btnpubli" style="margin-left: 90%">
-                   <button id="blanco" style="width: 5vw; height: 3vh; border: 0;  left:0"> Publicar</button>
+               <div class="container">
+                   <span class="select-wrapper">
+                        <input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="true"  name="file"  ngf-max-size="200MB" required />
+                   </span>
+               </div>
+
+               <div class="btnpubli">
+                   <button  id="blanco" style="width: 5vw; height: 3vh; border: 0;  "> Publicar</button>
                </div>
 
            </form>
@@ -248,14 +258,14 @@
         <div class="formucar">
             <form name="myForm" style="margin: 0" ng-submit="CarpenCarp(document._id)">
 
-                <md-input-container style="font-size: 1vw; width: 55vw">
+                <md-input-container style="font-size: 1vw; margin-left: 5%; width: 90%">
                     <label>Nombre de la Carpeta</label>
                     <input type="text" ng-model="nombre" required >
                 </md-input-container>
 
 
-                <div class="btnpubli" style="margin-left: 90%">
-                    <button id="blanco" style="width: 5vw; height: 3vh; border: 0; top:-1vh; left:0"> Publicar</button>
+                <div class="btnpubli">
+                    <button id="blanco" style="width: 5vw; height: 3vh; border: 0; "> Publicar</button>
                 </div>
 
             </form>
@@ -277,12 +287,12 @@
         </div>
 
         <div ng-repeat="doc in document.carpetas" style="display:flex">
-            <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 60%;margin-top: 8%; margin-left: 35%"></div>
+            <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 60%;margin-top: 8%; margin-left: 40%"></div>
             <div class="enlinea tab2" ><p class="mi"><a href="#/root/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
             <div class="enlinea tab3" ><p class="mi"> -- </p></div>
             <div class="enlinea tab4" >
                 <p class="mi">
-                    <img ng-click="deletecarpeta(doc)" src="img/iconox.png"style="height: 2vh;margin-left: .2vw">
+                    <img ng-click="deletecarpeta(doc)" src="img/iconox.png"style="height: 2vh;margin-left: 35%">
                 </p>
             </div>
         </div>
@@ -295,7 +305,7 @@
             <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
         <div class="enlinea tab4">
             <p class="mi">
-                <img ng-click="deletearchivodocs(archivo)" src="img/iconox.png"style="height: 2vh;margin-left: .2vw">
+                <img ng-click="deletearchivodocs(archivo)" src="img/iconox.png"style="height: 2vh;margin-left: 35%">
             </p>
 
         </div>
