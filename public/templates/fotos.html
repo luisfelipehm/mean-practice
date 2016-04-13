@@ -47,10 +47,13 @@
     .imgeli
     {
         width: .9vw;
-        float: right;
-        margin-right: .5vw;
-        margin-top: .7vh;
+        right: .5vw;
+        top: .7vh;
         z-index: 500;
+        position: absolute;
+    }
+    a {
+        text-decoration: none;
     }
 </style>
 
@@ -74,13 +77,15 @@
 
     <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 4.5%;margin-bottom: 4.5%">
 
-        <a href="#/root/fotos/{{album._id}}">
+
             <div class="hovernegro">
                 <div class="hovertitulo">
-                    <img class="imgeli" src="/img/basura_blanca.png">
-                    <p class="titulosalbums">{{album.nombre}}</p>
+                    <img class="imgeli" src="/img/basura_blanca.png" ng-click="alertando(album)">
+                    <a href="#/root/fotos/{{album._id}}">
+                        <p class="titulosalbums">{{album.nombre}}</p>
+                    </a>
                 </div>
                 <img src="{{(!album.files[0] ? '/img/Iconos_no_adjunto-68.png' : album.files[0].adjunto)}}" style="height: 100%;width: 100%">
             </div>
-        </a>
+
     </div>

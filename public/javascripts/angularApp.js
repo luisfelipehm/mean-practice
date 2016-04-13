@@ -1,5 +1,5 @@
 
-var app = angular.module('flapperNews', ['ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore','ngMessages','ui.timepicker']);
+var app = angular.module('flapperNews', ['base64','ui.router','ngMaterial','ngFileUpload','ui.calendar','jkuri.gallery','slick','nvd3','btford.socket-io','angularMoment','underscore','ngMessages','ui.timepicker' ]);
 
 app.filter('moment', function() {
     return function(dateString, format) {
@@ -98,7 +98,7 @@ app.factory('posts', ['$http','auth',function($http,auth){
         });
     };
     o.create = function(post) {
-        return $http.post('/posts', post, {
+        return $http.post('/postssin', post, {
             headers: {Authorization: 'Bearer '+auth.getToken()}
         }).success(function(data){
             o.posts.push(data);
@@ -356,7 +356,102 @@ app.factory('formularios', ['$http','auth',function($http,auth){
     return o;
 }]);
 
-app.factory('auth', ['$http', '$window','$state','mySocket', function($http, $window,$state,mySocket){
+app.factory('actas', ['$http','auth',function($http,auth){
+    var o = {
+        actas:[]
+    };
+    o.getAll = function() {
+        return $http.get('/actas').success(function(data){
+            angular.copy(data, o.actas);
+        });
+    };
+    o.addComment = function(id, comment) {
+        return $http.post('/actas/' + id + '/comments', comment, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+    o.create = function(acta) {
+
+
+        return $http.post('/actas', acta, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.areas.push(data);
+        });
+    };
+    //o.get = function(id) {
+    //    return $http.get('/areas/' + id).then(function(res){
+    //        return res.data;
+    //    });
+    //};
+    return o;
+}]);
+
+app.factory('auth', ['$http', '$window','$state','mySocket','$base64', function($http, $window,$state,mySocket,$base64){
+
+
+    (function () {
+
+        var object = typeof exports != 'undefined' ? exports : this; // #8: web workers
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+        function InvalidCharacterError(message) {
+            this.message = message;
+        }
+        InvalidCharacterError.prototype = new Error;
+        InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+        // encoder
+        // [https://gist.github.com/999166] by [https://github.com/nignag]
+        object.btoa || (
+            object.btoa = function (input) {
+                var str = String(input);
+                for (
+                    // initialize result and counter
+                    var block, charCode, idx = 0, map = chars, output = '';
+                    // if the next str index does not exist:
+                    //   change the mapping table to "="
+                    //   check if d has no fractional digits
+                    str.charAt(idx | 0) || (map = '=', idx % 1);
+                    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+                    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+                ) {
+                    charCode = str.charCodeAt(idx += 3/4);
+                    if (charCode > 0xFF) {
+                        throw new InvalidCharacterError("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");
+                    }
+                    block = block << 8 | charCode;
+                }
+                return output;
+            });
+
+        // decoder
+        // [https://gist.github.com/1020396] by [https://github.com/atk]
+        object.atob || (
+            object.atob = function (input) {
+                var str = String(input).replace(/=+$/, '');
+                if (str.length % 4 == 1) {
+                    throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+                }
+                for (
+                    // initialize result and counters
+                    var bc = 0, bs, buffer, idx = 0, output = '';
+                    // get next character
+                    buffer = str.charAt(idx++);
+                    // character found in table? initialize bit storage and add its ascii value;
+                    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+                        // and if not first of each 4 characters,
+                        // convert the first 8 bits to one ascii character
+                    bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+                ) {
+                    // try to find character in table (0-63, not found => -1)
+                    buffer = chars.indexOf(buffer);
+                }
+                return output;
+            });
+
+    }());
+
     var auth = {};
     auth.saveToken = function (token){
         $window.localStorage['flapper-news-token'] = token;
@@ -609,6 +704,17 @@ app.config([
                     }]}
 
             })
+            .state('actas', {
+                parent: 'root',
+                url: '/actas',
+                templateUrl: 'templates/actas.html',
+                controller: 'ActasCtrl',
+                //resolve: {
+                //    postPromise: ['actas', function(actas){
+                //        return actas.getAll();
+                //    }]
+                //}
+            })
             .state('formularioresults', {
                 parent: 'root',
                 url: '/formularios/{id}/results',
@@ -636,30 +742,59 @@ app.config([
         $urlRouterProvider.otherwise('/root/home');
     }]);
 
-app.controller('AreaxCtrl', ['$scope','areas', function ($scope,areas) {
+app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout','actas', function ($scope,auth,users,Upload,$http,$timeout,actas) {
+    $scope.nombre = '';
+    $scope.apellido = '';
+
+    $scope.imprimirnombre = function (nombre) {
+        console.log(nombre);
+    };
+
+    $scope.crearActa = function () {
+        if(!$scope.nombre || $scope.nombre == ''){alert('un campo esta vacio');return }
+        actas.create({
+            titulo: $scope.nombre,
+            fecha: $scope.apellido,
+            adjunto: $scope.nombre,
+            carpeta: $scope.nombre,
+            comentarios: $scope.nombre
+        })
+    }
+}]);
+
+app.controller('AreaxCtrl', ['$scope','areas','auth', function ($scope,areas,auth) {
     areas.getAll();
+    $scope.currentUser = auth.currentUser();
     $scope.areas = areas.areas;
     $scope.hola = 'Hola mundo';
 }]);
 
 app.controller('FoticosCtrl', ['$scope','fotos', function ($scope,fotos) {
-
     $scope.fotos = fotos.fotos;
-
     $scope.awesomeThings = [];
-    //setTimeout(
-    //    function() {
-    //angular.forEach($scope.fotos, function (foto) {
-    //    $scope.awesomeThings.push(foto.files[0].adjunto);
-    //})
-    //        angular.forEach($scope.awesomeThings, function (im) {
-    //
-    //
-    //            $('#slicking').append('<div aria-live="polite" class="slick-list draggable" tabindex="0"><div class="slick-track" style="opacity: 1; width: 288px; transform: translate3d(0px, 0px, 0px);">' +
-    //                '<div class="imagencuadro slick-slide slick-active" data-slick-index="0" aria-hidden="false" style="width: 288px;"><img class="imgactiva" src="'+im +'"  style="opacity: 1;">' +
-    //                '</div></div></div>')
-    //        })
-    //    }, 1000);
+}]);
+
+app.controller('CumpleanosCtrl', ['$scope','users', function ($scope,users) {
+    users.getAll();
+    $scope.users = users.users;
+
+
+
+    setTimeout(
+        function() {
+            $scope.users = $scope.users.filter(function( obj ) {
+
+                if(obj.cumpleanos) {
+                    return (moment(obj.cumpleanos).format("MMM Do YY") == moment(Date.now()).format("MMM Do YY") );
+                }
+
+            });
+
+            console.log($scope.users);
+        }, 500);
+
+
+
 
 }]);
 
@@ -821,17 +956,6 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             });
         }
     });
-
-
-
-
-
-
-
-
-
-
-
      $scope.loadAreas = function() {
             areas.getAll();
             $scope.areas = areas.areas;
@@ -882,7 +1006,9 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 admincrono:     datos[17],
                 adminpqrsf:     datos[18],
                 adminusers:     datos[19],
-                tramitepqrsf:   datos[20]
+                tramitepqrsf:   datos[20],
+                cumpleanos:      datos[21],
+                elid: id
             },id);
             users.getAll();
         }else{
@@ -910,7 +1036,9 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                     admincrono:     datos[17],
                     adminpqrsf:     datos[18],
                     adminusers:     datos[19],
-                    tramitepqrsf:   datos[20]},
+                    tramitepqrsf:   datos[20],
+                    cumpleanos:      datos[21],
+                    elid: id},
 
                 file: file,
                 headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
@@ -958,7 +1086,8 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 region:         $scope.region,
                 documento:      $scope.documento,
                 apellido:       $scope.apellido,
-                contratacion:   $scope.contratacion
+                contratacion:   $scope.contratacion,
+                cumpleanos: $scope.cumpleanos
             });
             $scope.username = '';
             $scope.password = '';
@@ -973,6 +1102,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             $scope.documento= '';
             $scope.apellido= '';
             $scope.contratacion= '';
+            $scope.cumpleanos= '';
         }else{
 
         file.upload = Upload.upload({
@@ -989,7 +1119,8 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 region:         $scope.region,
                 documento:      $scope.documento,
                 apellido:       $scope.apellido,
-                contratacion:   $scope.contratacion},
+                contratacion:   $scope.contratacion,
+                cumpleanos:     $scope.cumpleanos},
             file: file,
             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 
@@ -1026,6 +1157,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             $scope.documento= '';
             $scope.apellido= '';
             $scope.contratacion= '';
+            $scope.cumpleanos = '';
             $scope.picFile = '';
             users.getAll();
         });
@@ -1087,8 +1219,8 @@ app.controller('RootCtrl', ['$scope','$rootScope', function ($scope,$rootScope) 
 app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,users) {
 
 
-
-
+    $scope.fechaxxx = moment();
+    console.log($scope.fechaxxx);
     $scope.currentUser = auth.currentUser();
 
     $scope.pqrsf = pqrsf.pqrsf;
@@ -1350,6 +1482,15 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
 
     });
 
+    $scope.cortarlargostring = function (tr) {
+        if(tr.length > 33){
+             return tr.slice(0,33) + "..."
+        }else {
+            return tr
+        }
+
+    };
+
     $scope.CarpenCarp = function(id){
         if($scope.nombre === '') { return; }
         console.log($scope.nombre)
@@ -1360,6 +1501,24 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
             $scope.document = doc;
         });
         $scope.nombre = '';
+    };
+    $scope.deletecarpeta = function (ar) {
+        return $http.delete('/folder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $scope.document = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+    $scope.deletearchivodocs = function (ar) {
+        return $http.delete('/file/' + ar._id + '/' + $scope.document._id,  {data:{padreidx: $scope.document._id},headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $scope.document = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
     };
 
     $scope.uploadPic = function(files) {
@@ -1406,10 +1565,17 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
     };
 }]);
 
-app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
+app.controller('CalendarCtrl',['$scope','$http','$window','eventos','users','auth','$compile', function ($scope,$http,$window,eventos,users,auth,$compile) {
 
     $scope.eventos = eventos.eventos;
-    console.log($scope.eventos)
+
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user) {
+        $scope.usuario = user;
+    })
+
     $scope.manejadordeeventos = [];
 
     angular.forEach($scope.eventos, function (evento) {
@@ -1465,7 +1631,15 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
     };
 
 
-
+    $scope.eliminarevento = function (ar) {
+        return $http.delete('/eventos/' + ar,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $window.location.reload();
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
     $scope.hola = 'Hello World';
     $scope.eventSources = [];
     $scope.uiConfig = {
@@ -1496,19 +1670,25 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
 
                 angular.forEach($scope.eventos, function (evento) {
                     if(moment(date).format('DD MM YYYY') == moment(evento.fechainicio).format('DD MM YYYY')){
-                    $('.cut').append('   <p class="horaround">'+moment(evento.horainicio).format('LT')+'</p>' +
-                        '   <div class="titsub"><span>' +
-                        '       <img style="height:2vh;margin-left:4%" src="/img/evento.png">'+evento.nombre+'<img src="img/Iconos-81.png" class="desplegarev"> </span>' +
-                        '       <div class="infoevshow">' +
-                        '       <p class="labelshowevdes">• Descripcion:</p>' +
-                        '       <p class="datoshowevdes">'+evento.descripcion+'</p> ' +
-                        '       <p class="labelshowevdes">• Hora:</p> ' +
-                        '       <p class="datoshowevdes">'+moment(evento.horainicio).format('LT')+' a '+moment(evento.horafinal).format('LT')+'</p>' +
-                        '       <p class="labelshowevdes">• Fecha:</p>' +
-                        '       <p class="datoshowevdes">'+moment(evento.fechainicio).format('DD MM YYYY')+' a '+moment(evento.fechainicio).format('DD-MM-YYYY')+'</p>' +
-                        '       </div>' +
-                        '       </div><br>'  )
-                    }})
+                        angular.element(document.getElementsByClassName('cut')).append($compile(
+                            '   <p class="horaround">'+moment(evento.horainicio).format('LT')+'</p>' +
+                            '   <div class="titsub"><span>' +
+                            '       <img ng-show="usuario.data.admincrono" ng-click="eliminarevento(\''+ evento._id+'\')" style="height:2vh;margin-left:4%" src="/img/icono-eliminar-g.png">' +
+                            '       <img style="height:2vh;margin-left:4%" src="/img/evento.png">'+evento.nombre+'<img src="img/Iconos-81.png" class="desplegarev"> </span>' +
+                            '       <div class="infoevshow">' +
+                            '       <p class="labelshowevdes">• Descripcion:</p>' +
+                            '       <p class="datoshowevdes">'+evento.descripcion+'</p> ' +
+                            '       <p class="labelshowevdes">• Hora:</p> ' +
+                            '       <p class="datoshowevdes">'+moment(evento.horainicio).format('LT')+' a '+moment(evento.horafinal).format('LT')+'</p>' +
+                            '       <p class="labelshowevdes">• Fecha:</p>' +
+                            '       <p class="datoshowevdes">'+moment(evento.fechainicio).format('DD MM YYYY')+' a '+moment(evento.fechainicio).format('DD-MM-YYYY')+'</p>' +
+                            '       </div>' +
+                            '       </div><br>'
+                        )($scope));
+
+
+                    }});
+
                 $('.leftcal').append(
                     '<script>' +
                     '$(".desplegarev").click(function(){' +
@@ -1586,18 +1766,43 @@ app.controller('CalendarCtrl',['$scope','eventos', function ($scope,eventos) {
 
 }]);
 
-app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http', function ($scope,auth,users,formularios,$http) {
+app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http','areas', function ($scope,auth,users,formularios,$http,areas) {
     $scope.isLoggedIn = auth.isLoggedIn;
+
+
 
 
 
     $scope.currentUser = auth.currentUser();
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
+        $scope.formularios = formularios.formularios;
+        if(!$scope.usuario.data.adminforms){
+        $scope.formularios = $scope.formularios.filter(function( obj ) {
+            return (obj.habilitado == true);
+        });
+        $scope.formularios = $scope.formularios.filter(function( obj ) {
+              return (obj.area == $scope.usuario.data.area || !obj.area);
+        });
+        }
 
     });
 
-    $scope.formularios = formularios.formularios;
+
+
+    $scope.loadAreas = function() {
+        areas.getAll();
+        $scope.areas = areas.areas;
+    };
+
+
+    $scope.habilitando = function (hab,id) {
+        return $http.post('/formularios/' + id + '/habilitar', {habilitado: hab}, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+
+
     $scope.pregunta = {valor:''};
     $scope.tipo = {valor:''};
     $scope.opcion = {valor:''};
@@ -1612,9 +1817,13 @@ app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http',
         formularios.create({
             nombre: $scope.nombre,
             descripcion: $scope.descripcion,
-            fecha: Date.now()
+            area: $scope.area,
+            fecha: Date.now(),
+            habilitado: true
         });
         $scope.nombre = '';
+        $scope.descripcion = '';
+        $scope.area = '';
     };
 
 
@@ -1656,73 +1865,110 @@ app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http',
 
 }]);
 
-app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment','users', function ($scope,mySocket,auth,$http,moment,users) {
+app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http','moment','users','$compile', function ($scope,Upload,$timeout,mySocket,auth,$http,moment,users,$compile) {
 
-    //Array.prototype.remove = function() {
-    //    var what, a = arguments, L = a.length, ax;
-    //    while (L && this.length) {
-    //        what = a[--L];
-    //        while ((ax = this.indexOf(what)) !== -1) {
-    //            this.splice(ax, 1);
-    //        }
-    //    }
-    //    return this;
-    //};
-
-
+    /*
+     * $scope.mensajes  VARIABLE DONDE SE GUARDAN LOS MENSAJES PARA GENERAR CHATS CADA VEZ QUE SE HACE UN GET AL SERVIDOR
+     * $scope.usuariosconectados  GUARDA LOS USUARIOS DE LA BARRA EN DONDE MUESTRA LOS USUARIOS QUE ESTAN CONECTADOS O NO
+     * $scope.currentUser GUARDA EL TOKEN DE JSON DE EL USUARIO QUE ESTA CONECTADO
+     * $scope.isLoggedIn  Si el usuario esta logueado
+     * $scope.titleize  Es una funcion que recibe un string y devuelve el string con el primer caracter en mayusculas
+     * $scope.actualizarUsers La funcion actualizar users se ejecuta para estar actualizando constantemente los usuarios conectados
+    */
     $scope.mensajes = [];
     $scope.usuariosconectados = [];
     $scope.currentUser = auth.currentUser();
-
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.titleize = function (text) {return text.charAt(0).toUpperCase() + text.slice(1);};
+    $scope.actualizarUsers = function () {return $http.get('/conectados').success(function(data){ angular.copy(data,$scope.usuariosconectados)});
+    };
+    // * ESTE GET TRAE LA INFORMACION DEL USUARIO YA QUE EL TOKEN NECESITA RENOVARSE (CERRAR SESION) PARA PODER ACTUALIZAR LOS DATOS
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
-
     });
-
-    $scope.isLoggedIn = auth.isLoggedIn;
-
+    /*
+     * Si el usuario esta logueado envia un socket para actualizar el estado de conexion
+     */
     if ($scope.isLoggedIn) {
         socket.emit('usuario', $scope.currentUser.username);
         mySocket.forward('usuario', $scope);
     }
-
+    /*
+    * La funcion obtenerMensajes se ejecuta cada vez que llega un socket 'chateando' esta funcion trae el ultimo mensaje y
+    * hace un append a los chats que estan involucrados
+    */
     $scope.obtenerMensajes = function (name1,name2,rec) {
-
-        //return $http.get('/products').then(function(response) {
-        //    return response.data;
-        //});
+        // Get con dos parametros los username de los responsables del chat
         $http.get('/mensajes/'+ name1 +','+ name2).then(function (response) {
-
+            /*
+            * Promesa del get a mensajes
+            * la respuesta de este get se copia en $scope.mensajes y en $scope.lastme se guarda el ultimo mensaje enviado
+            * a continuacion el campo de texto del chat se vacia            *
+            */
             angular.copy(response.data, $scope.mensajes);
             var lastme = $scope.mensajes.slice(-1)[0];
             $("#"+rec+"chattext2").val('');
+            /*
+             * Si el mensaje es texto plano osea no tiene un adjunto el cuadro de chat que se genera solo tiene el mensaje
+             * y la hora en la que se envio este mensaje
+             */
+            if(!lastme.adjunto){
+                $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
+                                                ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ lastme.fotoperfil +"\"> </div>") +
+                                             '  <div class="chatboxmessagecontent">    ' +
+                                             '      <p>'+lastme.mensaje+'</p>     ' +
+                                             '      <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">'  +   moment(lastme.fecha).format('LT')   +' </time>    ' +
+                                             '  </div> ' +
+                                             '</li>');
 
+            }
+            /*
+             * En caso de que exista un adjunto se genera mediante genereitordemensajes 1,2,3 el html
+              * que se va a ingresar en el chat y hay una serie de if y else que definen las imagenes
+              * o el tipo de link que se va a generar en el adjunto del chat (PDF, WORD, EXCEL, POWER POINT, IMAGEN O OTRO)
+              * TODO tenemos que crear un visualizador de imagenes y que el pdf descargue al darles click tambien se puede usar el visualizador recomendado por zarta
+             */
+            else {
+                var genereitordemensajes1 = '<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
+                                            '   <div class="chatboxmessagecontent chatboxmessagecontents">';
+                var genereitordemensajes2 = '';
+                if(lastme.adjunto.split('.')[1]=='doc' || lastme.adjunto.split('.')[1]=='docx'){
+                    var genereitordemensajes2 =        ' <a href="'+lastme.adjunto+'"><img  src="img/WRD.png" class="subirarchvos2"></a><br>'
+                }else if(lastme.adjunto.split('.')[1]=='ppsx' || lastme.adjunto.split('.')[1]=='ppt' || lastme.adjunto.split('.')[1]=='pptm' || lastme.adjunto.split('.')[1]=='pptx'){
+                    var genereitordemensajes2 =         ' <a href="'+lastme.adjunto+'"><img  src="img/PW.png" class="subirarchvos2"></a><br>';
+                }else if(lastme.adjunto.split('.')[1]=='xls' || lastme.adjunto.split('.')[1]=='xlsx' || lastme.adjunto.split('.')[1]=='xlsm' || lastme.adjunto.split('.')[1]=='xlsb'){
+                    var genereitordemensajes2 =         ' <a href="'+lastme.adjunto+'"><img  src="img/XEL.png" class="subirarchvos2"></a><br>';
+                }else if(lastme.adjunto.split('.')[1]=='pdf'){
+                    var genereitordemensajes2 =         ' <a target="_blank" href="'+lastme.adjunto+'"><img src="img/PDF.png" class="subirarchvos2"></a><br>';
+                }else if(lastme.adjunto.split('.')[1].toLowerCase() =='png' || lastme.adjunto.split('.')[1].toLowerCase()=='tiff' || lastme.adjunto.split('.')[1].toLowerCase()=='gif' || lastme.adjunto.split('.')[1].toLowerCase()=='jpg' || lastme.adjunto.split('.')[1].toLowerCase()=='jpeg' || lastme.adjunto.split('.')[1].toLowerCase()=='bmp'){
+                    var genereitordemensajes2 =         ' <a target="_blank" href="'+lastme.adjunto+'"><img src="'+ lastme.adjunto+'" class="subirarchvos2"></a><br>';
+                }else{
+                    var genereitordemensajes2 =    ' <a href="'+lastme.adjunto+'"><img src="img/DOC.png" class="subirarchvos2"></a><br>';
+                }
 
-            //$('#chatcontent'+rec).append('<p>'+lastme.mensaje+'</p>');
-            $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
-                ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ lastme.fotoperfil +"\"> </div>") +
-                '        <div class="chatboxmessagecontent">    ' +
-                '           <p>'+lastme.mensaje+'</p>     ' +
-                '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">'  +   moment(lastme.fecha).format('LT')   +' </time>    ' +
-                '         </div> ' +
-                '   </li>');
+                var genereitordemensajes3 =  '<p>'+lastme.mensaje+'</p>     ' +
+                '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(lastme.fecha).format('LT')   +'   </time>    ' +
+                    ' </div>'+
+                    ' </li>';
+                /*
+                  * Se genera el contenido necesario
+                  * Y se anade al chat
+                 */
+                var genereitordemensajes = genereitordemensajes1 + genereitordemensajes2 + genereitordemensajes3;
+                $('#chatcontent'+rec).append(genereitordemensajes);
+            }
+            /*
+              * Esta linea hace que el chat baje el scroll automaticamente
+            */
             $('#chatcontent'+rec).scrollTop($('#chatcontent'+rec)[0].scrollHeight);
 
         })
     };
-
-    $scope.titleize = function (text) {
-        return text.charAt(0).toUpperCase() + text.slice(1);
-    };
-
-
-
-
-    $scope.actualizarUsers = function () {
-        return $http.get('/conectados').success(function(data){
-            angular.copy(data,$scope.usuariosconectados)
-        });
-    };
+    /*
+      * La funcion actualizar users se esta llamando cuando el socket indica que un usuario se conecto a la pagina
+      * mySocket.forward('chateando', $scope); Con esta linea habilitamos el envio y recepcion de sockets en la aplicacion
+      * este socket es cuando se envian mensajes
+    */
 
     $scope.$on('socket:usuario', function (ev, data) {
        $scope.actualizarUsers();
@@ -1730,27 +1976,134 @@ app.controller('ChatCtrl',['$scope','mySocket','auth','$http','moment','users', 
 
     mySocket.forward('chateando', $scope);
 
-
-        $scope.$on('socket:chateando', function (ev, data) {
-            if(data.envia == $scope.currentUser.username){
-                $scope.obtenerMensajes(data.participan[0],data.participan[1],data.recibe);
-            }else if(data.recibe == $scope.currentUser.username)
-            {
-                if($('#'+data.envia+'chat').length == 0){
-                    $scope.generarChat(data.envia, data.nombrec);
-                }else{
-                    $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
-                }
+    /*
+      * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
+      * Ademas el que recibe el mensaje si tiene la caja de chat cerrado la abre en  if($('#'+data.envia+'chat').length == 0){
+      * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
+     */
+    $scope.$on('socket:chateando', function (ev, data) {
+        if(data.envia == $scope.currentUser.username){
+            $scope.obtenerMensajes(data.participan[0],data.participan[1],data.recibe);
+        }else if(data.recibe == $scope.currentUser.username){
+            if($('#'+data.envia+'chat').length == 0){
+                $scope.generarChat(data.envia, data.nombrec);
+            }else{
+                $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
             }
+        }
+    });
+    $scope.cancelarsubidachats= function(name){
+        angular.element(document.getElementById('previasubidaarchivos'+name)).remove();
+    };
+
+    $scope.enviarmensajeadjunto= function (file,name) {
+        file.upload = Upload.upload({
+            url: '/chat/adjuntos',
+            data: {},
+            file: file,
+            headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+        });
+
+        file.upload.then(function (response) {
+            console.log("Postcontroller: upload then ");
+            $timeout(function () {
+                file.result = response.data;
+            });
+        }, function (response) {
+            if (response.status > 0)
+                $scope.errorMsg = response.status + ': ' + response.data;
+        });
+
+        file.upload.progress(function (evt) {
+            // Math.min is to fix IE which reports 200% sometimes
+            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            console.log("PostController: upload progress " + file.progress);
+        });
+
+        file.upload.success(function (data, status, headers, config) {
+
+            $scope.title = '';
+            $scope.link = '';
+            $scope.picFile = '';
+
+            socket.emit('pubs', 'update');
+            console.log(name);
+            console.log('mimerrjr');
+            socket.emit("chateando", {mesj: $("#"+name+"chattext2").val(),
+                                      envia:  $scope.currentUser.username ,
+                                      participan: [name , $scope.currentUser.username].sort(),
+                                      recibe:  name ,
+                                      nombrec: $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] ,
+                                      fotoperfil: (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil) ,
+                                      adjunto: data });
+            angular.element(document.getElementById('previasubidaarchivos'+name)).remove();
+            angular.element(document.getElementById(name+'chattext2')).val('');
+
         });
 
 
 
-
-var a =
-
+    };
 
 
+
+
+    $scope.seleccionarchivochat = function (ff,name) {
+
+        var progresito = name + "picFile.progress";
+        var progresito2 = name + "picFile";
+
+        if(ff){
+
+            var genereitor1 =  ' <li class="self" id="previasubidaarchivos'+ name+'">'+
+                    '<div class="chatboxmessagecontent chatboxmessagecontents">'+
+                    ' <img src="/img/icono-atras.png" class="subirarchvos" ng-click="enviarmensajeadjunto('+progresito2+',\''+ name +'\')">';
+
+
+            if(ff.name.split('.')[1]=='doc' || ff.name.split('.')[1]=='docx')
+            {
+                var genereitor2 =         '  <img  src="img/WRD.png" class="imagenadjuntochat">';
+            }else if(ff.name.split('.')[1]=='ppsx' || ff.name.split('.')[1]=='ppt' || ff.name.split('.')[1]=='pptm' || ff.name.split('.')[1]=='pptx')
+            {
+                var genereitor2 =         '  <img  src="img/PW.png" class="imagenadjuntochat">'
+            }else if(ff.name.split('.')[1]=='xls' || ff.name.split('.')[1]=='xlsx' || ff.name.split('.')[1]=='xlsm' || ff.name.split('.')[1]=='xlsb')
+            {
+                var genereitor2 =         '  <img  src="img/XEL.png" class="imagenadjuntochat">'
+            }
+            else if(ff.name.split('.')[1]=='pdf')
+            {
+                var genereitor2 =         '  <img  src="img/PDF.png" class="imagenadjuntochat">'
+            }
+            else if(ff.name.split('.')[1].toLowerCase() =='png' || ff.name.split('.')[1].toLowerCase()=='tiff' || ff.name.split('.')[1].toLowerCase()=='gif' || ff.name.split('.')[1].toLowerCase()=='jpg' || ff.name.split('.')[1].toLowerCase()=='jpeg')
+            {
+                var genereitor2 =         '  <img  ngf-src="!'+ name+'picFile.$error && '+ name+'picFile" class="imagenadjuntochat">';
+            }
+            else
+            {
+                var genereitor2 = '  <img  src="img/DOC.png" class="imagenadjuntochat">';
+            }
+
+
+            var genereitor3 = '  <div class="progresosubidachat">'+
+                ' <div style="width:{{'+progresito+'}}%" ng-bind="'+progresito+'+\'%\'" class="ng-binding progresointernochat"></div>'+
+                '  </div>'+
+                ' <img src="img/icono-eliminar-g.png" class="cancelarsubidachat" ng-click="cancelarsubidachats(\''+ name+'\')">'+
+                ' </div>'+
+                ' </li>';
+
+
+            var genereitor  = genereitor1 + genereitor2 + genereitor3;
+            console.log(name)
+            angular.element(document.getElementById('chatcontent'+name)).append($compile(genereitor)($scope));
+            setTimeout(function(){
+            $('#chatcontent'+name).scrollTop($('#chatcontent'+name)[0].scrollHeight)
+            }, 100);
+        console.log(ff.name)
+        }else
+        {
+            angular.element(document.getElementById('previasubidaarchivos'+name)).remove();
+        }
+    };
 
     $scope.numerochats = 1;
     $scope.generarChat = function (name , titulochat) {
@@ -1761,33 +2114,102 @@ var a =
 
         $http.get('/mensajes/'+ part[0] +','+ part[1]).then(function (response) {
             angular.copy(response.data, $scope.mensajes);
-            $('#chap').append('<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'", nombrec: "'  + $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] +'",fotoperfil: "'+ (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil) +'" });} e.preventDefault();}});' +
-                '$("#closechat'+ name+'").click(function () {$("#'+name+'chat").nextAll(".chatbox").css("right", "-=285");numerodechats--;$("#'+name+'chat").remove();})' +
-                '</script>' +
-                '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
-                '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
-                '<h1> '+titulochat.split(' ')[2]+' '+ titulochat.split(' ')[0] +'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
-                '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
-                '    <div class="chatboxinput">'+
-                '<input type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> </div> </div>' +
-                '<script>$("#'+name+'chat").css("right",numerodechats*285+"px");' +
-                ' $("#'+name +'chattext2").focus();' +
-                '' +
-                '</script>');
+
+            var genereitor = '<script>numerodechats++;$("#'+name+'chattext2").keypress(function(e) {if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){}else {socket.emit("chateando", {mesj: $("#'+name+'chattext2").val(),envia: "'+ $scope.currentUser.username +'",participan: ["'+name +'", "'+$scope.currentUser.username+'"].sort(),recibe: "'+ name +'", nombrec: "'  + $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] +'",fotoperfil: "'+ (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil) +'" });} e.preventDefault();}});' +
+            '$("#closechat'+ name+'").click(function () {$("#'+name+'chat").nextAll(".chatbox").css("right", "-=285");numerodechats--;$("#'+name+'chat").remove();})' +
+            '</script>' +
+            '<div class="chatbox" id="'+name+'chat" style="bottom: 0px; display: block;">' +
+            '<div class="chatboxhead"><div class="chatboxtitle"><i class="fa fa-comments"></i>'+
+            '<h1> '+titulochat.split(' ')[0]+' '+ titulochat.split(' ')[1] +'</h1></div><div class="chatboxoptions">&nbsp;&nbsp; <i style="cursor: pointer" id="closechat'+name+'" class="fa  fa-times cerrarchat" ng-click="cerrarChat(users.username)"></i> </div>'+
+            '<br clear="all"></div><div class="chatboxcontent" id="chatcontent'+ name +'"></div>'+
+            '    <div class="chatboxinput">'+
+                ' <label for="'+ name +'file-img">'+
+                '  <img src="img/adjunto_blanco.png" class="adjuntarchat">'+
+                ' </label>'+
+                ' <input ngf-select="seleccionarchivochat('+ name+'picFile,\''+ name+'\')" type="file" class="camera" ngf-select ng-model="'+ name+'picFile" id="'+ name+'file-img"  ngf-multiple="false" name="file"  ngf-max-size="200MB" style="display: none" />'+
+            '<input placeholder="Escribe tu mensaje..." type="text" id="'+name+'chattext2" class="chatboxtextarea" autocomplete="off"> ' +
+                '</div>' +
+                ' </div>' +
+            '<script>$("#'+name+'chat").css("right",numerodechats*285+"px");' +
+            ' $("#'+name +'chattext2").focus();' +
+            '' +
+            '</script>';
+
+
+
+
+
+
+
+
+
+
+
+            angular.element(document.getElementById('chap')).append($compile(genereitor)($scope));
 
             $scope.numerochats += 1;
 
             angular.forEach($scope.mensajes, function (mensa) {
 
-                //$('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>');
-                $('#chatcontent'+name).append('<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
-                    ($scope.currentUser.username == mensa.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ mensa.fotoperfil +"\"> </div>") +
-                    '        <div class="chatboxmessagecontent">    ' +
-                    '           <p>'+mensa.mensaje+'</p>     ' +
-                    '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(mensa.fecha).format('LT')   +'   </time>    ' +
-                    '         </div> ' +
-                    '   </li>');
 
+                if(!mensa.adjunto){
+                    $('#chatcontent'+name).append(
+                        '<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
+                        ($scope.currentUser.username == mensa.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ mensa.fotoperfil +"\"> </div>") +
+                        '        <div class="chatboxmessagecontent">    ' +
+                        '           <p>'+mensa.mensaje+'</p>     ' +
+                        '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(mensa.fecha).format('LT')   +'   </time>    ' +
+                        '         </div> ' +
+                        '   </li>');
+                }else{
+
+                var genereitordemensajes1 = '<li class="'+ ($scope.currentUser.username == mensa.usernameone  ? "self" : "other") +'"> ' +
+                    ' <div class="chatboxmessagecontent chatboxmessagecontents">';
+
+                var genereitordemensajes2 = '';
+
+
+                if(mensa.adjunto.split('.')[1]=='doc' || mensa.adjunto.split('.')[1]=='docx')
+                {
+                    var genereitordemensajes2 =        ' <a href="'+mensa.adjunto+'"><img  src="img/WRD.png" class="subirarchvos2"></a><br>'
+                }else if(mensa.adjunto.split('.')[1]=='ppsx' || mensa.adjunto.split('.')[1]=='ppt' || mensa.adjunto.split('.')[1]=='pptm' || mensa.adjunto.split('.')[1]=='pptx')
+                {
+                    var genereitordemensajes2 =         ' <a href="'+mensa.adjunto+'"><img  src="img/PW.png" class="subirarchvos2"></a><br>';
+
+                }else if(mensa.adjunto.split('.')[1]=='xls' || mensa.adjunto.split('.')[1]=='xlsx' || mensa.adjunto.split('.')[1]=='xlsm' || mensa.adjunto.split('.')[1]=='xlsb')
+                {
+                    var genereitordemensajes2 =         ' <a href="'+mensa.adjunto+'"><img  src="img/XEL.png" class="subirarchvos2"></a><br>';
+                }
+                else if(mensa.adjunto.split('.')[1]=='pdf')
+                {
+                    var genereitordemensajes2 =         ' <a href="'+mensa.adjunto+'"><img src="img/PDF.png" class="subirarchvos2"></a><br>';
+                }
+                else if(mensa.adjunto.split('.')[1].toLowerCase() =='png' || mensa.adjunto.split('.')[1].toLowerCase()=='tiff' || mensa.adjunto.split('.')[1].toLowerCase()=='gif' || mensa.adjunto.split('.')[1].toLowerCase()=='jpg' || mensa.adjunto.split('.')[1].toLowerCase()=='jpeg')
+                {
+                    var genereitordemensajes2 =         ' <a href="'+mensa.adjunto+'"><img src="'+ mensa.adjunto+'" class="subirarchvos2"></a><br>';
+
+                }
+                else
+                {
+                    var genereitordemensajes2 =    ' <a href="'+mensa.adjunto+'"><img src="img/DOC.png" class="subirarchvos2"></a><br>';
+                }
+
+
+
+
+                var genereitordemensajes3 ='           <p>'+mensa.mensaje+'</p>     ' +
+                    '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(mensa.fecha).format('LT')   +'   </time>    ' +
+                    ' </div>'+
+                    ' </li>';
+                var genereitordemensajes = genereitordemensajes1 + genereitordemensajes2 + genereitordemensajes3;
+
+
+                    $('#chatcontent'+name).append(genereitordemensajes);
+
+                }
+
+
+                //$('#chatcontent'+name).append('<p>'+mensa.mensaje+'</p>');
 
             });
 
@@ -1796,9 +2218,6 @@ var a =
         });
         }
     };
-
-
-
     $scope.actualizarUsers();
 
 
@@ -1822,6 +2241,21 @@ app.controller('FormularioresultsCtrl',['$scope','formularios','users','formular
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.data2 = [];
     $scope.currentUser = auth.currentUser();
+
+
+    $scope.alegible = function (obj) {
+        console.log('entro')
+        var a = '';
+      angular.forEach(obj, function (ob) {
+          a += ', ' + ob;
+      });
+        return a;
+    };
+
+
+    $scope.typee = function(obj) {
+        return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
+    }
 
     $scope.exportData = function () {
         var blob = new Blob([document.getElementById('exportable').innerHTML], {
@@ -2035,6 +2469,14 @@ if(typeof $scope.resultado3[0] === 'object'){
 app.controller('CalendarbarCtrl',['$scope', function ($scope) {
     $scope.hola = 'Hello World';
     $scope.eventSource = [];
+    $scope.calcularleft = function(element){
+        var mid = element.outerWidth()/2;
+        var pare = element.parent().outerWidth()/2;
+        var total = pare-mid;
+        var cien = pare*2;
+        var last = total*100/cien;
+        return last;
+    }
     $scope.uiConfi = {
         calendar:{
             height: 450,
@@ -2055,7 +2497,11 @@ app.controller('CalendarbarCtrl',['$scope', function ($scope) {
                 week: 'Semana',
                 day: 'Dia'
             },
-            dayClick: $scope.alertEventOnClick,
+            dayClick: function(date, jsEvent, view) {
+                $('.diacalendar').html(moment(date).locale('es').format('dddd')).css('left',$scope.calcularleft($('.diacalendar'))+'%');
+                $('.dianumcalendar').html(moment(date).locale('es').format('DD')).css('left',$scope.calcularleft($('.dianumcalendar'))+'%');
+                $('.mescalendar').html(moment(date).locale('es').format('MMMM')+' '+moment().format('YYYY')).css('left',$scope.calcularleft($('.mescalendar'))+'%');
+            },
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize
         }
@@ -2136,6 +2582,29 @@ app.controller('FotosCtrl',['$scope','users','fotos','Upload','$http','auth', fu
 
     $scope.currentUser = auth.currentUser();
 
+
+    $scope.remove = function (ar) {
+        return $http.delete('/formularios/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                formularios.getAll();
+                $scope.formularios = formularios.formularios;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.alertando = function (text) {
+        return $http.delete('/fotos/' + text._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                fotos.getAll();
+                $scope.fotos = fotos.fotos;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    }
+
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
 
@@ -2176,25 +2645,7 @@ app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','
         $scope.areas = areas.areas;
     };
 
-    //$scope.fotoperfil = '';
-    //console.log($scope.fotoperfil);
-    //$scope.getUser = function (id) {
-    //    return $http.get('/users/' + id).then(function(res){
-    //        console.log(res.fotoperfil)
-    //    });
-    //};
-    //$scope.bodyc = {val:''};
-    //$scope.currentUser = auth.currentUser();
-
-
-    //OBTENER DATOS DE UN GET CON UNA PROMESA
-
-     //users.get($scope.currentUser._id);
-
-    //$scope.fotoperfil = $scope.usuario.fotoperfil;
-
-
-    $scope.selectthing = function(idx, form) {
+     $scope.selectthing = function(idx, form) {
         if ($scope.selectedIndex == idx  ){
             form ? $scope.selectedIndex = idx : $scope.selectedIndex = undefined
 
@@ -2236,6 +2687,7 @@ app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','
 
         }).success(function(comment) {
             posts.getAll();
+            $scope.posts = posts.posts;
         });
         $scope.bodyc.val = '';
     };
@@ -2254,6 +2706,8 @@ app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','
             $scope.title = '';
             $scope.link = '';
             $scope.area = '';
+            posts.getAll()
+            $scope.posts = posts.posts;
         }
 
         file.upload = Upload.upload({
@@ -2288,7 +2742,9 @@ app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','
             $scope.picFile = '';
             console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
             socket.emit('pubs', 'update');
+
             posts.getAll();
+            $scope.posts = posts.posts;
 
         });
 

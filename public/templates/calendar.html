@@ -365,6 +365,22 @@
         z-index: 11;
     }
 
+    .btncrearevento
+    {
+        left: 7vw;
+        top: 26vh ;
+        position: absolute;
+    }
+    @media (max-height: 700px) {
+        .calendarcontainer2
+        {
+            top: 100px;
+        }
+        .btncrearevento{
+            top: 23vh !important;
+        }
+    }
+
 
 </style>
 
@@ -372,38 +388,26 @@
 
 <label class="titulocrono">Cronograma</label>
 
-    <div class="fondofalso"> </div>
+    <div class="fondofalso">
 
     <div ng-controller="CalendarbarCtrl">
-
-        <div class="leftcal ab">
-
-            <script>
-
-    //        $(document).ready(function(){
-    //            var ndia = moment("2016-03-11",'YYYY-MM-DD').format('DD'),
-    //                    ldia = moment("2016-03-11",'YYYY-MM-DD').format('dddd');
-    //
-    //            $('.cut').prepend('<p class="showldia">'+ldia+' </p>');
-    //            $('.cut').prepend('<p class="showndia">'+ndia+' </p>');
-    //
-    //        });
-          </script>
+            <div class="leftcal ab">
 
             </div>
 
-            <div class="calendarcontainer2">
-                <div class="messup">
-                    <div class="siguiente2"></div>
-                    <div class="anterior2"></div>
-                    <p class="onlymes"></p>
+                    <div class="calendarcontainer2">
+                        <div class="messup">
+                            <div class="siguiente2"></div>
+                            <div class="anterior2"></div>
+                            <p class="onlymes"></p>
+                        </div>
+                        <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
+                    </div>
+                <div  ng-show="usuario.data.admincrono" class="btncrearevento">
+                    <img src="/img/crear-evento-1.png" style="width: 25%">
                 </div>
-            <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
-            </div>
-        <div style="margin-left: 10%;top:250px ; position: absolute" class="btncrearevento">
-            <img src="/img/crear-evento-1.png" style="width: 25%">
-        </div>
 
+            </div>
     </div>
 
 
@@ -427,9 +431,9 @@
 
                         <md-datepicker ng-model="fechafinal" md-placeholder="Fecha final"></md-datepicker><br>
 
-                        <input ui-timepicker ng-model="horainicio" class="horaini">
+                        <input ui-timepicker ng-model="horainicio" placeholder="Hora Inicio" class="horaini">
 
-                        <input ui-timepicker ng-model="horafinal" class="horafin"><br>
+                        <input ui-timepicker ng-model="horafinal" placeholder="Hora Final" class="horafin"><br>
 
                         <div style="vertical-align: 10vh" >
                             <input type="image" src="/img/crear-evento-1.png"  class="md-raised btncreareven">

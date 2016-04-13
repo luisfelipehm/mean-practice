@@ -26,8 +26,8 @@
     }
     .iconoeditaruser
     {
-        width: 1vw;
-        margin-left: 1vw;
+        width: 20px;
+        margin-left: 20px;
         float: right;
     }
     .boximgusersedit
@@ -212,9 +212,9 @@
         <h3 class="tittleregistrar">Registrar nuevo usuario</h3>
 
 
-        <md-input-container class="loginedit">
+        <md-input-container class="loginedit" required>
             <label>Login</label>
-            <input type="text" ng-model="username">
+            <input type="text" ng-model="username" required>
         </md-input-container>
 
         <md-input-container class="loginedit">
@@ -282,6 +282,8 @@
             <input type="text" ng-model="contratacion">
         </md-input-container>
 
+            <md-datepicker ng-model="cumpleanos" md-placeholder="Fecha de cumpleaños"></md-datepicker>
+
             <!--SELECCIONAR ARICHIVO FOTO-->
 
         <div class="boxexaminar">
@@ -342,7 +344,7 @@
      <div class="boxallusers">
         <div> <img class="imguseredit" ng-src="{{(!user.fotoperfil) ? '/img/boton-examinar.png' : user.fotoperfil}}"> </div>
         <div class="boximgusersedit" ng-hide="editing" ng-click="editing = true"> <img class="iconoeditaruser" src="/img/icono-editar.png"> </div>
-        <div class="boximguserseli"> <img class="iconoeditaruser" src="/img/icono-eliminar-g.png"> </div>
+        <div class="boximguserseli"> <img class="iconoeditaruser" ng-show="usuario.data.adminusers" src="/img/icono-eliminar-g.png"> </div>
         <p class="editdatosusername">{{user.nombre}} {{user.apellido}}</p>
         <p class="editdatosusercargo"><span class="negrita">Cargo: </span>{{user.cargo}}</p>
         <p class="editdatosuserarea"><span class="negrita">Area:</span>{{user.area}}</p>
@@ -353,15 +355,15 @@
          <div class="boxinuseredit">
 
              <form ng-if="editing" enctype="multipart/form-data" name="myForm"
-                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf],user._id);editing = false;">
+                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf,user.cumpleanos],user._id);editing = false;">
 
                  <div class=" lineahgris"></div>
                  <h3 class="tittleedit">Editar</h3>
 
 
-                 <md-input-container class="loginedit">
+                 <md-input-container class="loginedit" required>
                      <label>Login</label>
-                     <input type="text" ng-model="user.username" >
+                     <input type="text" ng-model="user.username" required>
                  </md-input-container>
 
                  <md-input-container class="loginedit">
@@ -429,6 +431,7 @@
                      <input type="text" ng-model="user.contratacion">
                  </md-input-container>
 
+                 <md-datepicker ng-model="user.cumpleanos" md-placeholder="Fecha de cumpleaños"></md-datepicker>
 
                  <div ng-if="usuario.data.adminusers">
 

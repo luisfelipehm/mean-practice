@@ -28,7 +28,8 @@ var UserSchema = new mongoose.Schema({
     admincrono: Boolean,
     adminpqrsf: Boolean,
     tramitepqrsf: Boolean,
-    ultimaconexion: Date
+    ultimaconexion: Date,
+    cumpleanos: Date
 
 });
 

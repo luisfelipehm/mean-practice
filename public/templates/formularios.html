@@ -12,10 +12,10 @@
     }
     .boxformularios
     {
+        position: relative;
         background: #ebebeb;
         width: 90%;
-        height: auto;
-        min-height: 25vh;
+        min-height: 30vh;
         margin-left: 5%;
         margin-top: 2%;
         margin-bottom: 2%;
@@ -24,6 +24,7 @@
         box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
 
     }
+
     .iconoformulario
     {
         position: absolute;
@@ -160,8 +161,9 @@
     }
     .btnpublicar
     {
-        margin-left: 84%;
-        margin-bottom: 5% ;
+        margin-left: 82.5%;
+        margin-bottom: 5%;
+        margin-top: 1%;
         width: 6vw;
         opacity: 0.6;
     }
@@ -180,6 +182,33 @@
         position: absolute;
         right: 2vw;
     }
+    md-switch.md-default-theme.md-checked .md-ink-ripple, md-switch.md-checked .md-ink-ripple {
+        color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked .md-thumb, md-switch.md-checked .md-thumb {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked .md-ink-ripple, md-switch.md-checked .md-ink-ripple {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked .md-bar, md-switch.md-checked .md-bar {
+        background-color: rgba(227,6,19,0.5);
+    }
+
+    .boxbtn
+    {
+        position: relative;
+    }
+    #inputselectformulario{
+        width: 15vw; margin: 0;
+        margin-left: 25vw;
+        position: absolute;
+        bottom: 17%;
+        z-index: 600;
+
+
+    }
+
 
 </style>
 
@@ -197,18 +226,28 @@
         <div class="tx1">
             <md-input-container style="width: 100%">
                 <label>Nombre del Formulario</label>
-                <input type="text" ng-model="nombre">
+                <input type="text" ng-model="nombre" required>
             </md-input-container>
         </div>
 
         <div class="dx1">
             <md-input-container style="width: 100%">
                 <label>Descripcion</label>
-                <input type="text" ng-model="descripcion">
+                <input type="text" ng-model="descripcion" required>
             </md-input-container>
         </div>
 
-         <div style="vertical-align: 10vh" >
+        <div style="display: inline-block;">
+            <md-input-container id="inputselectformulario">
+                <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
+                    <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                        {{area.nombre}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+         <div class="boxbtn" >
             <input type="image" src="/img/boton-crear.png"  class="md-raised btnpublicar">
          </div>
 
@@ -224,13 +263,13 @@
     </md-input-container>
 </div>
 
-<div ng-repeat="forma in formularios | filter:search | orderBy:'-'" class="boxformularios">
+<div ng-repeat="forma in formularios | filter:search | orderBy:'-'" class="boxformularios" >
 
     <!--{{forma}}-->
     <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
-        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.data.adminforms">
 
+        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.data.adminforms">
         <img class="iconossuperiordos" src="/img/icono-eliminar-g.png" ng-show="usuario.data.adminforms" ng-click="remove(forma)">
     </div>
 
@@ -263,13 +302,18 @@
     </div>
 
     <div>
-        <a href="#/root/formularios/{{forma._id}}/results" ng-show="usuario.data.adminforms"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
+        <a href="#/root/formularios/{{forma._id}}/results" ng-show="usuario.data.adminforms">
+            <img class="btnresultados" src="/img/boton_resultados.png"> </a>
     </div>
     <div ng-show="editing">
     <h3 style="margin-left: 22%">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
         <p style="margin: 4px 0 0 25%">{{pp.pregunta}}</p>
     </div>
+
+        <md-switch ng-model="forma.habilitado" aria-label="Switch 1" ng-change="habilitando(forma.habilitado,forma._id)" style="margin-left: 22%">
+            Habilitado? {{(forma.habilitado == true) ? "SI" :  "NO" }}
+        </md-switch>
 
     <div class="preguntasformulario">
         <form ng-submit="addPregunta(forma._id)" >

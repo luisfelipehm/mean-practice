@@ -268,7 +268,7 @@
 
     <!--MIS PQRS-->
     <div ng-show="mispq" style="margin-top: 2vh">
-        <div ng-repeat="pq in pqrsf" class="boxpubli">
+        <div ng-repeat="pq in pqrsf | orderBy: '-'" class="boxpubli">
             <div> <img style="width: 1.5vh;margin-top: 0.5vh; margin-left: 97% " src="/img/icono-eliminar-g.png"></div>
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
@@ -395,12 +395,14 @@
 
          <div class="inftextobli"> <label>Los campos con aspectos (*) son campos que se deben llenar obligatoriamente.</label>
 
-             <div class="nombreuser"> <label style="vertical-align: 40%"> Al día 23 de Febrero 2016 Yo </label> <span class="asterisco">*</span>
+             <div class="nombreuser"> <label style="vertical-align: 40%">Al día {{ fechaxxx | moment:'DD'}} de {{   fechaxxx | moment:'MMMM' }} {{ fechaxxx | moment:'YYYY'}} Yo </label> <span class="asterisco">*</span>
                 <md-input-container style="width: 29.8vw; height: auto">
                     <label></label>
                     <input type="text" ng-model="nombre" placeholder="Nombres y Apellidos">
                 </md-input-container>
              </div>
+             <br>
+             <br>
 
              <div>
                <label style="vertical-align: 0">Identificado con </label> <span class="asterisco">*</span>
@@ -458,11 +460,11 @@
                  <p class="listdat">Dirección <input style="margin-left: 3vw" class="inpt" type="text" ng-model="direccion"> </p>
              </div>
 
-             <div style="position: absolute; top: 65vh; left: 65%">
+             <div style="position: absolute; top: 80vh; left: 65%">
                  <img style="height: 7.5vh" src="/img/icono-fomulario.png">
              </div>
 
-             <div style="width: 8vw;position: absolute;top: 65vh; left:75%;border: solid aqua 1px">
+             <div style="width: 8vw;position: absolute;top: 80vh; left:75%;">
                  <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
                  <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
                  <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
@@ -513,9 +515,9 @@
 <div ng-show="usuario.data.adminpqrsf">
 
     <div>
-        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 1">Nuevo 120</h2></div>
-        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 2">Tramite 120</h2></div>
-        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 3">Cerrado 120</h2></div>
+        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 1">Nuevo </h2></div>
+        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 2">Tramite </h2></div>
+        <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 3">Cerrado </h2></div>
     </div>
 
     <div style="border:solid red .1vw; margin-left: 5%; width: 90%;margin-bottom: 1vh"></div>
@@ -562,7 +564,7 @@
 
     <!--PRIMERA VISTA-->
     <div ng-show="mispqadmin == 1">
-        <div ng-repeat="pq in pqnuevo" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqnuevo | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
                 <div style="width: 5vw; display: inline-block">
@@ -710,7 +712,7 @@
 
     <!--TRAMITE-->
     <div ng-show="mispqadmin == 2">
-        <div ng-repeat="pq in pqtramite" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqtramite | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
 
@@ -857,7 +859,7 @@
 
 
 
-        <div ng-repeat="pq in pqcerrado" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqcerrado | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
 
@@ -889,7 +891,7 @@
     <h1 class="pqnav" ng-click="mispqtramite = 1">Nuevo</h1>
     <!--<h1 class="pqnav" style="text-align: right" ng-click="mispqtramite = 2">Cerrado</h1>-->
     <div ng-show="mispqtramite == 1">
-        <div ng-repeat="pq in pqasignados" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqasignados | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
 

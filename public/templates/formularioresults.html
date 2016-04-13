@@ -1,5 +1,6 @@
 <style>
-    .nv-label > text{
+    .nv-label > text
+    {
         fill: white !important;
     }
     .graficasform
@@ -7,28 +8,54 @@
         width: 50%;
         display: inline-block;
     }
+    .tittleresul
+    {
+        text-align: center;
+        font-size: 2vw;
+    }
+    .btnexportar
+    {
+        position: relative;
+        width: 10vw;
+        opacity: .6;
+        left: 80%;
+    }
+    .btnexportar:hover
+    {
+        opacity: 1;
+    }
+
 </style>
 
 <div ng-repeat="resu in resultadofinal" class="graficasform">
-    <h1>{{formulario.preguntas[$index].pregunta}}</h1>
+    <h1 class="tittleresul">{{formulario.preguntas[$index].pregunta}}</h1>
     <nvd3 options="options" data="resu"></nvd3>
 </div>
 
-<div id="exportable">
-<table style="display: none;">
-    <thead>
-    <tr>
-        <th>Pregunta</th>
-        <th>Respuestas</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody >
-    <tr ng-repeat="resu in resultadofinal">
-        <td>{{formulario.preguntas[$index].pregunta}}</td>        
-        <td ng-repeat="r in resu">{{r.key}}: {{r.y}}</td>
-    </tr>
-    </tbody>
-</table>
+
+
+<div id="exportable" >
+    
+    <table style="display: none;">
+        <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Preguntas y Respuestas</th>
+        </tr>
+        </thead>
+        <tbody >
+    
+        <tr ng-repeat="resp in formulario.respuestas">
+    
+            <td>{{resp.author}}</td>
+            <td>{{resp.fecha}}</td>
+            <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{typee(r.respuesta) == "object" ? alegible(r.respuesta) : r.respuesta}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-<button ng-click="exportData()">Export</button>
+
+    <img ng-click="exportData()" class="btnexportar"  src="/img/boton-exportar.png">
+
+<!--<button ng-click="exportData()">Export</button>-->
