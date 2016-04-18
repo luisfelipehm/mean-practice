@@ -691,9 +691,11 @@ router.put('/posts/:post/upvote',auth, function(req, res, next) {
 router.delete('/conectados/:_id',auth, function(req, res,next){
 
   Conectado.findById( req.params._id, function ( err, conectado ){
+    if(conectado){
     conectado.remove( function ( err, conectado ){
       res.json(conectado);
     });
+    }
   });
 });
 
@@ -714,10 +716,31 @@ router.post('/areas/:area/editando',auth, function(req, res, next) {
 router.delete('/formularios/:_id',auth, function(req, res,next){
 
   Formulario.findById( req.params._id, function ( err, ar ){
-    ar.remove( function ( err, arf ){
-      res.json(arf);
-    });
+    if(ar){
+      ar.remove(function (err, arf) {
+        res.json(arf);
+      });
+    }
   });
+});
+
+router.delete('/users/:_id',auth, function(req, res,next){
+
+  User.findById( req.params._id, function ( err, ar ){
+    if(ar) {
+      ar.remove(function (err, arf) {
+        res.json(arf);
+      });
+    }
+  });
+});
+
+
+router.post('compararcorreo', function (req,res,next) {
+  User.find({email: req.body.email}, function (err, usuario) {
+      if(!usuario){return}
+
+  })
 });
 
 router.delete('/folder/:_id',auth, function(req, res,next){
@@ -725,6 +748,7 @@ router.delete('/folder/:_id',auth, function(req, res,next){
 
   Folder.findById( req.params._id, function ( err, ar ){
     var padres = ar.padre;
+    if(ar){
     ar.remove( function ( err, arf ){
       if (err) { return next(err); }
       console.log(padres);
@@ -736,6 +760,7 @@ router.delete('/folder/:_id',auth, function(req, res,next){
       });
 
     });
+    }
   });
 });
 
@@ -746,6 +771,7 @@ router.delete('/file/:_id/:document',auth, function(req, res,next){
   //folder
   File.findById( req.params._id, function ( err, ar ){
     var padres = req.params.document;
+    if(ar){
     ar.remove( function ( err, arf ){
       if (err) { return next(err); }
       console.log(padres);
@@ -756,6 +782,7 @@ router.delete('/file/:_id/:document',auth, function(req, res,next){
         res.json(document)
       });
     });
+    }
   });
 });
 
@@ -763,10 +790,12 @@ router.delete('/file/:_id/:document',auth, function(req, res,next){
 router.delete('/fotos/:_id',auth, function(req, res,next){
 console.log(req.params._id)
   Foto.findById( req.params._id, function ( err, ar ){
+    if(ar){
     ar.remove( function ( err, arf ){
       if (err) { return next(err); }
       res.json(arf);
     });
+    }
   });
 });
 
@@ -774,30 +803,38 @@ console.log(req.params._id)
 router.delete('/areas/:_id',auth, function(req, res,next){
 
   Area.findById( req.params._id, function ( err, ar ){
-    ar.remove( function ( err, arf ){
-      if (err) { return next(err); }
-      res.json(arf);
-    });
+    if(ar) {
+      ar.remove(function (err, arf) {
+        if (err) {
+          return next(err);
+        }
+        res.json(arf);
+      });
+    }
   });
 });
 
 router.delete('/eventos/:_id',auth, function(req, res,next){
 
   Evento.findById( req.params._id, function ( err, ar ){
+    if(ar){
     ar.remove( function ( err, arf ){
       if (err) { return next(err); }
       res.json(arf);
     });
+    }
   });
 });
 
 router.delete('/posts/areas/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Postarea.findById( req.params._id, function ( err, post ){
+    if(post){
     post.remove( function ( err, post ){
       if (err) { return next(err); }
       res.json(post);
     });
+    }
   });
 });
 
@@ -805,20 +842,24 @@ router.delete('/posts/areas/:_id',auth, function(req, res,next){
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Post.findById( req.params._id, function ( err, post ){
+    if(post){
     post.remove( function ( err, post ){
       if (err) { return next(err); }
       res.json(post);
     });
+    }
   });
 });
 
 router.delete('/comments/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Comment.findById( req.params._id, function ( err, comment ){
+    if(comment){
     comment.remove( function ( err, comment ){
       if (err) { return next(err); }
       res.json(comment);
     });
+    }
   });
 });
 

@@ -1078,7 +1078,16 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             });
         }
     };
-
+    $scope.remove = function (ar) {
+        return $http.delete('/users/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                users.getAll();
+                $scope.users = users.users;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
 
 
     $scope.uploadPic = function(file) {
