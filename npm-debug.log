@@ -2,7 +2,7 @@
 1 verbose cli [ '/usr/local/bin/node',
 1 verbose cli   '/usr/local/bin/npm',
 1 verbose cli   'start',
-1 verbose cli   '-p',
+1 verbose cli   '-a',
 1 verbose cli   '3001' ]
 2 info using npm@2.14.12
 3 info using node@v4.2.6
@@ -24,7 +24,7 @@
 10 verbose pkgid flapper-news@0.0.0
 11 verbose cwd /home/oscar/proyectos
 12 error Linux 4.2.0-35-generic
-13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start" "-p" "3001"
+13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start" "-a" "3001"
 14 error node v4.2.6
 15 error npm  v2.14.12
 16 error code ELIFECYCLE
