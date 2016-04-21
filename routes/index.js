@@ -43,6 +43,18 @@ router.get('/posts', function(req, res, next) {
   })
 });
 
+
+
+
+router.get('/actas', function(req, res, next) {
+
+  Acta.find(function(err, ac){
+    if(err){ return next(err); }
+    res.json(ac);
+  });
+
+});
+
 router.get('/eventos', function(req, res, next) {
 
   Evento.find(function(err, even){
@@ -445,7 +457,39 @@ router.post('/areas/:postarea/comments',auth, function(req, res, next) {
 });
 
 
+router.post('/actas/otro', function(req, res, next) {
 
+  Acta.findById({_id: req.body.id}, function (err,acta) {
+
+    if(!acta){return;}
+    acta.comentarios.push({
+      texto: req.body.texto,
+      aprobado: req.body.aprobado,
+      nombre: req.body.nombre,
+      username: req.body.username
+    })
+    acta.save(function (err,acta) {
+      Acta.find(function (err,ac) {
+        res.json(ac)
+      })
+    })
+
+  });
+
+  
+});
+
+router.post('/actas',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.adjunto = '/uploads2/'+req.file.filename;
+  var acta = new Acta(req.body);
+
+  acta.save(function(err, ac){
+      Acta.find({carpeta: req.body.carpeta},function (err,allactas) {
+        res.json(allactas);
+      })
+  });
+});
 
 
 router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {

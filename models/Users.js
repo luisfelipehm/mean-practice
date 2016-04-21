@@ -29,8 +29,9 @@ var UserSchema = new mongoose.Schema({
     adminpqrsf: Boolean,
     tramitepqrsf: Boolean,
     ultimaconexion: Date,
-    cumpleanos: Date
-
+    cumpleanos: Date,
+    adminactas:Boolean,
+    usaactas: Boolean
 });
 
 
@@ -66,6 +67,8 @@ UserSchema.methods.generateJWT = function() {
         adminfotos: this.adminfotos,
         admincrono: this.admincrono,
         adminpqrsf: this.adminpqrsf,
+        adminactas: this.adminactas,
+        usaactas: this.usaactas,
 
         exp: parseInt(exp.getTime() / 1000),
     }, 'SECRET');
