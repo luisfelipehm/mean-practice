@@ -709,11 +709,19 @@ app.config([
                 url: '/actas',
                 templateUrl: 'templates/actas.html',
                 controller: 'ActasCtrl',
-                //resolve: {
-                //    postPromise: ['actas', function(actas){
-                //        return actas.getAll();
-                //    }]
-                //}
+                
+                onEnter: ['$state', 'auth', function($state, auth){
+            var currentUser = auth.currentUser();
+            if(currentUser.usaactas == undefined  && currentUser.adminactas == undefined ){
+                $state.go('home');
+            }
+        }],
+
+                resolve: {
+                   postPromise: ['actas', function(actas){
+                       return actas.getAll();
+                   }]
+                }
             })
             .state('formularioresults', {
                 parent: 'root',
@@ -722,6 +730,11 @@ app.config([
                 controller: 'FormularioresultsCtrl',
                 resolve: {
                     formularior: ['$stateParams', 'formularios', function($stateParams, formularios) {
+
+
+
+
+
                         return formularios.getResults($stateParams.id);
                     }]}
 
@@ -743,23 +756,108 @@ app.config([
     }]);
 
 app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout','actas', function ($scope,auth,users,Upload,$http,$timeout,actas) {
-    $scope.nombre = '';
-    $scope.apellido = '';
 
-    $scope.imprimirnombre = function (nombre) {
-        console.log(nombre);
+
+    $scope.currentUser = auth.currentUser();
+    console.log($scope.currentUser.adminactas)
+
+    $scope.seleccorp = function () {
+      $scope.xxx = true
+
+    };
+    $scope.selecterFolder = 0;
+    $scope.actas = actas.actas;
+    $scope.xx = false;
+    $scope.xxx = false;
+    $scope.search = 0;
+
+    $scope.selec = function (pa) {
+        $scope.selecterFolder = pa;
+        $scope.actas = $scope.actas.filter(function( obj ) {
+
+            if(obj.carpeta == pa) {
+                return obj
+            }
+
+        });
+        $scope.xx = true;
+
+    };
+    $scope.buscarencomentarios = function (ac) {
+
+
+      angular.forEach(ac.comentarios, function (com) {
+
+
+
+          if(com.username == $scope.currentUser.username && com.aprobado == 'si'){
+
+              return false;
+          }
+      });
+        return true
     };
 
-    $scope.crearActa = function () {
-        if(!$scope.nombre || $scope.nombre == ''){alert('un campo esta vacio');return }
-        actas.create({
-            titulo: $scope.nombre,
-            fecha: $scope.apellido,
-            adjunto: $scope.nombre,
-            carpeta: $scope.nombre,
-            comentarios: $scope.nombre
-        })
-    }
+    $scope.comentarioActa = function (text, id, aprob) {
+        users.get($scope.currentUser._id).then(function(user){
+
+            return $http.post('/actas/otro', {
+                texto: text,
+                id: id,
+                aprobado: aprob,
+                nombre: user.data.nombre + ' ' + user.data.apellido,
+                username: user.data.username
+            }, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            }).success(function(data){
+                $scope.actas = data;
+            });
+
+        });
+
+
+    };
+
+
+    $scope.uploadPic2 = function (file) {
+        if(file==undefined || !$scope.nombre || $scope.nombre == '' || !$scope.fecha || $scope.fecha == '')
+        {
+
+        }else{
+
+            file.upload = Upload.upload({
+                url: '/actas/',
+                data: {
+                    titulo: $scope.nombre,
+                    fecha: $scope.fecha,
+                    carpeta: $scope.selecterFolder
+                },
+
+                file: file,
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+
+            file.upload.progress(function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+
+            file.upload.success(function (data, status, headers, config) {
+                $scope.actas = data;
+            });
+        }
+    };
+
+
 }]);
 
 app.controller('AreaxCtrl', ['$scope','areas','auth', function ($scope,areas,auth) {
@@ -840,24 +938,39 @@ app.controller('AreasCtrl', ['$scope','auth','areas','$http', function ($scope,a
 
 }]);
 
-app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth', function ($scope,users,Upload,$timeout,$http,areas,area,auth) {
+app.controller('AreaCtrl', ['$scope','users','Upload','$timeout','$http', 'areas','area','auth','$window', function ($scope,users,Upload,$timeout,$http,areas,area,auth,$window) {
 
 
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.currentUser = auth.currentUser();
 
+
         users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
-        $scope.area = area;
+            $scope.area = area;
+
+
         $scope.area.posts = $scope.area.posts.filter(function( obj ) {
             return (obj.areaf == $scope.usuario.data.area || !obj.areaf);
         });
+
+            console.log($scope.area.posts)
 
     });
 
     $scope.loadAreas = function() {
         areas.getAll();
         $scope.areas = areas.areas;
+    };
+
+    $scope.remove = function(post) {
+        return $http.delete('/posts/areas/' + post._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $window.location.reload();
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
     };
 
 
@@ -1063,7 +1176,16 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
             });
         }
     };
-
+    $scope.remove = function (ar) {
+        return $http.delete('/users/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                users.getAll();
+                $scope.users = users.users;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
 
 
     $scope.uploadPic = function(file) {
@@ -1483,8 +1605,8 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
     });
 
     $scope.cortarlargostring = function (tr) {
-        if(tr.length > 33){
-             return tr.slice(0,33) + "..."
+        if(tr.length > 55){
+             return tr.slice(0,55) + "..."
         }else {
             return tr
         }
@@ -1886,6 +2008,11 @@ app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
     });
+    $scope.alertammm = function () {
+       document.getElementById('chatAudio').play()
+    };
+
+
     /*
      * Si el usuario esta logueado envia un socket para actualizar el estado de conexion
      */
@@ -1987,8 +2114,10 @@ app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http
         }else if(data.recibe == $scope.currentUser.username){
             if($('#'+data.envia+'chat').length == 0){
                 $scope.generarChat(data.envia, data.nombrec);
+                $scope.alertammm();
             }else{
                 $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
+                $scope.alertammm();
             }
         }
     });

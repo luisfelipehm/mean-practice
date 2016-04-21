@@ -350,12 +350,28 @@
         opacity: 1;
     }
 
+
+    #parteinferiorformulario{
+        position: absolute;
+        display: inline-block;
+        width: 90%;
+        margin-left: 5%;
+        margin-bottom: 3vh;
+        right: 1.1vw;
+        top: 66%
+    }
+    #adjuntaralaspublicaciones{
+        display: inline-block; margin-left: 20vw
+    }
+    .iconadjun{
+        vertical-align: -1vh; width: 2vw;
+    }
+    #inputselectformulario{
+        width: 15vw; margin: 0
+    }
     .boxbtnpubli
     {
-        position: absolute;
-        top: 0;
-        left: 41.5vw;
-        top: 12.3vh;
+        display: inline-block;vertical-align: -1.4vh
     }
 
 </style>
@@ -408,11 +424,11 @@
         <!--</md-button>-->
 
 
-        <div class="containerfoto">
-                <span class="select-wrapper">
-                    <input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>
-                </span>
-        </div>
+        <!--<div class="containerfoto">-->
+                <!--<span class="select-wrapper">-->
+                    <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/*" ngf-max-size="200MB" required/>-->
+                <!--</span>-->
+        <!--</div>-->
 
         <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
@@ -428,19 +444,30 @@
         <span ng-show="picFile.result">Upload Successful</span>
 
         <!--button select-->
-        <div class="btnselect">
-            <md-select  placeholder="Area" ng-model="areaf" md-on-open="loadAreas()">
-                <md-option ng-repeat="area in areas" value="{{area.nombre}}">
-                    {{area.nombre}}
-                </md-option>
-            </md-select>
+        <div id="parteinferiorformulario">
+
+            <div id="adjuntaralaspublicaciones">
+                <label for="file-img">
+                    <img  class="iconadjun"  src="img/camara.png">
+                </label>
+                <input type="file" class="camera" ngf-select ng-model="picFile" id="file-img"  ngf-multiple="false" name="file"  ngf-max-size="200MB" style="display: none" />
+            </div>
+            <div style="display: inline-block;">
+                <md-input-container id="inputselectformulario">
+                    <md-select ng-model="areaf" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
+                        <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                            {{area.nombre}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <div class="boxbtnpubli" >
+                <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >
+            </div>
         </div>
 
-        <!--button publicar-->
 
-        <div class="boxbtnpubli">
-            <input type="image" src="/img/botones_publicar.png" class="btnpublicar" >  </input>
-        </div>
 
 
 
@@ -451,7 +478,7 @@
 <!--Publicación-->
 <div>
 
-    <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
+    <div ng-repeat="post in area.posts | orderBy: '-upvotes' | filter:search | orderBy: '-'">
 
 
 

@@ -260,7 +260,7 @@
         position: relative;
         top: 1.5vh;
         left: 1.5vw;
-        width: 15%;
+        width: 25%;
         font-family: Arial;
         font-size: .8vw;
         margin-bottom: 5%;
@@ -697,7 +697,7 @@
                         <div class="superior">
                             <div class="supcoment"  ng-click="selectthing($index)">
                                 <img class="imgcoment" src="/img/iconocomen.png">
-                                <span class="textocomentariosenlinea">Comentarios {{post.comments.length}}</span>
+                                <span class="textocomentariosenlinea">Comentarios&nbsp;{{post.comments.length}}</span>
                             </div>
                             <!--COMENTARIOS-->
                             <div ng-repeat="comentario in post.comments" ng-show="$parent.$index===selectedIndex">
