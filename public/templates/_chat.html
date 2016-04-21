@@ -307,6 +307,7 @@
     <div id="searchUserBox" >
         <i class="fa fa-comments iconochatnofi" ></i>
         <input placeholder="Buscar..." type="text" ng-model="search" required>
+        <audio id="chatAudio"><source src="/sounds/notification.mp3" type="audio/mpeg"></audio>
     </div>
 
     <!--Caja de chatr gris "-->
@@ -315,6 +316,7 @@
 
         </div>
         <div style="background-color: #e5e5e5; width: 90%; min-height:88%; margin-left: 5%">
+
             <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'"style="margin-bottom: 10px;margin-top: 10px">
                 <div style="margin-top: 5px" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
                     <div class="imguserchat">

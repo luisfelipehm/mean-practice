@@ -27,23 +27,22 @@
     .iconoeditaruser
     {
         width: 20px;
-        margin-left: 20px;
         float: right;
     }
     .boximgusersedit
     {
         position: absolute;
         height: auto;
-        right: 0;
-        margin-right: 2vw;
+
+        right: 2vw;
         margin-top: .5vh;
     }
     .boximguserseli
     {
         position: absolute;
         height: auto;
-        right: 0;
-        margin-right: .5vw;
+
+        right: .5vw;
         margin-top: .5vh;
     }
     .imguseredit
@@ -344,7 +343,7 @@
      <div class="boxallusers">
         <div> <img class="imguseredit" ng-src="{{(!user.fotoperfil) ? '/img/boton-examinar.png' : user.fotoperfil}}"> </div>
         <div class="boximgusersedit" ng-hide="editing" ng-click="editing = true"> <img class="iconoeditaruser" src="/img/icono-editar.png"> </div>
-        <div class="boximguserseli"> <img class="iconoeditaruser" ng-show="usuario.data.adminusers" src="/img/icono-eliminar-g.png"> </div>
+        <div class="boximguserseli"> <img ng-click="remove(user)" class="iconoeditaruser" ng-show="usuario.data.adminusers" src="/img/icono-eliminar-g.png"> </div>
         <p class="editdatosusername">{{user.nombre}} {{user.apellido}}</p>
         <p class="editdatosusercargo"><span class="negrita">Cargo: </span>{{user.cargo}}</p>
         <p class="editdatosuserarea"><span class="negrita">Area:</span>{{user.area}}</p>

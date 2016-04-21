@@ -1,13 +1,79 @@
-<form ng-submit="crearActa()">
-<input type="text" ng-model="nombre">
-
-<h1> hola mi nombre es {{nombre}}</h1>
-
-<input type="text" ng-model="apellido">
-
-<h1> y mi apellido es {{apellido}}</h1>
+<style>
 
 
-    <input type="submit" value="{{apellido}}">
 
-</form>
+</style>
+
+<div ng-if="!xx && !xxx">
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(1)">SOLUCIONES</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(2)">FAMILIA IPS</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="seleccorp()">CORPORACIONES</div>
+</div>
+
+<div ng-if="!xx && xxx">
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(3)">CORPORACIÓN IPS BOYACÁ</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(4)">CORPORACIÓN IPS CÓRDOBA</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(5)">CORPORACIÓN IPS COSTA ATLÁNTICA</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(6)">CORPORACIÓN IPS EJE CAFETERO</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(7)">CORPORACIÓN IPS HUILA</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(8)">CORPORACIÓN IPS LLANOS</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(9)">CORPORACIÓN IPS NARIÑO</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(10)">CORPORACIÓN IPS OCCIDENTE</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(11)">CORPORACIÓN IPS ORIENTE</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(12)">CORPORACIÓN IPS SANTANDER</div>
+    <div><img src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;" ng-click="selec(13)">CORPORACIÓN IPS TOLIMA</div>
+</div>
+
+
+<div ng-show="xx">
+    <form ng-submit="uploadPic2(picFile)" ng-show="currentUser.adminactas">
+        <input type="text" ng-model="nombre" title="nombre" />
+        <md-datepicker ng-model="fecha" md-placeholder="Fecha del acta"></md-datepicker>
+        <label for="file-input">
+            <div class="imguser">
+                <img style="width: 200px;" ng-show="myForm.file.$valid" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
+            </div>
+        </label>
+        <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" ng-hide="true" />
+
+        <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+        <div class="li"></div>
+            <span class="progress" ng-show="picFile.progress >= 0">
+                <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+            </span>
+        <span ng-show="picFile.result">Upload Successful</span>
+
+        <div>
+            <input type="image" src="/img/registrar.png" class="btnregistrar2"  style="width: 200px;">  </input>
+        </div>
+
+    </form>
+
+
+    <div ng-repeat="ac in actas | filter:search | orderBy: '-'" style="border: 1px solid red" ng-init="mivar = buscarencomentarios(ac)">
+        <p>{{ac.titulo}}</p>
+        <p>{{ac.adjunto}}</p>
+        <p>{{ac.fecha}}</p>
+        <p>{{ac.carpeta}}</p>
+        <form ng-submit="comentarioActa(ac.cc, ac._id,ac.aprobacion );ac.cc = '';">
+            <div ng-show="mivar">
+                <p>Aprueba este documento</p>
+                <md-radio-group ng-model="ac.aprobacion">
+                    <md-radio-button value="si" class="md-primary">Si</md-radio-button>
+                    <md-radio-button value="no">No</md-radio-button>
+                </md-radio-group>
+                <input type="text" ng-model="ac.cc">
+                <input type="image" src="/img/registrar.png" class="btnregistrar2"  style="width: 100px;">
+                <div ng-repeat="com in ac.comentarios">
+                    <p>{{com.nombre}}</p>
+                    <p>{{com.texto}}</p>
+                    <p>{{com.aprobado}}</p>
+                    <p>{{com.username}}</p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
