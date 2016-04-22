@@ -228,6 +228,18 @@ router.get('/pqrsf', function(req, res, next) {
 });
 
 
+router.get('/pqrsfuser/:user', function(req, res, next) {
+
+
+  Pqrsf.find({creadopor: req.params.user}).populate('files').exec(function(err, pqrsf){
+    if(err){ return next(err); }
+    console.log(pqrsf)
+    res.json(pqrsf);
+  });
+});
+
+
+
 
 
 
@@ -394,20 +406,24 @@ var upload = multer({ storage: storage });
 
 
 
+
+
+
+
+
 //ANADIR ARCHIVOS A LA PQRSF
 
 router.post('/pqrsf', function(req, res, next){
-  console.log('error1');
 
   var pqrsf = new Pqrsf(req.body);
   pqrsf.encargado = [req.body.encargado];
   pqrsf.fechainicio = Date.now();
   pqrsf.fase = 1;
   pqrsf.save(function (err, pq){
-    console.log(err);
-    console.log('error2');
-    if(err){ return next(err); }
-    res.json(pq)
+    Pqrsf.find({creadopor: req.body.creadopor}).populate('files').exec(function(err, pqrsf){
+      if(err){ return next(err); }
+      res.json(pqrsf);
+    });
   });
 });
 
@@ -576,8 +592,10 @@ router.post('/pqrsfs/:pqrsf/files',auth, upload.single('file'), function(req, re
     req.pqrsf.files.push(file);
     req.pqrsf.save(function(err, document) {
       if(err){ return next(err); }
-      console.log('done');
-      res.json(req.body);
+      Pqrsf.find({creadopor: req.body.usuario}).populate('files').exec(function(err, pqrsf){
+        if(err){ return next(err); }
+        res.json(pqrsf);
+      });
     });
 
   });
@@ -694,8 +712,12 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
       req.document.files.push(file);
       req.document.save(function(err, document) {
         if(err){ return next(err); }
+        var query = Folder.findById({_id:document._id});
+        query.populate('files').populate('carpetas').exec(function (err, document){
+          if (err) { return next(err); }
+          res.json(document)
+        });
 
-        res.json(document);
       });
 
     });

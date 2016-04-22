@@ -301,7 +301,7 @@
         <div ng-repeat="archivo in document.files" style="display: flex;" ng-class="{'last':$last}">
 
         <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" style="height: 90%; margin-top: 1%; margin-left: 38%"></div>
-            <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}">{{cortarlargostring(archivo.nombre)}}</a></p></div>
+            <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}"  ng-bind="archivo.nombre | cortarlargostring:true"></a></p></div>
             <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
         <div class="enlinea tab4">
             <p class="mi">

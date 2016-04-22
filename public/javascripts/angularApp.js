@@ -7,6 +7,34 @@ app.filter('moment', function() {
     };
 });
 
+
+app.animation('.boxpublipqrs', function ($animateCss) {
+    return {
+        enter: function (element) {
+            return $animateCss(element,{
+                from:{
+                    opacity: 0
+                },
+                to: {
+                    opacity: 1
+                },
+                duration: 0.5
+            })
+        }
+    }
+})
+
+app.filter('cortarlargostring', function () {
+    return function (tr,bol) {
+        if(tr.length > 55){
+            return tr.slice(0,55) + "..."
+        }else {
+            return tr
+        }
+    }
+});
+
+
 app.config(['$httpProvider', function($httpProvider) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
@@ -192,6 +220,12 @@ app.factory('pqrsf', ['$http','auth',function($http,auth){
     var o = {
         pqrsf:[],
         pq:[]
+    };
+
+    o.getByUser =  function (par) {
+        return $http.get('/pqrsfuser/' +par ).success(function(data){
+            angular.copy(data, o.pqrsf);
+        });
     };
 
     o.getAll = function() {
@@ -530,7 +564,6 @@ app.config([
                     }]}
 
             })
-
             .state('home', {
                 parent: 'root',
                 url: '/home',
@@ -543,22 +576,6 @@ app.config([
                     //}],
                     postPromise: ['posts', function(posts){
                         return posts.getAll();
-                    }]
-
-                }
-            })
-            .state('pqrsf', {
-                parent: 'root',
-                url: '/pqrsf',
-                templateUrl: 'templates/pqrsf.html',
-                controller: 'PqrsfCtrl',
-                resolve: {
-                    //postPromise2:['users', function(users){
-                    //    var ux = auth.currentUser();
-                    //    return users.get(ux._id);
-                    //}],
-                    postPromise: ['pqrsf', function(pqrsf){
-                        return pqrsf.getAll();
                     }]
 
                 }
@@ -711,16 +728,99 @@ app.config([
                 controller: 'ActasCtrl',
                 
                 onEnter: ['$state', 'auth', function($state, auth){
-            var currentUser = auth.currentUser();
-            if(currentUser.usaactas == undefined  && currentUser.adminactas == undefined ){
-                $state.go('home');
-            }
-        }],
+                    var currentUser = auth.currentUser();
+                    if(currentUser.usaactas == undefined  && currentUser.adminactas == undefined ){
+                        $state.go('home');
+                    }
+                }],
 
                 resolve: {
                    postPromise: ['actas', function(actas){
                        return actas.getAll();
                    }]
+                }
+            })
+            .state('pqrsfdispatcher', {
+                parent: 'root',
+                url: '/pqrsfdispatcher',
+                templateUrl: 'templates/pqrsfdispatcher.html',
+                controller: 'PqrsfdispatcherCtrl',
+                onEnter: ['$state', 'auth', function($state, auth){
+                    var currentUser = auth.currentUser();
+                    if(currentUser.tramitepqrsf){
+                        $state.go('tramitepq');
+                    }else if(currentUser.adminpqrsf){
+                        $state.go('adminpq');
+                    }else{
+                        $state.go('pqrsfuser');
+                    }
+
+                }]
+
+            })
+            .state('pqrsfuser', {
+                parent: 'root',
+                url: '/pqrsfuser',
+                templateUrl: 'templates/pqrsfuser.html',
+                controller: 'PqrsfuserCtrl',
+                resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
+                    postPromise: ['pqrsf','auth', function(pqrsf,auth){
+                        var currentUser = auth.currentUser();
+                        return pqrsf.getByUser(currentUser.username);
+                    }]
+
+                }
+            })
+            .state('tramitepq', {
+                parent: 'root',
+                url: '/pqrsf',
+                templateUrl: 'templates/pqrsf.html',
+                controller: 'PqrsfCtrl',
+                resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
+                    postPromise: ['pqrsf', function(pqrsf){
+                        return pqrsf.getAll();
+                    }]
+
+                }
+            })
+            .state('adminpq', {
+                parent: 'root',
+                url: '/pqrsf',
+                templateUrl: 'templates/pqrsf.html',
+                controller: 'PqrsfCtrl',
+                resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
+                    postPromise: ['pqrsf', function(pqrsf){
+                        return pqrsf.getAll();
+                    }]
+
+                }
+            })
+            .state('pqrsf', {
+                parent: 'root',
+                url: '/pqrsf',
+                templateUrl: 'templates/pqrsf.html',
+                controller: 'PqrsfCtrl',
+                resolve: {
+                    //postPromise2:['users', function(users){
+                    //    var ux = auth.currentUser();
+                    //    return users.get(ux._id);
+                    //}],
+                    postPromise: ['pqrsf', function(pqrsf){
+                        return pqrsf.getAll();
+                    }]
+
                 }
             })
             .state('formularioresults', {
@@ -739,8 +839,6 @@ app.config([
                     }]}
 
             });
-
-
         //    .state('document', {
         //    url: '/document/{id}',
         //    templateUrl: 'templates/document.html',
@@ -759,7 +857,7 @@ app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout',
 
 
     $scope.currentUser = auth.currentUser();
-    console.log($scope.currentUser.adminactas)
+    console.log($scope.currentUser.adminactas);
 
     $scope.seleccorp = function () {
       $scope.xxx = true
@@ -1338,14 +1436,116 @@ app.controller('RootCtrl', ['$scope','$rootScope', function ($scope,$rootScope) 
 
 }]);
 
+app.controller('PqrsfdispatcherCtrl', ['$scope','auth', function ($scope,auth) {
+
+
+}]);
+
+app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout', function ($scope,pqrsf,$http,auth,Upload,$timeout) {
+
+    $scope.currentUser = auth.currentUser();
+    $scope.pqrsf = pqrsf.pqrsf;    
+    $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
+    $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
+
+
+    $scope.uploadPic = function(files) {
+
+        return $http.post('/pqrsf', {
+            nombre: $scope.nombre,
+            tdocumento: $scope.tdocumento,
+            ndocumento: $scope.ndocumento,
+            empresa: $scope.empresa,
+            cargo: $scope.cargo,
+            ciudad2: $scope.ciudad2,
+            creadopor: $scope.currentUser.username,
+            tipopq: $scope.tipopq,
+            comentario: $scope.comentario,
+            email: $scope.email,
+            celular: $scope.celular,
+            direccion: $scope.direccion,
+            estado: 'En espera',
+            tipodepost: 'creador'
+            // encargado: 'ivantrips'
+        }, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            console.log(data[data.length - 1]);
+            $scope.total = files.length;
+            $scope.cont = 0;
+            angular.forEach(files, function(file) {
+                $scope.cont++;
+                file.upload = Upload.upload({
+                    url: '/pqrsfs/'+ data[data.length - 1]._id + '/files',
+                    data:{id: data._id,file:file,nombre: file.name,usuario: $scope.currentUser.username},
+                    headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+                });
+
+                file.upload.then(function (response) {
+
+                    $timeout(function () {
+                        file.result = response.data;
+                    });
+                }, function (response) {
+                    if (response.status > 0)
+                        $scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                    file.progress = Math.min(100, parseInt(100.0 *
+                        evt.loaded / evt.total));
+                });
+                file.upload.progress(function (evt) {
+                    // Math.min is to fix IE which reports 200% sometimes
+                    file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                    console.log("PostController: upload progress " + file.progress);
+                });
+                file.upload.success(function (data, status, headers, config) {
+                    if($scope.cont == $scope.total){
+                        $scope.nombre = '';
+                        $scope.tdocumento = '';
+                        $scope.ndocumento = '';
+                        $scope.empresa = '';
+                        $scope.cargo = '';
+                        $scope.ciudad = '';
+                        $scope.tipopq = '';
+                        $scope.comentario = '';
+                        $scope.email = '';
+                        $scope.celular = '';
+                        $scope.direccion = '';
+                        $scope.picFile = '';
+                        $scope.mispq = true;
+                        
+                        // pqrsf.getAll();
+                        $scope.pqrsf = data;
+                        // $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
+                        //     return obj.creadopor == $scope.usuario.data.username;
+                        // });
+
+                    }
+
+                });
+
+
+            });
+
+
+        });
+
+
+
+
+
+    };
+
+}]);
+
 app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout','$state','users', function ($scope,pqrsf,$http,auth,Upload,$timeout,$state,users) {
 
 
     $scope.fechaxxx = moment();
-    console.log($scope.fechaxxx);
+
     $scope.currentUser = auth.currentUser();
 
-    $scope.pqrsf = pqrsf.pqrsf;
+
 
     users.get($scope.currentUser._id).then(function(user){
         $scope.usuario =  user;
@@ -1596,6 +1796,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
     $scope.document = document;
+    console.log(document);
     $scope.isLoggedIn = auth.isLoggedIn;
     $scope.currentUser = auth.currentUser();
 
@@ -1604,14 +1805,7 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
 
     });
 
-    $scope.cortarlargostring = function (tr) {
-        if(tr.length > 55){
-             return tr.slice(0,55) + "..."
-        }else {
-            return tr
-        }
-
-    };
+    
 
     $scope.CarpenCarp = function(id){
         if($scope.nombre === '') { return; }
@@ -1675,10 +1869,8 @@ app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'd
                 console.log("PostController: upload progress " + file.progress);
             });
             file.upload.success(function (data, status, headers, config) {
+                console.log(data)
                 $scope.document = data;
-
-
-
             });
 
 

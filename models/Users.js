@@ -67,6 +67,7 @@ UserSchema.methods.generateJWT = function() {
         adminfotos: this.adminfotos,
         admincrono: this.admincrono,
         adminpqrsf: this.adminpqrsf,
+        tramitepqrsf: this.tramitepqrsf,
         adminactas: this.adminactas,
         usaactas: this.usaactas,
 
