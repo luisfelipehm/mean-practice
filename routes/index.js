@@ -13,6 +13,7 @@ var Postarea = mongoose.model('Postarea');
 var Pqrsf = mongoose.model('Pqrsf');
 var Pqrsffile = mongoose.model('Pqrsffile');
 var Conectado = mongoose.model('Conectado');
+var Pqrsfnum = mongoose.model('Pqrsfnum');
 var Conversation = mongoose.model('Conversation');
 var Pregunta = mongoose.model('Pregunta');
 var Evento = mongoose.model('Evento');
@@ -233,7 +234,16 @@ router.get('/pqrsfuser/:user', function(req, res, next) {
 
   Pqrsf.find({creadopor: req.params.user}).populate('files').exec(function(err, pqrsf){
     if(err){ return next(err); }
-    console.log(pqrsf)
+    res.json(pqrsf);
+  });
+});
+
+
+router.get('/pqrsftramite/:user', function(req, res, next) {
+
+
+  Pqrsf.find().populate('files').exec(function(err, pqrsf){
+    if(err){ return next(err); }
     res.json(pqrsf);
   });
 });
@@ -415,16 +425,50 @@ var upload = multer({ storage: storage });
 
 router.post('/pqrsf', function(req, res, next){
 
-  var pqrsf = new Pqrsf(req.body);
-  pqrsf.encargado = [req.body.encargado];
-  pqrsf.fechainicio = Date.now();
-  pqrsf.fase = 1;
-  pqrsf.save(function (err, pq){
-    Pqrsf.find({creadopor: req.body.creadopor}).populate('files').exec(function(err, pqrsf){
-      if(err){ return next(err); }
-      res.json(pqrsf);
-    });
-  });
+
+
+    Pqrsfnum.findOne(function (err,num) {
+      var numerable= null;
+      switch (req.body.tipopq) {
+        case "Peticion":
+          numerable = "P" + (Number(num.peticion.substring(1))+1);
+          num.peticion = numerable;
+          break;
+        case "Queja":
+          numerable = "Q" + (Number(num.queja.substring(1))+1);
+          num.queja = numerable;
+          break;
+        case "Reclamo":
+          numerable = "R" + (Number(num.reclamo.substring(1))+1);
+          num.reclamo = numerable;
+          break;
+        case "Solicitud":
+          numerable = "S" + (Number(num.solicitud.substring(1))+1);
+          num.solicitud = numerable;
+          break;
+        case "Felicitacion":
+          numerable = "F" + (Number(num.felicitacion.substring(1))+1);
+          num.felicitacion = numerable;
+          break;
+
+      }
+      num.save(function (err,thetake) {
+        var pqrsf = new Pqrsf(req.body);
+        pqrsf.enumeracion = numerable;
+        pqrsf.encargado = [req.body.encargado];
+        pqrsf.fechainicio = Date.now();
+        pqrsf.fase = 1;
+        pqrsf.save(function (err, pq){
+          Pqrsf.find({creadopor: req.body.creadopor}).populate('files').exec(function(err, pqrsf){
+            if(err){ return next(err); }
+            res.json(pqrsf);
+          });
+        });
+      })
+
+    })
+
+
 });
 
 
@@ -440,8 +484,6 @@ router.param('postarea', function(req, res, next, id) {
     return next();
   });
 });
-
-
 
 router.post('/areas/:postarea/comments',auth, function(req, res, next) {
 
@@ -471,7 +513,6 @@ router.post('/areas/:postarea/comments',auth, function(req, res, next) {
 
 
 });
-
 
 router.post('/actas/otro', function(req, res, next) {
 
@@ -506,7 +547,6 @@ router.post('/actas',auth, upload.single('file'), function(req, res, next) {
       })
   });
 });
-
 
 router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {
 
@@ -553,27 +593,43 @@ function removeA(arr) {
 
 
 router.post('/pqrsf/:pqrsf', function(req, res, next){
-  console.log('error1');
 
-  console.log(req.pqrsf);
+
+
   req.pqrsf.fase += 1;
-  console.log('error2');
+
   req.pqrsf.comentarios.push(req.body.comentario);
-  console.log('error3');
+
   req.pqrsf.estado = req.body.estado;
-  console.log('error4');
-  ((req.body.estado == 'Cerrado') ? req.pqrsf.fechacierre = Date.now() : '');
-  console.log('error5');
-  console.log(req.body.responsable);
-  if(  req.body.tramitando != 'tramitando'){  req.pqrsf.encargados.push(req.body.responsable)}else{  removeA(req.pqrsf.encargados, req.body.responsable)}
-console.log(req.pqrsf.encargados);
-  console.log(req.pqrsf.encargados);
+
+  if(req.body.estado == 'Cerrado'){
+     req.pqrsf.fechacierre = Date.now()
+  }
+
+
+  if(  req.body.tramitando != 'tramitando'){
+    req.pqrsf.encargados.push(req.body.responsable)}
+  else{
+    removeA(req.pqrsf.encargados, req.body.responsable)
+  }
+
 
   req.pqrsf.save(function (err, pq){
-    console.log(err);
-    console.log('error2');
     if(err){ return next(err); }
-    res.json(pq)
+    var pqs = {};
+    Pqrsf.find().populate('files').exec(function (err,pqsx) {
+      pqs.pqnuevo = pqsx.filter(function( obj ) {
+        return obj.estado == 'En espera';
+      });
+      pqs.pqtramite = pqsx.filter(function( obj ) {
+        return obj.estado == 'En tramite';
+      });
+      pqs.pqcerrado = pqsx.filter(function( obj ) {
+        return obj.estado == 'Cerrado';
+      });
+      console.log(pqs)
+      res.json(pqs)
+    });
   });
 });
 
@@ -592,10 +648,12 @@ router.post('/pqrsfs/:pqrsf/files',auth, upload.single('file'), function(req, re
     req.pqrsf.files.push(file);
     req.pqrsf.save(function(err, document) {
       if(err){ return next(err); }
-      Pqrsf.find({creadopor: req.body.usuario}).populate('files').exec(function(err, pqrsf){
-        if(err){ return next(err); }
-        res.json(pqrsf);
-      });
+
+        Pqrsf.find({creadopor: req.body.usuario}).populate('files').exec(function(err, pqrsf){
+          if(err){ return next(err); }
+          res.json(pqrsf);
+        });
+
     });
 
   });

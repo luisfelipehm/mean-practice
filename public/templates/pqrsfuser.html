@@ -299,7 +299,7 @@
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
             <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
             <div class="fechas">
-                <p class="tittlemypqrs">{{pq.tipopq}}</p>
+                <p class="tittlemypqrs">{{pq.tipopq}} {{pq.enumeracion}}</p>
                 <p class="fpqrs">Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
                 <p class="fpqrs" style="margin-bottom: 3vh">Fecha de cierre: {{ !pq.fechacierre ? '--/--/--' : (pq.fechacierre | moment:'DD') + ' de ' +  (pq.fechainicio | moment:'MMMM') + ' ' + (pq.fechainicio | moment:'YYYY')}}</p>
             </div>
@@ -341,7 +341,10 @@
                     </div>
 
                     <div style="position: relative; display: inline-block; margin-top: 3vh; margin-left: 31vw">
-                        <a style="margin-left: .5vw" ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;"></div></a>
+                        <a style="margin-left: .5vw" ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}">
+                            <div style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;">
+                            </div>
+                        </a>
                     </div>
 
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
@@ -478,13 +481,13 @@
 
                 <div style="margin-top: 1vh;position: relative;">
                     <div style="position: absolute; top:0;right: 15px">
-                        <img style="height: 7.5vh" src="/img/icono-fomulario.png">
+                        <img style="height: 7.5vh"  ng-src="{{!picFile ? '/img/icono-fomulario.png' : iconoSubidaDocumentoPq(picFile)}}">
                     </div>
                     <div style="width: 8vw;position: absolute;top: 0vh; right:60px">
                         <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
                         <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
-                        <p style="margin: 0; font-size: .7vw;color: #575756">Nombre Archivo</p>
-                        <p style="margin: 0; font-size: .7vw;color: #575756">7Kb</p>
+                        <p style="margin: 0; font-size: .7vw;color: #575756">{{picFile[0].name}}</p>
+                        <p style="margin: 0; font-size: .7vw;color: #575756">{{picFile[0].size * .001 + "KB"}}</p>
                     </div>
                     <p class="titlepersonales">Datos Personales</p>
                     <p class="listdat">Correo Personal <input class="inpt" type="text" ng-model="email" > </p>
@@ -516,7 +519,7 @@
                     <label for="file-input">
                         <img class="iconadjun" src="/img/iconoadjdoc.jpg">
                     </label>
-                    <input type="file" class="adjunta" ngf-select ng-model="picFile"  id="file-input" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+                    <input type="file" class="adjunta" ngf-select ng-model="picFile"  id="file-input" ngf-multiple="true"  name="file" ngf-max-size="200MB" required />
                     <!--BOTON ENVIAR-->
                     <input type="image" src="/img/botones-enviar.png" style="width: 6.8vw; margin-left: 6%" >  </input>
                 </div>
