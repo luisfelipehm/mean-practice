@@ -453,16 +453,17 @@
                     <textarea style="width: 44vw; border-radius: .5vw .5vw .5vw .5vw;resize: none; " ng-model="comentario"  rows="5"  placeholder="Comentarios..."></textarea>
              </div>
 
-             <div style="margin-top: 1vh">
+             <div style="margin-top: 1vh;position: relative;">
+                 <div style="position: absolute; top:0;right: 15px">
+                     <img style="height: 7.5vh" src="/img/icono-fomulario.png">
+                 </div>
                  <p class="titlepersonales">Datos Personales</p>
                  <p class="listdat">Correo Personal <input class="inpt" type="text" ng-model="email" > </p>
                  <p class="listdat">Celular/Teléfono <input class="inpt" type="text" ng-model="celular"> </p>
                  <p class="listdat">Dirección <input style="margin-left: 3vw" class="inpt" type="text" ng-model="direccion"> </p>
              </div>
 
-             <div style="position: absolute; top: 80vh; left: 65%">
-                 <img style="height: 7.5vh" src="/img/icono-fomulario.png">
-             </div>
+
 
              <div style="width: 8vw;position: absolute;top: 80vh; left:75%;">
                  <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
@@ -575,7 +576,7 @@
                     <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Reclamo'" src="/img/adminreclamo.png">
                 </div>
                 <div style="display: inline-block; width: 30vw;"><p class="titlerespon">{{pq.tipopq}}</p>
-                    <p style="margin: 0; font-size: 1vw"> Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
+                    <p style="margin: 0; font-size: 1vw" > Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
                     <div style="margin-bottom: 2vh;color: #e3152d; " ng-click="editing = true">ver mas</div>
                 </div>
 
@@ -886,7 +887,7 @@
     </div>
 </div>
 
-
+<!--TRAMITE PQRSF-->
 <div ng-show="usuario.data.tramitepqrsf">
     <h1 class="pqnav" ng-click="mispqtramite = 1">Nuevo</h1>
     <!--<h1 class="pqnav" style="text-align: right" ng-click="mispqtramite = 2">Cerrado</h1>-->

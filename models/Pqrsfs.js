@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var PqrsfSchema = new mongoose.Schema({
     nombre: String,
     tdocumento: String,
+    enumeracion: String,
     ndocumento: String,
     empresa: String,
     cargo: String,

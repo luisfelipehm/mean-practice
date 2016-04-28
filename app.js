@@ -24,6 +24,7 @@ require('./models/Actas');
 require('./models/Eventos');
 require('./models/Postareas');
 require('./models/Pqrsffiles');
+require('./models/Pqrsfnums');
 require('./models/Respuestas');
 require('./config/passport');
 moongose.connect('mongodb://localhost/news');
