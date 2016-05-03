@@ -897,6 +897,55 @@ app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout',
       $scope.xxx = true
 
     };
+
+
+    $scope.verificarAprobados =function(comentarios){
+        var apro = []
+
+        angular.forEach(comentarios, function (elemento) {
+            if (elemento.aprobado == 'si'){
+                // if (apro.indexOf({nombre: elemento.nombre,aprobado: elemento.aprobado}) == -1) {
+
+                    apro.push(
+                        {
+                            nombre: elemento.nombre,
+                            aprobado: elemento.aprobado
+                        }
+                    )
+                // }
+            }
+        });
+
+
+        apro = _.uniq(apro)
+
+        // var arr = {};
+        //
+        // for ( var i=0, len=apro.length; i < len; i++ )
+        //     arr[apro[i]['place']] = apro[i];
+        //
+        // apro = new Array();
+        // for ( var key in arr )
+        //     apro.push(arr[key]);
+
+        // angular.forEach(apro, function (elemento2) {
+        //     if()
+        // });
+        // console.log(apro)
+        // angular.forEach(apro, function (a) {
+        //     if (apro.indexOf(a) < 0) {
+        //         // a is NOT in array1
+        //         final.push(a);
+        //     }
+        // });
+        // console.log(final)
+
+        // $.each(names, function(i, el){
+        //     if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+        // });
+        console.log(apro)
+        return apro;
+    }
     $scope.selecterFolder = 0;
     $scope.actas = actas.actas;
     $scope.xx = false;
@@ -1670,7 +1719,7 @@ app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$time
         ext = ext.slice(-1)[0] ;
         ext = ext.toLowerCase();
         if(ext =='doc' || ext=='docx'){
-            return  "/img/WRD.png"
+            return "/img/WRD.png"
         }else if(ext=='ppsx' || ext=='ppt' || ext=='pptm' || ext=='pptx'){
             return "/img/PW.png"
         }else if(ext=='xls' || ext=='xlsx' || ext=='xlsm' || ext=='xlsb'){
@@ -1682,6 +1731,32 @@ app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$time
         }else{
             return "/img/DOC.png"
         }
+
+    }
+
+    $scope.cambiarArchivo = function (index, ruta) {
+
+
+        var ext = ruta.split('.');
+        ext = ext.slice(-1)[0] ;
+        ext = ext.toLowerCase();
+        if(ext =='doc' || ext=='docx'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/WRD.png");
+
+        }else if(ext=='ppsx' || ext=='ppt' || ext=='pptm' || ext=='pptx'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/PW.png");
+        }else if(ext=='xls' || ext=='xlsx' || ext=='xlsm' || ext=='xlsb'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/XEL.png");
+        }else if(ext=='pdf'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/PDF.png");
+        }else if(ext.toLowerCase() =='png' || ext.toLowerCase()=='tiff' || ext.toLowerCase()=='gif' || ext.toLowerCase()=='jpg' || ext.toLowerCase()=='jpeg' || ext.toLowerCase()=='bmp'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', ruta);
+        }else{
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/DOC.png");
+        }
+
+
+        angular.element(document.getElementById('cambioimagen' + index)).prop('href', ruta);
 
     }
 

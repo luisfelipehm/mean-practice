@@ -225,6 +225,7 @@
     .icoguardar
     {
         margin-left: 84%;
+        margin-bottom:3%;
     }
     .comment
     {
@@ -421,7 +422,11 @@
 
                         </div>
                     </div>
-
+                    <div ng-init="ac.aprobaciones = verificarAprobados(ac.comentarios)">
+                        <div ng-repeat="aprob in ac.aprobaciones">
+                            <p>{{aprob.nombre}} aprobo: {{aprob.aprobado}} </p>
+                        </div>
+                    </div>
                     <div class="otrocomment" ng-repeat="com in ac.comentarios">
                         <div class="photomini">
 
@@ -445,5 +450,6 @@
         </div>
     </div>
 </div>
+
 
 

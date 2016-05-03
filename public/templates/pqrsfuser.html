@@ -280,6 +280,133 @@
         opacity: 1;
     }
 
+    /* ESTILO DEL MODAL*/
+    .modal1
+    {
+        background: rgba(29, 29, 25, .7);
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    .cerrar
+    {
+        background: #c11727;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 20px ;
+        text-align: center;
+        position: absolute;
+        right: -20px;
+        top: -20px;
+    }
+    .cerrar > p
+    {
+        font-size: 22px;
+        text-align: center;
+        margin: 0;
+    }
+    .boxmodal
+    {
+        position: absolute;
+        border: solid #ededed;
+        background: #ededed;
+        width: 40vw;
+        height: 70vh;
+        margin: auto;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        border-radius: 10px;
+    }
+    .mbt1
+    {
+
+    }
+    .pt1
+    {
+        color: #c11727;
+        font-size: 2.8vw;
+        font-weight: 400;
+        margin: 5% 0 0 15%;
+        width: 70%;
+
+    }
+    .pt2
+    {
+        color: #3c3c3b;
+        font-size: 3.8vw;
+        font-weight: bold;
+        margin: 0 0 0 15%;
+        width: 70%;
+
+    }
+    .pt3
+    {
+        color: #c11727;
+        font-size: 1.8vw;
+        font-weight: bold;
+        width: 70%;
+        margin: 5% 0 5% 16%;
+    }
+    .lispq
+    {
+        width: 80%;
+        margin-left: 10%;
+        margin-right:0;
+        margin-bottom: 3%;
+        border-bottom: solid grey 1px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+
+    }
+    .selection
+    {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .scroll
+    {
+        overflow-y: scroll;
+        height: 38%;
+        width:92%;
+    }
+    .boxscroll::-webkit-scrollbar
+    {
+        width: 4px;
+    }
+
+    .boxscroll::-webkit-scrollbar-track
+    {
+        border-radius: 10px;
+        background-color: grey;
+    }
+
+    .boxscroll::-webkit-scrollbar-thumb
+    {
+        border-radius: 10px;
+        background-color: #c11727;
+    }
+    .boxbotnenvipq
+    {
+        position: relative;
+        margin-top: 9%;
+        width: 82%;
+        margin-left:10%;
+    }
+    .btnenpg
+    {
+        width: 6vw;
+        float: right;
+    }
+
+
 </style>
 
     <!--BARRA SUPERIOR PQRS-->
@@ -333,7 +460,7 @@
                             <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
                         </div>
 
-                        <img style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png">
+                       <a target="_blank" id="cambioimagen{{$index}}"> <img  id="imgchange{{$index}}" style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png"> </a>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; " >Adjunto:</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 35%" >Por el Solicitante</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 69%" >Adobe Pdf</p>
@@ -341,10 +468,11 @@
                     </div>
 
                     <div style="position: relative; display: inline-block; margin-top: 3vh; margin-left: 31vw">
-                        <a style="margin-left: .5vw" ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}">
-                            <div style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;">
+                        <div style="margin-left: .5vw;display: inline-block;cursor: pointer" ng-repeat="f in pq.files" ng-if="f.fase == 1" >
+                            <div ng-click="cambiarArchivo($parent.$parent.$index, f.adjunto)" style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;" >
+
                             </div>
-                        </a>
+                        </div>
                     </div>
 
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
@@ -495,11 +623,6 @@
                     <p class="listdat">Dirección <input style="margin-left: 3vw" class="inpt" type="text" ng-model="direccion"> </p>
                 </div>
 
-
-
-
-
-
                 <div style="margin-left: 32vw; margin-top: -4vh; margin-bottom: 1vh">
                     <div ng-repeat="f in picFile" style="display:inline-block;position: relative;margin-bottom: 2%;">
                         <div style="width: 10px;height: 10px;background-color: #E30613;margin-top: 1vh; margin-right: 1vw "></div> {{f.$errorParam}}
@@ -537,3 +660,96 @@
         </form>
     </div>
 
+<div class="modal1">
+    <div class="boxmodal">
+        <div class="cerrar"><p>x</p></div>
+        <div style=" width: 80%;margin-left: 10%;margin-top: 8%">
+            <div class="mbt1">
+                <p class="pt1">Redireccionamiento</p>
+            </div>
+            <div class="mbt1" style="margin-top: -15px;">
+                <p class="pt2">Solicitud</p>
+            </div>
+            <div class="mbt1">
+                <p class="pt3">Área Encargada</p>
+            </div>
+            <div class="scroll boxscroll">
+               <div class="lispq">
+                   <p class="selection">Example </p>
+               </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+                <div class="lispq">
+                    <p class="selection">Example </p>
+                </div>
+            </div>
+            <div class="boxbotnenvipq">
+                <img  class="btnenpg" src="/img/botones-enviar.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
