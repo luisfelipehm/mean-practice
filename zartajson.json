@@ -1,0 +1,15 @@
+[
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":null,"texto":"ZATRAM"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":null,"texto":"aaaa"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":null,"texto":"klagtusah"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":null,"texto":"Hooola como vamos"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":"si","texto":"aprobado"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":"si","texto":"aprobado"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":"si","texto":"aprobado"},
+  {"username":"ozarta","nombre":"Oscar Zatram","aprobado":"si","texto":"aprobado"}
+]
+
+// username identificador
+// nombre nombre real de la persona
+// aprobado null si o no
+// texto comentario como tal
