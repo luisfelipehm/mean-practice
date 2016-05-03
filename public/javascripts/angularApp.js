@@ -2341,7 +2341,23 @@ app.controller('FormulariosCtrl',['$scope','auth','users','formularios','$http',
 
     });
 
+    $scope.removerPregunta  = function (id) {
+        return $http.delete('/preguntas/'+id , {
+                headers: { Authorization: 'Bearer' + auth.getToken()}
+            }).then(function (data) {
+            $scope.formularios = data.data;
+            if(!$scope.usuario.data.adminforms) {
+                $scope.formularios = $scope.formularios.filter(function (obj) {
+                    return (obj.habilitado == true);
+                });
+                $scope.formularios = $scope.formularios.filter(function (obj) {
+                    return (obj.area == $scope.usuario.data.area || !obj.area);
+                });
+            }
+        }, function (err) {
 
+        })
+    };
 
     $scope.loadAreas = function() {
         areas.getAll();
@@ -3124,7 +3140,14 @@ app.controller('FotoCtrl', ['$scope','users','Upload','$timeout','$http', 'fotos
             });
             file.upload.success(function (data, status, headers, config) {
                 $scope.foto = data;
+                $scope.images = [];
+                angular.forEach($scope.foto.files, function (adj) {
 
+                    $scope.images.push({
+                        thumb: adj.adjunto, img: adj.adjunto
+                    })
+                });
+                console.log($scope.images)
                 $scope.picFile = '';
 
             });
