@@ -31,9 +31,9 @@
     }
 
     .tab1{ width: 15%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
-    .tab2{ width: 60%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
-    .tab3{ width: 15%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0}
-    .tab4{ width: 10%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-right: 0;border-top: 0;border-left: 0}
+    .tab2{ width: 60%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0;margin-left:-10px;}
+    .tab3{ width: 15%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-left: 0;border-top: 0;margin-left:-10px;}
+    .tab4{ width: 10%;height: 40px;border: .1vw solid #ababab;vertical-align: top;border-right: 0;border-top: 0;border-left: 0;margin-left:-10px;}
     .last > .tab1{border-bottom: 0}
     .last > .tab2{border-bottom: 0}
     .last > .tab3{border-bottom: 0}
@@ -44,11 +44,13 @@
         width: 100%;
         max-height:5vh;
         vertical-align:top;
-        display:flex
+
+
     }
 
     #tab11{border-left: 0;border-top: 0}
-    #tab22{border-top: 0;border-left: 0;text-align: center;font-weight: bold;font-family: Arial;font-size: 1vw;}
+    #tab22{border-top: 0;border-left: 0;text-align: center;font-weight: bold;font-family: Arial;font-size: 1vw;
+        }
     #tab33{border-top: 0;border-left: 0;text-align: center;font-weight: bold;font-family: Arial;font-size: 1vw;}
     #tab44{border-top: 0;border-right: 0}
 
@@ -283,10 +285,10 @@
         </div>
 
         <div ng-repeat="doc in document.carpetas" style="display:flex">
-            <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 60%;margin-top: 8%; margin-left: 40%"></div>
-            <div class="enlinea tab2" ><p class="mi"><a href="#/root/documents/{{doc._id}}">{{doc.nombre}}</a></p></div>
-            <div class="enlinea tab3" ><p class="mi"> -- </p></div>
-            <div class="enlinea tab4" >
+            <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" style="height: 60%;margin-top: 8%; margin-left: 40%"></div><!--
+            --><div class="enlinea tab2" style="overflow: hidden;"><p class="mi"><a href="#/root/documents/{{doc._id}}">{{doc.nombre}}</a></p></div><!--
+            --><div class="enlinea tab3" ><p class="mi"> -- </p></div><!--
+            --><div class="enlinea tab4" >
                 <p class="mi">
                     <img ng-click="deletecarpeta(doc)" src="img/iconox.png"style="height: 2vh;margin-left: 35%">
                 </p>
