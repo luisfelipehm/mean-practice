@@ -676,12 +676,29 @@ router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res,
     req.foto.files.push(file);
     req.foto.save(function(err, foto) {
       if(err){ return next(err); }
-      res.json(foto);
+      var query = Foto.findById({_id: foto._id});
+      query.populate('files').exec(function (err, document){
+        if (err) { return next(err); }
+        res.json(document)
+      });
     });
 
   });
 });
 
+
+router.delete('/preguntas/:_id', function (req,res,next) {
+  Pregunta.findById( req.params._id, function ( err, ar ){
+    if(ar){
+      ar.remove(function (err, arf) {
+        Formulario.find().populate('preguntas').exec(function(err, formularios){
+          if(err){ return next(err); }
+          res.json(formularios);
+        });
+      });
+    }
+  });
+});
 
 //CREAR CARPETAS DENTRO DE LAS CARPETAS
 

@@ -308,7 +308,9 @@
     <div ng-show="editing">
     <h3 style="margin-left: 22%">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
-        <p style="margin: 4px 0 0 25%">{{pp.pregunta}}</p>
+
+        <p style="margin: 4px 0 0 25%;display: inline-block;">{{pp.pregunta}}</p>
+        <img src="/img/icono-eliminar-g.png" style="height: 18px;display:inline-block;cursor: pointer" ng-click="removerPregunta(pp._id)">
     </div>
 
         <md-switch ng-model="forma.habilitado" aria-label="Switch 1" ng-change="habilitando(forma.habilitado,forma._id)" style="margin-left: 22%">
@@ -349,9 +351,9 @@
                 </div>
 
 
-                <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh;cursor: pointer">
+                <div ng-repeat="opt in opciones" style="width: 15vw;height: 5vh;cursor: pointer">
                     {{opt}}
-                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%;cursor: pointer" ng-click="removerOpcion($index)">
+                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 66%;cursor: pointer" ng-click="removerOpcion($index)">
                 </div>
 
             </div>
