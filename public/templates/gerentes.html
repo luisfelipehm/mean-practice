@@ -1,0 +1,192 @@
+<link rel="stylesheet" href="/javascripts/semantic.min.css">
+<script src="/javascripts/semantic.min.js"></script>
+
+<div id="imagensuperiormundo" style="position: relative;top: -10vh;left: 0;width: 100%;z-index: 10  ">
+    <img src="/img/logo-iso-sol.png" style="position: absolute;top: 20vh;left: 5%;width: 30vw;">
+    <img style="width:100%; height: auto;" src="/img/foto_mundo.png">
+</div>
+
+
+<!--<div class="svgrojo">-->
+<!--<svg version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"viewBox="2.3 221.8 957 116.4" enable-background="new 2.3 221.8 957 116.4" xml:space="preserve">-->
+<!--<path class="linearedtop" d="M1.9,250.5c0,0,174.5-40.6,437.5-25.3c301,17.3,519.9,82.5,519.9,82.5v16.5c0,0-145.6-41.8-429.8-50.9c-159.7-5.2-387.9,17.7-527.6,50.8V250.5z"/>-->
+<!--<path class="linearedtop2" d="M2.1,300.7c0,0,170.3-52.4,433.7-42.2c301.4,11.6,523.5,63.3,523.5,63.3v16.5c0,0-145.6-41.8-429.8-50.9c-159.7-5.1-387.9,17.8-527.6,50.9L2.1,300.7z"/>-->
+<!--</svg>-->
+<!--</div>-->
+
+<style>
+    #fondounoi{  position: fixed;
+        z-index: 0;
+        height: 100vh;
+        min-height: 100vh;
+        width: 22vw;
+        top: 0;
+        background-image: url("../img/textura_30.png");
+        background-size: 40px 40px;-webkit-box-shadow: inset 0px 0px 50px -8px;
+        -moz-box-shadow: inset 0px 0px 50px -8px;
+        box-shadow: inset 0px 0px 50px -8px;}
+    #fondodosi{    position: fixed;
+        top: 0;
+        left: 22vw;
+        width: 56vw;
+        z-index: 0;
+        background-image: url("img/fondo_centro_50.png");
+        background-size: 40px 40px;
+        min-height: 100vh;
+        height: 100vh;
+        margin-top: 0;
+        -webkit-box-shadow: inset 0px 0px 30px -8px;
+        -moz-box-shadow: inset 0px 0px 30px -8px;
+        box-shadow: inset 0px 0px 30px -8px;}
+    #fondotresi{
+        position: fixed;
+        background-image: url("../img/textura_30.png");
+        background-size:40px 40px;
+        height: 100vh;
+        width: 22vw;
+        z-index: 0;
+        top: 0;
+        right: 0vw;
+        -webkit-box-shadow: inset 0px 0px 30px -18px ;
+        -moz-box-shadow: inset 0px 0px 30px -18px ;
+        box-shadow: inset 0px 0px 30px -18px;
+    }
+
+    @media (max-width: 600px) {
+        #imagensuperiormundo
+        {
+            top: 0 !important;
+        }
+        barraizq {
+            display: none;
+        }
+        barrader {
+            display: none;
+        }
+        #fondounoi{display: none}
+        #fondotresi{display: none}
+        #fondodosi{width: 100vh;left: 0}
+        .content{width: 100vw;
+            left: 0;
+            top:0}
+        chat{display:none}
+        #espaciodemoderacion{display: none}
+        barranav{display: none}
+        md-input-container{line-height:8px;font-size: 1em;margin-top: 0}
+    }
+    .ui.grid>table {
+         padding-left: 0;
+         padding-right: 0;
+    }
+</style>
+
+
+
+<barranav></barranav>
+
+<!--<div class="formucar">-->
+    <!--<form name="myForm" style="margin: 0" ng-submit="CarpenCarp(document._id)">-->
+
+        <!--<md-input-container style="font-size: 1vw; margin-left: 5%; width: 90%">-->
+            <!--<label>Nombre de la Carpeta</label>-->
+            <!--<input type="text" ng-model="nombre" required >-->
+        <!--</md-input-container>-->
+
+
+        <!--<div class="btnpubli">-->
+            <!--<button id="blanco" style="width: 5vw; height: 3vh; border: 0; "> Publicar</button>-->
+        <!--</div>-->
+
+    <!--</form>-->
+<!--</div>-->
+
+
+<div class="ui four column doubling stackable grid container">
+
+    <div class="ui segment" style="width: 100%;">
+        <form ng-submit="CarpenCarp(document)">
+            <div class="ui input">
+                <input type="text" placeholder="Nombre de la carpeta" ng-model="carpetaNueva">
+            </div>
+
+            <button class="ui primary button" ng-click="">
+                Crear Carpeta
+            </button>
+
+        </form>
+    </div>
+    <table class="ui celled striped table">
+        <thead>
+            <tr>
+                <th colspan="4">
+                    Documentos y archivos
+                </th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Tamaño</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="doc in document.carpetas">
+            <td></td>
+            <td><a href="#/gerentes/{{doc._id}}">{{doc.nombre}}</a></td>
+            <td> -- </td>
+            <td><img ng-click="deletecarpeta(doc)" src="img/iconox.png"style="height: 2vh;margin-left: 35%"></td>
+        </tr>
+
+
+
+        <tr>
+            <td class="collapsing">
+                <i class="folder icon"></i> node_modules
+            </td>
+            <td>Initial commit</td>
+            <td class="right aligned collapsing">10 hours ago</td>
+            <td class="right aligned collapsing">10 hours ago</td>
+        </tr>
+        <tr>
+            <td>
+                <i class="folder icon"></i> test
+            </td>
+            <td>Initial commit</td>
+            <td class="right aligned">10 hours ago</td>
+            <td class="right aligned">10 hours ago</td>
+        </tr>
+        <tr>
+            <td>
+                <i class="folder icon"></i> build
+            </td>
+            <td>Initial commit</td>
+            <td class="right aligned">10 hours ago</td>
+            <td class="right aligned">10 hours ago</td>
+        </tr>
+        <tr>
+            <td>
+                <i class="file outline icon"></i> package.json
+            </td>
+            <td>Initial commit</td>
+            <td class="right aligned">10 hours ago</td>
+            <td class="right aligned">10 hours ago</td>
+        </tr>
+        <tr>
+            <td>
+                <i class="file outline icon"></i> Gruntfile.js
+            </td>
+            <td>Initial commit</td>
+            <td class="right aligned">10 hours ago</td>
+            <td class="right aligned">10 hours ago</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+

@@ -303,7 +303,7 @@
             <div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>
         <div class="enlinea tab4">
             <p class="mi">
-                <img ng-click="deletearchivodocs(archivo)" src="img/iconox.png"style="height: 2vh;margin-left: 35%">
+                <img ng-click="deletearchivodocs(archivo)" ng-show="usuario.data.admindocs" src="img/iconox.png"style="height: 2vh;margin-left: 35%">
             </p>
 
         </div>

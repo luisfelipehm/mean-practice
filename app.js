@@ -12,6 +12,8 @@ require('./models/Comments');
 require('./models/Users');
 require('./models/Folders');
 require('./models/Files');
+require('./models/Gfolders');
+require('./models/Gfiles');
 require('./models/Fotosfiles');
 require('./models/Fotos');
 require('./models/Formularios');

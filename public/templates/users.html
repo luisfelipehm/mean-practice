@@ -201,7 +201,33 @@
     <span>{{ error.message }}</span>
 </div>
 
+<div class="boxpubliuser" ng-show="usuario.data.adminusers" style="padding: 10px">
+    <h3 style="margin: 0;">Registrar Gerente</h3>
+    <form ng-submit="registrarGerente()">
+        <md-input-container class="loginedit" required>
+            <label>Login</label>
+            <input type="text" ng-model="gereUsername" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Contraseña</label>
+            <input type="password" ng-model="gerePassword" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Nombre</label>
+            <input type="text" ng-model="gereNombre" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Apellido</label>
+            <input type="text" ng-model="gereApellido" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Corporacion</label>
+            <input type="text" ng-model="corpo" required>
+        </md-input-container>
 
+        <input type="image" src="/img/registrar.png" class="btnregistrar2" >
+    </form>
+</div>
     <!--REGISTRAR USUARIO-->
 <div class="boxpubliuser" ng-show="usuario.data.adminusers" >
 
@@ -288,9 +314,7 @@
         <div class="boxexaminar">
 
             <label for="file-input">
-                <div class="imguser">
-                    <img style="height: 100%" ng-show="myForm.file.$valid" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
-                </div>
+                    <img style="width: 50px" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
             </label>
             <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" ng-hide="true" />
             <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />-->

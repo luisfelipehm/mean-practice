@@ -181,6 +181,41 @@ app.factory('documents', ['$http','auth',function($http,auth){
     };
     o.get = function(id) {
         return $http.get('/documents/' + id).then(function(res){
+			console.log(res.data)
+            return res.data;
+        });
+    };
+
+    return o;
+}]);
+
+app.factory('gdocuments', ['$http','auth',function($http,auth){
+    var o = {
+        documents:[]
+    };
+
+    o.getAll = function() {
+        return $http.get('/gdocuments').success(function(data){
+            angular.copy(data, o.documents);
+        });
+    };
+    o.create = function(document) {
+
+        return $http.post('/gdocuments', document, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data){
+            o.documents.push(data);
+        });
+    };
+
+    o.addSubFolder = function(id , document) {
+        return $http.post('/gdocuments/' + id + '/gdocuments', document, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        });
+    };
+    o.get = function(id) {
+        return $http.get('/gdocuments/' + id).then(function(res){
+            console.log(res.data)
             return res.data;
         });
     };
@@ -429,6 +464,7 @@ app.factory('actas', ['$http','auth',function($http,auth){
     };
     o.getAll = function() {
         return $http.get('/actas').success(function(data){
+
             angular.copy(data, o.actas);
         });
     };
@@ -597,6 +633,55 @@ app.config([
                     }]}
 
             })
+
+            .state('gerentes', {
+                url: '/gerentes/{id}',
+                views: {
+                    "main": {
+                        controller: 'GerentesCtrl',
+                        templateUrl: 'templates/gerentes.html'
+                    }
+                },
+                resolve: {
+                    document: ['$stateParams', 'gdocuments', function($stateParams, gdocuments) {
+                        return gdocuments.get($stateParams.id);
+                }]},
+                onEnter: ['$state', 'auth', function($state, auth){
+                    // if(auth.isLoggedIn() == false){
+                    //     $state.go('login');
+                    // }
+                    // var currentUser = auth.currentUser();
+                    // if(!currentUser.gerente || !currentUser.admingerente){
+                    //     $state.go('login');
+                    // }
+
+                }]
+            })
+            .state('xgxgxg', {
+                url: '/xgxgxg',
+                views: {
+                    "main": {
+                        controller: 'xgxgxgCtrl',
+                        templateUrl: 'templates/xgxgxg.html'
+                    }
+                },
+
+                resolve: {
+            postPromise: ['gdocuments', function(documents){
+                return documents.getAll();
+            }]
+        },
+                onEnter: ['$state', 'auth', function($state, auth){
+                    // if(auth.isLoggedIn() == false){
+                    //     $state.go('login');
+                    // }
+                    // var currentUser = auth.currentUser();
+                    // if(!currentUser.gerente || !currentUser.admingerente){
+                    //     $state.go('login');
+                    // }
+
+                }]
+            })
             .state('home', {
                 parent: 'root',
                 url: '/home',
@@ -693,7 +778,7 @@ app.config([
                 templateUrl: 'templates/document.html',
                 controller: 'DocumentCtrl',
                 resolve: {
-                    document: ['$stateParams', 'documents', function($stateParams, documents) {
+                    document: ['$stateParams', 'documents', function($stateParams, documents) {						
                         return documents.get($stateParams.id);
                     }]}
 
@@ -887,6 +972,85 @@ app.config([
         $urlRouterProvider.otherwise('/root/home');
     }]);
 
+
+app.controller('GerentesCtrl',['$scope','auth', function ($scope,auth) {
+    $scope.document = document;
+    console.log(document);
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.currentUser = auth.currentUser();
+
+    // users.get($scope.currentUser._id).then(function(user){
+    //     $scope.usuario =  user;
+    // });
+    $scope.CarpenCarp = function(id){
+        // if($scope.nombre === '') { return; }
+        // console.log($scope.nombre)
+        // gdocuments.addSubFolder(id, {
+        //     nombre: $scope.nombre,
+        //     padre: $scope.id
+        // }).success(function(doc) {
+        //     $scope.document = doc;
+        // });
+        // $scope.nombre = '';
+        
+    };
+    // $scope.deletecarpeta = function (ar) {
+    //     return $http.delete('/folder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+    //         .success(function(data) {
+    //             $scope.document = data;
+    //         })
+    //         .error(function(data) {
+    //             console.log('Error: ' + data);
+    //         });
+    // };
+    // $scope.deletearchivodocs = function (ar) {
+    //     return $http.delete('/file/' + ar._id + '/' + $scope.document._id,  {data:{padreidx: $scope.document._id},headers: {Authorization: 'Bearer '+auth.getToken()}})
+    //         .success(function(data) {
+    //             $scope.document = data;
+    //         })
+    //         .error(function(data) {
+    //             console.log('Error: ' + data);
+    //         });
+    // };
+
+    // $scope.uploadPic = function(files) {
+    //
+    //
+    //
+    //     angular.forEach(files, function(file) {
+    //         file.upload = Upload.upload({
+    //             url: '/documents/'+ $scope.document._id + '/files',
+    //             data:{id: $scope.document._id,file:file,nombre: file.name},
+    //             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+    //         });
+    //
+    //         file.upload.then(function (response) {
+    //             $timeout(function () {
+    //                 file.result = response.data;
+    //             });
+    //         }, function (response) {
+    //             if (response.status > 0)
+    //                 $scope.errorMsg = response.status + ': ' + response.data;
+    //         }, function (evt) {
+    //             file.progress = Math.min(100, parseInt(100.0 *
+    //                 evt.loaded / evt.total));
+    //         });
+    //         file.upload.progress(function (evt) {
+    //             // Math.min is to fix IE which reports 200% sometimes
+    //             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+    //             console.log("PostController: upload progress " + file.progress);
+    //         });
+    //         file.upload.success(function (data, status, headers, config) {
+    //             console.log(data)
+    //             $scope.document = data;
+    //         });
+    //
+    //
+    //     });
+    //
+    // };
+}]);
+
 app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout','actas', function ($scope,auth,users,Upload,$http,$timeout,actas) {
 
 
@@ -909,7 +1073,8 @@ app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout',
                     apro.push(
                         {
                             nombre: elemento.nombre,
-                            aprobado: elemento.aprobado
+                            aprobado: elemento.aprobado,
+                            fecha: elemento.fecha
                         }
                     )
                 // }
@@ -917,37 +1082,11 @@ app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout',
         });
 
 
-        apro = _.uniq(apro)
-
-        // var arr = {};
-        //
-        // for ( var i=0, len=apro.length; i < len; i++ )
-        //     arr[apro[i]['place']] = apro[i];
-        //
-        // apro = new Array();
-        // for ( var key in arr )
-        //     apro.push(arr[key]);
-
-        // angular.forEach(apro, function (elemento2) {
-        //     if()
-        // });
-        // console.log(apro)
-        // angular.forEach(apro, function (a) {
-        //     if (apro.indexOf(a) < 0) {
-        //         // a is NOT in array1
-        //         final.push(a);
-        //     }
-        // });
-        // console.log(final)
-
-        // $.each(names, function(i, el){
-        //     if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-        // });
-        console.log(apro)
+        apro = _.uniq(apro,'nombre');
         return apro;
     }
     $scope.selecterFolder = 0;
-    $scope.actas = actas.actas;
+    $scope.actas = actas.actas;    
     $scope.xx = false;
     $scope.xxx = false;
     $scope.search = 0;
@@ -987,11 +1126,13 @@ app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout',
                 id: id,
                 aprobado: aprob,
                 nombre: user.data.nombre + ' ' + user.data.apellido,
-                username: user.data.username
+                username: user.data.username,
+                carpeta:$scope.selecterFolder
             }, {
                 headers: {Authorization: 'Bearer '+auth.getToken()}
             }).success(function(data){
-                $scope.actas = data;
+
+               $scope.actas = data;
             });
 
         });
@@ -1275,6 +1416,18 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
     //    })
     //});
 
+    $scope.registrarGerente = function () {
+        $http.post('/gerentes', {username: $scope.gereUsername,password:  $scope.gerePassword, nombre: $scope.gereNombre,apellido:  $scope.gereApellido, region:   $scope.corpo }).then(function (data) {
+            alert("Se registro el gerente exitosamente");
+        }, function (err) {
+            alert("Ocurrio un error");
+        })
+    };
+
+
+
+
+
 
     $scope.uploadPic2 = function (file,datos,id) {
         if(file==undefined)
@@ -1491,6 +1644,99 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
         }
     }]);
 
+app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
+
+    $scope.document = document;
+    console.log(document);
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.currentUser = auth.currentUser();
+
+    users.get($scope.currentUser._id).then(function(user){
+        $scope.usuario =  user;
+    });
+    $scope.CarpenCarp = function(id){
+        if($scope.nombre === '') { return; }
+        console.log($scope.nombre)
+        documents.addSubFolder(id, {
+            nombre: $scope.nombre,
+            padre: $scope.id
+        }).success(function(doc) {
+            $scope.document = doc;
+        });
+        $scope.nombre = '';
+    };
+    $scope.deletecarpeta = function (ar) {
+        return $http.delete('/folder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $scope.document = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+    $scope.deletearchivodocs = function (ar) {
+        return $http.delete('/file/' + ar._id + '/' + $scope.document._id,  {data:{padreidx: $scope.document._id},headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $scope.document = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.uploadPic = function(files) {
+
+
+
+        angular.forEach(files, function(file) {
+            file.upload = Upload.upload({
+                url: '/documents/'+ $scope.document._id + '/files',
+                data:{id: $scope.document._id,file:file,nombre: file.name},
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 *
+                    evt.loaded / evt.total));
+            });
+            file.upload.progress(function (evt) {
+                // Math.min is to fix IE which reports 200% sometimes
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                console.log("PostController: upload progress " + file.progress);
+            });
+            file.upload.success(function (data, status, headers, config) {
+                console.log(data)
+                $scope.document = data;
+            });
+
+
+        });
+
+    };
+}]);
+
+app.controller('xgxgxgCtrl',['$scope','auth','gdocuments', function ($scope,auth,gdocuments) {
+
+
+    $scope.gdocuments = gdocuments.documents;
+
+    $scope.crearCarpeta = function(){
+        if(!$scope.nombre || $scope.nombre === '') { return; }
+        gdocuments.create({
+            nombre: $scope.nombre
+        });
+        $scope.nombre = '';
+    };
+
+}]);
+
 app.controller('DocumentsCtrl',['$scope','auth','documents', function ($scope,auth,documents) {
 
     $scope.isLoggedIn = auth.isLoggedIn;
@@ -1612,7 +1858,6 @@ app.controller('TramitepqCtrl', ['$scope','auth','pqrsf','$http','Upload','$time
 
 }])
 
-
 app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeout','users', function ($scope,auth,pqrsf,$http,Upload,$timeout,users) {
     $scope.currentUser = auth.currentUser();
     $scope.pqnuevo = pqrsf.pqnuevo;
@@ -1621,6 +1866,104 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
     $scope.mispqadmin = 1;
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
+
+
+
+
+
+    $scope.cambiarArchivox = function (index, ruta) {
+
+
+        var ext = ruta.split('.');
+        ext = ext.slice(-1)[0] ;
+        ext = ext.toLowerCase();
+        if(ext =='doc' || ext=='docx'){
+            angular.element(document.getElementById('imgchangex' + index)).prop('src', "/img/WRD.png");
+
+        }else if(ext=='ppsx' || ext=='ppt' || ext=='pptm' || ext=='pptx'){
+            angular.element(document.getElementById('imgchangex' + index)).prop('src', "/img/PW.png");
+        }else if(ext=='xls' || ext=='xlsx' || ext=='xlsm' || ext=='xlsb'){
+            angular.element(document.getElementById('imgchangex' + index)).prop('src', "/img/XEL.png");
+        }else if(ext=='pdf'){
+            angular.element(document.getElementById('imgchangex' + index)).prop('src', "/img/PDF.png");
+        }else if(ext.toLowerCase() =='png' || ext.toLowerCase()=='tiff' || ext.toLowerCase()=='gif' || ext.toLowerCase()=='jpg' || ext.toLowerCase()=='jpeg' || ext.toLowerCase()=='bmp'){
+            angular.element(document.getElementById('imgchangex' + index)).prop('src', ruta);
+        }else{
+            angular.element(document.getElementById('imgchangex' + index)).prop('src', "/img/DOC.png");
+        }
+
+
+        angular.element(document.getElementById('cambioimagenx' + index)).prop('href', ruta);
+
+    }
+
+    $scope.cambiarArchivo = function (index, ruta) {
+
+
+        var ext = ruta.split('.');
+        ext = ext.slice(-1)[0] ;
+        ext = ext.toLowerCase();
+        if(ext =='doc' || ext=='docx'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/WRD.png");
+
+        }else if(ext=='ppsx' || ext=='ppt' || ext=='pptm' || ext=='pptx'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/PW.png");
+        }else if(ext=='xls' || ext=='xlsx' || ext=='xlsm' || ext=='xlsb'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/XEL.png");
+        }else if(ext=='pdf'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/PDF.png");
+        }else if(ext.toLowerCase() =='png' || ext.toLowerCase()=='tiff' || ext.toLowerCase()=='gif' || ext.toLowerCase()=='jpg' || ext.toLowerCase()=='jpeg' || ext.toLowerCase()=='bmp'){
+            angular.element(document.getElementById('imgchange' + index)).prop('src', ruta);
+        }else{
+            angular.element(document.getElementById('imgchange' + index)).prop('src', "/img/DOC.png");
+        }
+
+
+        angular.element(document.getElementById('cambioimagen' + index)).prop('href', ruta);
+
+    }
+
+    $scope.cerrarModal = function(){
+        angular.element(document.getElementById('modalarch')).css('display','none')
+    }
+    $scope.archivoszip = [];
+
+    $scope.modalArchivos = function (archivos, fase) {
+        angular.element(document.getElementById('descargarzip')).css('display','none');
+        var bases = '';
+
+        $scope.archivoszip = [];
+        angular.forEach(archivos , function (archivo) {
+            if(archivo.fase == fase){
+                var xg = archivo.adjunto.split('/').splice(-1)[0];
+                $scope.archivoszip.push(xg)
+                bases += '<div class="lispq"><p class="selection">' + xg + '</p></div>'
+            }
+        });
+        angular.element(document.getElementById('modalarcdocs')).html('')
+        angular.element(document.getElementById('modalarcdocs')).append(bases)
+        angular.element(document.getElementById('modalarch')).css('display','block')
+
+    };
+
+    $scope.generarzip = function () {
+        angular.element(document.getElementById('cargazip')).css('display','block')
+        return $http.post('/pqrszipfile/', {
+            archivos: $scope.archivoszip
+        }, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).then(function (data) {
+
+            angular.element(document.getElementById('cargazip')).css('display','none');
+            angular.element(document.getElementById('descargarzip')).attr('href','/zips/' +data.data).css('display','block');
+
+
+
+        }, function (err) {
+
+        });
+    };
+
     $scope.loadasignables = function() {
         users.asignables().then(function (asig) {
             $scope.asignables = asig;
@@ -1648,6 +1991,8 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
             });
 
         }else{
+            console.log(files)
+            console.log(files)
             return $http.post('/pqrsf/'+ id, {
                 comentario: {c: comentario,f: fase+1, u: $scope.currentUser.nombre + ' ' + $scope.currentUser.apellido},
                 responsable: ((tramitando == 'tramitando')? $scope.currentUser.username : responsable),
@@ -1664,11 +2009,11 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
                     $scope.cont++;
 
 
-
+                    var a = "/pqrsfs/45/files"
                     file.upload = Upload.upload({
-                        url: '/pqrsfs/'+ data._id + '/files',
+                        url: '/pqrsfs/'+ id + '/files',
 
-                        data:{id: data._id,file:file,nombre: file.name,
+                        data:{id: id,file:file,nombre: file.name,
                             admm: true},
 
                         headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
@@ -1706,13 +2051,55 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
         }};
 }]);
 
-
 app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout', function ($scope,pqrsf,$http,auth,Upload,$timeout) {
 
     $scope.currentUser = auth.currentUser();
     $scope.pqrsf = pqrsf.pqrsf;    
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
+
+
+    $scope.cerrarModal = function(){
+        angular.element(document.getElementById('modalarch')).css('display','none')
+    }
+    $scope.archivoszip = [];
+
+    $scope.modalArchivos = function (archivos, fase) {
+        angular.element(document.getElementById('descargarzip')).css('display','none');
+        var bases = '';
+
+        $scope.archivoszip = [];
+        angular.forEach(archivos , function (archivo) {
+            if(archivo.fase == fase){
+                var xg = archivo.adjunto.split('/').splice(-1)[0];
+                $scope.archivoszip.push(xg)
+                bases += '<div class="lispq"><p class="selection">' + xg + '</p></div>'
+            }
+        });
+        angular.element(document.getElementById('modalarcdocs')).html('')
+        angular.element(document.getElementById('modalarcdocs')).append(bases)
+        angular.element(document.getElementById('modalarch')).css('display','block')
+
+    };
+
+    $scope.generarzip = function () {
+        angular.element(document.getElementById('cargazip')).css('display','block')
+        return $http.post('/pqrszipfile/', {
+            archivos: $scope.archivoszip
+        }, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).then(function (data) {
+
+            angular.element(document.getElementById('cargazip')).css('display','none');
+            angular.element(document.getElementById('descargarzip')).attr('href','/zips/' +data.data).css('display','block');
+
+
+
+        }, function (err) {
+
+        });
+    };
+
 
     $scope.iconoSubidaDocumentoPq = function (file) {
         var ext = file[0].name.split('.');
@@ -2105,92 +2492,6 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 
 
 
-}]);
-
-app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
-
-    $scope.document = document;
-    console.log(document);
-    $scope.isLoggedIn = auth.isLoggedIn;
-    $scope.currentUser = auth.currentUser();
-
-    users.get($scope.currentUser._id).then(function(user){
-        $scope.usuario =  user;
-
-    });
-
-    
-
-    $scope.CarpenCarp = function(id){
-        if($scope.nombre === '') { return; }
-        console.log($scope.nombre)
-        documents.addSubFolder(id, {
-            nombre: $scope.nombre,
-            padre: $scope.id
-        }).success(function(doc) {
-            $scope.document = doc;
-        });
-        $scope.nombre = '';
-    };
-    $scope.deletecarpeta = function (ar) {
-        return $http.delete('/folder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
-            .success(function(data) {
-                $scope.document = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-    $scope.deletearchivodocs = function (ar) {
-        return $http.delete('/file/' + ar._id + '/' + $scope.document._id,  {data:{padreidx: $scope.document._id},headers: {Authorization: 'Bearer '+auth.getToken()}})
-            .success(function(data) {
-                $scope.document = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-
-    $scope.uploadPic = function(files) {
-
-
-
-        angular.forEach(files, function(file) {
-
-            file.upload = Upload.upload({
-                url: '/documents/'+ $scope.document._id + '/files',
-
-                data:{id: $scope.document._id,file:file,nombre: file.name},
-
-                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
-            });
-
-            file.upload.then(function (response) {
-
-                $timeout(function () {
-                    file.result = response.data;
-                });
-            }, function (response) {
-                if (response.status > 0)
-                    $scope.errorMsg = response.status + ': ' + response.data;
-            }, function (evt) {
-                file.progress = Math.min(100, parseInt(100.0 *
-                    evt.loaded / evt.total));
-            });
-            file.upload.progress(function (evt) {
-                // Math.min is to fix IE which reports 200% sometimes
-                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                console.log("PostController: upload progress " + file.progress);
-            });
-            file.upload.success(function (data, status, headers, config) {
-                console.log(data)
-                $scope.document = data;
-            });
-
-
-        });
-
-    };
 }]);
 
 app.controller('CalendarCtrl',['$scope','$http','$window','eventos','users','auth','$compile', function ($scope,$http,$window,eventos,users,auth,$compile) {
@@ -2975,7 +3276,9 @@ app.controller('FormularioresultsCtrl',['$scope','formularios','users','formular
         $scope.resultado3 = [];
 
         angular.forEach($scope.data2, function (dat) {
-            $scope.resultado3.push(dat[z].respuesta)
+            if(dat[z]){
+                $scope.resultado3.push(dat[z].respuesta)
+            }
         });
 
 

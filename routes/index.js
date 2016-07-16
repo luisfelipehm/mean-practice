@@ -1,8 +1,10 @@
 var express = require('express');
+var archiver = require('archiver');
 var router = express.Router();
 var passport = require('passport');
 var mongoose = require('mongoose');
 var moment = require('moment');
+var fs = require('fs');
 var Post = mongoose.model('Post');
 var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
@@ -22,6 +24,8 @@ var User = mongoose.model('User');
 var Acta = mongoose.model('Acta');
 var Folder = mongoose.model('Folder');
 var Formulario = mongoose.model('Formulario');
+var Gfile = mongoose.model('Gfile');
+var Gfolder = mongoose.model('Gfolder');
 
 
 
@@ -79,6 +83,14 @@ router.post('/eventos', function(req, res, next) {
 router.get('/documents', function(req, res, next) {
 
   Folder.find(function(err, documents){
+    if(err){ return next(err); }
+    res.json(documents);
+  });
+
+});
+router.get('/gdocuments', function(req, res, next) {
+
+  Gfolder.find(function(err, documents){
     if(err){ return next(err); }
     res.json(documents);
   });
@@ -289,6 +301,16 @@ router.post('/documents',auth, function(req, res, next) {
   });
 });
 
+router.post('/gdocuments',auth, function(req, res, next) {
+  var document = new Gfolder(req.body);
+  document.author = req.payload.username;
+  document.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(document);
+  });
+});
+
 // OBTENER UNA PUBLICACION
 
 router.get('/posts/:post', function(req, res, next) {
@@ -340,6 +362,21 @@ router.param('document', function(req, res, next, id) {
   });
 });
 
+router.param('gdocument', function(req, res, next, id) {
+
+
+
+  var query = Gfolder.findById(id);
+
+  query.populate('files').populate('carpetas').exec(function (err, document){
+    if (err) { return next(err); }
+    if (!document) { return next(new Error('can\'t find post')); }
+
+    req.document = document;
+    return next();
+  });
+});
+
 // OBTENER UN ALBUM
 
 router.get('/fotos/:foto', function(req, res, next) {
@@ -352,6 +389,40 @@ console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
   });
 });
 
+
+router.post('/pqrszipfile', function (req,res,next) {
+
+
+  var ruta = 'C:/Users/Usuario/hub/mean-practice/public/zips/pqrsfarchivos-'+ Date.now() +'.zip';
+  console.log('1')
+  var output = fs.createWriteStream(ruta);
+  console.log('2')
+  var archive = archiver('zip');
+  console.log('3')
+  output.on('close', function() {
+    console.log(archive.pointer() + ' total bytes');
+    console.log('archiver has been finalized and the output file descriptor has closed.');
+    res.json(ruta.split('/').splice(-1)[0])
+  });
+  console.log('4')
+
+  archive.on('error', function(err) {
+    throw err;
+  });
+  console.log('5')
+  archive.pipe(output);
+  console.log('6')
+  // var file1 ='C:/Users/Usuario/hub/mean-practice/public/sounds/notification.mp3';
+  // var file2 = 'C:/Users/Usuario/hub/mean-practice/public/javascripts/angularApp.js';
+  for (i in req.body.archivos){
+    archive.append(fs.createReadStream('C:/Users/Usuario/hub/mean-practice/public/uploads2/'+req.body.archivos[i]), { name: req.body.archivos[i] })
+  }
+  console.log('7')
+  archive.finalize();
+  console.log('8')
+
+
+});
 
 router.param('area', function(req, res, next, id) {
 
@@ -385,6 +456,16 @@ router.get('/areas/:area', function(req, res, next) {
 // OBTENER UNA CARPETA
 
 router.get('/documents/:document', function(req, res, next) {
+  console.log(req.document);
+  req.document.populate('files').populate('carpetas','nombre', function(err, document) {
+    if (err) { return next(err);   }
+
+
+    res.json(document);
+  });
+});
+
+router.get('/gdocuments/:gdocument', function(req, res, next) {
   console.log(req.document);
   req.document.populate('files').populate('carpetas','nombre', function(err, document) {
     if (err) { return next(err);   }
@@ -514,6 +595,9 @@ router.post('/areas/:postarea/comments',auth, function(req, res, next) {
 
 });
 
+
+
+
 router.post('/actas/otro', function(req, res, next) {
 
   Acta.findById({_id: req.body.id}, function (err,acta) {
@@ -523,10 +607,11 @@ router.post('/actas/otro', function(req, res, next) {
       texto: req.body.texto,
       aprobado: req.body.aprobado,
       nombre: req.body.nombre,
-      username: req.body.username
+      username: req.body.username,
+      fecha: Date.now()
     })
     acta.save(function (err,acta) {
-      Acta.find(function (err,ac) {
+      Acta.find({carpeta: req.body.carpeta},function (err,ac) {
         res.json(ac)
       })
     })
@@ -1198,6 +1283,19 @@ router.post('/usersf',auth,upload.single('file'), function(req, res, next){
 
 
 
+
+router.post('/gerentes', function (req,res,next) {
+  gerente = new User(req.body);
+  gerente.setPassword(req.body.password);
+  gerente.gerente = true;
+  gerente.save(function (err){
+    if(err){ return next(err); }
+
+    return res.json("Se registro")
+  });
+});
+
+
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
     return res.status(400).json({message: 'Please fill out all fields'});
@@ -1237,6 +1335,10 @@ router.post('/login', function(req, res, next){
 
 // Home page
 
+
+router.get('/gerentesPage', function(req, res, next) {
+
+});
 
 router.get('/', function(req, res, next) {
 

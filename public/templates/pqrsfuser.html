@@ -280,134 +280,42 @@
         opacity: 1;
     }
 
-    /* ESTILO DEL MODAL*/
-    .modal1
-    {
-        background: rgba(29, 29, 25, .7);
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
-    .cerrar
-    {
-        background: #c11727;
-        color: white;
-        width: 30px;
-        height: 30px;
-        border-radius: 20px ;
-        text-align: center;
-        position: absolute;
-        right: -20px;
-        top: -20px;
-    }
-    .cerrar > p
-    {
-        font-size: 22px;
-        text-align: center;
-        margin: 0;
-    }
-    .boxmodal
-    {
-        position: absolute;
-        border: solid #ededed;
-        background: #ededed;
-        width: 40vw;
-        height: 70vh;
-        margin: auto;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        border-radius: 10px;
-    }
-    .mbt1
-    {
 
-    }
-    .pt1
-    {
-        color: #c11727;
-        font-size: 2.8vw;
-        font-weight: 400;
-        margin: 5% 0 0 15%;
-        width: 70%;
-
-    }
-    .pt2
-    {
-        color: #3c3c3b;
-        font-size: 3.8vw;
-        font-weight: bold;
-        margin: 0 0 0 15%;
-        width: 70%;
-
-    }
-    .pt3
-    {
-        color: #c11727;
-        font-size: 1.8vw;
-        font-weight: bold;
-        width: 70%;
-        margin: 5% 0 5% 16%;
-    }
-    .lispq
-    {
-        width: 80%;
-        margin-left: 10%;
-        margin-right:0;
-        margin-bottom: 3%;
-        border-bottom: solid grey 1px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-
-    }
-    .selection
-    {
-        text-align: center;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .scroll
-    {
-        overflow-y: scroll;
-        height: 38%;
-        width:92%;
-    }
-    .boxscroll::-webkit-scrollbar
-    {
-        width: 4px;
-    }
-
-    .boxscroll::-webkit-scrollbar-track
-    {
-        border-radius: 10px;
-        background-color: grey;
-    }
-
-    .boxscroll::-webkit-scrollbar-thumb
-    {
-        border-radius: 10px;
-        background-color: #c11727;
-    }
-    .boxbotnenvipq
-    {
-        position: relative;
-        margin-top: 9%;
-        width: 82%;
-        margin-left:10%;
-    }
-    .btnenpg
-    {
-        width: 6vw;
-        float: right;
-    }
 
 
 </style>
+
+<div class="modal1" id="modalarch"  style="">
+    <div class="boxmodal">
+        <div ng-click="cerrarModal()" class="cerrar"><p>x</p></div>
+        <div style=" width: 80%;margin-left: 10%;margin-top: 8%">
+            <div class="mbt1">
+                <p class="pt1">Redireccionamiento</p>
+            </div>
+            <div class="mbt1" style="margin-top: -15px;">
+                <p class="pt2">Solicitud</p>
+            </div>
+            <div class="mbt1">
+                <p class="pt3">Área Encargada</p>
+            </div>
+            <div class="scroll boxscroll" id="modalarcdocs">
+
+            </div>
+            <div class="boxbotnenvipq">
+                <img  class="btnenpg" src="/img/botones-enviar.png" alt="" ng-click="generarzip()">
+            </div>
+
+            <a style="font-size: 20px;" id="descargarzip">Descargar</a>
+
+            <div class="sk-folding-cube" id="cargazip">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!--BARRA SUPERIOR PQRS-->
     <div class="boxpqnav">
@@ -488,7 +396,7 @@
                         <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}  </span>
                         <p style="font-size: 1vw;margin-left: 1.8vw;word-wrap: break-word; border-right: solid #575756 .1vw;width: 85%">{{cm.c}}</p>
 
-                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
+                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" ng-click="modalArchivos(pq.files,cm.f)"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
                     </div>
 
 
@@ -660,96 +568,4 @@
         </form>
     </div>
 
-<div class="modal1">
-    <div class="boxmodal">
-        <div class="cerrar"><p>x</p></div>
-        <div style=" width: 80%;margin-left: 10%;margin-top: 8%">
-            <div class="mbt1">
-                <p class="pt1">Redireccionamiento</p>
-            </div>
-            <div class="mbt1" style="margin-top: -15px;">
-                <p class="pt2">Solicitud</p>
-            </div>
-            <div class="mbt1">
-                <p class="pt3">Área Encargada</p>
-            </div>
-            <div class="scroll boxscroll">
-               <div class="lispq">
-                   <p class="selection">Example </p>
-               </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-                <div class="lispq">
-                    <p class="selection">Example </p>
-                </div>
-            </div>
-            <div class="boxbotnenvipq">
-                <img  class="btnenpg" src="/img/botones-enviar.png" alt="">
-            </div>
-        </div>
-    </div>
-</div>
+

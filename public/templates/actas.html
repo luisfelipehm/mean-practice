@@ -363,7 +363,7 @@
 
             </div>
 
-            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" ng-hide="true" />
+            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="APPLICATION/PDF" ngf-max-size="200MB" ng-hide="true" />
 
             <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
@@ -379,14 +379,14 @@
     <!--pubds-->
     <div ng-repeat="ac in actas | filter:search | orderBy: '-'" style=" margin-bottom: 2%" ng-init="mivar = buscarencomentarios(ac)">
         <div class="contenedorformulario">
-            <div class="elimyedit">
+            <div class="elimyedit" ng-show="currentUser.adminactas">
                 <img src="/img/icono-eliminar-g.png" class="icosup">
                 <img src="/img/icono-editar.png" class="icosup">
             </div>
             <div class="contpubli">
                 <div class="archi">
-                    <img src="/img/perro.jpg" class="imgadj" >
-                    <!--<p>{{ac.adjunto}}</p>-->
+                <a target="_blank" href="{{ac.adjunto}}"><img src="/img/PDF.png" class="imgadj" ></a>
+                    <!--<p></p>-->
                 </div>
                 <div class="infopubli">
                     <p class="titulopubliacta">{{ac.titulo}}</p>
@@ -401,7 +401,7 @@
 
             <div class="lineblack1"></div>
 
-            <form ng-submit="comentarioActa(ac.cc, ac._id,ac.aprobacion );ac.cc = '';">
+            <form ng-submit="comentarioActa(ac.cc, ac._id,ac.aprobacion );ac.cc = '';" >
                 <div ng-show="mivar">
 
                     <div class="comment">
@@ -422,9 +422,10 @@
 
                         </div>
                     </div>
-                    <div ng-init="ac.aprobaciones = verificarAprobados(ac.comentarios)">
+                    <div ng-init="ac.aprobaciones = verificarAprobados(ac.comentarios)" ng-show="currentUser.adminactas">
                         <div ng-repeat="aprob in ac.aprobaciones">
-                            <p>{{aprob.nombre}} aprobo: {{aprob.aprobado}} </p>
+
+                            <p>{{aprob.nombre}} aprobo: {{aprob.aprobado}} - {{aprob.fecha | moment:'DD'}} de {{aprob.fecha | moment:'MMMM'}} {{aprob.fecha | moment:'YYYY'}} </p>
                         </div>
                     </div>
                     <div class="otrocomment" ng-repeat="com in ac.comentarios">

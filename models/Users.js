@@ -31,7 +31,9 @@ var UserSchema = new mongoose.Schema({
     ultimaconexion: Date,
     cumpleanos: Date,
     adminactas:Boolean,
-    usaactas: Boolean
+    usaactas: Boolean,
+    gerente: Boolean,
+    admingerente: Boolean
 });
 
 

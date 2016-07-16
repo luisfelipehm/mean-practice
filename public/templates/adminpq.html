@@ -248,10 +248,46 @@
         opacity: 1;
     }
 
+
 </style>
 
 
-<div>
+<div class="modal1" id="modalarch"  style="">
+    <div class="boxmodal">
+        <div ng-click="cerrarModal()" class="cerrar"><p>x</p></div>
+        <div style=" width: 80%;margin-left: 10%;margin-top: 8%">
+            <div class="mbt1">
+                <p class="pt1">Redireccionamiento</p>
+            </div>
+            <div class="mbt1" style="margin-top: -15px;">
+                <p class="pt2">Solicitud</p>
+            </div>
+            <div class="mbt1">
+                <p class="pt3">Área Encargada</p>
+            </div>
+            <div class="scroll boxscroll" id="modalarcdocs">
+
+            </div>
+            <div class="boxbotnenvipq">
+                <img  class="btnenpg" src="/img/botones-enviar.png" alt="" ng-click="generarzip()">
+            </div>
+
+            <a style="font-size: 20px;" id="descargarzip">Descargar</a>
+
+            <div class="sk-folding-cube" id="cargazip">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div >
 
     <div>
         <div class="barracorespon"><h2 class="textcorrespo" ng-click="mispqadmin = 1">Nuevo </h2></div>
@@ -263,7 +299,7 @@
 
     <!--BUSCADOR-->
     <div class="cajabuscador" >
-        <div style="display: inline-block;"> <input class="buscador" type="text" placeholder="Escribe tu Busqueda..."></div>
+        <div style="display: inline-block;"> <input class="buscador" type="text" placeholder="Escribe tu Busqueda..." ng-model="search"></div>
         <div style="display: inline-block;">
             <md-input-container style="width: 10vw">
                 <md-select ng-model="tipospqrs" placeholder="Tipo">
@@ -302,7 +338,7 @@
 
     <!--PRIMERA VISTA-->
     <div ng-show="mispqadmin == 1">
-        <div ng-repeat="pq in pqnuevo | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqnuevo | orderBy: '-' | filter:search" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
                 <div style="width: 5vw; display: inline-block">
@@ -352,7 +388,7 @@
                             <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
                         </div>
 
-                        <img style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png">
+                        <a target="_blank" id="cambioimagenx{{$index}}"> <img  id="imgchangex{{$index}}" style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png"> </a>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; " >Adjunto:</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 35%" >Por el Solicitante</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 69%" >Adobe Pdf</p>
@@ -360,7 +396,11 @@
                     </div>
 
                     <div style="position: relative; display: inline-block; margin-top: 3vh; margin-left: 31vw">
-                        <a style="margin-left: .5vw" ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}"><div style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;"></div></a>
+                        <div style="margin-left: .5vw;display: inline-block;cursor: pointer" ng-repeat="f in pq.files" ng-if="f.fase == 1" >
+                            <div ng-click="cambiarArchivox($parent.$parent.$index, f.adjunto)" style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;" >
+
+                            </div>
+                        </div>
                     </div>
 
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
@@ -452,7 +492,7 @@
 
     <!--TRAMITE-->
     <div ng-show="mispqadmin == 2">
-        <div ng-repeat="pq in pqtramite | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqtramite | orderBy: '-' | filter:search" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
 
@@ -501,7 +541,7 @@
                             <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
                         </div>
 
-                        <a href=" " target="_blank"> <img style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png"> </a>
+                        <a target="_blank" id="cambioimagen{{$index}}"> <img  id="imgchange{{$index}}" style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png"> </a>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; " >Adjunto:</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 35%" >Por el Solicitante</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 69%" >Adobe Pdf</p>
@@ -509,8 +549,10 @@
                     </div>
 
                     <div style="position: relative; display: inline-block; margin-top: 3vh; margin-left: 31vw">
-                        <div style="margin-left: .5vw" ng-repeat="f in pq.files" ng-if="f.fase == 1" href="{{f.adjunto}}">
-                            <div style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;"></div>
+                        <div style="margin-left: .5vw;display: inline-block;cursor: pointer" ng-repeat="f in pq.files" ng-if="f.fase == 1" >
+                            <div ng-click="cambiarArchivo($parent.$parent.$index, f.adjunto)" style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;" >
+
+                            </div>
                         </div>
                     </div>
 
@@ -527,7 +569,10 @@
                         <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}  </span>
                         <p style="font-size: 1vw;margin-left: 1.8vw;word-wrap: break-word; border-right: solid #575756 .1vw;width: 85%">{{cm.c}}</p>
 
-                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" href="{{f.adjunto}}"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
+
+
+
+                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" ng-click="modalArchivos(pq.files,cm.f)"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
                     </div>
 
 
@@ -601,7 +646,7 @@
 
 
 
-        <div ng-repeat="pq in pqcerrado | orderBy: '-'" class="boxpubli" style="border-radius: .5vw ">
+        <div ng-repeat="pq in pqcerrado | orderBy: '-' | filter:search" class="boxpubli" style="border-radius: .5vw ">
 
             <div>
 
