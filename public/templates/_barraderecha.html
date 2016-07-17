@@ -15,10 +15,13 @@
     }
     .imgactiva
     {
-        margin-left: auto;
-        margin-right: auto;
-        autoHeight: true;
-        width: 10vw;
+        position: relative;
+        top:0;
+        left: 0;
+        bottom: 0;
+        rigth:0;
+        margin: auto;
+        width: 14vw;
 
     }
     .imagencuadro
@@ -28,40 +31,106 @@
     }
     .barraderechaimg
     {
-        position: absolute;
+        position: relative;
         height:50vh;
         width: 22%;
-        top: 15vh;
+        top: 0;
+        z-index: 2;
     }
     .fondobarradercha
     {
-        position: absolute;
-        background-image: url("../img/textura_30.png");
-        background-size:40px 40px;
-        height: 100vh;
-        width: 21.9vw;
-        top: 42vh;
-        right: 0vw;
-        -webkit-box-shadow: inset 0px 0px 50px -8px ;
-        -moz-box-shadow: inset 0px 0px 50px -8px ;
-        box-shadow: inset 0px 0px 50px -8px;
+        display: inline-block;
+        background-color: transparent;
+        height: 100%;
+        min-height: 100%;
+        width: 100%;
+
     }
+    #cumpletit
+    {
+        position: relative;
+        border: solid #e3152d;
+        background-color: #e3152d;
+        border-radius: 10px;
+        top: 45vh;
+        left: .6vw;
+    }
+    #cumpletit h2
+    {
+        text-align: center;
+        color: white;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
+
+    .contenedorimagen
+    {
+        margin-left: .5vw;
+        margin-top: 1vh;
+        width: 14vw;
+        height: 14vw;
+        overflow: hidden;
+    }
+    .circuloimagencumopleanos
+    {
+        position: relative;
+        top:.8vh;
+        border-radius: 10px;
+        width: 25px;
+        overflow: hidden;
+        margin-bottom: .5vh;
+        display: inline-block;
+    }
+
 
 </style>
 
 
-<div class="fondobarradercha">
+<div class="fondobarradercha" ng-controller="FoticosCtrl">
 
     <div class="barraderechaimg">
         <p class="dtittle1">Actividades</p>
 
-      <!--IMAGENES BARRA DERECHA-->
-        <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades">
-            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-f.png"></div>
-            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/icono-t.png"></div>
-            <div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro.jpg"></div>
-            <!--<div class="imagencuadro"><img class="imgactiva" data-lazy="/img/perro2.jpg"></div>-->
+        <!--IMAGENES BARRA DERECHA-->
+        <slick lazy-load='ondemand' autoplay='true' slides-to-show=1 slides-to-scroll=1  class="imagenesactividades" id="slicking">
+            <div ng-repeat="f in fotos" class="imagencuadro">
+                <a href="#/root/fotos/{{f._id}}">
+
+                        <div class="contenedorimagen">
+                            <img class="imgactiva" data-lazy="{{((!f.files[0].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[0].adjunto)}}">
+                        </div>
+
+                        <div class="contenedorimagen">
+                            <img class="imgactiva" data-lazy="{{((!f.files[1].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[1].adjunto)}}">
+                        </div>
+
+                        <div class="contenedorimagen">
+                            <img class="imgactiva" data-lazy="{{((!f.files[2].adjunto) ? '/img/Iconos_no_adjunto-68.png' : f.files[2].adjunto)}}">
+                        </div>
+                </a>
+            </div>
         </slick>
 
     </div>
+
+    <div ng-controller="CumpleanosCtrl">
+        <div id="cumpletit">
+            <h2>Feliz Cumpleaños</h2>
+        </div>
+        <div style="position: relative; top: 46vh">
+            <div style="width: 80%; margin-left: 5%" ng-repeat="us in users" >
+                <div class="circuloimagencumopleanos"> <img style="height: 25px;" ng-src="{{us.fotoperfil}}"> </div>
+              <div style="display: inline-block; margin-left: .5vw; font-size: 18px">{{us.nombre}} {{us.apellido}}</div>
+            </div>
+        </div>
+    </div>
 </div>
+
+    <!--</div>-->
+        <!--<div style="position: relative; top: 48vh">-->
+            <!--<div ng-repeat="us in users">-->
+                <!--<img style="display: inline-block; height: 20px" ng-src="{{us.fotoperfil}}">-->
+                <!--<p style="margin:0;margin-left: 5px;display:inline-block;;font-size: 20px">{{us.nombre}} {{us.apellido}}</p>-->
+            <!--</div></div>-->
+    <!--</div>-->
+<!--</div>-->

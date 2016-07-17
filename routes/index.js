@@ -1,24 +1,31 @@
 var express = require('express');
+var archiver = require('archiver');
 var router = express.Router();
 var passport = require('passport');
 var mongoose = require('mongoose');
 var moment = require('moment');
+var fs = require('fs');
 var Post = mongoose.model('Post');
 var Respuesta = mongoose.model('Respuesta');
 var Comment = mongoose.model('Comment');
 var Foto = mongoose.model('Foto');
 var Area = mongoose.model('Area');
 var Fotosfile = mongoose.model('Fotosfile');
+var Postarea = mongoose.model('Postarea');
 var Pqrsf = mongoose.model('Pqrsf');
 var Pqrsffile = mongoose.model('Pqrsffile');
 var Conectado = mongoose.model('Conectado');
+var Pqrsfnum = mongoose.model('Pqrsfnum');
 var Conversation = mongoose.model('Conversation');
 var Pregunta = mongoose.model('Pregunta');
 var Evento = mongoose.model('Evento');
 var File = mongoose.model('File');
 var User = mongoose.model('User');
+var Acta = mongoose.model('Acta');
 var Folder = mongoose.model('Folder');
 var Formulario = mongoose.model('Formulario');
+var Gfile = mongoose.model('Gfile');
+var Gfolder = mongoose.model('Gfolder');
 
 
 
@@ -39,6 +46,18 @@ router.get('/posts', function(req, res, next) {
     if(err){ return next(err); }
     res.json(posts);
   })
+});
+
+
+
+
+router.get('/actas', function(req, res, next) {
+
+  Acta.find(function(err, ac){
+    if(err){ return next(err); }
+    res.json(ac);
+  });
+
 });
 
 router.get('/eventos', function(req, res, next) {
@@ -64,6 +83,14 @@ router.post('/eventos', function(req, res, next) {
 router.get('/documents', function(req, res, next) {
 
   Folder.find(function(err, documents){
+    if(err){ return next(err); }
+    res.json(documents);
+  });
+
+});
+router.get('/gdocuments', function(req, res, next) {
+
+  Gfolder.find(function(err, documents){
     if(err){ return next(err); }
     res.json(documents);
   });
@@ -116,6 +143,7 @@ router.post('/formularios',auth, function(req, res, next) {
   var formulario = new Formulario(req.body);
   formulario.author = req.payload.username;
   formulario.preguntas = [];
+
   formulario.save(function(err, formulario){
     if(err){ return next(err); }
     res.json(formulario);
@@ -140,6 +168,7 @@ router.param('formulario', function(req, res, next, id) {
 
 router.post('/formularios/:formulario/responder',auth, function(req, res, next) {
   var comment = new Respuesta(req.body);
+  comment.fecha = Date.now();
   comment.author = req.payload.username;
   comment.save(function(err, comment){
     if(err){ return next(err); }
@@ -149,6 +178,16 @@ router.post('/formularios/:formulario/responder',auth, function(req, res, next) 
       res.json(comment);
     });
   });
+});
+
+
+router.post('/formularios/:formulario/habilitar',auth, function(req, res, next) {
+    req.formulario.habilitado = req.body.habilitado;
+    req.formulario.save(function(err, formulario) {
+      if(err){ return next(err); }
+      res.json(formulario);
+    });
+
 });
 
 // OBTENER UN FORMULARIO
@@ -202,6 +241,27 @@ router.get('/pqrsf', function(req, res, next) {
 });
 
 
+router.get('/pqrsfuser/:user', function(req, res, next) {
+
+
+  Pqrsf.find({creadopor: req.params.user}).populate('files').exec(function(err, pqrsf){
+    if(err){ return next(err); }
+    res.json(pqrsf);
+  });
+});
+
+
+router.get('/pqrsftramite/:user', function(req, res, next) {
+
+
+  Pqrsf.find().populate('files').exec(function(err, pqrsf){
+    if(err){ return next(err); }
+    res.json(pqrsf);
+  });
+});
+
+
+
 
 
 
@@ -233,6 +293,16 @@ router.post('/fotos',auth, function(req, res, next) {
 
 router.post('/documents',auth, function(req, res, next) {
   var document = new Folder(req.body);
+  document.author = req.payload.username;
+  document.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(document);
+  });
+});
+
+router.post('/gdocuments',auth, function(req, res, next) {
+  var document = new Gfolder(req.body);
   document.author = req.payload.username;
   document.save(function(err, post){
     if(err){ return next(err); }
@@ -292,6 +362,21 @@ router.param('document', function(req, res, next, id) {
   });
 });
 
+router.param('gdocument', function(req, res, next, id) {
+
+
+
+  var query = Gfolder.findById(id);
+
+  query.populate('files').populate('carpetas').exec(function (err, document){
+    if (err) { return next(err); }
+    if (!document) { return next(new Error('can\'t find post')); }
+
+    req.document = document;
+    return next();
+  });
+});
+
 // OBTENER UN ALBUM
 
 router.get('/fotos/:foto', function(req, res, next) {
@@ -304,9 +389,83 @@ console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
   });
 });
 
+
+router.post('/pqrszipfile', function (req,res,next) {
+
+
+  var ruta = 'C:/Users/Usuario/hub/mean-practice/public/zips/pqrsfarchivos-'+ Date.now() +'.zip';
+  console.log('1')
+  var output = fs.createWriteStream(ruta);
+  console.log('2')
+  var archive = archiver('zip');
+  console.log('3')
+  output.on('close', function() {
+    console.log(archive.pointer() + ' total bytes');
+    console.log('archiver has been finalized and the output file descriptor has closed.');
+    res.json(ruta.split('/').splice(-1)[0])
+  });
+  console.log('4')
+
+  archive.on('error', function(err) {
+    throw err;
+  });
+  console.log('5')
+  archive.pipe(output);
+  console.log('6')
+  // var file1 ='C:/Users/Usuario/hub/mean-practice/public/sounds/notification.mp3';
+  // var file2 = 'C:/Users/Usuario/hub/mean-practice/public/javascripts/angularApp.js';
+  for (i in req.body.archivos){
+    archive.append(fs.createReadStream('C:/Users/Usuario/hub/mean-practice/public/uploads2/'+req.body.archivos[i]), { name: req.body.archivos[i] })
+  }
+  console.log('7')
+  archive.finalize();
+  console.log('8')
+
+
+});
+
+router.param('area', function(req, res, next, id) {
+
+
+
+  var query = Area.findById(id);
+
+  query.populate('posts').exec(function (err, area){
+    if (err) { return next(err); }
+    if (!area) { return next(new Error('can\'t find post')); }
+
+    req.area = area;
+    return next();
+  });
+});
+
+
+router.get('/areas/:area', function(req, res, next) {
+
+  req.area.populate('posts', function(err, area) {
+    if (err) { return next(err);   }
+
+
+    res.json(area);
+  });
+});
+
+
+
+
 // OBTENER UNA CARPETA
 
 router.get('/documents/:document', function(req, res, next) {
+  console.log(req.document);
+  req.document.populate('files').populate('carpetas','nombre', function(err, document) {
+    if (err) { return next(err);   }
+
+
+    res.json(document);
+  });
+});
+
+router.get('/gdocuments/:gdocument', function(req, res, next) {
   console.log(req.document);
   req.document.populate('files').populate('carpetas','nombre', function(err, document) {
     if (err) { return next(err);   }
@@ -338,20 +497,158 @@ var upload = multer({ storage: storage });
 
 
 
+
+
+
+
+
 //ANADIR ARCHIVOS A LA PQRSF
 
 router.post('/pqrsf', function(req, res, next){
-  console.log('error1');
 
-  var pqrsf = new Pqrsf(req.body);
-  pqrsf.encargado = [req.body.encargado];
-  pqrsf.fechainicio = Date.now();
-  pqrsf.fase = 1;
-  pqrsf.save(function (err, pq){
-    console.log(err);
-    console.log('error2');
+
+
+    Pqrsfnum.findOne(function (err,num) {
+      var numerable= null;
+      switch (req.body.tipopq) {
+        case "Peticion":
+          numerable = "P" + (Number(num.peticion.substring(1))+1);
+          num.peticion = numerable;
+          break;
+        case "Queja":
+          numerable = "Q" + (Number(num.queja.substring(1))+1);
+          num.queja = numerable;
+          break;
+        case "Reclamo":
+          numerable = "R" + (Number(num.reclamo.substring(1))+1);
+          num.reclamo = numerable;
+          break;
+        case "Solicitud":
+          numerable = "S" + (Number(num.solicitud.substring(1))+1);
+          num.solicitud = numerable;
+          break;
+        case "Felicitacion":
+          numerable = "F" + (Number(num.felicitacion.substring(1))+1);
+          num.felicitacion = numerable;
+          break;
+
+      }
+      num.save(function (err,thetake) {
+        var pqrsf = new Pqrsf(req.body);
+        pqrsf.enumeracion = numerable;
+        pqrsf.encargado = [req.body.encargado];
+        pqrsf.fechainicio = Date.now();
+        pqrsf.fase = 1;
+        pqrsf.save(function (err, pq){
+          Pqrsf.find({creadopor: req.body.creadopor}).populate('files').exec(function(err, pqrsf){
+            if(err){ return next(err); }
+            res.json(pqrsf);
+          });
+        });
+      })
+
+    })
+
+
+});
+
+
+router.param('postarea', function(req, res, next, id) {
+
+  var query = Postarea.findById(id);
+
+  query.exec(function (err, postarea){
+    if (err) { return next(err); }
+    if (!postarea) { return next(new Error('can\'t find postarea')); }
+
+    req.postarea = postarea;
+    return next();
+  });
+});
+
+router.post('/areas/:postarea/comments',auth, function(req, res, next) {
+
+  User.findOne({ username: req.payload.username  }, function (err, name) {
+
+      req.postarea.comentarios.push({
+            author: titleize(name.nombre) + ' ' + titleize(name.apellido),
+            author2: req.payload.username,
+            fotoperfil: (name.fotoperfil == undefined ? '/img/user_chat.png' : name.fotoperfil),
+            body: req.body.body
+          }
+      );
+      req.postarea.save(function(err, postarea) {
+        if(err){ return next(err); }
+
+        var query = Area.findById(req.body.idarea);
+
+        query.populate('posts').exec(function (err, area){
+          if (err) { return next(err); }
+          res.json(area);
+        });
+
+
+      });
+
+  });
+
+
+});
+
+
+
+
+router.post('/actas/otro', function(req, res, next) {
+
+  Acta.findById({_id: req.body.id}, function (err,acta) {
+
+    if(!acta){return;}
+    acta.comentarios.push({
+      texto: req.body.texto,
+      aprobado: req.body.aprobado,
+      nombre: req.body.nombre,
+      username: req.body.username,
+      fecha: Date.now()
+    })
+    acta.save(function (err,acta) {
+      Acta.find({carpeta: req.body.carpeta},function (err,ac) {
+        res.json(ac)
+      })
+    })
+
+  });
+
+  
+});
+
+router.post('/actas',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.adjunto = '/uploads2/'+req.file.filename;
+  var acta = new Acta(req.body);
+
+  acta.save(function(err, ac){
+      Acta.find({carpeta: req.body.carpeta},function (err,allactas) {
+        res.json(allactas);
+      })
+  });
+});
+
+router.post('/areas/:area/posts',auth, upload.single('file'), function(req, res, next) {
+
+  req.body.file = '/uploads2/'+req.file.filename;
+  var post = new Postarea(req.body);
+
+  post.author = req.payload.username;
+  post.save(function(err, post){
     if(err){ return next(err); }
-    res.json(pq)
+
+    req.area.posts.push(post);
+    req.area.save(function(err, document) {
+      if(err){ return next(err); }
+
+      res.json(document);
+    });
+
   });
 });
 
@@ -381,26 +678,43 @@ function removeA(arr) {
 
 
 router.post('/pqrsf/:pqrsf', function(req, res, next){
-  console.log('error1');
 
-  console.log(req.pqrsf);
+
+
   req.pqrsf.fase += 1;
-  console.log('error2');
-  req.pqrsf.comentarios.push(req.body.comentario);
-  console.log('error3');
-  req.pqrsf.estado = req.body.estado;
-  console.log('error4');
-  ((req.body.estado == 'Cerrado') ? req.pqrsf.fechacierre = Date.now() : '');
-  console.log('error5');
-  ((req.body.tramitando != 'tramitando') ? req.pqrsf.encargados.push(req.body.responsable) : removeA(req.pqrsf.encargados, req.body.responsable));
 
-  console.log(req.pqrsf.encargados);
+  req.pqrsf.comentarios.push(req.body.comentario);
+
+  req.pqrsf.estado = req.body.estado;
+
+  if(req.body.estado == 'Cerrado'){
+     req.pqrsf.fechacierre = Date.now()
+  }
+
+
+  if(  req.body.tramitando != 'tramitando'){
+    req.pqrsf.encargados.push(req.body.responsable)}
+  else{
+    removeA(req.pqrsf.encargados, req.body.responsable)
+  }
+
 
   req.pqrsf.save(function (err, pq){
-    console.log(err);
-    console.log('error2');
     if(err){ return next(err); }
-    res.json(pq)
+    var pqs = {};
+    Pqrsf.find().populate('files').exec(function (err,pqsx) {
+      pqs.pqnuevo = pqsx.filter(function( obj ) {
+        return obj.estado == 'En espera';
+      });
+      pqs.pqtramite = pqsx.filter(function( obj ) {
+        return obj.estado == 'En tramite';
+      });
+      pqs.pqcerrado = pqsx.filter(function( obj ) {
+        return obj.estado == 'Cerrado';
+      });
+      console.log(pqs)
+      res.json(pqs)
+    });
   });
 });
 
@@ -419,8 +733,12 @@ router.post('/pqrsfs/:pqrsf/files',auth, upload.single('file'), function(req, re
     req.pqrsf.files.push(file);
     req.pqrsf.save(function(err, document) {
       if(err){ return next(err); }
-      console.log('done');
-      res.json(req.body);
+
+        Pqrsf.find({creadopor: req.body.usuario}).populate('files').exec(function(err, pqrsf){
+          if(err){ return next(err); }
+          res.json(pqrsf);
+        });
+
     });
 
   });
@@ -443,18 +761,36 @@ router.post('/fotos/:foto/files',auth, upload.single('file'), function(req, res,
     req.foto.files.push(file);
     req.foto.save(function(err, foto) {
       if(err){ return next(err); }
-      res.json(foto);
+      var query = Foto.findById({_id: foto._id});
+      query.populate('files').exec(function (err, document){
+        if (err) { return next(err); }
+        res.json(document)
+      });
     });
 
   });
 });
 
 
+router.delete('/preguntas/:_id', function (req,res,next) {
+  Pregunta.findById( req.params._id, function ( err, ar ){
+    if(ar){
+      ar.remove(function (err, arf) {
+        Formulario.find().populate('preguntas').exec(function(err, formularios){
+          if(err){ return next(err); }
+          res.json(formularios);
+        });
+      });
+    }
+  });
+});
+
 //CREAR CARPETAS DENTRO DE LAS CARPETAS
 
 
 router.post('/documents/:document/documents',auth, function(req, res, next) {
   var comment = new Folder(req.body);
+  console.log(req.body);
   comment.padre = req.document._id;
   comment.author = req.payload.username;
 
@@ -503,6 +839,20 @@ router.post('/posts',auth, upload.single('file'), function(req, res, next) {
   });
 });
 
+router.post('/postssin',auth, function(req, res, next) {
+  var post = new Post(req.body);
+  post.author = req.payload.username;
+  post.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(post);
+  });
+});
+
+
+router.post('/chat/adjuntos',auth, upload.single('file'), function(req, res, next) {
+    res.json('/uploads2/'+req.file.filename);
+});
 
 //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
@@ -522,8 +872,12 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
       req.document.files.push(file);
       req.document.save(function(err, document) {
         if(err){ return next(err); }
+        var query = Folder.findById({_id:document._id});
+        query.populate('files').populate('carpetas').exec(function (err, document){
+          if (err) { return next(err); }
+          res.json(document)
+        });
 
-        res.json(document);
       });
 
     });
@@ -544,6 +898,11 @@ router.param('post', function(req, res, next, id) {
 
 //ME GUSTA
 
+
+
+
+
+
 router.put('/posts/:post/upvote',auth, function(req, res, next) {
   req.post.upvote(function(err, post){
     if (err) { return next(err); }
@@ -558,9 +917,150 @@ router.put('/posts/:post/upvote',auth, function(req, res, next) {
 router.delete('/conectados/:_id',auth, function(req, res,next){
 
   Conectado.findById( req.params._id, function ( err, conectado ){
+    if(conectado){
     conectado.remove( function ( err, conectado ){
       res.json(conectado);
     });
+    }
+  });
+});
+
+// ELIMINAR USUARIOS
+
+
+router.post('/areas/:area/editando',auth, function(req, res, next) {
+
+  Area.findById( req.body._id, function ( err, ar ){
+    ar.nombre = req.body.nombre;
+    ar.save(function(err, arc){
+      if(err){ return next(err); }
+        res.json(arc);
+    });
+  });
+});
+
+router.delete('/formularios/:_id',auth, function(req, res,next){
+
+  Formulario.findById( req.params._id, function ( err, ar ){
+    if(ar){
+      ar.remove(function (err, arf) {
+        res.json(arf);
+      });
+    }
+  });
+});
+
+router.delete('/users/:_id',auth, function(req, res,next){
+
+  User.findById( req.params._id, function ( err, ar ){
+    if(ar) {
+      ar.remove(function (err, arf) {
+        res.json(arf);
+      });
+    }
+  });
+});
+
+
+router.post('compararcorreo', function (req,res,next) {
+  User.find({email: req.body.email}, function (err, usuario) {
+      if(!usuario){return}
+
+  })
+});
+
+router.delete('/folder/:_id',auth, function(req, res,next){
+  //padre
+
+  Folder.findById( req.params._id, function ( err, ar ){
+    var padres = ar.padre;
+    if(ar){
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      console.log(padres);
+      var query = Folder.findById(padres);
+      query.populate('files').populate('carpetas').exec(function (err, document){
+        if (err) { return next(err); }
+
+        res.json(document)
+      });
+
+    });
+    }
+  });
+});
+
+router.delete('/file/:_id/:document',auth, function(req, res,next){
+
+
+
+  //folder
+  File.findById( req.params._id, function ( err, ar ){
+    var padres = req.params.document;
+    if(ar){
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      console.log(padres);
+      var query = Folder.findById(padres);
+      query.populate('files').populate('carpetas').exec(function (err, document){
+        if (err) { return next(err); }
+
+        res.json(document)
+      });
+    });
+    }
+  });
+});
+
+
+router.delete('/fotos/:_id',auth, function(req, res,next){
+console.log(req.params._id)
+  Foto.findById( req.params._id, function ( err, ar ){
+    if(ar){
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      res.json(arf);
+    });
+    }
+  });
+});
+
+
+router.delete('/areas/:_id',auth, function(req, res,next){
+
+  Area.findById( req.params._id, function ( err, ar ){
+    if(ar) {
+      ar.remove(function (err, arf) {
+        if (err) {
+          return next(err);
+        }
+        res.json(arf);
+      });
+    }
+  });
+});
+
+router.delete('/eventos/:_id',auth, function(req, res,next){
+
+  Evento.findById( req.params._id, function ( err, ar ){
+    if(ar){
+    ar.remove( function ( err, arf ){
+      if (err) { return next(err); }
+      res.json(arf);
+    });
+    }
+  });
+});
+
+router.delete('/posts/areas/:_id',auth, function(req, res,next){
+  console.log("Deleting");
+  Postarea.findById( req.params._id, function ( err, post ){
+    if(post){
+    post.remove( function ( err, post ){
+      if (err) { return next(err); }
+      res.json(post);
+    });
+    }
   });
 });
 
@@ -568,18 +1068,24 @@ router.delete('/conectados/:_id',auth, function(req, res,next){
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Post.findById( req.params._id, function ( err, post ){
+    if(post){
     post.remove( function ( err, post ){
+      if (err) { return next(err); }
       res.json(post);
     });
+    }
   });
 });
 
 router.delete('/comments/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Comment.findById( req.params._id, function ( err, comment ){
+    if(comment){
     comment.remove( function ( err, comment ){
+      if (err) { return next(err); }
       res.json(comment);
     });
+    }
   });
 });
 
@@ -598,7 +1104,7 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
     comment.post = req.post;
     comment.author = titleize(name.nombre) +' ' + titleize(name.apellido);
     comment.author2 = req.payload.username;
-    comment.fotoperfil = (name.fotoperfil == undefined ? '/img/iconouser.jpg' : name.fotoperfil);
+    comment.fotoperfil = (name.fotoperfil == undefined ? '/img/user_chat.png' : name.fotoperfil);
     comment.save(function(err, comment){
       if(err){ return next(err); }
 
@@ -674,9 +1180,11 @@ console.log(req.body);
 
 router.post('/users/:_id', function(req, res, next){
 
-  User.findOne({ username: req.body.username  }, function (err, name) {
+  User.findById(req.body.elid  , function (err, name) {
 
     (req.body.password == "unpasswordquenadienuncaenlavidacolocaria" ? console.log('No cambio el password') : name.setPassword(req.body.password));
+    name.username = req.body.username;
+    console.log(name.username);
     name.nombre =         req.body.nombre;
     name.email =          req.body.email;
     name.area =           req.body.area;
@@ -695,6 +1203,7 @@ router.post('/users/:_id', function(req, res, next){
     name.adminfotos =     req.body.adminfotos;
     name.admincrono =     req.body.admincrono;
     name.adminpqrsf =     req.body.adminpqrsf;
+    name.cumpleanos =     req.body.cumpleanos;
     name.tramitepqrsf =   req.body.tramitepqrsf;
     name.save();
     res.json(name);
@@ -774,6 +1283,19 @@ router.post('/usersf',auth,upload.single('file'), function(req, res, next){
 
 
 
+
+router.post('/gerentes', function (req,res,next) {
+  gerente = new User(req.body);
+  gerente.setPassword(req.body.password);
+  gerente.gerente = true;
+  gerente.save(function (err){
+    if(err){ return next(err); }
+
+    return res.json("Se registro")
+  });
+});
+
+
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
     return res.status(400).json({message: 'Please fill out all fields'});
@@ -813,6 +1335,10 @@ router.post('/login', function(req, res, next){
 
 // Home page
 
+
+router.get('/gerentesPage', function(req, res, next) {
+
+});
 
 router.get('/', function(req, res, next) {
 

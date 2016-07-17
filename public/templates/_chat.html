@@ -5,9 +5,9 @@
     .chatty
     {
         position: fixed;
-        width: 15vw;
-        height: 40vh;
-        bottom: 4vh;
+        width: 288px;
+        height: 390px;
+        bottom: 42px;
         right: 0;
         border: 1px solid white;
         z-index: 1000;
@@ -18,7 +18,7 @@
     }
     .conectchat
     {
-        height: .7vh;
+        height: 7px;
     }
 
     .chatbox {
@@ -150,16 +150,21 @@
 
     .chatboxinput {
         padding: 5px;
-        background-color: #575756;
+        background-color: #e3152d;
         border-left: 1px solid #cccccc;
         border-right: 1px solid #cccccc;
         border-bottom: 1px solid #cccccc;
     }
-
+    .adjuntarchat
+    {
+        margin: 3px 8px 0 8px;
+        width: 20px;
+    }
     .chatboxtextarea {
-        width: 262px;
-        height: 20px;
-        padding: 3px 0pt 3px 3px;
+
+        width: 222px;
+        height: 25px;
+        padding: 3px 0pt 0 6px;
         border: 1px solid #eeeeee;
         margin: 1px;
         overflow: hidden;
@@ -199,17 +204,19 @@
         position: fixed;
         bottom: 0;
         right: 0;
-        height: 4vh;
-        width: 15VW;
+        height: 40px;
+        width: 280px;
         background-color: #e3152d;
         border: 1px solid #e3152d;
+        z-index: 2;
     }
     #searchUserBox input
     {
-        margin: .6vh 0 .3vh 3vw;
-        font-size: 2vh;
-        width: 11vw;
-        height: 3vh;
+        margin: .6vh 0 .3vh 2.6vw;
+        font-size: 20px;
+        width: 216px;
+        height: 26px;
+        padding: 0 0 0 .3vw;
     }
     .iconochatnofi
     {
@@ -224,19 +231,83 @@
         margin-top: .4vh;
         margin-left: .4vw;
         border-radius: 50%;
-        height: 4.1vh;
-        width: 4.1vh;
+        height: 18px;
+        width: 18px;
         overflow: hidden;
         display:inline-block;
+    }
+    .subirarchvos
+    {
+        width: auto;
+        height: 60px;
+        float: left;
+        opacity: .7;
+        order: 1;
+        margin-right: 10px ;
+
+    }
+    .subirarchvos:hover
+    {
+        opacity: 1;
+    }
+    .imagenadjuntochat
+    {
+
+        order: 2;
+        max-height: 60px;
+        min-height: 60px;
+        height: 60px;
+        max-width: 80px;
+    }
+    .progresosubidachat{
+
+        margin-top: 10px;
+        width: 128px;
+        height: 15px;
+        background-color: #ededed;
+
+        float: left;
+
+    }
+    .cancelarsubidachat
+    {
+        order: 2;
+        height: 15px;
+        margin-top: 10px;
+        float: right;
+    }
+    .chatboxmessagecontents
+    {
+        max-width: 150px;
+    }
+    .progresointernochat
+    {
+
+        background-color: #878787;
+        height: 100%;
+        width: 0;
+        color: white;
+    }
+    .subirarchvos2
+    {
+        width: auto;
+        height: 60px;
+        float: left;
+        order: 1;
+        margin-right: 10px ;
     }
 </style>
 
 <div ng-controller="ChatCtrl" id="chap">
 
+
+
+
     <!--buscadode chat-->
-    <div id="searchUserBox">
+    <div id="searchUserBox" >
         <i class="fa fa-comments iconochatnofi" ></i>
-        <input type="text" ng-model="search" required>
+        <input placeholder="Buscar..." type="text" ng-model="search" required>
+        <audio id="chatAudio"><source src="/sounds/notification.mp3" type="audio/mpeg"></audio>
     </div>
 
     <!--Caja de chatr gris "-->
@@ -245,15 +316,16 @@
 
         </div>
         <div style="background-color: #e5e5e5; width: 90%; min-height:88%; margin-left: 5%">
-            <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'"style="">
-                <div style="margin-top: 1.7vh" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
+
+            <div ng-repeat="users in usuariosconectados | filter:search | orderBy: 'actual'"style="margin-bottom: 10px;margin-top: 10px">
+                <div style="margin-top: 5px" ng-click="generarChat(users.username , titleize(users.apellido) +' ' + titleize(users.nombre))">
                     <div class="imguserchat">
-                        <img style=" width:2vw; height: 2vw;" src="{{users.fotoperfil == undefined ? '/img/iconouser.jpg' : users.fotoperfil}}">
+                        <img style=" width:18px; height: 18px;" src="{{users.fotoperfil == undefined ? '/img/user_chat.png' : users.fotoperfil}}">
                     </div>
-                    <div style="display: inline-block; position: absolute; margin-top: 1.4vh; margin-left: .5vw;font-size: 1.1vh";>
-                        {{titleize(users.apellido)}} {{titleize(users.nombre)}}
+                    <div style="display: inline-block; position: absolute; margin-top: 5px; margin-left: .5vw;font-size: 12px";>
+                         {{titleize(users.nombre.split(' ')[0])}} {{titleize(users.apellido.split(' ')[0])}}
                     </div>
-                    <div style="display: inline-block; position: absolute; margin-top: 2vh; margin-left: 7vw">
+                    <div style="display: inline-block; position: absolute; margin-top: 8px; right:15%">
                         <img src="/img/conectado.png" class="conectchat" ng-show="users.actual">
                         <img src="/img/desconectado.png" class="conectchat" ng-show="!users.actual" >
                     </div>

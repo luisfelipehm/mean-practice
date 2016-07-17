@@ -12,10 +12,10 @@
     }
     .boxformularios
     {
+        position: relative;
         background: #ebebeb;
         width: 90%;
-        height: auto;
-        min-height: 25vh;
+        min-height: 30vh;
         margin-left: 5%;
         margin-top: 2%;
         margin-bottom: 2%;
@@ -24,6 +24,7 @@
         box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
 
     }
+
     .iconoformulario
     {
         position: absolute;
@@ -145,57 +146,138 @@
     {
         opacity: 1;
     }
+    .lupita
+    {
+        left: 47.5vw;
+        position: relative;
+        width: 1vw;
+        height: auto;
+    }
+    .cajabuscar
+    {
+        margin-left: 5%;
+        width: 90%;
+        margin-top: 5vh;
+    }
+    .btnpublicar
+    {
+        margin-left: 82.5%;
+        margin-bottom: 5%;
+        margin-top: 1%;
+        width: 6vw;
+        opacity: 0.6;
+    }
+    .btnpublicar:hover
+    {
+        opacity: 1;
+    }
+    .imgtx
+    {
+        width: 2vh;
+        height: auto;
+    }
+    .boxiconremove
+    {
+        top: 2vh;
+        position: absolute;
+        right: 2vw;
+    }
+    md-switch.md-default-theme.md-checked .md-ink-ripple, md-switch.md-checked .md-ink-ripple {
+        color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked .md-thumb, md-switch.md-checked .md-thumb {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked .md-ink-ripple, md-switch.md-checked .md-ink-ripple {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked .md-bar, md-switch.md-checked .md-bar {
+        background-color: rgba(227,6,19,0.5);
+    }
+
+    .boxbtn
+    {
+        position: relative;
+    }
+    #inputselectformulario{
+        width: 15vw; margin: 0;
+        margin-left: 25vw;
+        position: absolute;
+        bottom: 17%;
+        z-index: 600;
+
+
+    }
+
 
 </style>
 
 
-<div class="fondoformulario">
+<div class="fondoformulario" ng-show="usuario.data.adminforms">
+
+
 
     <div class="imguserformulario">
-        <img style="width: 10.6vw; height: auto;" src="/img/perro.jpg">
+        <img style=" height: 100%;" src="{{usuario.data.fotoperfil == undefined ? '/img/user_chat.png' : usuario.data.fotoperfil}}">
     </div>
 
-    <form ng-show="usuario.adminforms" name="myForm" ng-submit="crearFormulario()">
+    <form name="myForm" ng-submit="crearFormulario()">
 
         <div class="tx1">
             <md-input-container style="width: 100%">
                 <label>Nombre del Formulario</label>
-                <input type="text" ng-model="nombre">
+                <input type="text" ng-model="nombre" required>
             </md-input-container>
         </div>
 
         <div class="dx1">
             <md-input-container style="width: 100%">
                 <label>Descripcion</label>
-                <input type="text" ng-model="descripcion">
+                <input type="text" ng-model="descripcion" required>
             </md-input-container>
         </div>
-        <div>
-            <img class="btncrear" src="/img/boton-crear.png">
+
+        <div style="display: inline-block;">
+            <md-input-container id="inputselectformulario">
+                <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
+                    <md-option ng-repeat="area in areas" value="{{area.nombre}}">
+                        {{area.nombre}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
         </div>
 
-        <div class="lineaform"> </div>
+         <div class="boxbtn" >
+            <input type="image" src="/img/boton-crear.png"  class="md-raised btnpublicar">
+         </div>
 
-        <md-button type="submit"  class="md-raised"> Publicar </md-button>
     </form>
 
 </div>
 
+<div class="cajabuscar">
+    <img class="lupita" src="/img/lupa.png">
+    <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
+        <label>Buscar</label>
+        <input type="text" ng-model="search" required>
+    </md-input-container>
+</div>
 
+<div ng-repeat="forma in formularios | filter:search | orderBy:'-'" class="boxformularios" >
 
-<div ng-repeat="forma in formularios | orderBy:'-'" class="boxformularios">
     <!--{{forma}}-->
     <!--ICONOS DE EDITAR Y ELIMINAR-->
     <div class="boxiconossuperiores">
-        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.adminforms">
-        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png"  ng-show="usuario.adminforms">
+
+        <img class="iconossuperioruno" src="/img/icono-editar.png" ng-click="editing = true"  ng-show="usuario.data.adminforms">
+        <img class="iconossuperiordos" src="/img/icono-eliminar-g.png" ng-show="usuario.data.adminforms" ng-click="remove(forma)">
     </div>
 
     <div>
         <label class="tituloformulario" >{{forma.nombre}}</label>
     </div >
 
-    <div class="boximgresultado"  ng-show="usuario.adminforms">
+    <div class="boximgresultado">
         <a href="#/root/formularios/{{forma._id}}">
             <img class="iconoresponderformulario" src="/img/icono-fomulario.png">
         </a>
@@ -220,13 +302,20 @@
     </div>
 
     <div>
-        <a href="#/root/formularios/{{forma._id}}/results"> <img class="btnresultados" src="/img/boton_resultados.png"> </a>
+        <a href="#/root/formularios/{{forma._id}}/results" ng-show="usuario.data.adminforms">
+            <img class="btnresultados" src="/img/boton_resultados.png"> </a>
     </div>
     <div ng-show="editing">
     <h3 style="margin-left: 22%">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
-        <p style="margin: 4px 0 0 25%">{{pp.pregunta}}</p>
+
+        <p style="margin: 4px 0 0 25%;display: inline-block;">{{pp.pregunta}}</p>
+        <img src="/img/icono-eliminar-g.png" style="height: 18px;display:inline-block;cursor: pointer" ng-click="removerPregunta(pp._id)">
     </div>
+
+        <md-switch ng-model="forma.habilitado" aria-label="Switch 1" ng-change="habilitando(forma.habilitado,forma._id)" style="margin-left: 22%">
+            Habilitado? {{(forma.habilitado == true) ? "SI" :  "NO" }}
+        </md-switch>
 
     <div class="preguntasformulario">
         <form ng-submit="addPregunta(forma._id)" >
@@ -262,9 +351,9 @@
                 </div>
 
 
-                <div ng-repeat="opt in opciones" style="border: 2px solid #E30613; width: 15vw;height: 5vh;cursor: pointer">
+                <div ng-repeat="opt in opciones" style="width: 15vw;height: 5vh;cursor: pointer">
                     {{opt}}
-                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 100%;cursor: pointer" ng-click="removerOpcion($index)">
+                    <img src="/img/icono-eliminar-g.png" style="float: right;height: 66%;cursor: pointer" ng-click="removerOpcion($index)">
                 </div>
 
             </div>

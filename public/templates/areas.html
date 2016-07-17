@@ -1,7 +1,27 @@
+<br>
+<br>
+<br>
+<br>
+
 <form ng-submit="crearArea()">
     <md-input-container>
-        <label>Pregunta</label>
+        <label>Nombre del Area</label>
         <input type="text" ng-model="nombre" required md-maxlength="200">
     </md-input-container>
     <md-button type="submit" class="md-raised"> Crear Area </md-button>
 </form>
+
+
+<div ng-repeat="a in areas" ng-init="editar = false">
+<a href="#/root/areas/{{a._id}}">{{a.nombre}}</a>
+    <p ng-click="editar = true">editar</p>
+
+    <form ng-submit="editararea(a._id, a.nombre)">
+        <input type="text" ng-model="a.nombre" ng-show="editar">
+        <input type="submit" value="Editar" ng-show="editar">
+    </form>
+
+    <p ng-click="deletearea(a)">eliminar</p>
+
+
+</div>

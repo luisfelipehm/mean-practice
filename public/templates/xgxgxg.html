@@ -1,0 +1,13 @@
+
+<form name="myForm" ng-submit="crearCarpeta()" style="margin-left: 4.5%">
+    <md-input-container>
+        <label>Nombre de la Carpeta</label>
+        <input type="text" ng-model="nombre" required >
+    </md-input-container>
+    <md-button type="submit"  class="md-raised"> Publicar </md-button>
+</form>
+
+<div ng-repeat="documento in gdocuments">
+    {{documento}}
+    <a href="#/gerentes/{{documento._id}}">{{documento._id}}</a>
+</div>

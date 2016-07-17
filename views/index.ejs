@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>My Angular App!</title>
+  <title>Intranet Soluciones</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
   <link rel="stylesheet" href="/libs/angular-material/angular-material.min.css">
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link rel="stylesheet" href="/stylesheets/fafa.min.css">
   <link rel="stylesheet" href="/libs/jquery-timepicker-jt/jquery.timepicker.css">
+
   <script src="/socket.io/socket.io.js"></script>
 
 
@@ -22,14 +23,17 @@
 
 
   <script src="/libs/angular/angular.min.js"></script>
+  <script src="/libs/angular-sanitize/angular-sanitize.min.js"></script>
   <script src="/libs/angular-socket-io/socket.js"></script>
   <script>
     //var socket = io('ws://192.168.0.24');
     var socket = io('ws://192.168.0.24:3000');
 //    var socket = io();
   </script>
+  <script src="/libs/file-saver.js/FileSaver.js"></script>
   <script src="/libs/moment/min/moment.min.js"></script>
   <script src="/libs/moment/locale/es.js"></script>
+  <script src="/libs/angular-base64/angular-base64.min.js"></script>
   <script src="/libs/underscore/underscore-min.js"></script>
   <script src="/libs/angular-underscore-module/angular-underscore-module.js"></script>
   <script src="/libs/angular-moment/angular-moment.min.js"></script>
@@ -57,6 +61,8 @@
 
 
   <script src="/javascripts/angularApp.js"></script>
+
+
   <style>
 
     html {
@@ -71,19 +77,17 @@
     }
     .content
     {
-      position: absolute;
-      top: 44vh;
-      left: 22%;
+      position: relative;
+      z-index: 10;
+      top: -10vh;
+      display: inline-block;
       width: 56%;
-      z-index: 9 ;
-      background-image: url("img/fondo_centro_50.png");
-      background-size: 40px 40px;
+      background-color: transparent;
       min-height: 100% ;
       height: auto;
       margin-top: 0;
-      -webkit-box-shadow: inset 0px 0px 30px -8px ;
-      -moz-box-shadow: inset 0px 0px 30px -8px ;
-      box-shadow: inset 0px 0px 30px -8px;
+      vertical-align:top;
+
     }
     form.new_message
     {

@@ -8,25 +8,23 @@ module.exports = function(io) {
 
     io.on('connection', function(socket){
 
-
-
-
         socket.on('chateando', function (msg) {
-            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: msg.mesj,receptor: msg.recibe, fecha: Date.now(),fotoperfil: msg.fotoperfil });
+
+            function urlify(text) {
+                var urlRegex = /(https?:\/\/[^\s]+)/g;
+                return text.replace(urlRegex, function(url) {
+                    return '<a target="_blank" href="' + url + '">' + url + '</a>';
+                });
+                // or alternatively
+                // return text.replace(urlRegex, '<a href="$1">$1</a>')
+            }
+
+            var linkeando = urlify(msg.mesj);
+            var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: linkeando,receptor: msg.recibe, fecha: Date.now(),fotoperfil: msg.fotoperfil,adjunto: msg.adjunto });
             conv.save(function(){
-
                 //var sabe = [{usernameone: msg.envia,usernametwo: msg.recibe},{usernametwo: msg.recibe,usernameone: msg.envia}];
-
                 io.emit('chateando',msg);
-
-
-
-
-
             });
-
-
-
 
         });
         socket.on('pubs', function (user) {
@@ -34,7 +32,6 @@ module.exports = function(io) {
                 io.emit('pubs',user)
 
         });
-
 
         socket.on('usuario', function (user) {
 
@@ -44,20 +41,19 @@ module.exports = function(io) {
                 name.actual = true;
                 name.ultimaconexion = Date.now();
                 name.save();
-                 io.emit('usuario',user)
+                io.emit('usuario',user)
             });
             });
         socket.on('disusuario', function (user) {
 
             User.findOne({ username: user }, function (err, name) {
+                if(!name){return err}
                 name.sock = '';
                 name.actual = false;
                 name.save();
                 io.emit('usuario',user)
             });
         });
-
-
 
 
         socket.on('sok', function(msg){

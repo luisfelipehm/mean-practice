@@ -1,15 +1,20 @@
 
-    <form ng-show="usuario.adminfotos" name="myForm" ng-submit="crearAlbum()">
-        <md-input-container>
-            <label>Nombre del Album</label>
-            <input type="text" ng-model="nombre" required md-maxlength="20">
-        </md-input-container>
-        <md-button type="submit"  class="md-raised"> Publicar </md-button>
-
-
-    </form>
-
 <style>
+    .btnpublicarfoto
+    {
+        width: 15%;
+        margin-left: 5%;
+        opacity: 0.7;
+    }
+    .btnpublicarfoto:hover
+    {
+        opacity: 1;
+    }
+    .trolform
+    {
+        margin-top: 5%;
+        margin-left: 4%;
+    }
     .hovernegro
     {
         width: 100%;
@@ -39,17 +44,48 @@
         margin-top: 7vh;
         line-height: 4vh;
     }
+    .imgeli
+    {
+        width: .9vw;
+        right: .5vw;
+        top: .7vh;
+        z-index: 500;
+        position: absolute;
+    }
+    a {
+        text-decoration: none;
+    }
 </style>
 
+<script>
+    function basura() {
+        alert("");
+    }
+</script>
 
-    <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 6%">
+<div class="trolform">
+    <form ng-show="usuario.data.adminfotos" name="myForm" ng-submit="crearAlbum()">
+        <md-input-container style="width: 39vw">
+            <label>Nombre del Album</label>
+            <input type="text" ng-model="nombre" required>
+        </md-input-container>
+        <input type="image" src="/img/botones_publicar.png" class="btnpublicarfoto" >  </input>
 
-        <a href="#/root/fotos/{{album._id}}">
+
+    </form>
+</div>
+
+    <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 4.5%;margin-bottom: 4.5%">
+
+
             <div class="hovernegro">
                 <div class="hovertitulo">
-                    <p class="titulosalbums">{{album.nombre}}</p>
+                    <img class="imgeli" src="/img/basura_blanca.png" ng-click="alertando(album)">
+                    <a href="#/root/fotos/{{album._id}}">
+                        <p class="titulosalbums">{{album.nombre}}</p>
+                    </a>
                 </div>
-                <img src="{{(!album.files[0] ? '/img/adminfelicitacion.png' : album.files[0].adjunto)}}" style="height: 100%">
+                <img src="{{(!album.files[0] ? '/img/Iconos_no_adjunto-68.png' : album.files[0].adjunto)}}" style="height: 100%;width: 100%">
             </div>
-        </a>
+
     </div>

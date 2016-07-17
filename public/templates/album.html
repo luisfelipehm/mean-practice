@@ -1,22 +1,37 @@
-<br>
-<br>
-<br>
-<br>
+<style>
+    .adjunta
+    {
+        display: none;
+    }
+    .iconadjun
+    {
+        width: 3vw;
+    }
+    .ng-gallery
+    {
+        width: 52.5vw;
+    }
+    .ng-gallery-content > a.close-popup {
 
-<form  ng-show="usuario.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
+        margin-top: 50px;
+    }
+
+</style>
+
+<h1 style="position: absolute;color: #575756;top: 0;left: 40%">{{foto.nombre}}</h1>
+
+<form  ng-show="usuario.data.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
 
-    <input type="file"  ngf-select ng-model="picFile" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
+    <div style="position: relative; left: 18%;width: 12vw;margin-bottom: -3%; margin-top: 10px" >
+        <label for="file-input">
+            <img class="iconadjun" src="/img/iconoadjdoc.jpg">
+        </label>
+        <input type="file" class="adjunta" ngf-select ng-model="picFile"  id="file-input" ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB" required />
 
-    <br>
+    </div>
 
-    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
-
-    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
-
-    <br>
-    Files:
-    <ul>
+    <ul style="margin-top: 0%; margin-left: 25%">
         <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
       <span class="progress" ng-show="f.progress >= 0">
         <div style="width:{{f.progress}}%"
@@ -29,12 +44,20 @@
     {{errorMsg}}
 
 
+    <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
-    <md-button type="submit"  class="md-raised"> Publicar </md-button>
+    <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+    <br>
+
+
+
+
+    <input type="image" src="/img/botones_publicar.png" style="position:absolute;width: 6.8vw;left: 4.5%;top: 10px" />
 
 </form>
 
+<div style="margin-top: 78px;width: 100%;height: 1px" ng-show="!usuario.data.adminfotos"></div>
 
 
-
-<ng-gallery images="images"></ng-gallery>
+<ng-gallery images="images" style="margin-left: 3%;"></ng-gallery>

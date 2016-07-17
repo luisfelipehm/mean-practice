@@ -26,24 +26,23 @@
     }
     .iconoeditaruser
     {
-        width: 1vw;
-        margin-left: 1vw;
+        width: 20px;
         float: right;
     }
     .boximgusersedit
     {
         position: absolute;
         height: auto;
-        right: 0;
-        margin-right: 2vw;
+
+        right: 2vw;
         margin-top: .5vh;
     }
     .boximguserseli
     {
         position: absolute;
         height: auto;
-        right: 0;
-        margin-right: .5vw;
+
+        right: .5vw;
         margin-top: .5vh;
     }
     .imguseredit
@@ -51,6 +50,7 @@
         position: absolute;
         height: 13vh;
         width: auto;
+        max-width: 7vw;
         margin-left: 1vw;
         margin-right: 1vw;
         margin-top: 4vh;
@@ -201,7 +201,33 @@
     <span>{{ error.message }}</span>
 </div>
 
+<div class="boxpubliuser" ng-show="usuario.data.adminusers" style="padding: 10px">
+    <h3 style="margin: 0;">Registrar Gerente</h3>
+    <form ng-submit="registrarGerente()">
+        <md-input-container class="loginedit" required>
+            <label>Login</label>
+            <input type="text" ng-model="gereUsername" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Contraseña</label>
+            <input type="password" ng-model="gerePassword" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Nombre</label>
+            <input type="text" ng-model="gereNombre" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Apellido</label>
+            <input type="text" ng-model="gereApellido" required>
+        </md-input-container>
+        <md-input-container class="loginedit" required>
+            <label>Corporacion</label>
+            <input type="text" ng-model="corpo" required>
+        </md-input-container>
 
+        <input type="image" src="/img/registrar.png" class="btnregistrar2" >
+    </form>
+</div>
     <!--REGISTRAR USUARIO-->
 <div class="boxpubliuser" ng-show="usuario.data.adminusers" >
 
@@ -211,9 +237,9 @@
         <h3 class="tittleregistrar">Registrar nuevo usuario</h3>
 
 
-        <md-input-container class="loginedit">
+        <md-input-container class="loginedit" required>
             <label>Login</label>
-            <input type="text" ng-model="username">
+            <input type="text" ng-model="username" required>
         </md-input-container>
 
         <md-input-container class="loginedit">
@@ -281,14 +307,14 @@
             <input type="text" ng-model="contratacion">
         </md-input-container>
 
+            <md-datepicker ng-model="cumpleanos" md-placeholder="Fecha de cumpleaños"></md-datepicker>
+
             <!--SELECCIONAR ARICHIVO FOTO-->
 
         <div class="boxexaminar">
 
             <label for="file-input">
-                <div class="imguser">
-                    <img style="height: 100%" ng-show="myForm.file.$valid" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
-                </div>
+                    <img style="width: 50px" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
             </label>
             <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" ng-hide="true" />
             <!--<input type="file" ngf-select ng-model="picFile" id="image_src" ngf-multiple="false" name="file" accept="image/" ngf-max-size="200MB" />-->
@@ -339,9 +365,9 @@
  <div ng-repeat="user in users | filter:search">
 
      <div class="boxallusers">
-        <div> <img class="imguseredit" src="/img/boton-examinar.png"> </div>
+        <div> <img class="imguseredit" ng-src="{{(!user.fotoperfil) ? '/img/boton-examinar.png' : user.fotoperfil}}"> </div>
         <div class="boximgusersedit" ng-hide="editing" ng-click="editing = true"> <img class="iconoeditaruser" src="/img/icono-editar.png"> </div>
-        <div class="boximguserseli"> <img class="iconoeditaruser" src="/img/icono-eliminar-g.png"> </div>
+        <div class="boximguserseli"> <img ng-click="remove(user)" class="iconoeditaruser" ng-show="usuario.data.adminusers" src="/img/icono-eliminar-g.png"> </div>
         <p class="editdatosusername">{{user.nombre}} {{user.apellido}}</p>
         <p class="editdatosusercargo"><span class="negrita">Cargo: </span>{{user.cargo}}</p>
         <p class="editdatosuserarea"><span class="negrita">Area:</span>{{user.area}}</p>
@@ -352,15 +378,15 @@
          <div class="boxinuseredit">
 
              <form ng-if="editing" enctype="multipart/form-data" name="myForm"
-                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf],user._id);editing = false;">
+                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf,user.cumpleanos],user._id);editing = false;">
 
                  <div class=" lineahgris"></div>
                  <h3 class="tittleedit">Editar</h3>
 
 
-                 <md-input-container class="loginedit">
+                 <md-input-container class="loginedit" required>
                      <label>Login</label>
-                     <input type="text" ng-model="user.username" >
+                     <input type="text" ng-model="user.username" required>
                  </md-input-container>
 
                  <md-input-container class="loginedit">
@@ -428,6 +454,7 @@
                      <input type="text" ng-model="user.contratacion">
                  </md-input-container>
 
+                 <md-datepicker ng-model="user.cumpleanos" md-placeholder="Fecha de cumpleaños"></md-datepicker>
 
                  <div ng-if="usuario.data.adminusers">
 

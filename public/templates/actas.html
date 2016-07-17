@@ -1,0 +1,456 @@
+<style>
+    md-input-container.md-default-theme .md-input, md-input-container .md-input
+    {
+        border-color: black;
+    }
+    md-datepicker.md-default-theme, md-datepicker
+    {
+        background: none;
+        margin-left:60%;
+        height: 10%;
+    }
+
+    md-checkbox.md-checked.red .md-icon {
+        background-color: rgba(227, 6, 19, 1);
+    }
+
+    md-switch.md-default-theme.md-checked.md-warn .md-ink-ripple, md-switch.md-checked.md-warn .md-ink-ripple {
+        color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked.md-warn .md-thumb, md-switch.md-checked.md-warn .md-thumb {
+        background-color: #E30613;
+    }
+    md-switch.md-default-theme.md-checked.md-warn .md-bar, md-switch.md-checked.md-warn .md-bar {
+        background-color: rgba(227,6,19,0.5);
+    }
+    md-radio-group.md-default-theme:not([disabled]) .md-primary .md-on, md-radio-group:not([disabled]) .md-primary .md-on, md-radio-group.md-default-theme:not([disabled]).md-primary .md-on, md-radio-group:not([disabled]).md-primary .md-on, md-radio-button.md-default-theme:not([disabled]) .md-primary .md-on, md-radio-button:not([disabled]) .md-primary .md-on, md-radio-button.md-default-theme:not([disabled]).md-primary .md-on, md-radio-button:not([disabled]).md-primary .md-on {
+        background-color: #E30613;
+    }
+    md-radio-group.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-group:not([disabled]) .md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-group:not([disabled]) .md-primary.md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-group:not([disabled]).md-primary .md-checked .md-off, md-radio-group.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-group:not([disabled]).md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-button:not([disabled]) .md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-button:not([disabled]) .md-primary.md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-button:not([disabled]).md-primary .md-checked .md-off, md-radio-button.md-default-theme:not([disabled]).md-primary.md-checked .md-off, md-radio-button:not([disabled]).md-primary.md-checked .md-off {
+        border-color: #E30613;
+    }
+
+
+    .contenedorcarpetas
+    {
+
+    }
+    .lineaactas
+    {
+        width:90%;
+        margin-left:5%;
+        border: solid #e3152d 1px;
+        margin-top:4%;
+        margin-bottom:4%;
+    }
+    .carpetas
+    {
+        width: 20%;
+        margin-left: 10%;
+        display: inline-block;
+    }
+    .btnregistrar2
+    {
+        width: 10vw;
+        margin-left: 4%;
+    }
+    .nombrecarpeta
+    {
+        text-align: center;
+        font-size: 1.1vw;
+    }
+    .logoactas
+    {
+        width:1.5vw;
+    }
+    .contenedorlogoactas
+    {
+        width: 50%;
+        margin-left: 25%;
+        text-align: center;
+    }
+    .txtacta
+    {
+        color: #e3152d;
+        font-size: 1.5vw;
+        margin-left: 1%;
+    }
+    .contenedorformulario
+    {
+        width: 90%;
+        margin-left: 5%;
+        background: #e3e3e3;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.19);
+    }
+    .imguser
+    {
+        position: relative;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        left: 1vw;
+        top: 1vh;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .ptituloactas
+    {
+
+    }
+
+    .ctituloactas
+    {
+        width: 75%;
+        margin-left: 5%;
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 1%;
+    }
+    .fechaactas
+    {
+
+    }
+    .lineblack
+    {
+        width: 94%;
+        margin:2% 3%;
+        border: solid #999999 1px;
+        position: relative;
+    }
+    .lineblack1
+    {
+        width: 98%;
+        margin-left: 1%;
+        border: solid #999999 1px;
+        position: relative;
+    }
+    .arcybtn
+    {
+        width: 99%;
+        margin: 2% 0;
+    }
+    .arcadj
+    {
+        width: 7%;
+    }
+    .exami
+    {
+        border-radius: 50%;
+        width: 3vw;
+        height: 3vw;
+        overflow: hidden;
+        margin-left: 3.2vw;
+    }
+   .boxiconoadjunto
+   {
+       width: 20%;
+       display: inline-block;
+   }
+   .publiacta
+   {
+       width: 77%;
+       display: inline-block;
+   }
+   .btnpubliacta
+   {
+       width: 150px;
+       margin-left: 71%;
+       opacity:.6;
+   }
+   .btnpubliacta:hover
+   {
+       opacity: 1;
+   }
+   .vacio
+   {
+        height: 2%;
+   }
+   .elimyedit
+   {
+        /*border: solid black 1px;*/
+        height: 5vh;
+        position: relative;
+   }
+   .icosup
+   {
+       width: 1vw;
+       float: right;
+       margin: 1% 2% 0 0;
+   }
+   .contpubli
+   {
+       /*border: solid navy 1px;*/
+   }
+   .archi
+   {
+       width: 30%;
+       /*border: solid peru 1px;*/
+       display: inline-block;
+   }
+   .infopubli
+   {
+       width: 68%;
+       /*border: solid forestgreen 1px;*/
+       display: inline-block;
+       vertical-align: top;
+   }
+    .titulopubliacta
+    {
+        font-size: 2vw;
+        font-weight: bold;
+        margin: 0;
+    }
+    .imgadj
+    {
+        width: 80%;
+        margin-left: 10%;
+    }
+    .sawgris
+    {
+        width: 4%;
+    }
+    .txtsaw
+    {
+        font-size: 1.2vw;
+        margin-bottom: 0;
+    }
+    .guarda
+    {
+        /*border: solid black 1px;*/
+        margin-top: 1%;
+
+    }
+    .icoguardar
+    {
+        margin-left: 84%;
+        margin-bottom:3%;
+    }
+    .comment
+    {
+        margin: 1% 2% ;
+        /*border: solid navy 1px;*/
+        width: 96%;
+    }
+    .boxciruser
+    {
+        /*border: solid red 1px;*/
+        width: 15%;
+        display: inline-block;
+    }
+    .commetuser
+    {
+        /*border: solid blue 1px;*/
+        width: 80%;
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 2%;
+    }
+    .ciruser
+    {
+        border-radius: 50%;
+        width: 4vw;
+        height: 4vw;
+        left: 3vw;
+        overflow: hidden;
+        margin-left: 30%;
+    }
+    .otrocomment
+    {
+        width: 80%;
+        margin-left:10%;
+    }
+    .photomini
+    {
+        border-radius: 50%;
+        width: 1.6vw;
+        height: 3vh;
+        overflow: hidden;
+        border: solid black 1px;
+        display: inline-block;
+    }
+    .phy
+    {
+        display: inline-block;
+    }
+    .mininame
+    {
+        margin:0;
+        font-size: .9vw;
+        font-family: Arial;
+        font-weight: bold;
+        color: #575756;
+    }
+    .minitxt
+    {
+        margin:0;
+        font-size: .6vw;
+        font-family: Arial;
+        font-weight: normal;
+        color: #575756;
+    }
+    .espacio
+    {
+        height: 2%;
+    }
+</style>
+
+<div class="contenedorcarpetas" ng-if="!xx && !xxx">
+    <div class="contenedorlogoactas"><img src="/img/icono-rojo.png" class="logoactas"><span class="txtacta">Actas</span></div>
+    <div class="lineaactas"></div>
+    <!--tres carpetas -->
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(1)"><p class="nombrecarpeta">SOLUCIONES</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(2)"><p class="nombrecarpeta">FAMILIA IPS</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="seleccorp()"><p class="nombrecarpeta">CORPORACIONES</p></div>
+</div>
+
+<div class="contenedorcarpetas" ng-if="!xx && xxx">
+    <!--11 corpo-->
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(3)"><p class="nombrecarpeta">CORPORACIÓN IPS BOYACÁ</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(4)"><p class="nombrecarpeta">CORPORACIÓN IPS CÓRDOBA</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(5)"><p class="nombrecarpeta">CORPORACIÓN IPS COSTA ATLÁNTICA</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(6)"><p class="nombrecarpeta">CORPORACIÓN IPS EJE CAFETERO</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(7)"><p class="nombrecarpeta">CORPORACIÓN IPS HUILA</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(8)"><p class="nombrecarpeta">CORPORACIÓN IPS LLANOS</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(9)"><p class="nombrecarpeta">CORPORACIÓN IPS NARIÑO</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(10)"><p class="nombrecarpeta">CORPORACIÓN IPS OCCIDENTE</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(11)"><p class="nombrecarpeta">CORPORACIÓN IPS ORIENTE</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(12)"><p class="nombrecarpeta">CORPORACIÓN IPS SANTANDER</p></div>
+    <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(13)"><p class="nombrecarpeta">CORPORACIÓN IPS TOLIMA</p></div>
+</div>
+
+
+<div ng-show="xx">
+    <!--form-->
+    <div  class="contenedorformulario" >
+        <form ng-submit="uploadPic2(picFile)" ng-show="currentUser.adminactas" >
+
+            <div class="imguser">
+                <img src="/img/perro.jpg">
+            </div>
+
+            <div class="ctituloactas">
+                <div class="ptituloactas">
+                    <md-input-container style="width: 100%; margin-bottom: 0">
+                        <label>Título</label>
+                        <input type="text" ng-model="nombre" title="nombre" required/>
+                    </md-input-container>
+                </div>
+
+                <div class="fechaactas">
+                    <md-datepicker ng-model="fecha" md-placeholder="Fecha del acta"></md-datepicker>
+                </div>
+            </div>
+
+            <div class="lineblack"> </div>
+
+            <div class="arcybtn">
+
+                <div class="boxiconoadjunto">
+                    <label for="file-input">
+                        <div class="arcadj">
+                            <img class="exami"  ng-show="myForm.file.$valid" ngf-src="!picFile ? '/img/boton-examinar.png' :(!picFile.$error && picFile)">
+                        </div>
+                    </label>
+                </div>
+
+                <div class="publiacta">
+                    <input type="image" src="/img/botones_publicar.png" class="btnpubliacta"  >
+                </div>
+
+                <div class="vacio"></div>
+
+            </div>
+
+            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="APPLICATION/PDF" ngf-max-size="200MB" ng-hide="true" />
+
+            <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+
+            <div class="li"></div>
+                <span class="progress" ng-show="picFile.progress >= 0">
+                    <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'" class="ng-binding"></div>
+                </span>
+            <span ng-show="picFile.result">Upload Successful</span>
+
+        </form>
+    </div>
+
+    <!--pubds-->
+    <div ng-repeat="ac in actas | filter:search | orderBy: '-'" style=" margin-bottom: 2%" ng-init="mivar = buscarencomentarios(ac)">
+        <div class="contenedorformulario">
+            <div class="elimyedit" ng-show="currentUser.adminactas">
+                <img src="/img/icono-eliminar-g.png" class="icosup">
+                <img src="/img/icono-editar.png" class="icosup">
+            </div>
+            <div class="contpubli">
+                <div class="archi">
+                <a target="_blank" href="{{ac.adjunto}}"><img src="/img/PDF.png" class="imgadj" ></a>
+                    <!--<p></p>-->
+                </div>
+                <div class="infopubli">
+                    <p class="titulopubliacta">{{ac.titulo}}</p>
+                    <p class="txtsaw"> <img src="/img/icono-ron.png" class="sawgris"> {{ac.fecha | moment:'DD'}} de {{ac.fecha | moment:'MMMM'}} {{ac.fecha | moment:'YYYY'}} </p>
+                    <p class="txtsaw"> <img src="/img/icono-ron.png" class="sawgris"> Aprueba este documento</p>
+                    <md-radio-group ng-model="ac.aprobacion">
+                        <md-radio-button value="si" style="display: inline-block" class="md-primary">Si</md-radio-button>
+                        <md-radio-button value="no" style="display: inline-block" class="md-primary">No</md-radio-button>
+                    </md-radio-group>
+                </div>
+            </div>
+
+            <div class="lineblack1"></div>
+
+            <form ng-submit="comentarioActa(ac.cc, ac._id,ac.aprobacion );ac.cc = '';" >
+                <div ng-show="mivar">
+
+                    <div class="comment">
+                        <div class="boxciruser">
+                            <div class="ciruser" >
+                                <img src="/img/perro.jpg">
+                            </div>
+                        </div>
+                        <div class="commetuser">
+                            <md-input-container style="width: 100%; margin: 0 ">
+                                <label>Escribe tu comentario</label>
+                                <input type="text" ng-model="ac.cc"  required>
+                            </md-input-container>
+
+                            <div class="guarda">
+                                <input type="image" src="/img/botones_publicar.png" class="icoguardar"  style="width: 100px;">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div ng-init="ac.aprobaciones = verificarAprobados(ac.comentarios)" ng-show="currentUser.adminactas">
+                        <div ng-repeat="aprob in ac.aprobaciones">
+
+                            <p>{{aprob.nombre}} aprobo: {{aprob.aprobado}} - {{aprob.fecha | moment:'DD'}} de {{aprob.fecha | moment:'MMMM'}} {{aprob.fecha | moment:'YYYY'}} </p>
+                        </div>
+                    </div>
+                    <div class="otrocomment" ng-repeat="com in ac.comentarios">
+                        <div class="photomini">
+
+                        </div>
+
+                        <div class="phy">
+                            <p class="mininame">{{com.nombre}}</p>
+                            <p class="minitxt">{{com.texto}}</p>
+                        </div>
+
+                        <div class="espacio">
+
+                        </div>
+
+                        <!--<p>{{com.aprobado}}</p>-->
+                        <!--<p>{{com.username}}</p>-->
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+

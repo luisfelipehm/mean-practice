@@ -4,6 +4,8 @@ var FormularioSchema = new mongoose.Schema({
     nombre: String,
     author: String,
     descripcion: String,
+    habilitado: Boolean,
+    area: String,
     fecha:Date,
     preguntas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pregunta' }],
     respuestas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Respuesta' }]
