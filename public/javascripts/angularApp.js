@@ -214,7 +214,8 @@ app.factory('gdocuments', ['$http','auth',function($http,auth){
         });
     };
     o.get = function(id) {
-        return $http.get('/gdocuments/' + id).then(function(res){
+        return $http.get('/gdocuments/' + id, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}} ).then(function(res){
             console.log(res.data)
             return res.data;
         });
@@ -611,6 +612,7 @@ app.config(function($mdThemingProvider) {
 app.config([
     '$stateProvider',
     '$urlRouterProvider',
+
     function($stateProvider, $urlRouterProvider) {
 
         $stateProvider
@@ -622,9 +624,14 @@ app.config([
                         templateUrl: 'templates/root.html'
                     }
                 },
-                onEnter: ['$state', 'auth', function($state, auth){
+                onEnter: ['$state', 'auth','$window', function($state, auth,$window){
                     if(auth.isLoggedIn() == false){
                         $state.go('login');
+                    }
+                    var currentUser = auth.currentUser();
+
+                    if(currentUser.gerente  ){
+                        $window.location.href = '#/gerentes/578c14b9a29f6950141106fa';
                     }
                 }],
                 resolve: {
@@ -643,17 +650,19 @@ app.config([
                     }
                 },
                 resolve: {
-                    document: ['$stateParams', 'gdocuments', function($stateParams, gdocuments) {
+                    gdocument: ['$stateParams', 'gdocuments', function($stateParams, gdocuments) {
                         return gdocuments.get($stateParams.id);
                 }]},
                 onEnter: ['$state', 'auth', function($state, auth){
-                    // if(auth.isLoggedIn() == false){
-                    //     $state.go('login');
-                    // }
-                    // var currentUser = auth.currentUser();
-                    // if(!currentUser.gerente || !currentUser.admingerente){
-                    //     $state.go('login');
-                    // }
+                    if(auth.isLoggedIn() == false){
+                        $state.go('login');
+                    }
+                    var currentUser = auth.currentUser();
+                    console.log(currentUser.gerente)
+                    console.log(currentUser.admingerente)
+                    if(!currentUser.gerente && !currentUser.admingerente){
+                        $state.go('home');
+                    }
 
                 }]
             })
@@ -670,17 +679,7 @@ app.config([
             postPromise: ['gdocuments', function(documents){
                 return documents.getAll();
             }]
-        },
-                onEnter: ['$state', 'auth', function($state, auth){
-                    // if(auth.isLoggedIn() == false){
-                    //     $state.go('login');
-                    // }
-                    // var currentUser = auth.currentUser();
-                    // if(!currentUser.gerente || !currentUser.admingerente){
-                    //     $state.go('login');
-                    // }
-
-                }]
+        }
             })
             .state('home', {
                 parent: 'root',
@@ -973,25 +972,45 @@ app.config([
     }]);
 
 
-app.controller('GerentesCtrl',['$scope','auth', function ($scope,auth) {
-    $scope.document = document;
-    console.log(document);
-    $scope.isLoggedIn = auth.isLoggedIn;
+app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http', function ($scope,auth,gdocuments,gdocument,$http) {
+    $scope.document = gdocument;
     $scope.currentUser = auth.currentUser();
+    $scope.document.carpetas = $scope.document.carpetas.filter(function( obj ) {
+        console.log(obj)
+         console.log(    $scope.currentUser.region)
+        return obj.corporacion == $scope.currentUser.region;
+    });
 
+    $scope.document.files = $scope.document.files.filter(function( obj ) {
+        return obj.corporacion == $scope.currentUser.region;
+    });
+
+    $scope.isLoggedIn = auth.isLoggedIn;
+
+
+    console.log($scope.currentUser);
+    $('.ui.dropdown').dropdown();
+    $scope.corpora = [];
+    $http.get('losgerentes').then(function (data) {
+        $scope.corpora = data.data;
+    })
     // users.get($scope.currentUser._id).then(function(user){
     //     $scope.usuario =  user;
     // });
-    $scope.CarpenCarp = function(id){
-        // if($scope.nombre === '') { return; }
-        // console.log($scope.nombre)
-        // gdocuments.addSubFolder(id, {
-        //     nombre: $scope.nombre,
-        //     padre: $scope.id
-        // }).success(function(doc) {
-        //     $scope.document = doc;
-        // });
-        // $scope.nombre = '';
+    $scope.CarpenCarp = function(){
+        var corporacion = angular.element(document.getElementsByName('gender')).attr('value');
+
+        if($scope.carpetaNueva === '') { return; }
+
+        gdocuments.addSubFolder($scope.document._id, {
+            nombre: $scope.carpetaNueva,
+            padre: $scope.document._id,
+            corporacion: corporacion
+        }).success(function(doc) {
+            $scope.document = doc;
+        });
+        $scope.carpetaNueva = '';
+
         
     };
     // $scope.deletecarpeta = function (ar) {

@@ -72,6 +72,9 @@ UserSchema.methods.generateJWT = function() {
         tramitepqrsf: this.tramitepqrsf,
         adminactas: this.adminactas,
         usaactas: this.usaactas,
+        gerente: this.gerente,
+        admingerente: this.admingerente,
+        region: this.region,
 
         exp: parseInt(exp.getTime() / 1000),
     }, 'SECRET');

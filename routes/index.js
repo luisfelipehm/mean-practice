@@ -467,12 +467,19 @@ router.get('/documents/:document', function(req, res, next) {
 
 router.get('/gdocuments/:gdocument', function(req, res, next) {
   console.log(req.document);
-  req.document.populate('files').populate('carpetas','nombre', function(err, document) {
-    if (err) { return next(err);   }
+  req.document.populate('files carpetas', function(err, document) {
+    if (err) {
+      return next(err);
+    }
 
 
     res.json(document);
+
+
   });
+
+    
+
 });
 
 
@@ -552,7 +559,6 @@ router.post('/pqrsf', function(req, res, next){
 
 });
 
-
 router.param('postarea', function(req, res, next, id) {
 
   var query = Postarea.findById(id);
@@ -594,9 +600,6 @@ router.post('/areas/:postarea/comments',auth, function(req, res, next) {
 
 
 });
-
-
-
 
 router.post('/actas/otro', function(req, res, next) {
 
@@ -674,8 +677,6 @@ function removeA(arr) {
   }
   return arr;
 }
-
-
 
 router.post('/pqrsf/:pqrsf', function(req, res, next){
 
@@ -806,6 +807,45 @@ router.post('/documents/:document/documents',auth, function(req, res, next) {
   });
 });
 
+router.post('/gdocuments/:gdocument/gdocuments',auth, function(req, res, next) {
+  var carpeta = new Gfolder(req.body);
+
+  carpeta.padre = req.document._id;
+  // comment.author = req.payload.username;
+
+  carpeta.save(function(err, comment){
+    if(err){ return next(err); }
+
+    req.document.carpetas.push(comment);
+    req.document.save(function(err, document) {
+      if(err){ return next(err); }
+      // var xx = document.carpetas;
+      // var yy = document.files;
+      // document.carpetas = []
+      // document.files = []
+      // for(x = 0; x<xx.length;x++){
+      //   if(xx[x].corporacion == user.region){
+      //     document.carpetas.append(xx[x])
+      //   }
+      //
+      // }
+      // for(y = 0; y<yy.length;y++){
+      //   if(yy[y].corporacion == user.region){
+      //     document.files.append(yy[y])
+      //   }
+      //
+      // }
+      res.json(document);
+      // res.json(document);
+    });
+  });
+});
+
+router.get('/losgerentes', function (req,res,next) {
+  User.find({gerente: true}, function (err,usuarios) {
+    res.json(usuarios)
+  })
+})
 
 // FUNCION PARA DARLE UN TAMANO A LOS ARCHIVOS
 

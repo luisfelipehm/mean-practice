@@ -104,12 +104,22 @@
 <div class="ui four column doubling stackable grid container">
 
     <div class="ui segment" style="width: 100%;">
-        <form ng-submit="CarpenCarp(document)">
+        <form ng-submit="CarpenCarp()">
             <div class="ui input">
                 <input type="text" placeholder="Nombre de la carpeta" ng-model="carpetaNueva">
             </div>
 
-            <button class="ui primary button" ng-click="">
+            <div class="ui selection dropdown">
+                <input type="hidden" name="gender" ng-model="corporacionSelected">
+                <i class="dropdown icon"></i>
+                <div class="default text">Gender</div>
+                <div class="menu">
+                    <div ng-repeat="n in corpora" class="item" data-value="{{n.region}}">{{n.region}}</div>
+
+                </div>
+            </div>
+
+            <button class="ui primary button" ng-click="CarpenCarp()">
                 Crear Carpeta
             </button>
 
@@ -118,70 +128,44 @@
     <table class="ui celled striped table">
         <thead>
             <tr>
-                <th colspan="4">
+                <th colspan="10">
                     Documentos y archivos
                 </th>
             </tr>
             <tr>
-                <th></th>
-                <th>Nombre</th>
-                <th>Tamaño</th>
-                <th>Opciones</th>
+                <th colspan="2"></th>
+                <th colspan="6">Nombre</th>
+                <th colspan="2">Tamaño</th>
+                <th colspan="2">Opciones</th>
             </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="doc in document.carpetas">
-            <td></td>
-            <td><a href="#/gerentes/{{doc._id}}">{{doc.nombre}}</a></td>
-            <td> -- </td>
-            <td><img ng-click="deletecarpeta(doc)" src="img/iconox.png"style="height: 2vh;margin-left: 35%"></td>
+        <tr ng-repeat="doc in document.carpetas" >
+            <td colspan="2"><p style="text-align: center;"><i class="folder icon large"></i></p></td>
+            <td colspan="6"><a style="text-align: center;" href="#/gerentes/{{doc._id}}">{{doc.nombre}}</a></td>
+            <td colspan="2"><p style="text-align: center;">--</p>  </td>
+            <td colspan="2"><p style="text-align: center;"> <i ng-click="deletecarpeta(doc)" class="trash outline icon large"></i></p></td>
         </tr>
 
 
 
+
+
+
+
         <tr>
-            <td class="collapsing">
-                <i class="folder icon"></i> node_modules
-            </td>
-            <td>Initial commit</td>
-            <td class="right aligned collapsing">10 hours ago</td>
-            <td class="right aligned collapsing">10 hours ago</td>
+            <td colspan="2"><p style="text-align: center;"><i class="file outline icon large"></i></p></td>
+
+            <td colspan="6">Gruntfile.js</td>
+            <td colspan="2" class="right aligned"> 54kb</td>
+            <td colspan="2" class="right aligned">10 hours ago</td>
         </tr>
-        <tr>
-            <td>
-                <i class="folder icon"></i> test
-            </td>
-            <td>Initial commit</td>
-            <td class="right aligned">10 hours ago</td>
-            <td class="right aligned">10 hours ago</td>
-        </tr>
-        <tr>
-            <td>
-                <i class="folder icon"></i> build
-            </td>
-            <td>Initial commit</td>
-            <td class="right aligned">10 hours ago</td>
-            <td class="right aligned">10 hours ago</td>
-        </tr>
-        <tr>
-            <td>
-                <i class="file outline icon"></i> package.json
-            </td>
-            <td>Initial commit</td>
-            <td class="right aligned">10 hours ago</td>
-            <td class="right aligned">10 hours ago</td>
-        </tr>
-        <tr>
-            <td>
-                <i class="file outline icon"></i> Gruntfile.js
-            </td>
-            <td>Initial commit</td>
-            <td class="right aligned">10 hours ago</td>
-            <td class="right aligned">10 hours ago</td>
-        </tr>
+
         </tbody>
     </table>
 </div>
+
+<br>
 
 
 
