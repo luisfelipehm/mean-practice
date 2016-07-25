@@ -249,8 +249,11 @@
 
         <div class="cajamenu">
              <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenu">Usuarios</span></a> </li>
+            <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"><span class="txtmenu">Gerentes</span></a> </li>
+
              <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false"><img class="iconorojo" src="/img/icono-rojo.png"> <a style="margin: 0" class="linkmenu"><span class="txtmenu">Departamentos</span></a> </li>
             <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
+
 
                 <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li></a>
                 <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>

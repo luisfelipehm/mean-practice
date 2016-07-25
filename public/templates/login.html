@@ -42,11 +42,7 @@
     }
     .cuadrologin
     {
-        position: absolute;
-        width: 33.5vw;
-        height: 50vh;
-        top: 13vh;
-        left: 56.5vw;
+
     }
     .saw
     {
@@ -63,9 +59,11 @@
         top: 84vh;
         opacity: 0.5;
     }
-    .boxfon
-    {
-
+    .boxfon {
+        background-image: url("/img/fondo.jpg") ;
+        height: 100%;
+        background-position: center center;
+        background-size: cover;
     }
     .endred
     {
@@ -78,7 +76,7 @@
     .imgsvg
     {
         fill:#e3152d;
-        mix-blend-mode: multiply;
+        /*mix-blend-mode: multiply;*/
     }
     #Capa_1
     {
@@ -141,33 +139,33 @@
         left: 65vw;
         top: 5.5vh;
     }
-    .backlogo
-    {
-        position: absolute;
-        width: 10vw;
-        left: 66vw;
-        top: 28vh;
-    }
-    .logob
-    {
-        width: 15vw;
-        height: auto;
-    }
-    .button
-    {
-        position: absolute;
-        left: 76.2vw;
-        top: 61vh;
-    }
-    .user
-    {
-        position: absolute;
-        top: 39vh;
-        left: 65vw;
-        z-index: 10;
-        width: 12vw;
-        height: 7.5vh;
-    }
+    /*.backlogo*/
+    /*{*/
+        /*position: absolute;*/
+        /*width: 10vw;*/
+        /*left: 66vw;*/
+        /*top: 28vh;*/
+    /*}*/
+    /*.logob*/
+    /*{*/
+        /*width: 15vw;*/
+        /*height: auto;*/
+    /*}*/
+    /*.button*/
+    /*{*/
+        /*position: absolute;*/
+        /*left: 76.2vw;*/
+        /*top: 61vh;*/
+    /*}*/
+    /*.user*/
+    /*{*/
+        /*position: absolute;*/
+        /*top: 39vh;*/
+        /*left: 65vw;*/
+        /*z-index: 10;*/
+        /*width: 12vw;*/
+        /*height: 7.5vh;*/
+    /*}*/
     .pwd
     {
         position: absolute;
@@ -211,10 +209,10 @@
     {
         color: white;
     }
-    .infouser
-    {
-        width: 17vw;
-    }
+    /*.infouser*/
+    /*{*/
+        /*width: 17vw;*/
+    /*}*/
     md-input-container.md-default-theme.md-input-invalid .md-input, md-input-container.md-input-invalid .md-input
     {
         border-color: yellow;
@@ -234,10 +232,10 @@
         height: auto;
         padding: 0;
     }
-    .icologin
-    {
-        width: 5.5vw;
-    }
+    /*.icologin*/
+    /*{*/
+        /*width: 5.5vw;*/
+    /*}*/
     .imgClass
     {
         position: absolute;
@@ -253,111 +251,214 @@
         height: 53vh;
         width: auto;
         transform: rotate(-90deg);
+    }
 
+    @media only screen and (max-width : 1000px) {
+        .cuadrologin{
+            width: 100%;
+        }
+        svg{
+            position: absolute;
+            margin-top: 60px;
+        }
+
+        .user{
+            width: 100%;
+        }
+        .infouser{
+            width: 100%;
+            margin: 5px 0;
+        }
+        form{
+            padding-top: 140px;
+            width: 65%;
+            margin:auto;
+        }
+        .icologin{
+            position: relative;
+            z-index: 1;
+            float: right;
+            width:100px;
+        }
+        .backlogo{
+            position: relative;
+        }
+
+        .logob
+        {
+            width: 15vw;
+            height: auto;
+        }
     }
 
 
 </style>
 
-
-<!--Esta es la imagen de fondo-->
-
+<!--Este es el fondo del login-->
 <div class="boxfon">
-    <img class="imgfon" src="/img/fondo.jpg">
-</div>
 
-<!--este es el cuadro del login en svg-->
-<div class="cuadrologin">
+    <div class="cuadrologin">
+
+
 
     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">
+    viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">
     <path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1
-	c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
+    c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
     </svg>
 
     <!--<img class="ficharoja" src="/img/ficha.png">-->
 
+        <div class="backlogo">
+            <img class="logob" src="/img/logoblanco.png">
+        </div>
+
+        <!--Login User-->
+
+
+        <div ng-show="error" class="">
+            <span>{{ error.message }}</span>
+        </div>
+
+        <form ng-submit="usuario.logIn()"
+               name="loginForm">
+            <!--<h3 >Iniciar Sesion</h3>-->
+
+            <div class="user">
+                <md-input-container class="infouser">
+                    <label >Usuario</label>
+                    <input type="text" ng-model="usuario.user.username" required >
+                </md-input-container>
+            </div>
+
+            <div class="user">
+                <md-input-container class="infouser">
+                    <label>Contraseña</label>
+                    <input type="password" ng-model="usuario.user.password" required  name="paswsr">
+                    <p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>
+                    <!--<div ng-messages="loginForm.paswsr.$error">-->
+                    <!--<div ng-message="required">This is required.</div>-->
+                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+                    <!--</div>-->
+                </md-input-container>
+
+            </div>
+
+            <!--<div class="button">-->
+            <!--<img class="icologin" src="/img/icono-login.b.png">-->
+            <!--<input type="submit" value="" class="imgClass"/>-->
+            <!--</div>-->
+
+
+
+                <input type="image"  class="icologin" src="/img/icono-login.b.png">
+
+
+
+        </form>
+
+
+
+    </div>
+
 </div>
 
-<div class="txt">
-    <p class="tittle">¡Su Solución</p>
-    <p class="tittle">Es Nuestro Objetivo!</p>
-</div>
+<!--<div class="boxfon">-->
+    <!--<img class="imgfon" src="/img/fondo.jpg">-->
+<!--</div>-->
+
+<!--este es el cuadro del login en svg-->
+<!--<div class="cuadrologin">-->
+
+    <!--<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"-->
+	 <!--viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">-->
+    <!--<path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1-->
+	<!--c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>-->
+    <!--</svg>-->
+
+    <!--&lt;!&ndash;<img class="ficharoja" src="/img/ficha.png">&ndash;&gt;-->
+
+<!--</div>-->
+
+<!--<div class="txt">-->
+    <!--<p class="tittle">¡Su Solución</p>-->
+    <!--<p class="tittle">Es Nuestro Objetivo!</p>-->
+<!--</div>-->
 
 
-<div class="barrainf">
+<!--<div class="barrainf">-->
 
-</div>
+<!--</div>-->
 
-<div class="sublista1">
-    <p class="list"> Carrera 13 # 37 - 37 Piso 5</p>
-    <p class="list"> info@susolucion.com.co / director.comercial@susolucion.com.co / giovanna.romero@susolucion.com.co / miopinion@susolucion.com.co</p>
-    <p class="list"> Atendemos de Lunes a Viernes 7:30 am - 5:00 pm </p>
-</div>
+<!--<div class="sublista1">-->
+    <!--<p class="list"> Carrera 13 # 37 - 37 Piso 5</p>-->
+    <!--<p class="list"> info@susolucion.com.co / director.comercial@susolucion.com.co / giovanna.romero@susolucion.com.co / miopinion@susolucion.com.co</p>-->
+    <!--<p class="list"> Atendemos de Lunes a Viernes 7:30 am - 5:00 pm </p>-->
+<!--</div>-->
 
-<div class="icosociales">
-    <a href="https://twitter.com" target="_blank"> <img class="imgfa" src="/img/icono-t.png"></a>
-    <a href="https://www.facebook.com" target="_blank"> <img class="imgfa" src="/img/icono-f.png"></a>
-    <a href="https://www.linkedin.com/" target="_blank"> <img class="imgfa" src="/img/icono-i.png"></a>
-</div>
+<!--<div class="icosociales">-->
+    <!--<a href="https://twitter.com" target="_blank"> <img class="imgfa" src="/img/icono-t.png"></a>-->
+    <!--<a href="https://www.facebook.com" target="_blank"> <img class="imgfa" src="/img/icono-f.png"></a>-->
+    <!--<a href="https://www.linkedin.com/" target="_blank"> <img class="imgfa" src="/img/icono-i.png"></a>-->
+<!--</div>-->
 
-<div class="endred">
-    <p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>
-</div>
+<!--<div class="endred">-->
+    <!--<p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>-->
+<!--</div>-->
 
 <!--Logo Soluciones-->
-<div class="backlogo">
-    <img class="logob" src="/img/logoblanco.png">
-</div>
+<!--<div class="backlogo">-->
+    <!--<img class="logob" src="/img/logoblanco.png">-->
+<!--</div>-->
 
 <!--checkbox-->
 
-<div class="boxcheck">
-    <input type="checkbox"/> No cerrar sesión <label style="margin-left: 4.4vw">¿Olvidaste tu Contraseña?</label>
-</div>
+<!--<div class="boxcheck">-->
+    <!--<input type="checkbox"/> No cerrar sesión <label style="margin-left: 4.4vw">¿Olvidaste tu Contraseña?</label>-->
+<!--</div>-->
 
 
 
 
 <!-- LOGIN DE USUARIO -->
 
-<div ng-show="error" class="">
-    <span>{{ error.message }}</span>
-</div>
+<!--<div ng-show="error" class="">-->
+    <!--<span>{{ error.message }}</span>-->
+<!--</div>-->
 
-<form ng-submit="usuario.logIn()"
-      style="margin-top:30px;" name="loginForm">
-    <!--<h3 >Iniciar Sesion</h3>-->
+<!--<form ng-submit="usuario.logIn()"-->
+      <!--style="margin-top:30px;" name="loginForm">-->
+    <!--&lt;!&ndash;<h3 >Iniciar Sesion</h3>&ndash;&gt;-->
 
-    <div class="user">
-        <md-input-container class="infouser">
-            <label >Usuario</label>
-            <input type="text" ng-model="usuario.user.username" required >
-        </md-input-container>
-    </div>
-
-    <div class="pwd">
-        <md-input-container class="infouser">
-            <label>Contraseña</label>
-            <input type="password" ng-model="usuario.user.password" required  name="paswsr">
-            <p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>
-            <!--<div ng-messages="loginForm.paswsr.$error">-->
-                <!--<div ng-message="required">This is required.</div>-->
-                <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
-            <!--</div>-->
-        </md-input-container>
-
-    </div>
-
-    <!--<div class="button">-->
-        <!--<img class="icologin" src="/img/icono-login.b.png">-->
-        <!--<input type="submit" value="" class="imgClass"/>-->
+    <!--<div class="user">-->
+        <!--<md-input-container class="infouser">-->
+            <!--<label >Usuario</label>-->
+            <!--<input type="text" ng-model="usuario.user.username" required >-->
+        <!--</md-input-container>-->
     <!--</div>-->
 
-    <div class="button" >
+    <!--<div class="pwd">-->
+        <!--<md-input-container class="infouser">-->
+            <!--<label>Contraseña</label>-->
+            <!--<input type="password" ng-model="usuario.user.password" required  name="paswsr">-->
+            <!--<p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>-->
+            <!--&lt;!&ndash;<div ng-messages="loginForm.paswsr.$error">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div ng-message="required">This is required.</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</md-input-container>-->
 
-            <input type="image"  class="icologin" src="/img/icono-login.b.png">
+    <!--</div>-->
 
-    </div>
+    <!--&lt;!&ndash;<div class="button">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img class="icologin" src="/img/icono-login.b.png">&ndash;&gt;-->
+        <!--&lt;!&ndash;<input type="submit" value="" class="imgClass"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-</form>
+    <!--<div class="button" >-->
+
+            <!--<input type="image"  class="icologin" src="/img/icono-login.b.png">-->
+
+    <!--</div>-->
+
+<!--</form>-->

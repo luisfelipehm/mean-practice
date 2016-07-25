@@ -78,6 +78,80 @@
          padding-left: 0;
          padding-right: 0;
     }
+    .content {
+         position: static;
+         z-index: 10;
+         top: -10vh;
+         display: inline-block;
+         width: auto !important;
+         background-color: transparent;
+         /*min-height: 100%;*/
+         height: auto;
+         margin-top: 0;
+         vertical-align: top;
+    }
+
+
+
+    /*!*el mmodal*!*/
+
+    /*.modal {*/
+        /*display: block; !* Hidden by default *!*/
+        /*position: fixed; !* Stay in place *!*/
+        /*z-index: 1000; !* Sit on top *!*/
+        /*padding-top: 100px; !* Location of the box *!*/
+        /*left: 0;*/
+        /*top: 0;*/
+        /*width: 100%; !* Full width *!*/
+        /*height: 100%; !* Full height *!*/
+        /*overflow: auto; !* Enable scroll if needed *!*/
+        /*background-color: rgb(0,0,0); !* Fallback color *!*/
+        /*background-color: rgba(0,0,0,0.4); !* Black w/ opacity *!*/
+    /*}*/
+
+    /*!* Modal Content *!*/
+    /*.modal-content {*/
+        /*background-color: #fefefe;*/
+        /*margin: auto;*/
+        /*padding: 20px;*/
+        /*border: 1px solid #888;*/
+        /*width: 420px;*/
+        /*margin-top: 200px ;*/
+    /*}*/
+
+    /*!* The Close Button *!*/
+    /*.close {*/
+        /*color: #aaaaaa;*/
+        /*float: right;*/
+        /*font-size: 28px;*/
+        /*font-weight: bold;*/
+    /*}*/
+
+    /*.close:hover,*/
+    /*.close:focus {*/
+        /*color: #000;*/
+        /*text-decoration: none;*/
+        /*cursor: pointer;*/
+    /*}*/
+    /*.tablagen{*/
+        /*display: table;*/
+    /*}*/
+    /*.fila{*/
+        /*display: table-row;*/
+    /*}*/
+    /*.col{*/
+        /*!*display: table-cell;*!*/
+        /*padding: 12px;*/
+        /*background: #ddd;*/
+    /*}*/
+
+
+
+
+
+
+
+
 </style>
 
 
@@ -101,9 +175,58 @@
 <!--</div>-->
 
 
+
+<!-- The Modal -->
+
+<div class="ui modal" >
+    <i class="close icon"></i>
+    <div class="header">
+        Cambiar contraseña
+    </div>
+    <div class="image content">
+        <div class="ui medium image">
+        </div>
+        <div class="description">
+            <div class="col"> Inserte su nueva contraseña</div>
+            <div class="col">
+                <div class="ui input">
+                    <input type="password" placeholder="" ng-model="pass1">
+                </div>
+            </div>
+            <div class="col"> Repita la contraseña</div>
+            <div class="col">
+                <div class="ui input">
+                    <input type="password" placeholder="" ng-model="pass2">
+                </div>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+
+            <!--<div class="ui header">We've auto-chosen a profile image for you.</div>-->
+            <!--<p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>-->
+            <!--<p>Is it okay to use this photo?</p>-->
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancelar
+        </div>
+        <div class="ui positive right labeled icon button" style="background: #2185D0" ng-click="change()">
+            Aceptar
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 <div class="ui four column doubling stackable grid container">
 
-    <div class="ui segment" style="width: 100%;">
+    <div class="ui segment" style="width: 100%;" ng-show="currentUser.admingerente">
         <form ng-submit="CarpenCarp()">
             <div class="ui input">
                 <input type="text" placeholder="Nombre de la carpeta" ng-model="carpetaNueva">
@@ -112,7 +235,7 @@
             <div class="ui selection dropdown">
                 <input type="hidden" name="gender" ng-model="corporacionSelected">
                 <i class="dropdown icon"></i>
-                <div class="default text">Gender</div>
+                <div class="default text">Privacidad</div>
                 <div class="menu">
                     <div ng-repeat="n in corpora" class="item" data-value="{{n.region}}">{{n.region}}</div>
 
@@ -125,10 +248,90 @@
 
         </form>
     </div>
+
+    <div class="ui segment" ng-show="currentUser.admingerente">
+        <form  enctype="multipart/form-data" name="myForm2" style="margin: 0" ng-submit="uploadPic(picFile)" name="fileForm">
+
+            <!--<div class="container">-->
+            <!--<span class="select-wrapper">-->
+            <!--<input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="true"  name="file"  ngf-max-size="200MB" required />-->
+            <!--</span>-->
+            <!--</div>-->
+
+            <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+            <img ng-show="myForm.file.$valid" ngf-src="!picFile.$error && picFile" class="thumb">
+
+            <p style="margin-left: 3vw; font-size: 1vw; font-weight: bold">Archivos:</p>
+            <div class="ui selection dropdown">
+                <input type="hidden" name="gender2">
+                <i class="dropdown icon"></i>
+                <div class="default text">Privacidad</div>
+                <div class="menu">
+                    <div ng-repeat="n in corpora" class="item" data-value="{{n.region}}">{{n.region}}</div>
+
+                </div>
+            </div>
+
+
+
+            <div class="ui list">
+
+                <!--<div ng-repeat="f in picFile" style="margin-left: 6vw; margin-top: 1vh ">-->
+                    <!--<li >-->
+                        <!--{{f.name}} {{f.$errorParam}}-->
+                    <!--</li>-->
+                          <!--<span class="progress" ng-show="f.progress >= 0">-->
+                            <!--<div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>-->
+                          <!--</span>-->
+                <!--</div>-->
+                <div class="item" ng-repeat="f in picFile">
+                    <i class="file outline icon"></i>
+                    <div class="content">
+                        {{f.name}}  {{errorMsg}}
+                        <!--<span class="progress" ng-show="f.progress >= 0">-->
+                            <!--<div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>-->
+                          <!--</span>-->
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+            </li>
+
+
+
+
+            <!--<md-button type="submit"  class="md-raised"> Publicar </md-button>-->
+            <label for="image_src">
+                <i class="upload icon big" style="cursor: pointer;"></i>
+            </label>
+
+
+            <input type="file"style="display: none;"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="true"  name="file"  ngf-max-size="200MB" required  />
+
+
+
+            <button class="ui primary button" style="float: right;">
+                Subir
+            </button>
+
+        </form>
+
+    </div>
+
+    <div style="width: 80%; border: 3px solid transparent;position: relative;">
+    <button class="ui primary button" id="myBtn" ng-click="mostrarModal()" style="position: absolute; right:0;bottom: 0;">
+        Cambiar Contraseña
+    </button>
+    </div>
+
     <table class="ui celled striped table">
         <thead>
             <tr>
-                <th colspan="10">
+                <th colspan="12">
                     Documentos y archivos
                 </th>
             </tr>
@@ -144,7 +347,7 @@
             <td colspan="2"><p style="text-align: center;"><i class="folder icon large"></i></p></td>
             <td colspan="6"><a style="text-align: center;" href="#/gerentes/{{doc._id}}">{{doc.nombre}}</a></td>
             <td colspan="2"><p style="text-align: center;">--</p>  </td>
-            <td colspan="2"><p style="text-align: center;"> <i ng-click="deletecarpeta(doc)" class="trash outline icon large"></i></p></td>
+            <td colspan="2"><p style="text-align: center;"> <i ng-show="currentUser.username == 'dfapolinarm' || currentUser.username == 'ivantrips' || currentUser.username == 'adminsoft'" ng-click="deletecarpeta(doc)" class="trash outline icon large"></i></p></td>
         </tr>
 
 
@@ -153,17 +356,19 @@
 
 
 
-        <tr>
+        <tr ng-repeat="f in document.files">
             <td colspan="2"><p style="text-align: center;"><i class="file outline icon large"></i></p></td>
-
-            <td colspan="6">Gruntfile.js</td>
-            <td colspan="2" class="right aligned"> 54kb</td>
-            <td colspan="2" class="right aligned">10 hours ago</td>
+            <td colspan="6"><a  href="{{f.adjunto}}">{{f.nombre}}</a></td>
+            <td colspan="2" class="right aligned"><p style="text-align: center;">{{f.tamano}}</p></td>
+            <td colspan="2" class="right aligned"><p style="text-align: center;"><i ng-show="currentUser.username == 'dfapolinarm' || currentUser.username == 'ivantrips' || currentUser.username == 'adminsoft'" ng-click="deletearchivo(f)" class="trash outline icon large"></i></p></td>
         </tr>
 
         </tbody>
     </table>
 </div>
+
+
+
 
 <br>
 

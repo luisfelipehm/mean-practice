@@ -378,7 +378,7 @@
          <div class="boxinuseredit">
 
              <form ng-if="editing" enctype="multipart/form-data" name="myForm"
-                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf,user.cumpleanos],user._id);editing = false;">
+                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf,user.cumpleanos,user.admingerente],user._id);editing = false;">
 
                  <div class=" lineahgris"></div>
                  <h3 class="tittleedit">Editar</h3>
@@ -481,6 +481,9 @@
 
                          <md-checkbox ng-model="user.adminfotos" class="red" >
                              Crear Albums de fotos
+                         </md-checkbox>
+                         <md-checkbox ng-model="user.admingerente" class="red" >
+                             Alimentar Carpetas de gerentes
                          </md-checkbox>
                      </div>
 

@@ -466,7 +466,7 @@ router.get('/documents/:document', function(req, res, next) {
 });
 
 router.get('/gdocuments/:gdocument', function(req, res, next) {
-  console.log(req.document);
+  console.log(req.document) ;
   req.document.populate('files carpetas', function(err, document) {
     if (err) {
       return next(err);
@@ -623,6 +623,19 @@ router.post('/actas/otro', function(req, res, next) {
 
   
 });
+
+
+
+router.post('/cambiocontra', function(req, res, next) {
+
+  User.findById({_id: req.body.id}, function (err,usuario) {
+    usuario.setPassword(req.body.pass1);
+    usuario.save();
+    res.json("se actualizo")
+
+  });
+  
+  });
 
 router.post('/actas',auth, upload.single('file'), function(req, res, next) {
 
@@ -845,6 +858,7 @@ router.get('/losgerentes', function (req,res,next) {
   User.find({gerente: true}, function (err,usuarios) {
     res.json(usuarios)
   })
+
 })
 
 // FUNCION PARA DARLE UN TAMANO A LOS ARCHIVOS
@@ -897,7 +911,7 @@ router.post('/chat/adjuntos',auth, upload.single('file'), function(req, res, nex
 //ARCHIVOS DE LAS CARPETAS EN LA PARTE DOCUMENTAL
 router.post('/documents/:document/files',auth, upload.single('file'), function(req, res, next) {
 
-  console.log('error');
+  // console.log('error');
     var file = new File();
     file.author = req.payload.username;
     file.nombre = req.body.nombre;
@@ -922,6 +936,37 @@ router.post('/documents/:document/files',auth, upload.single('file'), function(r
 
     });
 });
+
+
+router.post('/gdocuments/:gdocument/files',auth, upload.single('file'), function(req, res, next) {
+
+  var file = new Gfile();
+
+  file.nombre = req.body.nombre;
+  file.corporacion = req.body.corporacion;
+  file.filename = req.body.nombre;
+  file.fecha =  Date.now();
+  file.tamano = getReadableFileSizeString(req.file.size);
+  file.adjunto = '/uploads2/'+req.file.filename;
+  file.padre = req.document._id;
+  file.save(function(err, files){
+    if(err){ return next(err); }
+
+    req.document.files.push(file);
+    req.document.save(function(err, document) {
+      if(err){ return next(err); }
+      var query = Gfolder.findById({_id:document._id});
+      query.populate('files carpetas').exec(function (err, document){
+        if (err) { return next(err); }
+        res.json(document)
+      });
+
+    });
+
+  });
+});
+
+
 // PARAMETRO DE PUBLICACION
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
@@ -1030,6 +1075,27 @@ router.delete('/folder/:_id',auth, function(req, res,next){
   });
 });
 
+router.delete('/gfolder/:_id',auth, function(req, res,next){
+  //padre
+
+  Gfolder.findById( req.params._id, function ( err, ar ){
+    var padres = ar.padre;
+    if(ar){
+      ar.remove( function ( err, arf ){
+        if (err) { return next(err); }
+        console.log(padres);
+        var query = Gfolder.findById(padres);
+        query.populate('files carpetas').exec(function (err, document){
+          if (err) { return next(err); }
+
+          res.json(document)
+        });
+
+      });
+    }
+  });
+});
+
 router.delete('/file/:_id/:document',auth, function(req, res,next){
 
 
@@ -1042,12 +1108,34 @@ router.delete('/file/:_id/:document',auth, function(req, res,next){
       if (err) { return next(err); }
       console.log(padres);
       var query = Folder.findById(padres);
-      query.populate('files').populate('carpetas').exec(function (err, document){
+      query.populate('files carpetas').exec(function (err, document){
         if (err) { return next(err); }
 
         res.json(document)
       });
     });
+    }
+  });
+});
+
+router.delete('/gfile/:_id/:gdocument',auth, function(req, res,next){
+
+
+
+  //folder
+  Gfile.findById( req.params._id, function ( err, ar ){
+    var padres = req.params.gdocument;
+    if(ar){
+      ar.remove( function ( err, arf ){
+        if (err) { return next(err); }
+        console.log(padres);
+        var query = Gfolder.findById(padres);
+        query.populate('files carpetas').exec(function (err, document){
+          if (err) { return next(err); }
+
+          res.json(document)
+        });
+      });
     }
   });
 });
@@ -1199,10 +1287,7 @@ router.get('/asignables', function(req, res, next) {
 
 router.post('/users', function(req, res, next){
 console.log(req.body);
-  if(!req.body.username || !req.body.password){
-    console.log('hola');
-    return res.status(400).json({message: 'Please fill out all fields'});
-  }
+
 
   var user = new User(req.body);
 
@@ -1210,7 +1295,7 @@ console.log(req.body);
 
   user.setPassword(req.body.password);
   user.save(function (err, user){
-    if(err){ return next(err); }
+  if(err){ return next(err); }
 
 
   });
@@ -1245,6 +1330,7 @@ router.post('/users/:_id', function(req, res, next){
     name.adminpqrsf =     req.body.adminpqrsf;
     name.cumpleanos =     req.body.cumpleanos;
     name.tramitepqrsf =   req.body.tramitepqrsf;
+    name.admingerente =   req.body.admingerente;
     name.save();
     res.json(name);
   });
@@ -1325,14 +1411,30 @@ router.post('/usersf',auth,upload.single('file'), function(req, res, next){
 
 
 router.post('/gerentes', function (req,res,next) {
-  gerente = new User(req.body);
-  gerente.setPassword(req.body.password);
-  gerente.gerente = true;
-  gerente.save(function (err){
-    if(err){ return next(err); }
 
-    return res.json("Se registro")
+    gerente = new User(req.body);
+    gerente.setPassword(req.body.password);
+    gerente.gerente = true;
+    gerente.save(function (err){
+      if(err){ return next(err); }
+
+      return res.json("Se registro")
+    });
+
+  if(!req.body.username || !req.body.password){
+    return res.status(400).json({message: 'Please fill out all fields'});
+  }
+
+  
+  
+  var user = new User();
+  user.username = req.body.pass1;
+  user.setPassword(req.body.password);
+  user.save(function (err){
+    if(err){ return next(err); }
+    return res.json({token: user.generateJWT()})
   });
+
 });
 
 

@@ -6,7 +6,7 @@ var GfileSchema = new mongoose.Schema({
     nombre: String,
     tamano: String,
     fecha: String,
-    folder: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder' },
+    folder: { type: mongoose.Schema.Types.ObjectId, ref: 'Gfolder' },
     corporacion: String
 });
 

@@ -627,11 +627,11 @@ app.config([
                 onEnter: ['$state', 'auth','$window', function($state, auth,$window){
                     if(auth.isLoggedIn() == false){
                         $state.go('login');
+
                     }
                     var currentUser = auth.currentUser();
-
                     if(currentUser.gerente  ){
-                        $window.location.href = '#/gerentes/578c14b9a29f6950141106fa';
+                        $state.go('gerentes',{id: "578991c6a809558427456951"});
                     }
                 }],
                 resolve: {
@@ -658,8 +658,9 @@ app.config([
                         $state.go('login');
                     }
                     var currentUser = auth.currentUser();
-                    console.log(currentUser.gerente)
-                    console.log(currentUser.admingerente)
+                    // console.log(currentUser.gerente)
+                    // console.log(currentUser.admingerente)
+                    // console.log(!currentUser.gerente && !currentUser.admingerente)
                     if(!currentUser.gerente && !currentUser.admingerente){
                         $state.go('home');
                     }
@@ -972,19 +973,18 @@ app.config([
     }]);
 
 
-app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http', function ($scope,auth,gdocuments,gdocument,$http) {
+app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http','$timeout','Upload', function ($scope,auth,gdocuments,gdocument,$http,$timeout,Upload) {
     $scope.document = gdocument;
     $scope.currentUser = auth.currentUser();
-    $scope.document.carpetas = $scope.document.carpetas.filter(function( obj ) {
-        console.log(obj)
-         console.log(    $scope.currentUser.region)
-        return obj.corporacion == $scope.currentUser.region;
-    });
+    if($scope.currentUser.gerente){
+        $scope.document.carpetas = $scope.document.carpetas.filter(function( obj ) {
+            return obj.corporacion == $scope.currentUser.region;
+        });
 
-    $scope.document.files = $scope.document.files.filter(function( obj ) {
-        return obj.corporacion == $scope.currentUser.region;
-    });
-
+        $scope.document.files = $scope.document.files.filter(function( obj ) {
+            return obj.corporacion == $scope.currentUser.region;
+        });
+    }
     $scope.isLoggedIn = auth.isLoggedIn;
 
 
@@ -1013,61 +1013,93 @@ app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http',
 
         
     };
-    // $scope.deletecarpeta = function (ar) {
-    //     return $http.delete('/folder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
-    //         .success(function(data) {
-    //             $scope.document = data;
-    //         })
-    //         .error(function(data) {
-    //             console.log('Error: ' + data);
-    //         });
-    // };
-    // $scope.deletearchivodocs = function (ar) {
-    //     return $http.delete('/file/' + ar._id + '/' + $scope.document._id,  {data:{padreidx: $scope.document._id},headers: {Authorization: 'Bearer '+auth.getToken()}})
-    //         .success(function(data) {
-    //             $scope.document = data;
-    //         })
-    //         .error(function(data) {
-    //             console.log('Error: ' + data);
-    //         });
-    // };
 
-    // $scope.uploadPic = function(files) {
-    //
-    //
-    //
-    //     angular.forEach(files, function(file) {
-    //         file.upload = Upload.upload({
-    //             url: '/documents/'+ $scope.document._id + '/files',
-    //             data:{id: $scope.document._id,file:file,nombre: file.name},
-    //             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
-    //         });
-    //
-    //         file.upload.then(function (response) {
-    //             $timeout(function () {
-    //                 file.result = response.data;
-    //             });
-    //         }, function (response) {
-    //             if (response.status > 0)
-    //                 $scope.errorMsg = response.status + ': ' + response.data;
-    //         }, function (evt) {
-    //             file.progress = Math.min(100, parseInt(100.0 *
-    //                 evt.loaded / evt.total));
-    //         });
-    //         file.upload.progress(function (evt) {
-    //             // Math.min is to fix IE which reports 200% sometimes
-    //             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-    //             console.log("PostController: upload progress " + file.progress);
-    //         });
-    //         file.upload.success(function (data, status, headers, config) {
-    //             console.log(data)
-    //             $scope.document = data;
-    //         });
-    //
-    //
-    //     });
-    //
-    // };
+    $scope.mostrarModal= function () {
+        $('.ui.modal').modal('show');
+
+    }
+
+
+
+    $scope.change = function () {
+        if($scope.pass1==$scope.pass2){
+
+            return $http.post('/cambiocontra', {
+                id: $scope.currentUser._id,
+                pass1: $scope.pass1
+            }, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            }).then(function(data){
+                console.log(data.data)
+                alert('Se ha realizado el proceso satisfactoriamente');
+            },function (err) {
+                alert('Ha ocurrido un error');
+            });
+
+
+        }else{
+            alert('Las contraseñas no coinciden');
+        }
+        
+    }
+    
+    
+    $scope.deletecarpeta = function (ar) {
+        return $http.delete('/gfolder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $scope.document = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+    $scope.deletearchivo = function (ar) {
+        return $http.delete('/gfile/' + ar._id + '/' + $scope.document._id,  {data:{padreidx: $scope.document._id},headers: {Authorization: 'Bearer '+auth.getToken()}})
+            .success(function(data) {
+                $scope.document = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.uploadPic = function(files) {
+
+
+
+        angular.forEach(files, function(file) {
+            var corporacion = angular.element(document.getElementsByName('gender2')).attr('value');
+            file.upload = Upload.upload({
+                url: '/gdocuments/'+ $scope.document._id + '/files',
+                data:{id: $scope.document._id,file:file,nombre: file.name,corporacion: corporacion},
+                headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 *
+                    evt.loaded / evt.total));
+            });
+            file.upload.progress(function (evt) {
+                // Math.min is to fix IE which reports 200% sometimes
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                console.log("PostController: upload progress " + file.progress);
+            });
+            file.upload.success(function (data, status, headers, config) {
+                console.log(data)
+                $scope.document = data;
+            });
+
+
+        });
+
+    };
 }]);
 
 app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout','actas', function ($scope,auth,users,Upload,$http,$timeout,actas) {
@@ -1474,7 +1506,8 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 adminusers:     datos[19],
                 tramitepqrsf:   datos[20],
                 cumpleanos:      datos[21],
-                elid: id
+                elid: id,
+                admingerente:      datos[22],
             },id);
             users.getAll();
         }else{
@@ -1505,6 +1538,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                     tramitepqrsf:   datos[20],
                     cumpleanos:      datos[21],
                     elid: id},
+                    admingerente:      datos[22],
 
                 file: file,
                 headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
