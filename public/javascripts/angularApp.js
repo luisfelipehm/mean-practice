@@ -380,6 +380,13 @@ app.factory('users', ['$http','auth',function($http,auth){
 
     o.getAll = function() {
         return $http.get('/users').success(function(data){
+
+            angular.forEach(data, function (us) {
+
+                if(us.carpetasAdicionales){
+                    us.carpetasAdicionales = us.carpetasAdicionales.split("~")
+                }
+            })
             angular.copy(data, o.users);
         });
     };
@@ -640,7 +647,6 @@ app.config([
                     }]}
 
             })
-
             .state('gerentes', {
                 url: '/gerentes/{id}',
                 views: {
@@ -752,7 +758,7 @@ app.config([
             })
             .state('fotox', {
                 parent: 'root',
-                url: '/fotos/',
+                url: '/fotos',
                 templateUrl: 'templates/fotos.html',
                 controller: 'FotosCtrl',
                 resolve: {
@@ -869,7 +875,6 @@ app.config([
                     if(currentUser.tramitepqrsf){
                         $state.go('tramitepq');
                     }else if(currentUser.adminpqrsf){
-                        console.log('wtffffff')
                         $state.go('adminpq');
                     }else{
                         $state.go('pqrsfuser');
@@ -957,28 +962,81 @@ app.config([
                         return formularios.getResults($stateParams.id);
                     }]}
 
-            });
-        //    .state('document', {
-        //    url: '/document/{id}',
-        //    templateUrl: 'templates/document.html',
-        //    controller: 'DocumentCtrl',
-        //    resolve: {
-        //        document: ['$stateParams', 'document', function($stateParams, document) {
-        //            return document.get($stateParams.id);
-        //        }]}
-        //})
+            })
+            .state('mensajes', {
+                parent: 'root',
+                url: '/mensajes',
+                templateUrl: 'templates/mensajes.html',
+                controller: 'MensajesCtrl',
+
+                resolve: {
+                    // postPromise: ['actas', function(actas){
+                    //     return actas.getAll();
+                    // }]
+                }
+            })
 
 
         $urlRouterProvider.otherwise('/root/home');
     }]);
 
 
+app.controller('MensajesCtrl', ['$scope','auth','$http', function ($scope,auth,$http) {
+    $scope.currentUser = auth.currentUser();
+    var mens = []
+
+
+    $http.get('/mensajesNoChat/'+ $scope.currentUser.username ).then(function (response) {
+       console.log(response.data)
+    });
+    // $scope.areas = areas.areas;
+    // $scope.crearArea = function () {
+    //     if(!$scope.nombre || $scope.nombre === '') { return; }
+    //     areas.create({
+    //         nombre: $scope.nombre
+    //     });
+    //     $scope.nombre = '';
+    //     areas.getAll();
+    //     $scope.areas = areas.areas;
+    // };
+    //
+    // $scope.editararea= function(id,datico){
+    //
+    //     return $http.post('/areas/' + id+'/editando',{_id: id,nombre: datico},{headers: {Authorization: 'Bearer '+auth.getToken()}})
+    //         .success(function(data) {
+    //             areas.getAll();
+    //             $scope.areas = areas.areas;
+    //         })
+    //         .error(function(data) {
+    //             console.log('Error: ' + data);
+    //         });
+    //
+    //
+    // };
+    // $scope.deletearea = function (ar) {
+    //     return $http.delete('/areas/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+    //         .success(function(data) {
+    //             areas.getAll();
+    //             $scope.areas = areas.areas;
+    //         })
+    //         .error(function(data) {
+    //             console.log('Error: ' + data);
+    //         });
+    // };
+
+
+
+
+
+}]);
+
 app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http','$timeout','Upload', function ($scope,auth,gdocuments,gdocument,$http,$timeout,Upload) {
     $scope.document = gdocument;
     $scope.currentUser = auth.currentUser();
+    console.log($scope.currentUser);
     if($scope.currentUser.gerente){
         $scope.document.carpetas = $scope.document.carpetas.filter(function( obj ) {
-            return obj.corporacion == $scope.currentUser.region;
+            return obj.corporacion == $scope.currentUser.region || ($scope.currentUser.carpetasAdicionales ? $scope.currentUser.carpetasAdicionales.indexOf(obj.corporacion) !== -1 : false);
         });
 
         $scope.document.files = $scope.document.files.filter(function( obj ) {
@@ -1468,12 +1526,73 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
     //});
 
     $scope.registrarGerente = function () {
-        $http.post('/gerentes', {username: $scope.gereUsername,password:  $scope.gerePassword, nombre: $scope.gereNombre,apellido:  $scope.gereApellido, region:   $scope.corpo }).then(function (data) {
+        // console.log($scope.carpetasSeleccionadas)
+        // console.log( typeof $scope.carpetasSeleccionadas)
+        $scope.cscs = $scope.carpetasSeleccionadas.join("~")
+
+        $http.post('/gerentes', {username: $scope.gereUsername,password:  $scope.gerePassword, nombre: $scope.gereNombre,apellido:  $scope.gereApellido, region:   $scope.corpo, carpetasAdicionales: $scope.cscs }).then(function (data) {
             alert("Se registro el gerente exitosamente");
         }, function (err) {
             alert("Ocurrio un error");
         })
     };
+
+///*////////////////////esto fue lo que meti////////////////////////////////////////////
+
+
+
+    $scope.RedCarpet = function () {
+        $http.get('losgerentes').then(function (data) {
+            $scope.carpetasGerentes = data.data;
+        });
+        // $http.get('/gdocuments/578991c6a809558427456951')
+        //     .then(function (data) {
+        //         $scope.carpetasGerentes = data.data.carpetas;
+        //     },function (err) {
+        //
+        //     });
+    };
+
+    $scope.RedCarpet2 = function () {
+        $http.get('losgerentes').then(function (data) {
+            $scope.carpetasGerentes2 = data.data;
+        });
+
+    };
+
+
+    $scope.anadirCarpeta= function () {
+        if($scope.carpetasSeleccionadas.indexOf($scope.lacarpeta) !== -1) {
+            // alert("sdas")
+        }else {
+            $scope.carpetasSeleccionadas.push($scope.lacarpeta)
+        }
+    };
+
+    $scope.anadirCarpeta2= function (id,us) {
+        if(!us.carpetasAdicionales){
+            us.carpetasAdicionales = []
+        }
+
+        if(us.carpetasAdicionales.indexOf(id) !== -1) {
+            // alert("sdas")
+        }else {
+            us.carpetasAdicionales.push(id)
+        }
+
+    };
+
+
+    $scope.borrar2 = function (id,us) {
+        us.carpetasAdicionales.splice(id, 1);
+    }
+    $scope.borrar = function (id) {
+        $scope.carpetasSeleccionadas.splice(id, 1);
+    }
+    
+    $scope.carpetasSeleccionadas = [];
+    $scope.carpetasSeleccionadas2 = [];
+/////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -1481,6 +1600,12 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
 
 
     $scope.uploadPic2 = function (file,datos,id) {
+        if(datos[23]){
+            var cppppppp = datos[23].join("~")
+        } else {
+            var cppppppp = null;
+        }
+
         if(file==undefined)
         {
             users.edit({
@@ -1508,6 +1633,8 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                 cumpleanos:      datos[21],
                 elid: id,
                 admingerente:      datos[22],
+                carpetasAdicionales:      cppppppp,
+
             },id);
             users.getAll();
         }else{
@@ -1539,7 +1666,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
                     cumpleanos:      datos[21],
                     elid: id},
                     admingerente:      datos[22],
-
+                carpetasAdicionales:      cppppppp,
                 file: file,
                 headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
 
@@ -2877,7 +3004,13 @@ app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http
     $scope.usuariosconectados = [];
     $scope.currentUser = auth.currentUser();
     $scope.isLoggedIn = auth.isLoggedIn;
-    $scope.titleize = function (text) {return text.charAt(0).toUpperCase() + text.slice(1);};
+    $scope.titleize = function (text) {
+        if(text){
+            return text.charAt(0).toUpperCase() + text.slice(1);
+        }else{
+            return text
+        }
+    };
     $scope.actualizarUsers = function () {return $http.get('/conectados').success(function(data){ angular.copy(data,$scope.usuariosconectados)});
     };
     // * ESTE GET TRAE LA INFORMACION DEL USUARIO YA QUE EL TOKEN NECESITA RENOVARSE (CERRAR SESION) PARA PODER ACTUALIZAR LOS DATOS

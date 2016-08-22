@@ -33,7 +33,8 @@ var UserSchema = new mongoose.Schema({
     adminactas:Boolean,
     usaactas: Boolean,
     gerente: Boolean,
-    admingerente: Boolean
+    admingerente: Boolean,
+    carpetasAdicionales: String,
 });
 
 
@@ -75,7 +76,7 @@ UserSchema.methods.generateJWT = function() {
         gerente: this.gerente,
         admingerente: this.admingerente,
         region: this.region,
-
+        carpetasAdicionales: (this.carpetasAdicionales ?  this.carpetasAdicionales.split("~") : false),
         exp: parseInt(exp.getTime() / 1000),
     }, 'SECRET');
 };

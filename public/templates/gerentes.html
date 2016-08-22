@@ -1,8 +1,7 @@
-<link rel="stylesheet" href="/javascripts/semantic.min.css">
-<script src="/javascripts/semantic.min.js"></script>
+
 
 <div id="imagensuperiormundo" style="position: relative;top: -10vh;left: 0;width: 100%;z-index: 10  ">
-    <img src="/img/logo-iso-sol.png" style="position: absolute;top: 20vh;left: 5%;width: 30vw;">
+    <img src="/img/logo-iso-sol.png" id="logologo">
     <img style="width:100%; height: auto;" src="/img/foto_mundo.png">
 </div>
 
@@ -15,6 +14,9 @@
 <!--</div>-->
 
 <style>
+    #logologo{
+        position: absolute;top: 20vh;left: 5%;width: 30vw;
+    }
     #fondounoi{  position: fixed;
         z-index: 0;
         height: 100vh;
@@ -74,6 +76,24 @@
         barranav{display: none}
         md-input-container{line-height:8px;font-size: 1em;margin-top: 0}
     }
+    #movilTable{
+        display: none;
+    }
+    @media (max-width: 1000px) {
+        .ui.celled.striped.table{
+            display: none;
+        }
+        #logologo{
+            top: 15px;
+        }
+        .elanticelular{
+            display: none;
+        }
+        #movilTable{
+            display: block;
+        }
+    }
+
     .ui.grid>table {
          padding-left: 0;
          padding-right: 0;
@@ -226,6 +246,7 @@
 
 <div class="ui four column doubling stackable grid container">
 
+    <div class="elanticelular">
     <div class="ui segment" style="width: 100%;" ng-show="currentUser.admingerente">
         <form ng-submit="CarpenCarp()">
             <div class="ui input">
@@ -327,6 +348,26 @@
         Cambiar Contraseña
     </button>
     </div>
+    </div>
+
+    <table class="ui celled striped table" id="movilTable">
+        <thead>
+        <tr>
+            <th colspan="12">
+                Documentos y archivos
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="doc in document.carpetas" >
+            <td colspan="6"><i class="folder icon large"></i> <a style="text-align: center;" href="#/gerentes/{{doc._id}}">{{doc.nombre}}</a></td>
+        </tr>
+        <tr ng-repeat="f in document.files">
+            <td colspan="6"><i class="file outline icon large"></i> <a  href="{{f.adjunto}}">{{f.nombre}}</a></td>
+        </tr>
+        </tbody>
+    </table>
+
 
     <table class="ui celled striped table">
         <thead>
@@ -365,7 +406,9 @@
 
         </tbody>
     </table>
-</div>
+    <div ng-controller="NavCtrl as nav">
+        <a style="color: #4b29d1;text-decoration: none" href="" ng-click="nav.logOut(nav.currentUser.username)"> Cerrar Sesión</a>
+    </div>
 
 
 

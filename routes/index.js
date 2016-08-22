@@ -40,6 +40,28 @@ var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 };
 
 
+router.get('/mensajesNoChat/:mes', function(req, res, next) {
+
+  var sabe = req.params.mes;
+
+  console.log(sabe)
+  Conversation.find({ $or:[  {'usernameone':sabe}, {'usernametwo':sabe} ]}).distinct('usernameone' , function(err,mensa){
+    if(err){ return next(err); }
+    var alpha = mensa;
+    Conversation.find({ $or:[  {'usernameone':sabe}, {'usernametwo':sabe} ]}).distinct('usernametwo' , function(err,mensa2){
+      if(err){ return next(err); }
+      var beta = mensa2;
+      var omega = alpha.concat(beta);
+      var uniqueNames = [];
+      for(var a = 0; a < omega.length; a++ ){
+        if(uniqueNames.indexOf(omega[a]) == -1 && omega[a] != sabe) uniqueNames.push(omega[a]);
+      }
+      res.json(uniqueNames);
+    });
+
+  });
+});
+
 router.get('/posts', function(req, res, next) {
 
   Post.find().populate('comments').exec(function (err,posts) {
@@ -1192,7 +1214,6 @@ router.delete('/posts/areas/:_id',auth, function(req, res,next){
   });
 });
 
-
 router.delete('/posts/:_id',auth, function(req, res,next){
   console.log("Deleting");
   Post.findById( req.params._id, function ( err, post ){
@@ -1216,11 +1237,7 @@ router.delete('/comments/:_id',auth, function(req, res,next){
     }
   });
 });
-
-
 // NUEVOS COMENTARIOS A LAS PUBLICACIONES
-
-
 router.post('/posts/:post/comments',auth, function(req, res, next) {
   User.findOne({ username: req.payload.username  }, function (err, name) {
 
@@ -1247,17 +1264,14 @@ router.post('/posts/:post/comments',auth, function(req, res, next) {
 
 
 });
-
-
 //CREACION DE USUARIOS
-
-
 router.get('/areas', function(req, res, next) {
   Area.find(function(err, area){
     if(err){ return next(err); }
     res.json(area);
   });
 });
+
 router.post('/areas', function(req, res, next){
   var area = new Area(req.body);
   area.save(function (err, area){
@@ -1283,8 +1297,6 @@ router.get('/asignables', function(req, res, next) {
 
 });
 
-
-
 router.post('/users', function(req, res, next){
 console.log(req.body);
 
@@ -1300,8 +1312,6 @@ console.log(req.body);
 
   });
 });
-
-
 
 router.post('/users/:_id', function(req, res, next){
 
@@ -1331,12 +1341,12 @@ router.post('/users/:_id', function(req, res, next){
     name.cumpleanos =     req.body.cumpleanos;
     name.tramitepqrsf =   req.body.tramitepqrsf;
     name.admingerente =   req.body.admingerente;
+    name.carpetasAdicionales =   req.body.carpetasAdicionales;
     name.save();
     res.json(name);
   });
 
 });
-
 
 router.get('/users/:_id', function(req, res, next){
 
@@ -1407,9 +1417,6 @@ router.post('/usersf',auth,upload.single('file'), function(req, res, next){
   });
 });
 
-
-
-
 router.post('/gerentes', function (req,res,next) {
 
     gerente = new User(req.body);
@@ -1437,7 +1444,6 @@ router.post('/gerentes', function (req,res,next) {
 
 });
 
-
 router.post('/register', function(req, res, next){
   if(!req.body.username || !req.body.password){
     return res.status(400).json({message: 'Please fill out all fields'});
@@ -1454,10 +1460,7 @@ router.post('/register', function(req, res, next){
     return res.json({token: user.generateJWT()})
   });
 });
-
-
 // LOGIN
-
 router.post('/login', function(req, res, next){
   if(!req.body.username || !req.body.password){
     return res.status(400).json({message: 'Please fill out all fields'});
@@ -1473,11 +1476,7 @@ router.post('/login', function(req, res, next){
     }
   })(req, res, next);
 });
-
-
 // Home page
-
-
 router.get('/gerentesPage', function(req, res, next) {
 
 });

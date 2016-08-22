@@ -202,7 +202,7 @@
 </div>
 
 <div class="boxpubliuser" ng-show="usuario.data.adminusers" style="padding: 10px">
-    <h3 style="margin: 0;">Registrar Gerente</h3>
+    <h3 style="margin: 0;">Asignar Carpetas</h3>
     <form ng-submit="registrarGerente()">
         <md-input-container class="loginedit" required>
             <label>Login</label>
@@ -224,6 +224,36 @@
             <label>Corporacion</label>
             <input type="text" ng-model="corpo" required>
         </md-input-container>
+
+
+
+        <!--que es esta baina?-->
+        <div class="boxpubliuser" ng-show="usuario.data.adminusers" style="padding: 10px">
+                <h3 style="margin: 0;">Carpetas adicionales</h3>
+            <div style="display: table">
+            <div style="display: table-cell">
+                <md-input-container style="width: 10vw">
+                    <md-select ng-model="lacarpeta" placeholder="carpeta:" md-on-open="RedCarpet()">
+                        <md-option ng-repeat="n in carpetasGerentes"  value="{{ n.region }}">{{ n.region }}</md-option>
+                    </md-select>
+                </md-input-container>
+                </div>
+                    <div style="display: table-cell">
+                    <p ng-click="anadirCarpeta()">
+                        <img src="img/Iconos-81.png" width="20px">
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <ul>
+            <li ng-repeat="c in carpetasSeleccionadas">{{c}}
+                &nbsp;     <img src="img/Iconos-88.png" width="15px" ng-click="borrar($index)">
+            </li>
+        </ul>
+        <!--fin de la baina-->
+
 
         <input type="image" src="/img/registrar.png" class="btnregistrar2" >
     </form>
@@ -378,7 +408,7 @@
          <div class="boxinuseredit">
 
              <form ng-if="editing" enctype="multipart/form-data" name="myForm"
-                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf,user.cumpleanos,user.admingerente],user._id);editing = false;">
+                   ng-submit="uploadPic2(user.picFile,[user.username,user.password,user.nombre,user.email,user.area,user.cargo,user.sexo,user.telefono,user.direccion,user.region,user.documento,user.apellido,user.contratacion,user.adminpubli,user.admindocs,user.adminforms,user.adminfotos,user.admincrono,user.adminpqrsf,user.adminusers,user.tramitepqrsf,user.cumpleanos,user.admingerente, user.carpetasAdicionales ],user._id);editing = false;">
 
                  <div class=" lineahgris"></div>
                  <h3 class="tittleedit">Editar</h3>
@@ -523,6 +553,34 @@
                 </span>
 
                  <span ng-show="user.picFile.result">Upload Successful</span>
+
+
+                <div ng-show="user.gerente">
+                 <div class="boxpubliuser" ng-show="usuario.data.adminusers" style="padding: 10px">
+                     <h3 style="margin: 0;">Carpetas adicionales</h3>
+                     <div style="display: table">
+                         <div style="display: table-cell">
+                             <md-input-container style="width: 10vw">
+                                 <md-select ng-model="user.lacarpeta2" placeholder="carpeta:" md-on-open="RedCarpet2()">
+                                     <md-option ng-repeat="n in carpetasGerentes2"  value="{{ n.region }}">{{ n.region }}</md-option>
+                                 </md-select>
+                             </md-input-container>
+                         </div>
+                         <div style="display: table-cell">
+                             <p ng-click="anadirCarpeta2(user.lacarpeta2,user)">
+                                 <img src="img/Iconos-81.png" width="20px">
+                             </p>
+                         </div>
+                     </div>
+                 </div>
+                </div>
+
+                 <ul>
+
+                     <li ng-repeat="c in user.carpetasAdicionales">{{c}}
+                         &nbsp;     <img src="img/Iconos-88.png" width="15px" ng-click="borrar2($index,user)">
+                     </li>
+                 </ul>
 
                  <div>
                      <input type="image" src="/img/boton_actualizar.png" class="btnactualizar" >  </input>

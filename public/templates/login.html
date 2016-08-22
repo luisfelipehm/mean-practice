@@ -1,464 +1,631 @@
-<!--comentario de david-->
+
 
 <style>
-    md-input-container.md-default-theme ng-messages :not(.md-char-counter), md-input-container ng-messages :not(.md-char-counter), md-input-container.md-default-theme [ng-messages] :not(.md-char-counter), md-input-container [ng-messages] :not(.md-char-counter), md-input-container.md-default-theme ng-message :not(.md-char-counter), md-input-container ng-message :not(.md-char-counter), md-input-container.md-default-theme data-ng-message :not(.md-char-counter), md-input-container data-ng-message :not(.md-char-counter), md-input-container.md-default-theme x-ng-message :not(.md-char-counter), md-input-container x-ng-message :not(.md-char-counter), md-input-container.md-default-theme [ng-message] :not(.md-char-counter), md-input-container [ng-message] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message] :not(.md-char-counter), md-input-container [data-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message] :not(.md-char-counter), md-input-container [x-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [ng-message-exp] :not(.md-char-counter), md-input-container [ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message-exp] :not(.md-char-counter), md-input-container [data-ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message-exp] :not(.md-char-counter), md-input-container [x-ng-message-exp] :not(.md-char-counter) {
-        color: yellow;
-    }
-    .content
-    {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 97vh;
-    }
-    .imgfa
-    {
-        width: auto;
-        height: 2.5vh;
-        margin-left: 1vw;
-        width: auto;
-        top: 1vh;
-        left: 90.5vw;
-        cursor:pointer;
-    }
-    .imgin
-    {
-        height: 3.4vh;
-        width: auto;
-        top: 1vh;
-        left: 94.5vw;
-    }
-    .fondo
-    {
-        height: 72vh;
-        width: auto;
-    }
-    .imgfon
-    {
-        margin-top: 0;
-        height: 100%;
-        width: 100%;
-    }
-    .cuadrologin
-    {
 
-    }
-    .saw
-    {
-        width: auto;
-        height: 50vh;
-    }
-    .barrainf
-    {
-        position: absolute;
-        background: #3c474d;
-        mix-blend-mode: multiply;
-        height: 13vh ;
-        width: 100%;
-        top: 84vh;
-        opacity: 0.5;
-    }
-    .boxfon {
-        background-image: url("/img/fondo.jpg") ;
-        height: 100%;
-        background-position: center center;
-        background-size: cover;
-    }
-    .endred
-    {
-        background: #ce0a31;
-        position: absolute;
-        height: 3vh;
-        width: 100%;
-        top: 97vh;
-    }
-    .imgsvg
-    {
-        fill:#e3152d;
-        /*mix-blend-mode: multiply;*/
-    }
-    #Capa_1
-    {
-        transform: rotate(-90deg);
-        opacity: 0.85;
-    }
+        .menor{
+            display: none;
+        }
+        md-input-container.md-default-theme ng-messages :not(.md-char-counter), md-input-container ng-messages :not(.md-char-counter), md-input-container.md-default-theme [ng-messages] :not(.md-char-counter), md-input-container [ng-messages] :not(.md-char-counter), md-input-container.md-default-theme ng-message :not(.md-char-counter), md-input-container ng-message :not(.md-char-counter), md-input-container.md-default-theme data-ng-message :not(.md-char-counter), md-input-container data-ng-message :not(.md-char-counter), md-input-container.md-default-theme x-ng-message :not(.md-char-counter), md-input-container x-ng-message :not(.md-char-counter), md-input-container.md-default-theme [ng-message] :not(.md-char-counter), md-input-container [ng-message] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message] :not(.md-char-counter), md-input-container [data-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message] :not(.md-char-counter), md-input-container [x-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [ng-message-exp] :not(.md-char-counter), md-input-container [ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message-exp] :not(.md-char-counter), md-input-container [data-ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message-exp] :not(.md-char-counter), md-input-container [x-ng-message-exp] :not(.md-char-counter) {
+            color: yellow;
+        }
 
-    .txt
-    {
-        position: absolute;
-        top:58vh;
-        left: 3vw;
-    }
-    .tittle
-    {
-        color: white;
-        font-family: arial;
-        font-weight: bold;
-        font-size: 3vw;
-        text-shadow: .2vw .2vw .8vw black;
-        margin: 0;
-    }
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 97vh;
+        }
 
-    .sublista1
-    {
-        position: absolute;
-        top: 86vh;
-        left: 25vw;
-    }
-    .list
-    {
-        text-align: center;
-        font-family: Arial;
-        font-size: .8vw;
-        color: white;
-        margin-left: 30vw;
-        margin: 0 0 .1vh 0;
-    }
-    .mint
-    {
-        color: white;
-        margin: 0 1vh 2vh 2.2vw ;
-        font-family: Arial;
-        font-size: .9vw;
-        font-weight: normal;
-    }
-    .line1
-    {
-        position: absolute;
-        height: 13vh;
-        border-left: solid #5B5B5D .1vw;
-        left: 48.7vw;
-        top: 5.5vh;
-    }
-    .line2
-    {
-        position: absolute;
-        height: 13vh;
-        border-left: solid #5B5B5D .1vw;
-        left: 65vw;
-        top: 5.5vh;
-    }
-    /*.backlogo*/
-    /*{*/
-        /*position: absolute;*/
-        /*width: 10vw;*/
-        /*left: 66vw;*/
-        /*top: 28vh;*/
-    /*}*/
-    /*.logob*/
-    /*{*/
-        /*width: 15vw;*/
-        /*height: auto;*/
-    /*}*/
-    /*.button*/
-    /*{*/
-        /*position: absolute;*/
-        /*left: 76.2vw;*/
-        /*top: 61vh;*/
-    /*}*/
-    /*.user*/
-    /*{*/
-        /*position: absolute;*/
-        /*top: 39vh;*/
-        /*left: 65vw;*/
-        /*z-index: 10;*/
-        /*width: 12vw;*/
-        /*height: 7.5vh;*/
-    /*}*/
-    .pwd
-    {
-        position: absolute;
-        top: 47vh;
-        left: 65vw;
-        z-index: 10;
-        width: 12vw;
-        height: 7.5vh;
-    }
-    .derecho
-    {
-        font-family: Arial;
-        font-size: 0.8vw;
-        width: 18vw;
-        color: white;
-        margin: .5vh 0 0 43%;
-    }
-    .boxcheck
-    {
-        position: absolute;
-        color: white;
-        font-family: Arial;
-        font-size: .6vw;
-        left: 65vw;
-        top: 56vh;
-    }
-    .md-input-container
-    {
-        color: white;
-    }
-    md-input-container.md-default-theme label, md-input-container label, md-input-container.md-default-theme .md-placeholder, md-input-container .md-placeholder
-    {
+        .imgfa {
+            width: auto;
+            height: 2.5vh;
+            margin-left: 1vw;
+            width: auto;
+            top: 1vh;
+            left: 90.5vw;
+            cursor: pointer;
+        }
 
-        color: white;
-    }
-    md-input-container.md-default-theme .md-input, md-input-container .md-input {
-        color: white;
-        border-color: white;
-    }
-    md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label
-    {
-        color: white;
-    }
-    /*.infouser*/
-    /*{*/
-        /*width: 17vw;*/
-    /*}*/
-    md-input-container.md-default-theme.md-input-invalid .md-input, md-input-container.md-input-invalid .md-input
-    {
-        border-color: yellow;
-    }
-    input[type=checkbox]
-    {
-        zoom: 1;
-    }
-    .icosociales
-    {
-        position: absolute;
-        z-index: 1;
-        display: flex;
-        top: 93vh;
-        left: 45vw;
-        width: 8.5vw;
-        height: auto;
-        padding: 0;
-    }
-    /*.icologin*/
-    /*{*/
-        /*width: 5.5vw;*/
-    /*}*/
-    .imgClass
-    {
-        position: absolute;
-        top: 0;
-        width: 5.5vw;
-        height: 3.2vh;
-        background: transparent;
-        border: 0px;
-    }
-    .ficharoja
-    {
-        position: relative;
-        height: 53vh;
-        width: auto;
-        transform: rotate(-90deg);
-    }
+        .imgin {
+            height: 3.4vh;
+            width: auto;
+            top: 1vh;
+            left: 94.5vw;
+        }
 
-    @media only screen and (max-width : 1000px) {
-        .cuadrologin{
+        .fondo {
+            height: 72vh;
+            width: auto;
+        }
+
+        .imgfon {
+            margin-top: 0;
+            height: 100%;
             width: 100%;
         }
-        svg{
+
+        .cuadrologin {
             position: absolute;
-            margin-top: 60px;
+            width: 33.5vw;
+            height: 50vh;
+            top: 13vh;
+            left: 56.5vw;
+        }
+
+        .saw {
+            width: auto;
+            height: 50vh;
+        }
+
+        .barrainf {
+            position: absolute;
+            background: #3c474d;
+            mix-blend-mode: multiply;
+            height: 13vh;
+            width: 100%;
+            top: 84vh;
+            opacity: 0.5;
+        }
+
+        .boxfon {
+
+        }
+
+        .endred {
+            background: #ce0a31;
+            position: absolute;
+            height: 3vh;
+            width: 100%;
+            top: 97vh;
+        }
+
+        .imgsvg {
+            fill: #e3152d;
+            mix-blend-mode: multiply;
+        }
+
+        #Capa_1 {
+            transform: rotate(-90deg);
+            opacity: 0.85;
+        }
+
+        .txt {
+            position: absolute;
+            top: 58vh;
+            left: 3vw;
+        }
+
+        .tittle {
+            color: white;
+            font-family: arial;
+            font-weight: bold;
+            font-size: 3vw;
+            text-shadow: .2vw .2vw .8vw black;
+            margin: 0;
+        }
+
+        .sublista1 {
+            position: absolute;
+            top: 86vh;
+            left: 25vw;
+        }
+
+        .list {
+            text-align: center;
+            font-family: Arial;
+            font-size: .8vw;
+            color: white;
+            margin-left: 30vw;
+            margin: 0 0 .1vh 0;
+        }
+
+        .mint {
+            color: white;
+            margin: 0 1vh 2vh 2.2vw;
+            font-family: Arial;
+            font-size: .9vw;
+            font-weight: normal;
+        }
+
+        .line1 {
+            position: absolute;
+            height: 13vh;
+            border-left: solid #5B5B5D .1vw;
+            left: 48.7vw;
+            top: 5.5vh;
+        }
+
+        .line2 {
+            position: absolute;
+            height: 13vh;
+            border-left: solid #5B5B5D .1vw;
+            left: 65vw;
+            top: 5.5vh;
+        }
+
+        .backlogo {
+            position: absolute;
+            width: 10vw;
+            left: 66vw;
+            top: 28vh;
+        }
+
+        .logob {
+            width: 15vw;
+            height: auto;
+        }
+
+        .button {
+            position: absolute;
+            left: 76.2vw;
+            top: 61vh;
+        }
+
+        .user {
+            position: absolute;
+            top: 39vh;
+            left: 65vw;
+            z-index: 10;
+            width: 12vw;
+            height: 7.5vh;
+        }
+
+        .pwd {
+            position: absolute;
+            top: 47vh;
+            left: 65vw;
+            z-index: 10;
+            width: 12vw;
+            height: 7.5vh;
+        }
+
+        .derecho {
+            font-family: Arial;
+            font-size: 0.8vw;
+            width: 18vw;
+            color: white;
+            margin: .5vh 0 0 43%;
+        }
+
+        .boxcheck {
+            position: absolute;
+            color: white;
+            font-family: Arial;
+            font-size: .6vw;
+            left: 65vw;
+            top: 56vh;
+        }
+
+        .md-input-container {
+            color: white;
+        }
+
+        md-input-container.md-default-theme label, md-input-container label, md-input-container.md-default-theme .md-placeholder, md-input-container .md-placeholder {
+
+            color: white;
+        }
+
+        md-input-container.md-default-theme .md-input, md-input-container .md-input {
+            color: white;
+            border-color: white;
+        }
+
+        md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label {
+            color: white;
+        }
+
+        .infouser {
+            width: 17vw;
+        }
+
+        md-input-container.md-default-theme.md-input-invalid .md-input, md-input-container.md-input-invalid .md-input {
+            border-color: yellow;
+        }
+
+        input[type=checkbox] {
+            zoom: 1;
+        }
+
+        .icosociales {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            top: 93vh;
+            left: 45vw;
+            width: 8.5vw;
+            height: auto;
+            padding: 0;
+        }
+
+        .icologin {
+            width: 5.5vw;
+        }
+
+        .imgClass {
+            position: absolute;
+            top: 0;
+            width: 5.5vw;
+            height: 3.2vh;
+            background: transparent;
+            border: 0px;
+        }
+
+        .ficharoja {
+            position: relative;
+            height: 53vh;
+            width: auto;
+            transform: rotate(-90deg);
+
+        }
+
+
+    @media (max-width: 1000px) {
+
+        md-input-container.md-default-theme ng-messages :not(.md-char-counter), md-input-container ng-messages :not(.md-char-counter), md-input-container.md-default-theme [ng-messages] :not(.md-char-counter), md-input-container [ng-messages] :not(.md-char-counter), md-input-container.md-default-theme ng-message :not(.md-char-counter), md-input-container ng-message :not(.md-char-counter), md-input-container.md-default-theme data-ng-message :not(.md-char-counter), md-input-container data-ng-message :not(.md-char-counter), md-input-container.md-default-theme x-ng-message :not(.md-char-counter), md-input-container x-ng-message :not(.md-char-counter), md-input-container.md-default-theme [ng-message] :not(.md-char-counter), md-input-container [ng-message] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message] :not(.md-char-counter), md-input-container [data-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message] :not(.md-char-counter), md-input-container [x-ng-message] :not(.md-char-counter), md-input-container.md-default-theme [ng-message-exp] :not(.md-char-counter), md-input-container [ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [data-ng-message-exp] :not(.md-char-counter), md-input-container [data-ng-message-exp] :not(.md-char-counter), md-input-container.md-default-theme [x-ng-message-exp] :not(.md-char-counter), md-input-container [x-ng-message-exp] :not(.md-char-counter) {
+            color: yellow;
+        }
+
+        .md-input-container {
+            color: white;
+        }
+
+        md-input-container.md-default-theme label, md-input-container label, md-input-container.md-default-theme .md-placeholder, md-input-container .md-placeholder {
+
+            color: white;
+        }
+
+        md-input-container.md-default-theme .md-input, md-input-container .md-input {
+            color: white;
+            border-color: white;
+        }
+
+        md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label {
+            color: white;
+        }
+
+        .infouser {
+            width: 17vw;
+        }
+
+        md-input-container.md-default-theme.md-input-invalid .md-input, md-input-container.md-input-invalid .md-input {
+            border-color: yellow;
+        }
+
+        input[type=checkbox] {
+            zoom: 1;
+        }
+        .menor{
+            display: block;
+        }
+        .mayor{
+            display: none;
+        }
+        .cuadrologin{
+            position: relative;
+            top: 0;
+            width: 100%;
+            left: 0;
+        }
+        svg{
+            width: 100%;
+            transform: rotate(-90deg);
+            margin-top:60px;
         }
 
         .user{
+            position: static;
             width: 100%;
+            margin-top: 12px;
+
         }
         .infouser{
             width: 100%;
-            margin: 5px 0;
+            margin: 0 0;
+            font-size: 15px;
+            height: 35px;
         }
         form{
-            padding-top: 140px;
             width: 65%;
-            margin:auto;
+            margin:17%;
+            position: absolute;
+            top: 60px;
         }
         .icologin{
             position: relative;
             z-index: 1;
             float: right;
-            width:100px;
+            width:90px;
+            margin-top:10px;
+
         }
         .backlogo{
             position: relative;
+            width: 100%;
+            left: 0;
+            top: 0;
         }
-
         .logob
         {
-            width: 15vw;
+            width: 70%;
+            margin-left:15%;
+        }
+
+        .endred
+        {
+            background: #ce0a31;
+            position: absolute;
+            width: 100%;
+            top: 540px;
+            left: 0;
+        }
+        .derecho
+        {
+            font-family: Arial;
+            text-align: center;
+            font-size: 11px;
+            width: 90%;
+            margin-left: 5%;
+            color: white;
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
+        .barrainf
+        {
+            position: absolute;
+            /*background: #3c474d;*/
+            /*mix-blend-mode: multiply;*/
+            height: 100px;
+            width: 100%;
+            bottom: 22px;
+            /*opacity: 0.5;*/
+        }
+
+        .icosociales
+        {
+            position: absolute;
+            display: flex;
+            width: 30%;
+            margin-left: 35%;
             height: auto;
+            top: 500px;
+            left: 0;
+            /*margin-bottom:10%;*/
+        }
+        .sublista1
+        {
+            position: absolute;
+            top: 440px;
+            left: 0;
+        }
+        .imgfa
+        {
+            height: 30px;
+            margin-left: 5px;
+            cursor:pointer;
+        }
+        .list
+        {
+            text-align: center;
+            font-family: Arial;
+            font-size: 11px;
+            color: white;
+            margin: 0 0 .1vh 0;
+        }
+
+        .txt
+        {
+            position: relative;
+            top:0px;
+            width: 72%;
+            margin-left: 14%;
+        }
+
+        .tittle
+        {
+            color: white;
+            font-family: arial;
+            font-weight: bold;
+            font-size: 3vw;
+            text-shadow: .2vw .2vw .8vw black;
+            margin: 0;
+        }
+        .boxfon{
+            background-image: url("/img/fondo.jpg") ;
+            height: 560px;
+            background-position: center center;
+            background-size: cover;
+        }
+
+        .imgsvg {
+            fill: #e3152d;
+            opacity: 0.9;
+            /*mix-blend-mode: multiply;*/
         }
     }
 
 
 </style>
 
-<!--Este es el fondo del login-->
-<div class="boxfon">
+<script src="/javascripts/respond.js"></script>
+<!--Esta es la imagen de fondo-->
+<div class="mayor">
+    <div class="boxfon">
+        <img class="imgfon" src="/img/fondo.jpg">
+    </div>
 
+    <!--este es el cuadro del login en svg-->
     <div class="cuadrologin">
 
-
-
-    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-    viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">
     <path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1
-    c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
+	c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
     </svg>
 
-    <!--<img class="ficharoja" src="/img/ficha.png">-->
+        <!--<img class="ficharoja" src="/img/ficha.png">-->
 
-        <div class="backlogo">
-            <img class="logob" src="/img/logoblanco.png">
+    </div>
+
+    <div class="txt">
+        <p class="tittle">¡Su Solución</p>
+        <p class="tittle">Es Nuestro Objetivo!</p>
+    </div>
+
+
+    <div class="barrainf">
+
+    </div>
+
+    <div class="sublista1">
+        <p class="list"> Carrera 13 # 37 - 37 Piso 5</p>
+        <p class="list"> info@susolucion.com.co / director.comercial@susolucion.com.co / giovanna.romero@susolucion.com.co / miopinion@susolucion.com.co</p>
+        <p class="list"> Atendemos de Lunes a Viernes 7:30 am - 5:00 pm </p>
+    </div>
+
+    <div class="icosociales">
+        <a href="https://twitter.com" target="_blank"> <img class="imgfa" src="/img/icono-t.png"></a>
+        <a href="https://www.facebook.com" target="_blank"> <img class="imgfa" src="/img/icono-f.png"></a>
+        <a href="https://www.linkedin.com/" target="_blank"> <img class="imgfa" src="/img/icono-i.png"></a>
+    </div>
+
+    <div class="endred">
+        <p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>
+    </div>
+
+    <!--Logo Soluciones-->
+    <div class="backlogo">
+        <img class="logob" src="/img/logoblanco.png">
+    </div>
+
+    <!--checkbox-->
+
+
+    <!-- LOGIN DE USUARIO -->
+
+    <div ng-show="error" class="">
+        <span>{{ error.message }}</span>
+    </div>
+
+    <form ng-submit="usuario.logIn()"
+          style="margin-top:30px;" name="loginForm">
+        <!--<h3 >Iniciar Sesion</h3>-->
+
+        <div class="user">
+            <md-input-container class="infouser">
+                <label >Usuario</label>
+                <input type="text" ng-model="usuario.user.username" required >
+            </md-input-container>
         </div>
 
-        <!--Login User-->
+        <div class="pwd">
+            <md-input-container class="infouser">
+                <label>Contraseña</label>
+                <input type="password" ng-model="usuario.user.password" required  name="paswsr">
+                <p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>
+                <!--<div ng-messages="loginForm.paswsr.$error">-->
+                <!--<div ng-message="required">This is required.</div>-->
+                <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+                <!--</div>-->
+            </md-input-container>
 
-
-        <div ng-show="error" class="">
-            <span>{{ error.message }}</span>
         </div>
 
-        <form ng-submit="usuario.logIn()"
-               name="loginForm">
-            <!--<h3 >Iniciar Sesion</h3>-->
+        <!--<div class="button">-->
+        <!--<img class="icologin" src="/img/icono-login.b.png">-->
+        <!--<input type="submit" value="" class="imgClass"/>-->
+        <!--</div>-->
 
-            <div class="user">
-                <md-input-container class="infouser">
-                    <label >Usuario</label>
-                    <input type="text" ng-model="usuario.user.username" required >
-                </md-input-container>
+        <div class="button" >
+            <label for="img-login">
+                <img  class="icologin" src="/img/icono-login.b.png">
+            </label>
+            <input type="submit" style="display: none"  id="img-login" />
+        </div>
+
+    </form>
+</div>
+
+
+<div class="menor">
+
+    <div class="boxfon">
+
+        <div class="cuadrologin">
+
+
+            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">
+                <path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1
+                c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>
+                </svg>
+
+            <div ng-show="error" class="">
+                <span>{{ error.message }}</span>
             </div>
 
-            <div class="user">
-                <md-input-container class="infouser">
-                    <label>Contraseña</label>
-                    <input type="password" ng-model="usuario.user.password" required  name="paswsr">
-                    <p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>
-                    <!--<div ng-messages="loginForm.paswsr.$error">-->
-                    <!--<div ng-message="required">This is required.</div>-->
-                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
-                    <!--</div>-->
-                </md-input-container>
+            <form ng-submit="usuario.logIn()"
+                  name="loginForm">
+                <!--<h3 >Iniciar Sesion</h3>-->
 
-            </div>
+                <div class="backlogo">
+                    <img class="logob" src="/img/logoblanco.png">
+                </div>
 
-            <!--<div class="button">-->
-            <!--<img class="icologin" src="/img/icono-login.b.png">-->
-            <!--<input type="submit" value="" class="imgClass"/>-->
-            <!--</div>-->
+                <div class="user">
+                    <md-input-container class="infouser">
+                        <label style="color: white">Usuario</label>
+                        <input type="text" ng-model="usuario.user.username" required >
+                    </md-input-container>
+                </div>
 
+                <div class="user">
+                    <md-input-container class="infouser">
+                        <label style="color: white">Contraseña</label>
+                        <input type="password" ng-model="usuario.user.password" required  name="paswsr">
+                        <p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>
+                        <!--<div ng-messages="loginForm.paswsr.$error">-->
+                        <!--<div ng-message="required">This is required.</div>-->
+                        <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+                        <!--</div>-->
+                    </md-input-container>
 
+                    <input type="image"  class="icologin" src="/img/icono-login.b.png">
 
-                <input type="image"  class="icologin" src="/img/icono-login.b.png">
+                </div>
 
+            </form>
 
+        </div>
 
-        </form>
+        <div class="txt">
+            <p class="tittle">¡Su Solución</p>
+            <p class="tittle">Es Nuestro Objetivo!</p>
+        </div>
+
+        <div class="barrainf">
+
+        </div>
+
+        <div class="sublista1">
+            <p class="list"> Carrera 13 # 37 - 37 Piso 5</p>
+            <p class="list"> info@susolucion.com.co / director.comercial@susolucion.com.co / giovanna.romero@susolucion.com.co / miopinion@susolucion.com.co</p>
+            <p class="list"> Atendemos de Lunes a Viernes 7:30 am - 5:00 pm </p>
+        </div>
+
+        <div class="icosociales">
+            <a href="https://twitter.com" target="_blank"> <img class="imgfa" src="/img/icono-t.png"></a>
+            <a href="https://www.facebook.com" target="_blank"> <img class="imgfa" src="/img/icono-f.png"></a>
+            <a href="https://www.linkedin.com/" target="_blank"> <img class="imgfa" src="/img/icono-i.png"></a>
+        </div>
+
+        <div class="endred">
+            <p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>
+        </div>
 
 
 
     </div>
 
+
 </div>
-
-<!--<div class="boxfon">-->
-    <!--<img class="imgfon" src="/img/fondo.jpg">-->
-<!--</div>-->
-
-<!--este es el cuadro del login en svg-->
-<!--<div class="cuadrologin">-->
-
-    <!--<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"-->
-	 <!--viewBox="0 0 566.9 442.8" enable-background="new 0 0 566.9 442.8" xml:space="preserve">-->
-    <!--<path class="imgsvg"  d="M434.2,275.8c14,13.5,33.1,21.8,54.1,21.8c43.1,0,78.1-35,78.1-78.1s-35-78.1-78.1-78.1-->
-	<!--c-21,0-40,8.3-54.1,21.8V0L261.7,0l-88.5,0L0.6,0v179.5v83.9l0,179.5h173.4h86.7h173.4V275.8z"/>-->
-    <!--</svg>-->
-
-    <!--&lt;!&ndash;<img class="ficharoja" src="/img/ficha.png">&ndash;&gt;-->
-
-<!--</div>-->
-
-<!--<div class="txt">-->
-    <!--<p class="tittle">¡Su Solución</p>-->
-    <!--<p class="tittle">Es Nuestro Objetivo!</p>-->
-<!--</div>-->
-
-
-<!--<div class="barrainf">-->
-
-<!--</div>-->
-
-<!--<div class="sublista1">-->
-    <!--<p class="list"> Carrera 13 # 37 - 37 Piso 5</p>-->
-    <!--<p class="list"> info@susolucion.com.co / director.comercial@susolucion.com.co / giovanna.romero@susolucion.com.co / miopinion@susolucion.com.co</p>-->
-    <!--<p class="list"> Atendemos de Lunes a Viernes 7:30 am - 5:00 pm </p>-->
-<!--</div>-->
-
-<!--<div class="icosociales">-->
-    <!--<a href="https://twitter.com" target="_blank"> <img class="imgfa" src="/img/icono-t.png"></a>-->
-    <!--<a href="https://www.facebook.com" target="_blank"> <img class="imgfa" src="/img/icono-f.png"></a>-->
-    <!--<a href="https://www.linkedin.com/" target="_blank"> <img class="imgfa" src="/img/icono-i.png"></a>-->
-<!--</div>-->
-
-<!--<div class="endred">-->
-    <!--<p class="derecho">2016 © Copyright - Soluciones by SoftPlus</p>-->
-<!--</div>-->
-
-<!--Logo Soluciones-->
-<!--<div class="backlogo">-->
-    <!--<img class="logob" src="/img/logoblanco.png">-->
-<!--</div>-->
-
-<!--checkbox-->
-
-<!--<div class="boxcheck">-->
-    <!--<input type="checkbox"/> No cerrar sesión <label style="margin-left: 4.4vw">¿Olvidaste tu Contraseña?</label>-->
-<!--</div>-->
-
-
-
-
-<!-- LOGIN DE USUARIO -->
-
-<!--<div ng-show="error" class="">-->
-    <!--<span>{{ error.message }}</span>-->
-<!--</div>-->
-
-<!--<form ng-submit="usuario.logIn()"-->
-      <!--style="margin-top:30px;" name="loginForm">-->
-    <!--&lt;!&ndash;<h3 >Iniciar Sesion</h3>&ndash;&gt;-->
-
-    <!--<div class="user">-->
-        <!--<md-input-container class="infouser">-->
-            <!--<label >Usuario</label>-->
-            <!--<input type="text" ng-model="usuario.user.username" required >-->
-        <!--</md-input-container>-->
-    <!--</div>-->
-
-    <!--<div class="pwd">-->
-        <!--<md-input-container class="infouser">-->
-            <!--<label>Contraseña</label>-->
-            <!--<input type="password" ng-model="usuario.user.password" required  name="paswsr">-->
-            <!--<p ng-show="usuario.loginfallido" style="color:yellow">Usuario o contraseña invalida</p>-->
-            <!--&lt;!&ndash;<div ng-messages="loginForm.paswsr.$error">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div ng-message="required">This is required.</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</md-input-container>-->
-
-    <!--</div>-->
-
-    <!--&lt;!&ndash;<div class="button">&ndash;&gt;-->
-        <!--&lt;!&ndash;<img class="icologin" src="/img/icono-login.b.png">&ndash;&gt;-->
-        <!--&lt;!&ndash;<input type="submit" value="" class="imgClass"/>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-    <!--<div class="button" >-->
-
-            <!--<input type="image"  class="icologin" src="/img/icono-login.b.png">-->
-
-    <!--</div>-->
-
-<!--</form>-->
