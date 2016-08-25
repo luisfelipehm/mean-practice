@@ -194,6 +194,35 @@
         top: 1vh;
         overflow: hidden;
     }
+    .añadircarpeta{
+        width: 10vw;
+    }
+    @media (max-width: 1000px) {
+        .loginedit
+        {
+            width: 94%;
+        }
+        .añadircarpeta{
+            width: 64vw;
+        }
+        .btnregistrar2{
+            width: 21vw;
+            margin-left: 69.5%;
+        }
+        .emailedit{
+            width: 94%;
+        }
+        .fechacumpleaños{
+            margin-left: 1%;
+        }
+        .imguseredit{
+            height: 5vh;
+            margin-top: .5vh;
+        }
+        .boximgusersedit{
+            margin-right: 7vw;
+        }
+    }
 
 </style>
 
@@ -232,7 +261,7 @@
                 <h3 style="margin: 0;">Carpetas adicionales</h3>
             <div style="display: table">
             <div style="display: table-cell">
-                <md-input-container style="width: 10vw">
+                <md-input-container  class="añadircarpeta">
                     <md-select ng-model="lacarpeta" placeholder="carpeta:" md-on-open="RedCarpet()">
                         <md-option ng-repeat="n in carpetasGerentes"  value="{{ n.region }}">{{ n.region }}</md-option>
                     </md-select>
@@ -337,7 +366,7 @@
             <input type="text" ng-model="contratacion">
         </md-input-container>
 
-            <md-datepicker ng-model="cumpleanos" md-placeholder="Fecha de cumpleaños"></md-datepicker>
+            <md-datepicker ng-model="cumpleanos" md-placeholder="Fecha de cumpleaños" class="fechacumpleaños"></md-datepicker>
 
             <!--SELECCIONAR ARICHIVO FOTO-->
 

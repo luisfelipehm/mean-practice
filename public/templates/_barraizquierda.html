@@ -245,14 +245,49 @@
     #movil{
         display: none;
     }
+    #navazulcelular{
+        display: none !important;
+    }
+    .movilvisible{
+        display: none;
+    }
+    .barrascroleadacelular{
+        top: 33px !important;
+    }
+    .menuscroleablecelular{
+        top: 8px !important;
+        height: calc(100vh - 8px) !important;
+    }#navazulcelular{
+         z-index: 1230;
+         display: block;
+         left: 0;
+         height: 34px;
+         top: 0px;
+         width: 100%;
+         background-color: rgba(0, 0, 0, 0.70);
+         position: absolute;
+
+     }
+    .barramenumovil{
+        position: fixed !important;
+        top: 0px !important;
+
+    }
     @media (max-width: 1000px) {
+        .movilvisible{
+            display: block;
+        }
         #movil{
             display: block;
             position: fixed;
             z-index: 11;
-            background-color: black;
+            background-color: rgba(0, 0, 0, 0.70);
             height: 100vh;
             width: 100vw;
+            top: 33px;
+        }
+        #navazulcelular{
+            display: block !important;
         }
         barraizq{
             display: block !important;
@@ -263,9 +298,9 @@
         .cajamenumovil
         {
             position: relative;
-            top: 0vh;
+            top: 8vh;
             vertical-align:top;
-            margin-left: 1.2%;
+            margin-left: 17.2%;
             margin-bottom: 2px;
             width: 19vw;
             z-index: 1;
@@ -275,20 +310,22 @@
         {
             position: relative;
             top: -1.8vh;
-            font-size: 4vw;
+            font-size: 15px;
             color: white;
             margin-left: 43%;
         }
+        .lista{
+            height: 8vh;
+        }
+        .barrasup{
+            display: none;
+        }
+        .imglogosol{
+            top:37px!important;
+        }
 
     }
-    .barrascroleadacelular{
-        position: fixed !important;
-        top: 7px !important;
-    }
-    .menuscroleablecelular{
-        top: 8px !important;
-        height: calc(100vh - 8px) !important;
-    }
+
 </style>
 
 <div class="fondobarraizq">
@@ -398,26 +435,37 @@
     $('.mescalendar').html(moment().locale('es').format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
 
 </script>
+<div class="movilvisible" ng-controller="NavCtrl as nav">
+    <div ng-init="mostrarnav = false"></div>
+    <div id="navazulcelular" scroll noscroll>
+        <img ng-click="mostrarnav = !mostrarnav" src="/img/boton-menu.png" style="width: 46px; margin-left: 21px">
+        <a  class="username" style="color: white;margin-top: 7px;margin-right: 18px">{{ nav.currentUser.nombre.split(" ")[0]}} {{nav.currentUser.apellido.split(" ")[0]}}</a>
+    </div>
+    <div class="menumovil" id="movil" scroll ng-show="mostrarnav">
 
-<div class="menumovil" id="movil">
+        <div class="cajamenumovil" >
 
-    <div class="cajamenumovil">
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenumov">Usuarios</span></a> </li>
-        <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"><span class="txtmenumov">Gerentes</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenumov">Usuarios</span></a> </li>
+            <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"><span class="txtmenumov">Gerentes</span></a> </li>
 
-        <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false"><img class="iconorojo" src="/img/icono-rojo.png"> <a style="margin: 0" class="linkmenu"><span class="txtmenumov">Departamentos</span></a> </li>
-        <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
+            <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false"><img class="iconorojo" src="/img/icono-rojo.png"> <a style="margin: 0" class="linkmenu"><span class="txtmenumov">Departamentos</span></a> </li>
+            <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
 
 
-            <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li></a>
-            <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>
+                <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li></a>
+                <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>
+
+            </div>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenumov">Formularios</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"><span class="txtmenumov">Documentos</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/fotos/"  class="linkmenu"><span class="txtmenumov">Actividades</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu"><span class="txtmenumov">Cronograma</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/pqrsfdispatcher" class="linkmenu"><span class="txtmenumov">PQRSF</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/actas" class="linkmenu"><span class="txtmenumov">Asociados</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu" style="color: white;width: 200px;font-size: 15px;display: inline-block;text-align: center;margin-top: -13px;margin-left: -30px;vertical-align: top;"> Cerrar Sesión</a> </li>
 
         </div>
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenumov">Formularios</span></a> </li>
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"><span class="txtmenumov">Documentos</span></a> </li>
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/fotos/"  class="linkmenu"><span class="txtmenumov">Actividades</span></a> </li>
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu"><span class="txtmenumov">Cronograma</span></a> </li>
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/pqrsfdispatcher" class="linkmenu"><span class="txtmenumov">PQRSF</span></a> </li>
-        <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/actas" class="linkmenu"><span class="txtmenumov">Asociados</span></a> </li>
     </div>
 </div>
+
+
