@@ -981,14 +981,231 @@ app.config([
     }]);
 
 
-app.controller('MensajesCtrl', ['$scope','auth','$http', function ($scope,auth,$http) {
-    $scope.currentUser = auth.currentUser();
-    var mens = []
 
+
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','$http','moment','users','$compile', function ($scope,Upload,$timeout,mySocket,auth,$http,moment,users,$compile) {
+
+    $scope.currentUser = auth.currentUser();
 
     $http.get('/mensajesNoChat/'+ $scope.currentUser.username ).then(function (response) {
-       console.log(response.data)
+
+        $scope.artists = response.data.userConectados;       /*artists: son usuarios de conversaciones historicas*/
+        $scope.conversacion =response.data.conversaciones;  /* conversacion: son todas las conversaciones*/
+        
+        // if($scope.nombre_archivo==''){
+        //     var ADJ = document.getElementById('ADJ');
+        //     ADJ.css('visibility', value ? 'visible' : 'hidden');
+        // }else{
+        //     var ADJ = document.getElementById('ADJ');
+        //     ADJ.css('visibility', value ? 'visible' : 'block');
+        // }
+
+        document.getElementById("ADJ").style.visibility = "hidden";
+
+
+        var xx={};
+        var yo= $scope.currentUser.username;
+        var primera_conversacion='';
+
+
+
+        /*aquí es la logica del panel izquierdo, todas las conversaciones tenidas y lo ultimo que escribió el destinatario*/
+        angular.forEach($scope.conversacion , function (conv) {
+
+              for (var i=0; i<$scope.artists.length; i++){
+                  if($scope.artists[i]==conv.usernameone){
+                        if(i==0){
+                            primera_conversacion=conv.usernameone; /*aqui delegamos cual es la primera conversacion para imprimirla al panel derecho inmediatamente*/
+                        }
+
+                        xx[i] = {
+                                  De: conv.usernameone,
+                                  UltimoMsj: conv.mensaje,
+                                  DateMsj: conv.fecha
+                        }
+                  }
+            }
+        });
+        /*fin*/
+        $scope.mensajes ={};
+        $scope.mensajes= xx;
+
+
+
+        /*aquí es la logica del panel derecho, son los mensajes (historial) de un usuario del panel izquierdo*/
+        $scope.myConversacion = function(ok) {
+          //  document.getElementById(ok).style = "border: 1px solid red";
+            $scope.conversacion =response.data.conversaciones;
+            $scope.con_quien_converso= ok;
+            var yy={};
+            var contador=0;
+
+
+            angular.forEach($scope.conversacion , function (conv) {
+
+                        if(ok==conv.usernameone && yo==conv.receptor){
+                            contador++;
+                            yy[contador] = {
+                                De: conv.usernameone,
+                                UltimoMsj: conv.mensaje,
+                                DateMsj: conv.fecha
+                            }
+                        }
+
+                        if(ok==conv.receptor && yo==conv.usernameone){
+                            contador++;
+                            yy[contador] = {
+                                De: conv.usernameone,
+                                UltimoMsj: conv.mensaje,
+                                DateMsj: conv.fecha
+                            }
+                        }
+            });
+            $scope.historial_conv ={};
+            $scope.historial_conv= yy;
+            return $scope.historial_conv;
+            /*fin*/
+
+
+        }
+
+        /*aqui tomamos la primera conversacion para imprimirla*/
+        $scope.myConversacion(primera_conversacion);
+
+
+/*┼┼    ┼┼┼┼Esto┼┼es┼┼el┼┼Adjunto┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼*/
+        $scope.seleccionarchivochat = function (ff,name) {
+
+            // var progresito = name + "picFile.progress";
+            // var progresito2 = name + "picFile";
+
+            //console.log(ff[0].type);
+
+
+
+            switch (ff[0].type){
+
+                    case 'image/jpeg':
+                    case 'image/png':
+                    case 'image/gif':
+                    case 'image/tiff':
+                    case 'application/pdf':
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                    case 'application/vnd.ms-excel':
+                    case 'application/vnd.ms-word':
+                    case 'application/vnd.ms-powerpoint':
+                    case 'text/plain':
+                    case 'application/msword':
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
+                    case 'application/vnd.ms-word.template.macroEnabled.12':
+                    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
+                    case 'application/vnd.ms-excel.sheet.macroEnabled.12':
+                    case 'application/vnd.ms-excel.template.macroEnabled.12':
+                    case 'application/vnd.ms-excel.sheet.binary.macroEnabled.12':
+                    case 'application/vnd.openxmlformats-officedocument.presentationml.template':
+                    case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
+                    case 'application/vnd.ms-powerpoint.addin.macroEnabled.12':
+                    case 'application/vnd.ms-powerpoint.presentation.macroEnabled.12':
+                    case 'application/vnd.ms-powerpoint.template.macroEnabled.12':
+
+
+                    document.getElementById("ADJ").style.visibility = "visible";
+                    $scope.nombre_archivo= ff[0].name.substring(0,19);
+                    return $scope.nombre_archivo;
+
+
+                    break;
+                default:
+                    alert("No se puede adjuntar el archivo ya que no corresponde a una extención 'doc','docx','ppsx','ppt','pptm','pptx','xls','xlsx','xlsm','xlsb','pdf','png','tiff','gif','jpg','jpeg','doc','cvs' o 'txt'. ");
+                    console.log(ff[0].type);
+                    break;
+
+            }
+
+
+
+            // if(ff){
+            //
+            //     var genereitor1 =  ' <li class="self" id="previasubidaarchivos'+ name+'">'+
+            //         '<div class="chatboxmessagecontent chatboxmessagecontents">'+
+            //         ' <img src="/img/icono-atras.png" class="subirarchvos" ng-click="enviarmensajeadjunto('+progresito2+',\''+ name +'\')">';
+            //
+            //
+            //     if(ff.name.split('.')[1]=='doc' || ff.name.split('.')[1]=='docx')
+            //     {
+            //         var genereitor2 =         '  <img  src="img/WRD.png" class="imagenadjuntochat">';
+            //     }else if(ff.name.split('.')[1]=='ppsx' || ff.name.split('.')[1]=='ppt' || ff.name.split('.')[1]=='pptm' || ff.name.split('.')[1]=='pptx')
+            //     {
+            //         var genereitor2 =         '  <img  src="img/PW.png" class="imagenadjuntochat">'
+            //     }else if(ff.name.split('.')[1]=='xls' || ff.name.split('.')[1]=='xlsx' || ff.name.split('.')[1]=='xlsm' || ff.name.split('.')[1]=='xlsb')
+            //     {
+            //         var genereitor2 =         '  <img  src="img/XEL.png" class="imagenadjuntochat">'
+            //     }
+            //     else if(ff.name.split('.')[1]=='pdf')
+            //     {
+            //         var genereitor2 =         '  <img  src="img/PDF.png" class="imagenadjuntochat">'
+            //     }
+            //     else if(ff.name.split('.')[1].toLowerCase() =='png' || ff.name.split('.')[1].toLowerCase()=='tiff' || ff.name.split('.')[1].toLowerCase()=='gif' || ff.name.split('.')[1].toLowerCase()=='jpg' || ff.name.split('.')[1].toLowerCase()=='jpeg')
+            //     {
+            //         var genereitor2 =         '  <img  ngf-src="!'+ name+'picFile.$error && '+ name+'picFile" class="imagenadjuntochat">';
+            //     }
+            //     else
+            //     {
+            //         var genereitor2 = '  <img  src="img/DOC.png" class="imagenadjuntochat">';
+            //     }
+            //
+            //
+            //     var genereitor3 = '  <div class="progresosubidachat">'+
+            //         ' <div style="width:{{'+progresito+'}}%" ng-bind="'+progresito+'+\'%\'" class="ng-binding progresointernochat"></div>'+
+            //         '  </div>'+
+            //         ' <img src="img/icono-eliminar-g.png" class="cancelarsubidachat" ng-click="cancelarsubidachats(\''+ name+'\')">'+
+            //         ' </div>'+
+            //         ' </li>';
+            //
+            //
+            //     var genereitor  = genereitor1 + genereitor2 + genereitor3;
+            //     console.log(name);
+            //     angular.element(document.getElementById('message')).append($compile(genereitor)($scope));
+            //     // setTimeout(function(){
+            //     //     $('#chatcontent').scrollTop($('#chatcontent'+name)[0].scrollHeight)
+            //     // }, 100);
+            //     console.log(ff.name)
+            // }else
+            // {
+            //     angular.element(document.getElementById('previasubidaarchivos'+name)).remove();
+            // }
+        };
+
+
+        $scope.borrar = function() {
+            document.getElementById("ADJ").style.visibility = "hidden";
+            $scope.nombre_archivo= '';
+        }
+
+
+        $scope.envarMsj_a_ = function(con_quien_converso){
+            alert('se ha enviado el mensaje a '+ con_quien_converso);
+        }
+
+
+       /*┼┼┼fin┼┼┼adjunto┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼*/
     });
+
+/*
+ {"_id":"56d0a9ad48e250f02b932bb4",
+ "usernameone":"ozarta2",
+ "mensaje":"hola ivan",
+ "receptor":"ivantrips",
+ "fecha":"2016-02-26T19:38:21.064Z",
+ "fotoperfil":"/uploads2/perro 19-02-2016.jpg",
+ "__v":0,"usernametwo":["ivantrips","ozarta2"]
+*/
+
+
     // $scope.areas = areas.areas;
     // $scope.crearArea = function () {
     //     if(!$scope.nombre || $scope.nombre === '') { return; }
@@ -1024,11 +1241,10 @@ app.controller('MensajesCtrl', ['$scope','auth','$http', function ($scope,auth,$
     //         });
     // };
 
-
-
-
-
 }]);
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
 
 app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http','$timeout','Upload', function ($scope,auth,gdocuments,gdocument,$http,$timeout,Upload) {
     $scope.document = gdocument;
@@ -3030,7 +3246,8 @@ app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http
         mySocket.forward('usuario', $scope);
     }
     /*
-    * La funcion obtenerMensajes se ejecuta cada vez que llega un socket 'chateando' esta funcion trae el ultimo mensaje y
+    * La funcion obtenerMensajes se ejecuta cada vez que llega un socket 'chateando'
+    * esta funcion trae el ultimo mensaje y
     * hace un append a los chats que estan involucrados
     */
     $scope.obtenerMensajes = function (name1,name2,rec) {
@@ -3110,7 +3327,7 @@ app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http
        $scope.actualizarUsers();
     });
 
-    mySocket.forward('chateando', $scope);
+        mySocket.forward('chateando', $scope);
 
     /*
       * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
@@ -3178,8 +3395,6 @@ app.controller('ChatCtrl',['$scope','Upload','$timeout','mySocket','auth','$http
             angular.element(document.getElementById(name+'chattext2')).val('');
 
         });
-
-
 
     };
 
@@ -3541,7 +3756,7 @@ app.controller('FormularioCtrl', ['$scope', 'formularios','formulario','auth','$
 
     $scope.data2 = [
 
-            [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
+        [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
         [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
         [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"Si"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Cedula de Ciudadania"}],
         [{"pregunta":"intereses","respuesta":{"autos":false,"musica":"musica","otros":"otros"}},{"pregunta":"Deportes","respuesta":{"Tenis":"Tenis","Baloncesto":"Baloncesto","Futbol":"Futbol"}},{"pregunta":"Casado?","respuesta":"No"},{"pregunta":"comentarios","respuesta":"sasa"},{"pregunta":"Tipo de documento","respuesta":"Tarjeta de Identidad"}],
