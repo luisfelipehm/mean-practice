@@ -4146,4 +4146,23 @@ app.controller('AuthCtrl', [
         };
     }]);
 
+app.directive("scroll", function ($window) {
+    return function(scope, element, attrs) {
+        angular.element($window).bind("scroll", function() {
+            if (this.pageYOffset > 0) {
+                angular.element(document.getElementById('movil')).addClass('barrascroleadacelular');
+                angular.element(document.getElementById('navazulcelular')).addClass('barramenumovil');
+                scope.$emit('scro', {top: 0+'px',height:'700px'}
 
+                );
+            } else {
+                angular.element(document.getElementById('movil')).removeClass('barrascroleadacelular');
+                angular.element(document.getElementById('navazulcelular')).removeClass('barramenumovil');
+                scope.$emit('scro', {top: 150 - $window.pageYOffset + 'px',height:'700px'}
+
+                );
+            }
+            scope.$apply();
+        });
+    };
+});
