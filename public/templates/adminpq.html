@@ -371,6 +371,13 @@
         width: 5vw;
         display: inline-block;
     }
+    .lineagriscierra{
+        border: solid #a5a5a4 .1vw;
+        display: inline-block;
+        margin-left: 3vw;
+        height: 7vh;
+        vertical-align: -1vh;
+    }
     @media (max-width: 1000px) {
         .buscador {
             width: 89vw;
@@ -408,8 +415,9 @@
             width: 14vw;
         }
         .contenidopq{
-            width: 52vw;
+            width: 47vw;
             margin-top: 3vh;
+            margin-left: 5%;
         }
         md-checkbox .md-container{
             top: 0;
@@ -418,7 +426,7 @@
             font-size: 5.1vw;
         }
         .txtrespon{
-            font-size: 3vw;
+            font-size: 4vw;
         }
         .nombretipopqrsf{
             font-size: 4.5vw;
@@ -502,11 +510,11 @@
         }
         .fechaderecibido{
             font-size: 4vw;
-            margin-left: 8%;
+            margin-left: 24%;
         }
         .fechadecierre{
             font-size: 4vw;
-            margin-left: 8%;
+            margin-left: 24%;
         }
         .tipodepqrsf2{
             height: 10vh;
@@ -514,6 +522,14 @@
         .imagendepqrsf{
             width: 5vw;
             display: inline-block;
+            vertical-align: top;
+            margin-top: 14%;
+        }
+        .lineagriscierra{
+            vertical-align: 6vh;
+        }
+        .red .md-container{
+            top:-8vh;
         }
     }
 
@@ -931,7 +947,7 @@
                     <p class="fechadecierre">Fecha de cierre: {{pq.fechacierre | moment:'DD'}} de {{pq.fechacierre | moment:'MMMM'}} {{pq.fechacierre | moment:'YYYY'}}</p>
                     <div style="margin-bottom: 2vh;color: #e3152d; " ng-click="editing = true">ver mas</div>
                 </div>
-                <div style="border: solid #a5a5a4 .1vw; display: inline-block; margin-left: 3vw;height: 7vh; vertical-align: -1vh"></div>
+                <div class="lineagriscierra"></div>
 
                 <div style=" display:inline-block; vertical-align: 1.5vw;margin-left: 2.5vw ">
                     <md-checkbox ng-model="datos" class="red" >
