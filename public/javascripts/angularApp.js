@@ -1140,10 +1140,8 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
         }
 
 
-
-
-
         $scope.envarMsj_a_ = function(con_quien_converso){
+
             
             if($scope.mensajeTal == "" || !$scope.mensajeTal){
                 return 0;
@@ -1163,52 +1161,63 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
             }
 
             mySocket.forward('chateando', $scope);
-            return $scope.myConversacion($scope.usuarioMensaje);
-            //
-            // $("'#'+name+'chattext2").keypress(function(e) { $scope.myConversacion(con_quien_converso);
-            //     if (e.which == 13) {if($("#'+name+'chattext2").val() == ""){
-            //
-            //     }else {
-            //         socket.emit("chateando", {
-            //             mesj: $("#'+name+'chattext2").val(),
-            //             envia:  $scope.currentUser.username,
-            //             participan: [name , $scope.currentUser.username].sort(),
-            //             recibe:  name ,
-            //             nombrec:  $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] +'",fotoperfil: "'+ (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil) +'" });}
-            //             e.preventDefault();}});'
+            //return $scope.myConversacion($scope.usuarioMensaje);
+            $scope.uploadPic(le_file);
+            $scope.uploadPic = function(file) {
+                // if(file==undefined)
+                // {
+                //     posts.create({
+                //         title: $scope.title,
+                //         link: $scope.link,
+                //         area: $scope.area
+                //     });
+                //     $scope.title = '';
+                //     $scope.link = '';
+                //     $scope.area = '';
+                //     posts.getAll()
+                //     $scope.posts = posts.posts;
+                // }
 
-            // alert('se ha enviado el mensaje a '+ con_quien_converso);
-            //
-            // var file = le_file;
-            //
-            // console.log(file);
-            // var _id= $scope.currentUser._id;
-            //
-            //     //var corporacion = angular.element(document.getElementsByName('gender2')).attr('value');
-            //     file.upload = Upload.upload({
-            //         url: '/uploads2/'+ file.name,
-            //         data:{id: $scope.nombre_archivo,file:file,nombre: file.name},
-            //         headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
-            //     });
-            //     file.upload.then(function (response) {
-            //         $timeout(function () {
-            //             file.result = response.data;
-            //         });
-            //     }, function (response) {
-            //         if (response.status > 0)
-            //             $scope.errorMsg = response.status + ': ' + response.data;
-            //     }, function (evt) {
-            //         file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            //     });
-            //     file.upload.progress(function (evt) {
-            //         // Math.min is to fix IE which reports 200% sometimes
-            //         file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            //         console.log("PostController: upload progress " + file.progress);
-            //     });
-            //     file.upload.success(function (data, status, headers, config) {
-            //         console.log(data)
-            //         $scope.document = data;
-            //     });
+                file.upload = Upload.upload({
+                    url: '/uploads2',
+                    data: {title:$scope.title,link:$scope.link,area: $scope.area},
+                    file: file,
+                    headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+                });
+
+                // file.upload.then(function (response) {
+                //     console.log("Postcontroller: upload then ");
+                //     $timeout(function () {
+                //         file.result = response.data;
+                //     });
+                // }, function (response) {
+                //     if (response.status > 0)
+                //         $scope.errorMsg = response.status + ': ' + response.data;
+                // });
+
+                // file.upload.progress(function (evt) {
+                //     // Math.min is to fix IE which reports 200% sometimes
+                //     file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                //     console.log("PostController: upload progress " + file.progress);
+                // });
+
+                file.upload.success(function (data, status, headers, config) {
+                    console.log('terminado')
+
+                    $scope.title = '';
+                    $scope.link = '';
+                    $scope.picFile = '';
+                    console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+                    socket.emit('pubs', 'update');
+
+                    posts.getAll();
+                    $scope.posts = posts.posts;
+
+                });
+
+            };
+
+
         };
        /*┼┼┼fin┼┼┼adjunto┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼*/
     });
@@ -4051,7 +4060,6 @@ app.controller('MainCtrl',['$scope','areas','Upload','mySocket','posts','auth','
             data: {title:$scope.title,link:$scope.link,area: $scope.area},
             file: file,
             headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
-
         });
 
         file.upload.then(function (response) {
