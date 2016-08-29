@@ -208,46 +208,98 @@
 
 
     }
-    @media (max-width: 600px) {
+
+    .txtsolform{
+        width: 37vw;
+        margin-left: 11vw;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
+    .iconosolform{
+        width: 1vw;
+        height: auto;
+    }
+    .nombrepreguntaform{
+        width: 10vw;
+        display: inline-block;
+        margin-top: 2vh;
+    }
+    .tipopreguntaform{
+        width: 10vw;
+        display: inline-block;
+    }
+    .botoncrearpregunta{
+        position: relative;
+        top: -6.5vh;
+        left: 29vw;
+    }
+    @media (max-width: 602px) {
         .fondoformulario{
-            height: 300px;
+            height: 25vh;
         }
-        .imguserformulario
-        {
-            position: relative;
-            border-radius: 50%;
-            width: 8vw;
-            height: 8vw;
-            left: 1vw;
-            top: 1vh;
-            overflow: hidden;
+        .tx1{
+            width: 66vw;
         }
-        .tx1 {
-            position: static;
-            margin-left: 5%;
-            width: 90%;
+        .dx1{
+            width: 66vw;
         }
-        .dx1 {
-            position: static;
-            margin-left: 5%;
-            width: 90%;
+        #inputselectformulario{
+            width: 40vw;
+            margin-left: 19vw;
         }
-        #inputselectformulario {
-            width: 100%;
-            position: static;
-            margin-left: 0;
+        #inputselectformulario span{
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
-        #selectCrearDiv{
-            margin-left: 5%;
-            width: 90%;
+        .btnpublicar{
+            margin-left: 71%;
+            margin-top: 17%;
+            width: 21vw;
         }
-        .btnpublicar {
-            margin-right: 5%;
-            float: right;
-            margin-bottom: 0;
-            margin-top: 15px;
-            width: 25%;
-            opacity: 0.6;
+        .iconoresponderformulario{
+            width: 16.5vw;
+        }
+        .tituloformulario{
+            font-size: 4.5vw;
+            margin-left: 25vw;
+        }
+        .iconossuperioruno{
+            height: 4vh;
+            margin-left: 84%;
+        }
+        .iconossuperiordos{
+            height: 4vh;
+        }
+        .txtsolform{
+            margin-left: 25vw;
+            width: 60vw;
+        }
+        .iconosolform{
+            width: 4vw;
+        }
+        .btnresultados{
+            top: 3vh;
+            left: 26vw;
+            width: 24vw;
+        }
+        .nombrepreguntaform{
+            width: 60vw;
+            margin-top: -3vh;
+            margin-left: 10vw;
+        }
+        .tipopreguntaform{
+            width: 60vw;
+            margin-left: 10vw;
+        }
+        .tipopreguntaform md-input-container{
+            width: 45vw;
+        }
+        .botoncrearpregunta{
+            top: -1.5vh;
+        }
+        .boxformularios{
+            min-height: 40vh;
+
         }
     }
 
@@ -327,20 +379,22 @@
     </div>
 
     <div>
-        <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
-            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>{{forma.fecha | moment:'DD'}} de {{forma.fecha | moment:'MMMM'}} {{forma.fecha | moment:'YYYY'}}</span>
+        <p class="txtsolform">
+            <img class="iconosolform" src="/img/icono-ron.png"> <span>{{forma.fecha | moment:'DD'}} de {{forma.fecha | moment:'MMMM'}} {{forma.fecha | moment:'YYYY'}}</span>
         </p>
     </div>
 
-    <div>7
-        <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
-            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>{{forma.descripcion}}</span>
+
+    <div>
+        <p class="txtsolform">
+            <img class="iconosolform" src="/img/icono-ron.png"> <span>{{forma.descripcion}}</span>
+
         </p>
     </div>
 
     <div>
-        <p style="width: 37vw; margin-left: 11vw; margin-top: 1vh; margin-bottom: 1vh">
-            <img style="width: 1vw; height: auto" src="/img/icono-ron.png"> <span>{{forma.respuestas.length}} personas encuestadas</span>
+        <p class="txtsolform">
+            <img class="iconosolform" src="/img/icono-ron.png"> <span>{{forma.respuestas.length}} personas encuestadas</span>
         </p>
     </div>
 
@@ -349,7 +403,7 @@
             <img class="btnresultados" src="/img/boton_resultados.png"> </a>
     </div>
     <div ng-show="editing">
-    <h3 style="margin-left: 22%">Preguntas</h3>
+    <h3 style="margin-left: 22%;margin-top: 6%;">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
 
         <p style="margin: 4px 0 0 25%;display: inline-block;">{{pp.pregunta}}</p>
@@ -362,14 +416,14 @@
 
     <div class="preguntasformulario">
         <form ng-submit="addPregunta(forma._id)" >
-            <div style="width: 10vw;display: inline-block;margin-top: 2vh">
+            <div class="nombrepreguntaform">
                 <md-input-container style="height: 3vh">
                      <label>Pregunta</label>
                      <input type="text" ng-model="pregunta.valor">
                 </md-input-container>
             </div>
 
-            <div style="width: 10vw;display: inline-block;">
+            <div class="tipopreguntaform">
                 <md-input-container>
                     <label>Tipo</label>
                     <md-select ng-model="tipo.valor">
@@ -401,7 +455,7 @@
 
             </div>
 
-            <div style="position: relative; top: -6.5vh; left: 29vw">
+            <div class="botoncrearpregunta">
                 <md-button type="submit"  class="md-raised"> Crear Pregunta </md-button>
             </div>
 

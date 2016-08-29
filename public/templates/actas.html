@@ -294,10 +294,73 @@
     {
         height: 2%;
     }
+    @media (max-width: 1000px) {
+        .txtacta{
+            font-size: 7vw;
+        }
+        .logoactas{
+            width: 6.5vw;
+        }
+        .nombrecarpeta{
+            font-size: 3vw;
+        }
+        .btnregistrar2 {
+            width: 19vw;
+        }
+        .fechaactas{
+            margin-left: -109vw;
+        }
+        .btnpubliacta {
+            width: 23vw;
+            margin-left: 66%;
+        }
+        .exami{
+            width: 12vw;
+            height: 11vw;
+        }
+        .icosup {
+            width: 5vw;
+        }
+        .titulopubliacta{
+            font-size: 5vw;
+        }
+        .txtsaw {
+            font-size: 4.2vw;
+        }
+        .ciruser{
+            width: 8vw;
+            height: 8vw;
+            margin-top: 3vh;
+        }
+        .photomini{
+            width: 7.6vw;
+            height: 5vh;
+
+        }
+        .mininame{
+            font-size: 3.9vw;
+        }
+        .minitxt{
+            font-size: 3.6vw;
+        }
+        .guarda{
+            margin-left: -105vw;
+        }
+        .imguser{
+            top: 3vh;
+        }
+        .datosaprobacion{
+            width: 79vw;
+            margin-left: 6%;
+        }
+    }
 </style>
 
 <div class="contenedorcarpetas" ng-if="!xx && !xxx">
-    <div class="contenedorlogoactas"><img src="/img/icono-rojo.png" class="logoactas"><span class="txtacta">Actas</span></div>
+    <div class="contenedorlogoactas">
+        <img src="/img/icono-rojo.png" class="logoactas">
+        <span class="txtacta">Actas</span>
+    </div>
     <div class="lineaactas"></div>
     <!--tres carpetas -->
     <div class="carpetas"><img src="/img/icono-carpeta.png" class="btnregistrar2"  ng-click="selec(1)"><p class="nombrecarpeta">SOLUCIONES</p></div>
@@ -363,7 +426,7 @@
 
             </div>
 
-            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="APPLICATION/PDF" ngf-max-size="200MB" ng-hide="true" />
+            <input type="file" ngf-select ng-model="picFile" id="file-input" ngf-multiple="false" name="file" accept="APPLICATION/PDF" ngf-max-size="200MB" ng-hide="true"/>
 
             <i ng-show="myForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
 
@@ -425,7 +488,7 @@
                     <div ng-init="ac.aprobaciones = verificarAprobados(ac.comentarios)" ng-show="currentUser.adminactas">
                         <div ng-repeat="aprob in ac.aprobaciones">
 
-                            <p>{{aprob.nombre}} aprobo: {{aprob.aprobado}} - {{aprob.fecha | moment:'DD'}} de {{aprob.fecha | moment:'MMMM'}} {{aprob.fecha | moment:'YYYY'}} </p>
+                            <p class="datosaprobacion">{{aprob.nombre}} aprobo: {{aprob.aprobado}} - {{aprob.fecha | moment:'DD'}} de {{aprob.fecha | moment:'MMMM'}} {{aprob.fecha | moment:'YYYY'}} </p>
                         </div>
                     </div>
                     <div class="otrocomment" ng-repeat="com in ac.comentarios">

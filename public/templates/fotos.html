@@ -55,24 +55,30 @@
     a {
         text-decoration: none;
     }
-    .beAlbum {
+
+    .albumsfotos{
         display: inline-block;
-        width: 27%;height: 20vh;
+        width: 27%;
+        height: 20vh;
         margin-left: 4.5%;
         margin-bottom: 4.5%;
     }
-    .beImg{
-        height: 100%;
-        width: 100%;
-    }
-
-    @media (max-width: 600px) {
-        .beAlbum {
-            width: 90%;
-            height: auto;
+    @media(max-width: 602px){
+        md-input-container{
+            width: 62vw !important;
         }
-        .beAlbum  img{
-            height: auto;
+        .btnpublicarfoto{
+            width: 24%;
+        }
+        .imgeli{
+            width: 2.9vw;
+        }
+        .titulosalbums{
+            margin-top: 5vh !important;
+        }
+        .albumsfotos{
+            width: 43%;
+
         }
     }
 </style>
@@ -95,7 +101,9 @@
     </form>
 </div>
 
-    <div ng-repeat="album in fotos" class="beAlbum" style="">
+
+    <div ng-repeat="album in fotos" class="albumsfotos">
+
 
 
             <div class="hovernegro">
