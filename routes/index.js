@@ -43,8 +43,8 @@ var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 router.get('/mensajesNoChat/:mes', function(req, res, next) {
 
   var sabe = req.params.mes;
+  var vardeconvs= [];;
 
-  console.log(sabe)
   Conversation.find({ $or:[  {'usernameone':sabe}, {'usernametwo':sabe} ]}).distinct('usernameone' , function(err,mensa){
     if(err){ return next(err); }
     var alpha = mensa;
@@ -53,13 +53,27 @@ router.get('/mensajesNoChat/:mes', function(req, res, next) {
       var beta = mensa2;
       var omega = alpha.concat(beta);
       var uniqueNames = [];
+
       for(var a = 0; a < omega.length; a++ ){
         if(uniqueNames.indexOf(omega[a]) == -1 && omega[a] != sabe) uniqueNames.push(omega[a]);
       }
-      res.json(uniqueNames);
-    });
 
+
+
+      Conversation.find({}, function(err, allConversation) {
+        if (err) throw err;
+        res.json({userConectados: uniqueNames, conversaciones: allConversation});//uniqueNames
+      });
+
+
+
+
+
+    });
   });
+
+
+
 });
 
 router.get('/posts', function(req, res, next) {
