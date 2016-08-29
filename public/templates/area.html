@@ -373,12 +373,79 @@
     {
         display: inline-block;vertical-align: -1.4vh
     }
-
+    .imgnombrearea  {
+        width: 100%;
+        margin-top: -60px;
+    }
+    .nombrearea{
+        position: absolute;
+        z-index: 15;
+        top: -20px;
+        color: white;
+        font-size: 4vh;
+        left: 1vw;
+    }
+    @media (max-width: 1000px) {
+        .imgnombrearea  {
+            width: 100%;
+            margin-top: 0px;
+        }
+        .contenedorpubli{
+            height: 22vh;
+        }
+        .nombrearea{
+            top: 17px;
+        }
+        .tittlebox{
+            top: -9%;
+            width: 67vw;
+        }
+        .descriptionbox{
+            width: 67vw;
+            top: 19%;
+        }
+        .iconadjun{
+            width: 10vw;
+        }
+        #inputselectformulario{
+            width: 29vw;
+        }
+        #inputselectformulario span{
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .btnpublicar{
+            width: 20vw;
+            height: 5.2vh;
+        }
+        .supcoment{
+            font-size: 4vw;
+        }
+        .tittlepli{
+            font-size: 4.5vw;
+        }
+        div.transbox p{
+            font-size: 4vw;
+        }
+        .imgtx{
+            width: 4vh;
+        }
+        .imgusercoment2{
+            width: 10vw;
+            height: 10vw;
+        }
+        md-input-container{
+            font-size: 4vw !important;
+        }
+        .imgcoment{
+            width: 5vh;
+        }
+    }
 </style>
-<img src="/img/Iconos-83.png" style="width: 100%;margin-top: -60px">
+<img src="/img/Iconos-83.png" class="imgnombrearea">
 
 
-<p style="position: absolute;z-index: 15; top: -20px;color: white;font-size: 4vh;left: 1vw">{{area.nombre}}</p>
+<p class="nombrearea">{{area.nombre}}</p>
 <div class="cajabuscar">
     <img class="lupita" src="/img/lupa.png">
     <md-input-container style="margin-left: 5%; width: 90%; margin-bottom: 0">
