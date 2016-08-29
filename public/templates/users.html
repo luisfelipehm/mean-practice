@@ -197,6 +197,21 @@
     .añadircarpeta{
         width: 10vw;
     }
+    .cuadroactualizaruser1{
+        width: 28%;
+        display: inline-block;
+        margin-top: 1vh;
+    }
+    .cuadroactualizaruser2{
+        width: 70%;
+        margin-top: 1vh;
+    }
+    .cuadroactualizaruser2{
+        width: 32%;
+        display: inline-block;
+        float: right;
+        margin-top: 1vh;
+    }
     @media (max-width: 1000px) {
         .loginedit
         {
@@ -221,6 +236,26 @@
         }
         .boximgusersedit{
             margin-right: 7vw;
+        }
+        .cuadroactualizaruser1{
+            width: 70%;
+            margin-top: 1vh;
+        }
+        .cuadroactualizaruser2{
+            width: 82%;
+            /* display: inline-block; */
+            float: left;
+            margin-top: -1vh;
+        }
+        .cuadroactualizaruser2{
+            width: 82%;
+            float: left;
+            margin-top: -1vh;
+        }
+        .btnactualizar{
+            width: 31vw;
+            height: 7.2vh;
+            margin-left: 1.5%;
         }
     }
 
@@ -517,7 +552,7 @@
 
                  <div ng-if="usuario.data.adminusers">
 
-                     <div style="width: 28%;display: inline-block; margin-top: 1vh">
+                     <div class="cuadroactualizaruser1">
                          <md-checkbox ng-model="user.adminusers"  aria-label="Modificar Usuarios" class="red" >
                              Modificar Usuarios
                          </md-checkbox>
@@ -532,7 +567,7 @@
                      </div>
 
 
-                     <div style="width: 32%;display: inline-block; float: right;margin-top: 1vh">
+                     <div class="cuadroactualizaruser2">
 
                          <md-checkbox ng-model="user.adminforms" class="red" >
                              Crear Formularios
@@ -546,7 +581,7 @@
                          </md-checkbox>
                      </div>
 
-                     <div style="width: 32%;display: inline-block; float: right; margin-top: 1vh">
+                     <div class="cuadroactualizaruser3">
                          <md-checkbox ng-model="user.admincrono" class="red" >
                              Crear Eventos de Cronograma
                          </md-checkbox>

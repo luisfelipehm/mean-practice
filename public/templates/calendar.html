@@ -516,6 +516,13 @@
                     <img src="/img/crear-evento-1.png" class="imagencrearevento">
                 </div>
 
+            <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
+            </div>
+        <div style="margin-left: 60%;margin-top: 79vh; position: absolute" class="btncrearevento">
+            <img src="/img/crear-evento-1.png" style="width: 40%">
+        </div>
+
+
             </div>
     </div>
 
@@ -563,6 +570,7 @@
        }) ;
         $('.btncreareven').click(function(){
             $('#modal').hide();
+            location.reload();
         });
 
        $('.cerro').click(function(){
