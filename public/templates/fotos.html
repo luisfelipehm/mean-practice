@@ -55,6 +55,30 @@
     a {
         text-decoration: none;
     }
+    .albumsfotos{
+        display: inline-block;
+        width: 27%;
+        height: 20vh;
+        margin-left: 4.5%;
+        margin-bottom: 4.5%;
+    }
+    @media(max-width: 602px){
+        md-input-container{
+            width: 62vw !important;
+        }
+        .btnpublicarfoto{
+            width: 24%;
+        }
+        .imgeli{
+            width: 2.9vw;
+        }
+        .titulosalbums{
+            margin-top: 5vh !important;
+        }
+        .albumsfotos{
+            width: 43%;
+        }
+    }
 </style>
 
 <script>
@@ -75,7 +99,7 @@
     </form>
 </div>
 
-    <div ng-repeat="album in fotos" style="display: inline-block;width: 27%;height: 20vh;margin-left: 4.5%;margin-bottom: 4.5%">
+    <div ng-repeat="album in fotos" class="albumsfotos">
 
 
             <div class="hovernegro">

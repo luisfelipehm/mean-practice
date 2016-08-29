@@ -21,7 +21,16 @@
         left: 4.5%;
         top: 10px;
     }
-    @media (max-width: 1000px) {
+    .titulofoto{
+        position: absolute;
+        color: #575756;
+        top: 0;
+        left: 40%;
+    }
+    .nombreadjuntonoticia{
+        margin-top: 0%; margin-left: 25%;
+    }
+    @media (max-width: 602px) {
         .imgbtnpub{
             width: 26.8vw;
         }
@@ -29,11 +38,40 @@
             width: 12vw;
             margin-left: 17vw;
         }
+        .titulofoto{
+            top: 7%;
+        }
+        .ng-gallery{
+            width: 97vw;
+            margin-top: 7%;
+        }
+        .nombreadjuntonoticia{
+            margin-top: 16px;
+            margin-left: -2%;
+        }
+        div.ng-gallery div{
+            width: 46%;
+        }
+        .nombreadjunto{
+            font-size: 2vh;
+        }
+        .ng-gallery-content > a.nav-left{
+            left: 8px;
+        }
+        .ng-gallery-content > a.nav-right{
+            right: 8px;
+        }
+        .ng-gallery-content > img{
+            top: 48%;
+        }
+        .ng-gallery-content > a.close-popup{
+            top: 8px;
+        }
     }
 
 </style>
 
-<h1 style="position: absolute;color: #575756;top: 0;left: 40%">{{foto.nombre}}</h1>
+<h1 class="titulofoto">{{foto.nombre}}</h1>
 
 <form  ng-show="usuario.data.adminfotos" enctype="multipart/form-data" name="myForm2" ng-submit="uploadPic(picFile)">
 
@@ -46,16 +84,19 @@
 
     </div>
 
-    <ul style="margin-top: 0%; margin-left: 25%">
-        <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$errorParam}}
-      <span class="progress" ng-show="f.progress >= 0">
-        <div style="width:{{f.progress}}%"
-             ng-bind="f.progress + '%'"></div>
-      </span>
-        </li>
-        <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-        </li>
-    </ul>
+        <ul class="nombreadjuntonoticia">
+
+                <li ng-repeat="f in picFile" style="font:smaller" class="nombreadjunto">{{f.name}} {{f.$errorParam}}
+
+              <span class="progress" ng-show="f.progress >= 0">
+                <div style="width:{{f.progress}}%"
+                     ng-bind="f.progress + '%'"></div>
+              </span>
+                </li>
+                <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                </li>
+
+        </ul>
     {{errorMsg}}
 
 
