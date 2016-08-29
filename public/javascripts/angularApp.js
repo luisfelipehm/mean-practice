@@ -2972,8 +2972,8 @@ app.controller('CalendarCtrl',['$scope','$http','$window','eventos','users','aut
                         angular.element(document.getElementsByClassName('cut')).append($compile(
                             '   <p class="horaround">'+moment(evento.horainicio).format('LT')+'</p>' +
                             '   <div class="titsub"><span>' +
-                            '       <img ng-show="usuario.data.admincrono" ng-click="eliminarevento(\''+ evento._id+'\')" style="height:2vh;margin-left:4%" src="/img/icono-eliminar-g.png">' +
-                            '       <img style="height:2vh;margin-left:4%" src="/img/evento.png">'+evento.nombre+'<img src="img/Iconos-81.png" class="desplegarev"> </span>' +
+                            '       <img ng-show="usuario.data.admincrono" ng-click="eliminarevento(\''+ evento._id+'\')" class="iconoeliminarevento" src="/img/icono-eliminar-g.png">' +
+                            '       <img class="iconoeventos" src="/img/evento.png">'+evento.nombre+'<img src="img/Iconos-81.png" class="desplegarev"> </span>' +
                             '       <div class="infoevshow">' +
                             '       <p class="labelshowevdes">• Descripcion:</p>' +
                             '       <p class="datoshowevdes">'+evento.descripcion+'</p> ' +

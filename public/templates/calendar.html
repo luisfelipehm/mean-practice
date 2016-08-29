@@ -371,20 +371,129 @@
         top: 26vh ;
         position: absolute;
     }
-    @media (max-height: 700px) {
-        .calendarcontainer2
-        {
-            top: 100px;
-        }
+    .fondotitulocrono{
+        width: 100%;
+        margin-top: -60px;
+    }
+    .iconoeliminarevento{
+        height:2vh;
+        margin-left:4%;
+    }
+    .iconoeventos{
+        height:2vh;
+        margin-left:4%;
+    }
+    .crearevento{
+       background-color: white;
+        width: 24vw;
+        height: 54vh;
+        margin-top: 15%;
+        margin-left: 39%;
+    }
+    .cerro2{
+        display: none;
+    }
+    .imagencrearevento{
+        width: 25%;
+    }
+    /*@media (max-height: 700px) {*/
+        /*.calendarcontainer2*/
+        /*{*/
+            /*top: 100px;*/
+        /*}*/
+        /*.btncrearevento{*/
+            /*top: 23vh !important;*/
+        /*}*/
+    /*}*/
+    @media (max-width: 1000px) {
         .btncrearevento{
-            top: 23vh !important;
+            top: 108vh !important;
+            left: 45vw;
+            width: 100vw;
+        }
+        .fondotitulocrono{
+            width: 89%;
+            margin-top: 0%;
+            margin-left: 5%;
+        }
+        .titulocrono{
+            top: 2%;
+            left: 8%;
+        }
+        .leftcal{
+            top: 114vh;
+            width: 90%;
+            left: 7%;
+        }
+        .calendarcontainer2{
+            width: 80%;
+            left: 10%;
+            top: 78px;
+        }
+        .fondofalso{
+            height: 220vh;
+        }
+        .iconoeliminarevento{
+            height: 5vh;
+        }
+        .iconoeventos{
+            height: 5vh;
+        }
+        .desplegarev{
+            height: 4.5vh;
+        }
+        .showldia{
+            font-size: 5vh;
+        }
+        .titsub{
+            font-size: 3vh;
+        }
+        .horaround{
+            font-size: 3vh;
+        }
+        .datoshowevdes{
+            font-size: 3vh;
+        }
+        .labelshowevdes{
+            font-size: 4vh;
+        }
+        .crearevento{
+            width: 80vw;
+            height: 83vh;
+            margin-left: 10%;
+        }
+        #formularioeventos{
+            top: 16.5vh;
+            left: 18vw;
+        }
+        .horaini{
+            width: 29vw;
+        }
+        .horafin{
+            width: 28vw;
+        }
+        .btncreareven{
+            width: 36vw;
+        }
+        .cerro2{
+            display: block;
+            width: 10vw;
+            float: right;
+            margin-top: 8vh;
+            margin-right: 4vw;
+        }
+        .cerro{
+            display: none;
+        }
+        .imagencrearevento{
+            width: 45%;
         }
     }
 
 
 </style>
 
-<img src="/img/Iconos-83.png" style="width: 100%;margin-top: -60px">
+<img src="/img/Iconos-83.png" class="fondotitulocrono">
 
 <label class="titulocrono">Cronograma</label>
 
@@ -404,8 +513,15 @@
                         <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
                     </div>
                 <div  ng-show="usuario.data.admincrono" class="btncrearevento">
-                    <img src="/img/crear-evento-1.png" style="width: 25%">
+                    <img src="/img/crear-evento-1.png" class="imagencrearevento">
                 </div>
+
+            <div ui-calendar="uiConfig.calendar" ng-model="eventSources" id="calendar"></div>
+            </div>
+        <div style="margin-left: 60%;margin-top: 79vh; position: absolute" class="btncrearevento">
+            <img src="/img/crear-evento-1.png" style="width: 40%">
+        </div>
+
 
             </div>
     </div>
@@ -415,7 +531,8 @@
     <div style="position: absolute; width: 100vw;height: 100vh;" class="cerro">
 
     </div>
-    <div style="background-color: white; width: 24vw;height: 54vh; margin-top: 15%; margin-left: 39%;" class="crearevento">
+    <img src="/img/cerrarevento.png"  class="cerro2">
+    <div class="crearevento">
                 <div id="formularioeventos">
                     <form ng-submit="crearEvento(nombre,descripcion,fechainicio,fechafinal,horainicio,horafinal)">
                         <md-input-container style="margin-bottom: 0%">
@@ -453,9 +570,13 @@
        }) ;
         $('.btncreareven').click(function(){
             $('#modal').hide();
+            location.reload();
         });
 
        $('.cerro').click(function(){
+           $('#modal').hide();
+       });
+       $('.cerro2').click(function(){
            $('#modal').hide();
        });
     });
