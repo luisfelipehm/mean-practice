@@ -273,7 +273,7 @@
         top: 0px !important;
 
     }
-    @media (max-width: 1000px) {
+    @media (max-width: 602px){
         .movilvisible{
             display: block;
         }
@@ -322,6 +322,9 @@
         }
         .imglogosol{
             top:37px!important;
+        }
+        .departamentoslinks{
+            width: 60vw;
         }
 
     }
@@ -453,7 +456,10 @@
 
 
                 <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li></a>
-                <a style="color:black;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}"><li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li></a>
+                <a style="color:white;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}">
+                    <li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh">
+                        <img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li>
+                </a>
 
             </div>
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenumov">Formularios</span></a> </li>
