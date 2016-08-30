@@ -236,6 +236,19 @@
         margin: 4px 0 0 25%;
         display: inline-block;
     }
+    .selecttipo{
+        text-transform: none;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid;
+        width: 7vw;
+        margin-top: 8%;
+    }
+    .botonañadir{
+        width: 6vw;
+        border: 0;
+        margin-bottom: 1vh;
+    }
     @media (max-width: 602px) {
         .fondoformulario{
             height: 25vh;
@@ -298,13 +311,13 @@
             width: 45vw;
         }
         .botoncrearpregunta{
-            top: -1.5vh;
+            top: 1vh
         }
         .boxformularios{
             min-height: 40vh;
         }
         .anadir{
-            width: 23vw;
+            width: 30vw;
         }
         .tipopreguntaform span{
             padding-bottom: 15px;
@@ -315,6 +328,14 @@
         }
         .txtpreguntas{
             max-width: 65%;
+        }
+        .botonañadir{
+            width: 6vw;
+            margin-bottom: 1vh;
+            margin-top: 2vh;
+        }
+        .selecttipo{
+            width: 49vw;
         }
     }
 
@@ -436,14 +457,20 @@
             </div>
 
             <div class="tipopreguntaform">
-                <md-input-container>
-                    <label>Tipo</label>
-                    <md-select ng-model="tipo.valor">
-                        <md-option ng-repeat="state in states" value="{{state.html}}">
-                            {{state.visual}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
+               <!--<md-input-container>-->
+                    <!--<label>xxx</label>-->
+                    <!--<md-select ng-model="tipo.valor">-->
+                        <!--<md-option ng-repeat="state in states" value="{{state.html}}">-->
+                            <!--{{state.visual}}-->
+                        <!--</md-option>-->
+                    <!--</md-select>-->
+                <!--</md-input-container>-->
+
+                <select ng-model="tipo.valor" class="selecttipo">
+                    <option ng-repeat="state in states" value="{{state.html}}">
+                        {{state.visual}}
+                    </option>
+                </select>
             </div>
 
             <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
@@ -455,7 +482,7 @@
 
 
                 <!--<input type="text" ng-model="opcion.valor">-->
-                <div style="width: 6vw; border: 0; margin-bottom: 1vh" ng-click="addOpcion()">
+                <div class="botonañadir" ng-click="addOpcion()">
                     <img class="anadir" src="/img/botones_anadir.png">
                 </div>
 
