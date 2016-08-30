@@ -232,6 +232,10 @@
         top: -6.5vh;
         left: 29vw;
     }
+    .txtpreguntas{
+        margin: 4px 0 0 25%;
+        display: inline-block;
+    }
     @media (max-width: 602px) {
         .fondoformulario{
             height: 25vh;
@@ -301,6 +305,16 @@
         }
         .anadir{
             width: 23vw;
+        }
+        .tipopreguntaform span{
+            padding-bottom: 15px;
+            padding-top: 10px;
+        }
+        .md-select-menu-container.md-active md-select-menu{
+            z-index: 15;
+        }
+        .txtpreguntas{
+            max-width: 65%;
         }
     }
 
@@ -404,7 +418,7 @@
     <h3 style="margin-left: 22%;margin-top: 6%;">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
 
-        <p style="margin: 4px 0 0 25%;display: inline-block;">{{pp.pregunta}}</p>
+        <p class="txtpreguntas">{{pp.pregunta}}</p>
         <img src="/img/icono-eliminar-g.png" style="height: 18px;display:inline-block;cursor: pointer" ng-click="removerPregunta(pp._id)">
     </div>
 

@@ -273,6 +273,16 @@
         top: 0px !important;
 
     }
+    .cerrarsesion{
+        color: white;
+        width: 200px;
+        font-size: 15px;
+        display: inline-block;
+        text-align: center;
+        margin-top: -13px;
+        margin-left: -40px;
+        vertical-align: top;
+    }
     @media (max-width: 602px){
         .movilvisible{
             display: block;
@@ -299,12 +309,16 @@
         {
             position: relative;
             top: 8vh;
-            vertical-align:top;
+            vertical-align: top;
             margin-left: 17.2%;
             margin-bottom: 2px;
-            width: 19vw;
+            width: 100vw;
             z-index: 1;
             background-color: transparent;
+            overflow-y: scroll;
+            height: 100vh;
+            padding-top: 9%;
+            padding-bottom: 25%;
         }
         .txtmenumov
         {
@@ -312,7 +326,7 @@
             top: -1.8vh;
             font-size: 15px;
             color: white;
-            margin-left: 43%;
+            margin-left: 5%;
         }
         .lista{
             height: 8vh;
@@ -325,6 +339,21 @@
         }
         .departamentoslinks{
             width: 60vw;
+        }
+        .cerrarsesion{
+            margin-top: -8px;
+        }
+        .iconorojo{
+            top: -1.8vh;
+        }
+        .lista:hover
+        {
+            background-image: url(/img/sombramenu.png);
+            background-image: none !important;
+            outline: none;
+        }
+        li{
+            outline: none;
         }
 
     }
@@ -432,6 +461,15 @@
     });
 
 
+
+//    $('.depmovi').click(function(){
+//        $('.cajamenumovil').css('height','100vh')
+//        $('.cajamenumovil').css('overflow-y','scroll')
+//        $('.cajamenumovil').css('width','73vw')
+//        $('.cajamenumovil').css('padding-right','55')
+//    })
+
+
     $('.diacalendar').html(moment().locale('es').format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
     $('.dianumcalendar').html(moment().locale('es').format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
     $('.mescalendar').html(moment().locale('es').format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
@@ -449,21 +487,24 @@
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Usuarios</span></a> </li>
             <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Gerentes</span></a> </li>
 
-            <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false">
+            <li class="lista depmovi" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false">
                 <img class="iconorojo" src="/img/icono-rojo.png">
                 <a style="margin: 0" class="linkmenu">
                     <span class="txtmenumov">Departamentos</span>
                 </a>
             </li>
-            <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
+            <div ng-show="mostrarareas" ng-controller="AreaxCtrl" style="margin-top: -5vh;padding-bottom: 6%">
 
 
                 <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas">
-                    <li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li>
+                    <li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh">
+                        <img class="iconogris" src="/img/icono-ron.png">
+                        Gestionar Departamentos
+                    </li>
                 </a>
-                <a style="color:white;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}" >
-                    <li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"  ng-click="mostrarnav = !mostrarnav">
-                        <img class="iconogris" src="/img/icono-ron.png" > {{ar.nombre}} </li>
+                <a style="color:white;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}">
+                    <li class="departamentoslinks linkcerrarnavbar" style="list-style: none;margin-left: 3vw;margin-top: 1vh"  ng-click="mostrarnav = !mostrarnav" >
+                        <img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li>
                 </a>
 
             </div>
@@ -473,7 +514,7 @@
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu" ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Cronograma</span></a> </li>
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/pqrsfdispatcher" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">PQRSF</span></a> </li>
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/actas" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Asociados</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu" style="color: white;width: 200px;font-size: 15px;display: inline-block;text-align: center;margin-top: -13px;margin-left: -30px;vertical-align: top;" > Cerrar Sesión</a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu cerrarsesion"  > Cerrar Sesión</a> </li>
 
         </div>
     </div>
