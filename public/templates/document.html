@@ -203,9 +203,24 @@
         font-size: 1vw;
         font-weight: bold;
     }
+    .documentosmovil{
+        display: none;
+    }
+    .documentospc{
+        display: none;
+    }
     @media (max-width: 602px){
-        #tab22{
+        .mi{
+            font-size: 23px;
+        }
+        .tab2{
+            border: none;
+            width: 90% !important;
+        }
+        #tab222{
             font-size: 5vw;
+            margin-top: -9%;
+            margin-left: 4%;
         }
         .tab2{
             width: 50%;
@@ -225,7 +240,7 @@
         }
         .carpetasdoc{
             height: 56%;
-            margin-top: 38%;
+            margin-top: 53%;
             margin-left: 26%;
         }
         .mi{
@@ -255,7 +270,7 @@
         }
         .btnpubli{
             width: 39vw;
-            height: 5vh;
+            height: 3vh;
             margin-left: 56.5vw;
             font-size: 5vw;
         }
@@ -272,6 +287,21 @@
         }
         .tab1{
          border: none;
+        }
+        .documentosmovil{
+            display: block;
+        }
+        .documentospc{
+            display: none;
+        }
+        #tab111{border-left: 0;border-top: 0}
+        #tab222{border-top: 0;border-left: 0;text-align: center;font-weight: bold;font-family: Arial;
+        }
+        .imageniconosdoc{
+            margin-top: 47% !important;
+        }
+        .nombrecarpeta label{
+            padding-bottom: 8px;
         }
     }
 
@@ -371,7 +401,7 @@
     <br>
 
     <!--Titulo de la tabla-->
-    <div class="boxpubli" style="background-color: white">
+    <div class="boxpubli documentospc" style="background-color: white">
         <div class="conthead">
             <div class="enlinea tab1" id="tab11"></div>
             <div class="enlinea tab2" id="tab22"> <p>Nombre</p></div>
@@ -402,6 +432,43 @@
             </p>
 
         </div>
+
+
+        </div>
+    </div>
+
+
+    <!--visualización carpeta para movil -->
+
+    <div class="boxpubli documentosmovil" style="background-color: white">
+        <div class="conthead">
+            <div class="enlinea tab1" id="tab111"></div>
+            <div class="enlinea tab2" id="tab222"> <p>Nombre</p></div>
+        </div>
+
+        <div ng-repeat="doc in document.carpetas" style="display:flex">
+            <div class="enlinea tab1" ><img src="/img/icono-carpeta.png" class="carpetasdoc"></div><!--
+            --><div class="enlinea tab2" style="overflow: hidden;"><p class="mi"><a href="#/root/documents/{{doc._id}}">{{doc.nombre}}</a></p></div><!--
+            <!--&ndash;&gt;<div class="enlinea tab3" ><p class="mi"> &#45;&#45; </p></div>&lt;!&ndash;-->
+            <!--&ndash;&gt;<div class="enlinea tab4" >-->
+                <!--<p class="mi">-->
+                    <!--<img ng-click="deletecarpeta(doc)" src="img/iconox.png"style="height: 2vh;margin-left: 35%">-->
+                <!--</p>-->
+            <!--</div>-->
+        </div>
+
+        <!--info de los documentos y carpetas-->
+        <div ng-repeat="archivo in document.files" style="display: flex;" ng-class="{'last':$last}">
+
+        <div class="enlinea tab1"><img src="/img/icono-documentos-r.png" class="imageniconosdoc"></div>
+            <div class="enlinea tab2"><p class="mi"><a href="{{archivo.adjunto}}"  ng-bind="archivo.nombre | cortarlargostring:true"></a></p></div>
+            <!--&lt;!&ndash;<div class="enlinea tab3"><p class="mi">{{archivo.tamano}}</p></div>&ndash;&gt;-->
+        <!--<div class="enlinea tab4">-->
+            <!--<p class="mi">-->
+                <!--<img ng-click="deletearchivodocs(archivo)" ng-show="usuario.data.admindocs" src="img/iconox.png"style="height: 2vh;margin-left: 35%">-->
+            <!--</p>-->
+
+        <!--</div>-->
 
 
         </div>

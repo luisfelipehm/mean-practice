@@ -432,11 +432,9 @@
     });
 
 
-
     $('.diacalendar').html(moment().locale('es').format('dddd')).css('left',calcularleft($('.diacalendar'))+'%');
     $('.dianumcalendar').html(moment().locale('es').format('DD')).css('left',calcularleft($('.dianumcalendar'))+'%');
     $('.mescalendar').html(moment().locale('es').format('MMMM')+' '+moment().format('YYYY')).css('left',calcularleft($('.mescalendar'))+'%');
-
 </script>
 <div class="movilvisible" ng-controller="NavCtrl as nav">
     <div ng-init="mostrarnav = false"></div>
@@ -448,27 +446,34 @@
 
         <div class="cajamenumovil" >
 
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"><span class="txtmenumov">Usuarios</span></a> </li>
-            <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"><span class="txtmenumov">Gerentes</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Usuarios</span></a> </li>
+            <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Gerentes</span></a> </li>
 
-            <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false"><img class="iconorojo" src="/img/icono-rojo.png"> <a style="margin: 0" class="linkmenu"><span class="txtmenumov">Departamentos</span></a> </li>
+            <li class="lista" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false">
+                <img class="iconorojo" src="/img/icono-rojo.png">
+                <a style="margin: 0" class="linkmenu">
+                    <span class="txtmenumov">Departamentos</span>
+                </a>
+            </li>
             <div ng-show="mostrarareas" ng-controller="AreaxCtrl">
 
 
-                <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas"><li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li></a>
-                <a style="color:white;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}">
-                    <li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh">
-                        <img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li>
+                <a style="color:black;text-decoration: none" ng-show="currentUser.username == 'dfapolinarm'" class="departamentoslinks"  href="#/root/areas">
+                    <li class="departamentoslinks" style="list-style: none;margin-left: 5vw;margin-top: 1vh"><img class="iconogris" src="/img/icono-ron.png"> Gestionar Departamentos </li>
+                </a>
+                <a style="color:white;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}" >
+                    <li class="departamentoslinks" style="list-style: none;margin-left: 3vw;margin-top: 1vh"  ng-click="mostrarnav = !mostrarnav">
+                        <img class="iconogris" src="/img/icono-ron.png" > {{ar.nombre}} </li>
                 </a>
 
             </div>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu"><span class="txtmenumov">Formularios</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"><span class="txtmenumov">Documentos</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/fotos/"  class="linkmenu"><span class="txtmenumov">Actividades</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu"><span class="txtmenumov">Cronograma</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/pqrsfdispatcher" class="linkmenu"><span class="txtmenumov">PQRSF</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/actas" class="linkmenu"><span class="txtmenumov">Asociados</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu" style="color: white;width: 200px;font-size: 15px;display: inline-block;text-align: center;margin-top: -13px;margin-left: -30px;vertical-align: top;"> Cerrar Sesión</a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="formularios" class="linkmenu" ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Formularios</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="documentos" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Documentos</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/fotos/"  class="linkmenu" ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Actividades</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu" ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Cronograma</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/pqrsfdispatcher" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">PQRSF</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/actas" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Asociados</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu" style="color: white;width: 200px;font-size: 15px;display: inline-block;text-align: center;margin-top: -13px;margin-left: -30px;vertical-align: top;" > Cerrar Sesión</a> </li>
 
         </div>
     </div>

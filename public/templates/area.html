@@ -385,6 +385,12 @@
         font-size: 4vh;
         left: 1vw;
     }
+    .eliminarcomentario{
+        text-align:center;
+        margin: 1.5vh 0 0 0;
+        font-weight: bold;
+        font-size: 1vw;
+    }
     @media (max-width: 602px) {
         .imgnombrearea  {
             width: 100%;
@@ -440,6 +446,14 @@
         .imgcoment{
             width: 5vh;
         }
+        .eliminarBox{
+            right: 0vw;
+            width: 53vw;
+            height: 8vh;
+        }
+        .eliminarcomentario{
+            font-size: 3vw;
+        }
     }
 </style>
 <img src="/img/Iconos-83.png" class="imgnombrearea">
@@ -474,7 +488,7 @@
             </md-input-container>
         </div>
 
-        <!--Descripcion del formulario para publicar-->
+        <!--Desescripcion del formulario para publicar-->
         <div class="descriptionbox">
             <md-input-container style="width: 100%;font-size: 1.7vh;margin-top: 1vh">
                 <label>Descripción</label>
@@ -554,7 +568,7 @@
         <div class="boxpubli" ng-init="deleting = false">
 
 
-            <div class="eliminarBox" ng-show="deleting" ><p style="text-align:center;margin: 1.5vh 0 0 0;font-weight: bold; font-size: 1vw">Desea eliminar la publicación</p>
+            <div class="eliminarBox" ng-show="deleting" ><p class="eliminarcomentario">Desea eliminar la publicación</p>
                 <a ng-click="remove(post)"><img src="/img/Iconos-65.png" style="position: absolute;bottom:6%;width: 10%;left: 25%;"></a>
                 <p ng-click="deleting = false"><img style="position: absolute;bottom: 6%;width: 10%;right: 25%" src="/img/Iconos-64.png"></p>
 
