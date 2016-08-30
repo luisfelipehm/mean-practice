@@ -28,10 +28,14 @@
     @media (max-width: 1000px) {
         .tittleresul{
             font-size: 4vw;
+            width: 73%;
+            margin-left: 14%;
         }
         .btnexportar{
             left: 63%;
             width: 30vw;
+            margin-top: 13vh;
+            margin-bottom: 5vh;
         }
         .graficasform{
             width: 100%;
@@ -43,7 +47,13 @@
             min-height: 11%;
             height: 19vh;
         }
-
+        svg.nvd3-svg{
+            height: 300px !important;
+        }
+        .nv-label > text {
+            fill: #ffffff !important;
+            text-anchor: middle !important;
+        }
     }
 
 </style>
@@ -66,9 +76,9 @@
         </tr>
         </thead>
         <tbody >
-    
+
         <tr ng-repeat="resp in formulario.respuestas">
-    
+
             <td>{{resp.author}}</td>
             <td>{{resp.fecha}}</td>
             <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{typee(r.respuesta) == "object" ? alegible(r.respuesta) : r.respuesta}}</td>
