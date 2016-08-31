@@ -413,7 +413,26 @@
     {
         display: inline-block;vertical-align: -1.4vh
     }
-    @media (max-width: 600px) {
+    .unicamente{
+        display: inline-block;
+    }
+    @media (max-width: 900px) {
+        .thumb{
+            width: 31px;
+            height: 32px;
+            left: -4px;
+        }
+        .eliminarBoxcomment{
+            top: -12vh;
+            width: 39vw;
+            height: 11vh;
+        }
+        .eliminarBoxcomment p{
+            font-size: 10px;
+        }
+        .treli2{
+            top: 10vh;
+        }
         .imguser
         {
             height: 70px;
@@ -538,8 +557,25 @@
         .imgtx{
             width: 3vh;
         }
+        .unicamente{
+            width:67%;
+        }
+        barrader{
+            display: none;
+        }
+        chat{
+            display: none;
+        }
 
 
+
+    }
+
+    @media (max-height: 500px) {
+        .content{
+        width: 56%;
+        margin-left: 22%;
+          }
     }
 
 
@@ -610,7 +646,7 @@
                         </label>
                             <input type="file" class="camera" ngf-select ng-model="picFile" id="file-img"  ngf-multiple="false" name="file"  ngf-max-size="200MB" />
                     </div>
-                    <div style="display: inline-block;">
+                    <div class="unicamente">
                         <md-input-container id="inputselectformulario">
                             <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
                                 <md-option ng-repeat="area in areas" value="{{area.nombre}}">

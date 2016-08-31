@@ -294,7 +294,37 @@
     {
         height: 2%;
     }
+    @media (max-height: 500px) {
+        .content{
+            width: 56%;
+            margin-left: 22%;
+        }
+    }
+
     @media (max-width: 1000px) {
+        .sawgris{
+            width: 15px;
+        }
+        .imgadj {
+            width: 89px;
+            margin-left: 11px;
+        }
+        .ptituloactas
+        {
+            width: 271px;
+        }
+
+        barrader{
+            display: none;
+        }
+        chat{
+            display: none;
+        }
+
+        .carpetas{
+            width: 28%;
+            margin-top: 2%;
+        }
         .txtacta{
             font-size: 7vw;
         }
@@ -302,56 +332,56 @@
             width: 6.5vw;
         }
         .nombrecarpeta{
-            font-size: 3vw;
+            font-size: 12px;
         }
         .btnregistrar2 {
-            width: 19vw;
+            width: 99px;
         }
         .fechaactas{
-            margin-left: -109vw;
+            margin-left: -400px;
         }
         .btnpubliacta {
-            width: 23vw;
-            margin-left: 66%;
+            width: 95px;
+            margin-left: 187px;
         }
         .exami{
-            width: 12vw;
-            height: 11vw;
+            width: 49px;
+            height: 45px;
         }
         .icosup {
             width: 5vw;
         }
         .titulopubliacta{
-            font-size: 5vw;
+            font-size: 25px;
         }
         .txtsaw {
-            font-size: 4.2vw;
+            font-size: 16px;
         }
         .ciruser{
-            width: 8vw;
-            height: 8vw;
-            margin-top: 3vh;
+            width: 33px;
+            height: 33px;
+            margin-top: 22px;
         }
         .photomini{
-            width: 7.6vw;
-            height: 4vh;
+            width: 29px;
+            height: 29px;
 
         }
         .mininame{
-            font-size: 3.9vw;
+            font-size: 15px;
         }
         .minitxt{
-            font-size: 3.6vw;
+            font-size: 15px;
         }
         .guarda{
-            margin-left: -105vw;
+            margin-left: -374px;
         }
         .imguser{
             top: 3vh;
         }
         .datosaprobacion{
-            width: 79vw;
-            margin-left: 6%;
+            width: 327px;
+            margin-left: 22px;
         }
         .icosup{
             display: none;
@@ -496,9 +526,7 @@
                     </div>
                     <div class="otrocomment" ng-repeat="com in ac.comentarios">
                         <div class="photomini">
-
                         </div>
-
                         <div class="phy">
                             <p class="mininame">{{com.nombre}}</p>
                             <p class="minitxt">{{com.texto}}</p>

@@ -283,7 +283,7 @@
         margin-left: -40px;
         vertical-align: top;
     }
-    @media (max-width: 602px){
+    @media (max-width: 900px){
         .movilvisible{
             display: block;
         }
@@ -329,7 +329,7 @@
             margin-left: 5%;
         }
         .lista{
-            height: 8vh;
+            height: 50px;
         }
         .barrasup{
             display: none;
@@ -345,6 +345,7 @@
         }
         .iconorojo{
             top: -1.8vh;
+            height: 11px;
         }
         .lista:hover
         {
@@ -354,6 +355,9 @@
         }
         li{
             outline: none;
+        }
+        .username{
+            font-size: 18px;
         }
 
     }
@@ -514,7 +518,7 @@
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/calendar" class="linkmenu" ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Cronograma</span></a> </li>
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/pqrsfdispatcher" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">PQRSF</span></a> </li>
             <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="#/root/actas" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Asociados</span></a> </li>
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu cerrarsesion"  > Cerrar Sesión</a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="" ng-click="nav.logOut(nav.currentUser.username)" ng-show="nav.isLoggedIn()" class="linkmenu"  ><span class="txtmenumov"> Cerrar Sesión</span></a> </li>
 
         </div>
     </div>
