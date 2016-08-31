@@ -45,25 +45,56 @@ router.get('/mensajesNoChat/:mes', function(req, res, next) {
   var sabe = req.params.mes;
   var vardeconvs= [];;
 
-  Conversation.find({ $or:[  {'usernameone':sabe}, {'usernametwo':sabe} ]}).distinct('usernameone' , function(err,mensa){
+  Conversation.find({ $or:[  {'usernameone':sabe}, {'receptor':sabe} ]}).distinct('usernameone' , function(err,mensa){
     if(err){ return next(err); }
     var alpha = mensa;
-    Conversation.find({ $or:[  {'usernameone':sabe}, {'usernametwo':sabe} ]}).distinct('usernametwo' , function(err,mensa2){
+    Conversation.find({ $or:[  {'usernameone':sabe}, {'receptor':sabe} ]}).distinct('receptor' , function(err,mensa2){
       if(err){ return next(err); }
-      var beta = mensa2;
-      var omega = alpha.concat(beta);
+
+
+      var omega = alpha.concat(mensa2);
       var uniqueNames = [];
 
+
       for(var a = 0; a < omega.length; a++ ){
-        if(uniqueNames.indexOf(omega[a]) == -1 && omega[a] != sabe) uniqueNames.push(omega[a]);
+        if(uniqueNames.indexOf(omega[a]) == -1 && omega[a] != sabe && omega[a] != null) uniqueNames.push(omega[a]);
+      }
+
+      var beta = [];
+      var cc = 0;
+
+      for(i = 0; i< uniqueNames.length; i++){
+
+
+      Conversation.find({ $or:[  {'usernameone':sabe, 'receptor': uniqueNames[i]},
+        {'usernameone':uniqueNames[i],'receptor':sabe} ]}).sort({fecha: -1}).exec(function (err,conversacion) {
+
+          var nombrereal = (conversacion[0].usernameone == sabe ? conversacion[0].receptor : conversacion[0].usernameone)
+          beta.push({ nombre: nombrereal,
+                      conversacion: conversacion[0]
+                      // para: conversacion[0]['usernameone'],
+                      // de: conversacion[0]['receptor']
+          })
+          cc++;
+
+      })
+
       }
 
 
+        setInterval(function () {
+          if (cc == uniqueNames.length) {
+            cc++;
+            res.json(beta);
+          }
+        }, 200)
 
-      Conversation.find({}, function(err, allConversation) {
-        if (err) throw err;
-        res.json({userConectados: uniqueNames, conversaciones: allConversation});//uniqueNames
-      });
+
+
+
+
+
+
 
 
 
@@ -170,6 +201,12 @@ var sabe = req.params.mes.split(',').sort();
         console.log(mensa);
         res.json(mensa);
           });
+
+      // User.find(function(err, users){
+      //   if(err){ return next(err); }
+      //   res.json(users.nombre);
+      // });
+  
 });
 
 
@@ -941,6 +978,7 @@ router.post('/postssin',auth, function(req, res, next) {
 
 
 router.post('/chat/adjuntos',auth, upload.single('file'), function(req, res, next) {
+    console.log("mierdaaaaaa")
     res.json('/uploads2/'+req.file.filename);
 });
 

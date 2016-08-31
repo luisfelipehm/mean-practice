@@ -180,14 +180,14 @@
         </div>
         <ul class="thread-list" >
 
-                <li class="thread-list-item active" ng-repeat="X in mensajes"  >
-                  <div ng-click="myConversacion(X.De)" style="cursor:pointer;">
+                <li class="thread-list-item active" ng-repeat="m in mensajes"  >
+                  <div ng-click="generarConv(currentUser.username, m.nombre)" style="cursor:pointer;">
                     <h5 class="thread-name">
-                    {{X.De}}
+                    {{m.nombre}}
                     </h5>
                     <div class="thread-time">{{X.DateMsj.substring(0,10);}}</div>
                     <div class="thread-last-message">
-                        {{X.UltimoMsj}}
+                        {{m.conversacion.mensaje}}
                     </div>
                   </div>
                 </li>
@@ -199,9 +199,11 @@
 
         <ul class="message-list"  >
             <li class="message-list-item" ng-repeat="txt in historial_conv" id="{{con_quien_converso}}">
-                <h5 class="message-author-name">{{txt.De}}</h5>
-                <div class="message-time">{{txt.DateMsj.substring(0,10);}}  &nbsp; &nbsp; &nbsp;  hora:{{txt.DateMsj.substring(11,19);}}</div>
-                <div class="message-text">{{txt.UltimoMsj}}</div>
+                <h5 class="message-author-name">{{txt.usernameone}}</h5>
+                <div class="message-time">{{txt.fecha.substring(0,10);}}  &nbsp; &nbsp; &nbsp;  hora:{{txt.DateMsj.substring(11,19);}}</div>
+                <div class="message-text">{{txt.mensaje}}</div>
+                <div class="message-text"><img src="{{txt.adjunto}}" width="200px" > </div>
+
             </li>
         </ul>
 
@@ -211,31 +213,30 @@
 
                 <div id="opcionesMensaje">
 
-                    <div id="adjuntoOpcion" ng-click="envarMsj_a_(con_quien_converso)">
+                    <div id="adjuntoOpcion" ng-click="envarMsj_a_(picFile)">
                             <p><i class="send icon"></i>Enviar</p>
                     </div>
 
-                    <div id="adjuntoOpcion" class="XXX"
-                         ngf-select="seleccionarchivochat($files,'ok')"
-                         type="file"
-                         ngf-max-size="200MB">
-                        <p> <i class="attach icon "></i>Adjuntar</p>
+                    <div id="" class="XXX">
+                        <input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="false"  name="file"  ngf-max-size="200MB" />
+                        <!--<p> <i class="attach icon "></i>Adjuntar</p>-->
+
                     </div>
 
-                    <div id="adjuntoOpcion"
-                         style=" border-top: 1px solid transparent;
-                                 border-left: 1px solid transparent;
-                                 width: 240px;
-                                 text-align: right;
-                                 "
-                         alt='eliminar {{nombre_archivo}}' title='eliminar {{nombre_archivo}}'
-                    >
-                        <div id="ADJ" ng-click="borrar()">
-                            <i class="remove icon"></i>
-                            &nbsp;{{nombre_archivo}}
-                            <i class="file icon" id="b"></i>
-                        </div>
-                    </div>
+                    <!--<div id="adjuntoOpcion"-->
+                         <!--style=" border-top: 1px solid transparent;-->
+                                 <!--border-left: 1px solid transparent;-->
+                                 <!--width: 240px;-->
+                                 <!--text-align: right;-->
+                                 <!--"-->
+                         <!--alt='eliminar {{nombre_archivo}}' title='eliminar {{nombre_archivo}}'-->
+                    <!--&gt;-->
+                        <!--<div id="ADJ" ng-click="borrar()">-->
+                            <!--<i class="remove icon"></i>-->
+                            <!--&nbsp;{{nombre_archivo}}-->
+                            <!--<i class="file icon" id="b"></i>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </div>
 
