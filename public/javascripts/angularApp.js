@@ -34,6 +34,12 @@ app.filter('cortarlargostring', function () {
     }
 });
 
+app.filter('rawHtml', ['$sce', function($sce){
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+}]);
+
 
 app.config(['$httpProvider', function($httpProvider) {
     //initialize get if not there
@@ -991,8 +997,8 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
     // $scope.artists = response.data.userConectados;
     var yo;
 
-       $http.get('/mensajesNoChat/ivantrips').then(function (data) {
-           console.log(data.data)
+       $http.get('/mensajesNoChat/'+$scope.currentUser.username).then(function (data) {
+           //console.log(data.data)
            $scope.mensajes = data.data;
        },function (err) {
 
@@ -1004,17 +1010,25 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
         $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
             $scope.con_quien_converso=dos   ;
             $scope.historial_conv = response.data;
+
+            if(response.data.adjunto===undefined){ console.log('paila'); }else{console.log('ok');}
+
+
             setTimeout(function () {
                 $('.message-list').scrollTop($('.message-list')[0].scrollHeight);
             },500)
 
         })
     };
-
-
+    //
+    // angular.filter('newlines', function(text){
+    //     var a = text.replace('<', '&lt;');
+    //     text = a.replace('>', '&gt;');
+    //     return text;
+    // });
 
     /*++++++++++Esto++es++el++Adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-        $scope.seleccionarchivochat = function (ff,name) {
+    $scope.seleccionarchivochat = function (ff,name) {
 
         console.log(ff[0].type);
 
@@ -1064,8 +1078,6 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
 
         }
     };
-
-
 
 
     /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
@@ -1118,7 +1130,7 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
                 });
 
                 file.upload.success(function (data, status, headers, config) {
-
+                    console.log(data)
                     $scope.title = '';
                     $scope.link = '';
                     $scope.picFile = '';
@@ -1127,7 +1139,7 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
                     console.log($scope.usuarioMensaje);
                     console.log('mimerrjr');
                     socket.emit("chateando", {
-                        mesj: $("#" + $scope.usuarioMensaje + "chattext2").val(),
+                        mesj: $scope.mensajeTal,
                         envia: $scope.currentUser.username,
                         participan: [$scope.usuarioMensaje, $scope.currentUser.username].sort(),
                         recibe: $scope.usuarioMensaje,
@@ -1143,103 +1155,29 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
         }
 
 
+        mySocket.forward('chateando', $scope);
 
-        $scope.obtenerMensajes = function (name1,name2,rec) {
-            // Get con dos parametros los username de los responsables del chat
-            $http.get('/mensajes/'+ name1 +','+ name2).then(function (response) {
-                /*
-                 * Promesa del get a mensajes
-                 * la respuesta de este get se copia en $scope.mensajes y en $scope.lastme se guarda el ultimo mensaje enviado
-                 * a continuacion el campo de texto del chat se vacia            *
-                 */
-                // angular.copy(response.data, $scope.mensajes);
-                // var lastme = $scope.mensajes.slice(-1)[0];
-                // $("#"+rec+"chattext2").val('');
-                /*
-                 * Si el mensaje es texto plano osea no tiene un adjunto el cuadro de chat que se genera solo tiene el mensaje
-                 * y la hora en la que se envio este mensaje
-                 */
+        /*
+         * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
+         * Ademas el que recibe el mensaje si tiene la caja de chat cerrado la abre en  if($('#'+data.envia+'chat').length == 0){
+         * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
+         */
+        $scope.$on('socket:chateando', function (ev, data) {
+
+            $scope.generarConv(data.envia, data.recibe)
+        });
 
 
-                //
-                // if(!lastme.adjunto){
-                //     $('#chatcontent'+rec).append('<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
-                //         ($scope.currentUser.username == lastme.usernameone  ? "" : "<div class=\"avatar\"><img src=\""+ lastme.fotoperfil +"\"> </div>") +
-                //         '  <div class="chatboxmessagecontent">    ' +
-                //         '      <p>'+lastme.mensaje+'</p>     ' +
-                //         '      <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">'  +   moment(lastme.fecha).format('LT')   +' </time>    ' +
-                //         '  </div> ' +
-                //         '</li>');
-                //
-                // }
-                //
-                /*
-                 * En caso de que exista un adjunto se genera mediante genereitordemensajes 1,2,3 el html
-                 * que se va a ingresar en el chat y hay una serie de if y else que definen las imagenes
-                 * o el tipo de link que se va a generar en el adjunto del chat (PDF, WORD, EXCEL, POWER POINT, IMAGEN O OTRO)
-                 * TODO tenemos que crear un visualizador de imagenes y que el pdf descargue al darles click tambien se puede usar el visualizador recomendado por zarta
-                 */
-
-                // else {
-                //     var genereitordemensajes1 = '<li class="'+ ($scope.currentUser.username == lastme.usernameone  ? "self" : "other") +'"> ' +
-                //         '   <div class="chatboxmessagecontent chatboxmessagecontents">';
-                //     var genereitordemensajes2 = '';
-                //     if(lastme.adjunto.split('.')[1]=='doc' || lastme.adjunto.split('.')[1]=='docx'){
-                //         var genereitordemensajes2 =        ' <a href="'+lastme.adjunto+'"><img  src="img/WRD.png" class="subirarchvos2"></a><br>'
-                //     }else if(lastme.adjunto.split('.')[1]=='ppsx' || lastme.adjunto.split('.')[1]=='ppt' || lastme.adjunto.split('.')[1]=='pptm' || lastme.adjunto.split('.')[1]=='pptx'){
-                //         var genereitordemensajes2 =         ' <a href="'+lastme.adjunto+'"><img  src="img/PW.png" class="subirarchvos2"></a><br>';
-                //     }else if(lastme.adjunto.split('.')[1]=='xls' || lastme.adjunto.split('.')[1]=='xlsx' || lastme.adjunto.split('.')[1]=='xlsm' || lastme.adjunto.split('.')[1]=='xlsb'){
-                //         var genereitordemensajes2 =         ' <a href="'+lastme.adjunto+'"><img  src="img/XEL.png" class="subirarchvos2"></a><br>';
-                //     }else if(lastme.adjunto.split('.')[1]=='pdf'){
-                //         var genereitordemensajes2 =         ' <a target="_blank" href="'+lastme.adjunto+'"><img src="img/PDF.png" class="subirarchvos2"></a><br>';
-                //     }else if(lastme.adjunto.split('.')[1].toLowerCase() =='png' || lastme.adjunto.split('.')[1].toLowerCase()=='tiff' || lastme.adjunto.split('.')[1].toLowerCase()=='gif' || lastme.adjunto.split('.')[1].toLowerCase()=='jpg' || lastme.adjunto.split('.')[1].toLowerCase()=='jpeg' || lastme.adjunto.split('.')[1].toLowerCase()=='bmp'){
-                //         var genereitordemensajes2 =         ' <a target="_blank" href="'+lastme.adjunto+'"><img src="'+ lastme.adjunto+'" class="subirarchvos2"></a><br>';
-                //     }else{
-                //         var genereitordemensajes2 =    ' <a href="'+lastme.adjunto+'"><img src="img/DOC.png" class="subirarchvos2"></a><br>';
-                //     }
-                //
-                //     var genereitordemensajes3 =  '<p>'+lastme.mensaje+'</p>     ' +
-                //         '          <time datetime="2015-12-10 21:45:46 UTC" title="10 Dec  2015 at 09:45PM">      '  +       moment(lastme.fecha).format('LT')   +'   </time>    ' +
-                //         ' </div>'+
-                //         ' </li>';
-                //     /*
-                //      * Se genera el contenido necesario
-                //      * Y se anade al chat
-                //      */
-                //      var genereitordemensajes = genereitordemensajes1 + genereitordemensajes2 + genereitordemensajes3;
-                //     //$('#chatcontent'+rec).append(genereitordemensajes);
-                // }
-
-                /*
-                 * Esta linea hace que el chat baje el scroll automaticamente
-                 */
-               // $('#chatcontent'+rec).scrollTop($('#chatcontent'+rec)[0].scrollHeight);
-
-            })
-        };
 
 
-        // $scope.$on('socket:chateando', function (ev, data) {
-        //     if(data.envia == $scope.currentUser.username){
-        //         $scope.obtenerMensajes(data.participan[0],data.participan[1],data.recibe);
-        //     }else if(data.recibe == $scope.currentUser.username){
-        //         if($('#'+data.envia+'chat').length == 0){
-        //             $scope.generarChat(data.envia, data.nombrec);
-        //             $scope.alertammm();
-        //         }else{
-        //             $scope.obtenerMensajes(data.participan[0],data.participan[1],data.envia);
-        //             $scope.alertammm();
-        //         }
-        //     }
-        // });
+
+
 
     };
     /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
     /*+++fin+++adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 
-    $scope.obtenerMensajes($scope.usuarioMensaje,$scope.currentUser.username,yo);
-    $scope.alertammm();
 
 }])
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
