@@ -465,7 +465,6 @@
     });
 
 
-
 //    $('.depmovi').click(function(){
 //        $('.cajamenumovil').css('height','100vh')
 //        $('.cajamenumovil').css('overflow-y','scroll')
@@ -488,8 +487,17 @@
 
         <div class="cajamenumovil" >
 
-            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png"> <a ui-sref="users" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Usuarios</span></a> </li>
-            <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente"><img class="iconorojo" src="/img/icono-rojo.png"> <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"  ng-click="mostrarnav = !mostrarnav"><span class="txtmenumov">Gerentes</span></a> </li>
+            <li class="lista"><img class="iconorojo" src="/img/icono-rojo.png">
+                <a ui-sref="users" class="linkmenu"  ng-click="mostrarnav = !mostrarnav">
+                    <span class="txtmenumov">Usuarios</span>
+                </a>
+            </li>
+            <li ng-controller="AreaxCtrl" class="lista" ng-show="currentUser.admingerente">
+                <img class="iconorojo" src="/img/icono-rojo.png">
+                <a href="/#/gerentes/578cd534fcb1be081370a612" class="linkmenu"  ng-click="mostrarnav = !mostrarnav">
+                    <span class="txtmenumov">Gerentes</span>
+                </a>
+            </li>
 
             <li class="lista depmovi" ng-click=" !mostrarareas ? mostrarareas = true : mostrarareas = false">
                 <img class="iconorojo" src="/img/icono-rojo.png">
@@ -507,8 +515,10 @@
                     </li>
                 </a>
                 <a style="color:white;text-decoration: none" class="departamentoslinks" ng-repeat="ar in areas" href="#/root/areas/{{ar._id}}">
-                    <li class="departamentoslinks linkcerrarnavbar" style="list-style: none;margin-left: 3vw;margin-top: 1vh"  ng-click="mostrarnav = !mostrarnav" >
-                        <img class="iconogris" src="/img/icono-ron.png"> {{ar.nombre}} </li>
+                    <li class="departamentoslinks linkcerrarnavbar" style="list-style: none;margin-left: 3vw;margin-top: 1vh"   ng-click="getMyCtrlScope().mostrarnav = !mostrarnav">
+                        <img class="iconogris" src="/img/icono-ron.png">
+                        <span class="listadepmov">{{ar.nombre}}</span>
+                    </li>
                 </a>
 
             </div>
@@ -523,5 +533,3 @@
         </div>
     </div>
 </div>
-
-

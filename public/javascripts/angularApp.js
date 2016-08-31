@@ -2038,6 +2038,9 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
             mySocket.forward('usuario', $scope);
             auth.logOut();
         }
+    $scope.getMyCtrlScope = function() {
+        return $scope;
+    }
     }]);
 
 app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
