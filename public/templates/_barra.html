@@ -275,7 +275,13 @@
                     <div class="usernamediv"><a  class="username" style="color: white">{{ nav.currentUser.nombre.split(" ")[0]}} {{nav.currentUser.apellido.split(" ")[0]}}</a></div>
                     <div class="line2"></div>
                     <div class="iniciodiv"><a class="inicio" style="color: white" ui-sref="home">Inicio</a></div>
-
+                    <div class="iniciodiv"><a class="inicio" style="color: white" ui-sref="home"> </a></div>
+                    <div id="avisos" style="right:20px;width: 40px; color: #e3152d;display: none;" class="iniciodiv"   data-tooltip="Te han enviado un mensaje {{msj_de}}" data-position="bottom center" data-variation="huge"
+                         onclick='document.getElementById("avisos").style.display = "none";' ng-click="el_click()"
+                    >
+                        <i class="mail icon big" style="color: white"></i>
+                        <div class="floating ui teal label">{{cont}}</div>
+                    </div>
                 </div>
 
                 <p class="boxconfig"><img style=" height: 70%;" src="{{usuario.data.fotoperfil == undefined ? '/img/icono_tri_blanco.png' : usuario.data.fotoperfil}}"></p>

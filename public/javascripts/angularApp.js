@@ -34,6 +34,12 @@ app.filter('cortarlargostring', function () {
     }
 });
 
+app.filter('rawHtml', ['$sce', function($sce){
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+}]);
+
 
 app.config(['$httpProvider', function($httpProvider) {
     //initialize get if not there
@@ -784,7 +790,7 @@ app.config([
                 templateUrl: 'templates/document.html',
                 controller: 'DocumentCtrl',
                 resolve: {
-                    document: ['$stateParams', 'documents', function($stateParams, documents) {						
+                    document: ['$stateParams', 'documents', function($stateParams, documents) {
                         return documents.get($stateParams.id);
                     }]}
 
@@ -850,7 +856,7 @@ app.config([
                 url: '/actas',
                 templateUrl: 'templates/actas.html',
                 controller: 'ActasCtrl',
-                
+
                 onEnter: ['$state', 'auth', function($state, auth){
                     var currentUser = auth.currentUser();
                     if(currentUser.usaactas == undefined  && currentUser.adminactas == undefined ){
@@ -988,245 +994,187 @@ app.config([
 app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','$http','moment','users','$compile', function ($scope,Upload,$timeout,mySocket,auth,$http,moment,users,$compile) {
 
     $scope.currentUser = auth.currentUser();
-    var le_file=undefined;
-    var yo= $scope.currentUser.username;
+    // $scope.artists = response.data.userConectados;
+    var yo;
 
-    $http.get('/mensajesNoChat/'+ $scope.currentUser.username ).then(function (response) {
+       $http.get('/mensajesNoChat/'+$scope.currentUser.username).then(function (data) {
+           //console.log(data.data)
+           $scope.mensajes = data.data;
+       },function (err) {
 
-        $scope.artists = response.data.userConectados;       /*artists: son usuarios de conversaciones historicas*/
-        $scope.conversacion =response.data.conversaciones;  /* conversacion: son todas las conversaciones*/
-        document.getElementById("ADJ").style.visibility = "hidden";
-        var xx={};
-        var primera_conversacion='';
+       });
 
-        /*aquí es la logica del panel izquierdo, todas las conversaciones tenidas y lo ultimo que escribió el destinatario*/
-        angular.forEach($scope.conversacion , function (conv) {
+    $scope.generarConv = function( uno, dos ){
+        $scope.usuarioMensaje = ($scope.currentUser.username== uno ? dos : uno);
+        // console.log($scope.usuarioMensaje)
+        $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
+            $scope.con_quien_converso=dos   ;
+            $scope.historial_conv = response.data;
+            var objeto = getElementById(dos);
+            objeto.className = "";
+           // if(response.data.adjunto===undefined){ console.log('paila'); }else{console.log('ok');}
+
+            setTimeout(function () {
+                $('.message-list').scrollTop($('.message-list')[0].scrollHeight);
+            },500)
+
+        })
+    };
+    //
+    // angular.filter('newlines', function(text){
+    //     var a = text.replace('<', '&lt;');
+    //     text = a.replace('>', '&gt;');
+    //     return text;
+    // });
+
+    /*++++++++++Esto++es++el++Adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    $scope.seleccionarchivochat = function (ff,name) {
+
+        console.log(ff[0].type);
+
+        le_file=ff;
+
+        switch (ff[0].type){
+
+            case 'image/jpeg':
+            case 'image/png':
+            case 'image/gif':
+            case 'image/tiff':
+            case 'application/pdf':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+            case 'application/vnd.ms-excel':
+            case 'application/vnd.ms-word':
+            case 'application/vnd.ms-powerpoint':
+            case 'text/plain':
+            case 'application/msword':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
+            case 'application/vnd.ms-word.template.macroEnabled.12':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
+            case 'application/vnd.ms-excel.sheet.macroEnabled.12':
+            case 'application/vnd.ms-excel.template.macroEnabled.12':
+            case 'application/vnd.ms-excel.sheet.binary.macroEnabled.12':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.template':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
+            case 'application/vnd.ms-powerpoint.addin.macroEnabled.12':
+            case 'application/vnd.ms-powerpoint.presentation.macroEnabled.12':
+            case 'application/vnd.ms-powerpoint.template.macroEnabled.12':
 
 
-            var i = 0;
-            do{
+                // document.getElementById("ADJ").style.visibility = "visible";
+                // $scope.nombre_archivo= ff[0].name.substring(0,19);
+                // return $scope.nombre_archivo;
 
-                    if(i==0){/*aqui delegamos cual es la primera conversacion para imprimirla al panel derecho inmediatamente*/
-                             primera_conversacion=$scope.artists[i];
-                    }
+                // le_file= ff;
 
-                    if($scope.artists[i]==conv.usernameone && yo==conv.receptor && $scope.artists[i]!=null){
-                        xx[i] = {
-                            De: yo,
-                            UltimoMsj: conv.mensaje,
-                            DateMsj: conv.fecha
-                        }
-                    }
-
-                    if($scope.artists[i]==conv.receptor && yo==conv.usernameone && $scope.artists[i]!=null){
-                        xx[i] = {
-                            De: $scope.artists[i],
-                            UltimoMsj: conv.mensaje,
-                            DateMsj: conv.fecha
-                        }
-                    }
-                i++;
-            }while (i < $scope.artists.length);
+                break;
 
 
-        });
-        /*fin*/
-        $scope.mensajes ={};
-        $scope.mensajes= xx;
-        console.log($scope.mensajes);
+            default:
+                alert("No se puede adjuntar el archivo ya que no corresponde a una extención 'doc','docx','ppsx','ppt','pptm','pptx','xls','xlsx','xlsm','xlsb','pdf','png','tiff','gif','jpg','jpeg','doc' o 'txt'. ");
+                console.log(ff[0].type);
+                break;
+
+        }
+    };
 
 
-        /*aquí es la logica del panel derecho, son los mensajes (historial) de un usuario del panel izquierdo*/
-        $scope.myConversacion = function(ok) {
-            
-            
-            $scope.conversacion =response.data.conversaciones;
-            $scope.con_quien_converso= ok;
-            $scope.usuarioMensaje = ok;
-            var yy={};
-            var contador=0;
+    /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
+    $scope.envarMsj_a_ = function(file){
+        //
+        // var objeto = getElementById(id_del_objeto);
+        // objeto.className = nueva_clase;
 
-            angular.forEach($scope.conversacion , function (conv) {
+        //enviarmensajeadjunto()
+        console.log(file);
+        console.log($scope.picFile);
 
-                if(ok==conv.usernameone && yo==conv.receptor){
-                            contador++;
-                            yy[contador] = {
-                                De: ok,
-                                UltimoMsj: conv.mensaje,
-                                DateMsj: conv.fecha
-                            }
-                }
 
-                if(ok==conv.receptor && yo==conv.usernameone){
-                            contador++;
-                            yy[contador] = {
-                                De: yo,
-                                UltimoMsj: conv.mensaje,
-                                DateMsj: conv.fecha
-                            }
-                }
+        if($scope.mensajeTal == "" || !$scope.mensajeTal){
+            return 0;
+        } else {
+
+            users.get($scope.currentUser._id).then(function (user) {
+                $scope.usuario = user;
+                socket.emit('chateando', {
+                    mesj: $scope.mensajeTal,
+                    envia: $scope.currentUser.username,
+                    participan: [$scope.usuarioMensaje, $scope.currentUser.username].sort(),
+                    recibe: $scope.usuarioMensaje,
+                    nombrec: $scope.usuario.data.nombre.split(' ')[0] + ' ' + $scope.usuario.data.apellido.split(' ')[0],
+                    fotoperfil: (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil)
+                });
+                $scope.mensajeTal = "";
             });
-            $scope.historial_conv ={};
-            $scope.historial_conv= yy;
-            return $scope.historial_conv;
-            /*fin*/
-        }
 
-        /*aqui tomamos la primera conversacion para imprimirla en el panel derecho*/
-        $scope.myConversacion(primera_conversacion);
-
-
-
-/*┼┼┼┼┼┼┼┼┼┼Esto┼┼es┼┼el┼┼Adjunto┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼*/
-        $scope.seleccionarchivochat = function (ff,name) {
-
-            console.log(ff[0].type);
-
-            le_file=ff;
-
-            switch (ff[0].type){
-
-                    case 'image/jpeg':
-                    case 'image/png':
-                    case 'image/gif':
-                    case 'image/tiff':
-                    case 'application/pdf':
-                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                    case 'application/vnd.ms-excel':
-                    case 'application/vnd.ms-word':
-                    case 'application/vnd.ms-powerpoint':
-                    case 'text/plain':
-                    case 'application/msword':
-                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
-                    case 'application/vnd.ms-word.template.macroEnabled.12':
-                    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
-                    case 'application/vnd.ms-excel.sheet.macroEnabled.12':
-                    case 'application/vnd.ms-excel.template.macroEnabled.12':
-                    case 'application/vnd.ms-excel.sheet.binary.macroEnabled.12':
-                    case 'application/vnd.openxmlformats-officedocument.presentationml.template':
-                    case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
-                    case 'application/vnd.ms-powerpoint.addin.macroEnabled.12':
-                    case 'application/vnd.ms-powerpoint.presentation.macroEnabled.12':
-                    case 'application/vnd.ms-powerpoint.template.macroEnabled.12':
-
-
-                        document.getElementById("ADJ").style.visibility = "visible";
-                        $scope.nombre_archivo= ff[0].name.substring(0,19);
-                        return $scope.nombre_archivo;
-
-                           // le_file= ff;
-
-                    break;
-
-
-                    default:
-                        alert("No se puede adjuntar el archivo ya que no corresponde a una extención 'doc','docx','ppsx','ppt','pptm','pptx','xls','xlsx','xlsm','xlsb','pdf','png','tiff','gif','jpg','jpeg','doc' o 'txt'. ");
-                        console.log(ff[0].type);
-                    break;
-
-            }
-
-
-
-
-        };
-
-
-        $scope.borrar = function() {
-            document.getElementById("ADJ").style.visibility = "hidden";
-            $scope.nombre_archivo= '';
-        }
-
-
-        $scope.envarMsj_a_ = function(con_quien_converso){
-
-            
-            if($scope.mensajeTal == "" || !$scope.mensajeTal){
-                return 0;
-            } else {
-                users.get($scope.currentUser._id).then(function(user){
-                    $scope.usuario =  user;
-                    socket.emit('chateando', {
-                        mesj: $scope.mensajeTal,
-                        envia: $scope.currentUser.username,
-                        participan: [$scope.usuarioMensaje , $scope.currentUser.username].sort(),
-                        recibe: $scope.usuarioMensaje,
-                        nombrec: $scope.usuario.data.nombre.split(' ')[0] +' '+$scope.usuario.data.apellido.split(' ')[0] ,
-                        fotoperfil:  (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil)
-                    });
-                        $scope.mensajeTal = "";
-                });
-            }
-
-            mySocket.forward('chateando', $scope);
-            //return $scope.myConversacion($scope.usuarioMensaje);
-            $scope.uploadPic(le_file);
-            $scope.uploadPic = function(file) {
-                // if(file==undefined)
-                // {
-                //     posts.create({
-                //         title: $scope.title,
-                //         link: $scope.link,
-                //         area: $scope.area
-                //     });
-                //     $scope.title = '';
-                //     $scope.link = '';
-                //     $scope.area = '';
-                //     posts.getAll()
-                //     $scope.posts = posts.posts;
-                // }
-
+            if(file){
                 file.upload = Upload.upload({
-                    url: '/uploads2',
-                    data: {title:$scope.title,link:$scope.link,area: $scope.area},
+                    url: '/chat/adjuntos',
+                    data: {},
                     file: file,
-                    headers: {Authorization: 'Bearer '+auth.getToken(),'Content-Type': file.type}
+                    headers: {Authorization: 'Bearer ' + auth.getToken(), 'Content-Type': file.type}
                 });
 
-                // file.upload.then(function (response) {
-                //     console.log("Postcontroller: upload then ");
-                //     $timeout(function () {
-                //         file.result = response.data;
-                //     });
-                // }, function (response) {
-                //     if (response.status > 0)
-                //         $scope.errorMsg = response.status + ': ' + response.data;
-                // });
+                file.upload.then(function (response) {
+                    console.log("Postcontroller: upload then ");
+                    $timeout(function () {
+                        file.result = response.data;
+                    });
+                }, function (response) {
+                    if (response.status > 0)
+                        $scope.errorMsg = response.status + ': ' + response.data;
+                });
 
-                // file.upload.progress(function (evt) {
-                //     // Math.min is to fix IE which reports 200% sometimes
-                //     file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                //     console.log("PostController: upload progress " + file.progress);
-                // });
+                file.upload.progress(function (evt) {
+                    // Math.min is to fix IE which reports 200% sometimes
+                    file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                    console.log("PostController: upload progress " + file.progress);
+                });
 
                 file.upload.success(function (data, status, headers, config) {
-                    console.log('terminado')
-
+                    console.log(data)
                     $scope.title = '';
                     $scope.link = '';
                     $scope.picFile = '';
-                    console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+
                     socket.emit('pubs', 'update');
-
-                    posts.getAll();
-                    $scope.posts = posts.posts;
-
+                    console.log($scope.usuarioMensaje);
+                    console.log('mimerrjr');
+                    socket.emit("chateando", {
+                        mesj: $scope.mensajeTal,
+                        envia: $scope.currentUser.username,
+                        participan: [$scope.usuarioMensaje, $scope.currentUser.username].sort(),
+                        recibe: $scope.usuarioMensaje,
+                        nombrec: $scope.usuario.data.nombre.split(' ')[0] + ' ' + $scope.usuario.data.apellido.split(' ')[0],
+                        fotoperfil: (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil),
+                        adjunto: data
+                    });
+                  //  angular.element(document.getElementById('previasubidaarchivos' + $scope.usuarioMensaje)).remove();
+                  //  angular.element(document.getElementById($scope.usuarioMensaje + 'chattext2')).val('');
                 });
+            }
 
-            };
-
-
-        };
-       /*┼┼┼fin┼┼┼adjunto┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼*/
-    });
+        }
 
 
+        mySocket.forward('chateando', $scope);
 
-}]);
+        /*
+         * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
+         * Ademas el que recibe el mensaje si tiene la caja de chat cerrado la abre en  if($('#'+data.envia+'chat').length == 0){
+         * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
+         */
+        $scope.$on('socket:chateando', function (ev, data) {
+            $scope.generarConv(data.envia, data.recibe)
+        });
+
+    };
+    /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
+    /*+++fin+++adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+}])
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-
 
 
 app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http','$timeout','Upload', function ($scope,auth,gdocuments,gdocument,$http,$timeout,Upload) {
@@ -1268,7 +1216,7 @@ app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http',
         });
         $scope.carpetaNueva = '';
 
-        
+
     };
 
     $scope.mostrarModal= function () {
@@ -1297,10 +1245,10 @@ app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http',
         }else{
             alert('Las contraseñas no coinciden');
         }
-        
+
     }
-    
-    
+
+
     $scope.deletecarpeta = function (ar) {
         return $http.delete('/gfolder/' + ar._id,{headers: {Authorization: 'Bearer '+auth.getToken()}})
             .success(function(data) {
@@ -1394,7 +1342,7 @@ app.controller('ActasCtrl',['$scope','auth','users','Upload','$http','$timeout',
         return apro;
     }
     $scope.selecterFolder = 0;
-    $scope.actas = actas.actas;    
+    $scope.actas = actas.actas;
     $scope.xx = false;
     $scope.xxx = false;
     $scope.search = 0;
@@ -1788,7 +1736,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
     $scope.borrar = function (id) {
         $scope.carpetasSeleccionadas.splice(id, 1);
     }
-    
+
     $scope.carpetasSeleccionadas = [];
     $scope.carpetasSeleccionadas2 = [];
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -2011,6 +1959,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
 }]);
 
 app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$scope){
+    var contador=0;
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser();
@@ -2021,7 +1970,35 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
             mySocket.forward('usuario', $scope);
             auth.logOut();
         }
-    }]);
+
+    mySocket.forward('chateando', $scope);
+
+    /*
+     * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
+     * Ademas el que recibe el mensaje si tiene la caja de chat cerrado la abre en  if($('#'+data.envia+'chat').length == 0){
+     * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
+     */
+
+    $scope.el_click = function () {
+           contador=0;
+           window.location.assign("http://intranet.solucionescyf.com.co/#/root/mensajes")
+    }
+
+    $scope.$on('socket:chateando', function (ev, data) {
+        contador++;
+        $scope.currentUser = auth.currentUser();
+        var yo= $scope.currentUser.username;
+        if(data.recibe == yo){
+            document.getElementById("avisos").style.display = "block";
+            $scope.msj_de= data.envia;
+            $scope.cont= contador;
+        }
+    }); 
+
+
+
+
+}]);
 
 app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
@@ -2366,7 +2343,7 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
                 $scope.pqtramite = data.data.pqtramite;
                 $scope.pqcerrado = data.data.pqcerrado;
             }, function (err) {
-                
+
             });
 
         }else{
@@ -2433,7 +2410,7 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
 app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout', function ($scope,pqrsf,$http,auth,Upload,$timeout) {
 
     $scope.currentUser = auth.currentUser();
-    $scope.pqrsf = pqrsf.pqrsf;    
+    $scope.pqrsf = pqrsf.pqrsf;
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
 
@@ -2591,7 +2568,7 @@ app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$time
                         $scope.direccion = '';
                         $scope.picFile = '';
                         $scope.mispq = true;
-                        
+
                         // pqrsf.getAll();
                         $scope.pqrsf = data;
                         // $scope.pqrsf = $scope.pqrsf.filter(function( obj ) {
@@ -2678,7 +2655,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 
 
 
-    
+
 
 
     $scope.mispq = true;
@@ -2687,7 +2664,7 @@ app.controller('PqrsfCtrl', ['$scope','pqrsf','$http','auth','Upload','$timeout'
 
     $scope.tdocumentos = ('Cedula de Ciudadania;Cedula de Extranjeria;Pasaporte').split(';').map(function (state) { return { nombre: state }; });
     $scope.tipospq = ('Peticion Queja Reclamo Solicitud Felicitacion').split(' ').map(function (state) { return { nombre: state }; });
-    
+
     $scope.addCiclo = function (files,comentario,id,fase,responsable,estado,tramitando) {
         if(files==undefined)
         {

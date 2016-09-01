@@ -18,7 +18,7 @@ module.exports = function(io) {
                 // or alternatively
                 // return text.replace(urlRegex, '<a href="$1">$1</a>')
             }
-
+            console.log(msg)
             var linkeando = urlify(msg.mesj);
             var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: linkeando,receptor: msg.recibe, fecha: Date.now(),fotoperfil: msg.fotoperfil,adjunto: msg.adjunto });
             conv.save(function(){
