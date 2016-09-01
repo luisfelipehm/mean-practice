@@ -27,9 +27,45 @@
     }
     @media (max-width: 1000px) {
         .tittleresul{
-            font-size: 4vw;
+            font-size: 18px;
+            width: 273px;
+            margin-left: 52px;
         }
+        .btnexportar{
+            left: 226px;
+            width: 112px;
+            margin-top: 86px;
+            margin-bottom: 33px;
+        }
+        .graficasform{
+            width: 100%;
+            display: list-item;
+            vertical-align: top;
+            height: 300px;
+        }
+        .content{
+            min-height: 11%;
+            height: 19vh;
+        }
+        svg.nvd3-svg{
+            height: 300px !important;
+        }
+        .nv-label > text {
+            fill: #ffffff !important;
+            text-anchor: middle !important;
+        }
+        body{
+            top: 0 !important;
+        }
+        barrader{
+            display: none;
+        }
+        chat{
+            display: none;
+        }
+
     }
+
 
 </style>
 
@@ -51,9 +87,9 @@
         </tr>
         </thead>
         <tbody >
-    
+
         <tr ng-repeat="resp in formulario.respuestas">
-    
+
             <td>{{resp.author}}</td>
             <td>{{resp.fecha}}</td>
             <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{typee(r.respuesta) == "object" ? alegible(r.respuesta) : r.respuesta}}</td>

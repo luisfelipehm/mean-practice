@@ -1943,6 +1943,12 @@ app.controller('NavCtrl', ['$scope','Upload','$timeout','mySocket','auth','$http
             auth.logOut();
         }
 
+    $scope.getMyCtrlScope = function() {
+        return $scope;
+    }
+ 
+
+
     mySocket.forward('chateando', $scope);
 
 
@@ -1996,6 +2002,7 @@ var i=0,limite=6;
 
 
 }]);
+
 
 app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
