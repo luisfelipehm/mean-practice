@@ -1,4 +1,8 @@
 <style>
+    #userSelPopup{
+        max-width: 600px;
+        min-width: 300px;
+    }
     .barrasup
     {
         position: fixed;
@@ -260,6 +264,17 @@
     }
 </style>
 
+<script>
+    $('#usersPopup')
+            .popup({
+                inline: true,
+                position: 'bottom left',
+                popup: $('#userSelPopup'),
+                on: 'click'
+            });
+    $('.ui.dropdown')
+            .dropdown();
+</script>
 
     <div class="barrasup">
         <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
@@ -276,12 +291,72 @@
                     <div class="line2"></div>
                     <div class="iniciodiv"><a class="inicio" style="color: white" ui-sref="home">Inicio</a></div>
                     <div class="iniciodiv"><a class="inicio" style="color: white" ui-sref="home"> </a></div>
-                    <div id="avisos" style="right:20px;width: 40px; color: #e3152d;display: none;" class="iniciodiv"   data-tooltip="Te han enviado un mensaje {{msj_de}}" data-position="bottom center" data-variation="huge"
-                         onclick='document.getElementById("avisos").style.display = "none";' ng-click="el_click()"
-                    >
-                        <i class="mail icon big" style="color: white"></i>
-                        <div class="floating ui teal label">{{cont}}</div>
+
+                    <!--<div id="avisos"-->
+                         <!--style="right:20px;-->
+                                <!--width: 40px;-->
+                                <!--color: #e3152d;-->
+                                <!--display: block;"-->
+                         <!--class="iniciodiv"-->
+                         <!--data-tooltip="Te han enviado un mensaje {{msj_de}}-->
+                         <!--&#60;br&#62; OK-->
+                         <!--"-->
+                         <!--data-position="bottom center"-->
+                         <!--data-variation="huge"-->
+                         <!--ng-click="el_click()">-->
+                    <!--&lt;!&ndash;onclick='document.getElementById("avisos").style.display = "";&ndash;&gt;-->
+                        <!--<i class="mail icon big" style="color: white"></i>-->
+                        <!--<div class="floating ui teal label">{{cont}}</div>-->
+                    <!--</div>-->
+
+                    <div  class="iniciodiv" style="width: 100px">
+                        <div class="container">
+                            <a id="menuButtonDesktop" class="launch item">
+                                <!--<i class="content icon"></i>-->
+                                <!--Menu-->
+                            </a>
+                            <a class="launch item">
+                                <!--<i class="user icon"></i>-->
+                                <!--Name Surname-->
+                            </a>
+                            <a id="usersPopup" class="launch icon item">
+
+                                <i class="mail icon big" style="color: white"></i>
+                            </a>
+                        </div>
                     </div>
+                    <div id="userSelPopup" class="ui custom popup top left transition hidden">
+                        <div class="">
+                                    <div class="thread-count">
+                                        <h3  class="message-thread-heading">Conversaciones</h3>
+                                    </div>
+                                    <ul class="thread-list" >
+
+                                        <li class="thread-list-item" ng-repeat="m in mensajes | orderBy:'-conversacion.fecha'"  >
+                                            <!--class="thread-list-item active"-->
+                                            <div ng-click="generarConv(currentUser.username, m.nombre)" style="cursor:pointer;">
+                                                <h5 class="thread-name">
+                                                    {{m.nombre}}
+                                                </h5>
+                                                <div class="thread-time">{{m.conversacion.fecha.substring(0,10);}}</div>
+                                                <!--<div class="thread-last-message" ng-if="m.adjunto">(archivo adjunto)<div>-->
+                                                <div class="thread-last-message" ng-bind-html="m.conversacion.mensaje | rawHtml">
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                        </div>
+                    </div>
+                    <!--<div class="six wide bottom aligned column">-->
+                    <!--<button class="ui green button">-->
+                    <!--Do-->
+                    <!--</button>-->
+                    <!--<option selected="" value="80">James</option>-->
+                    <!--</div>-->
+                    <!--<select id="userSelectionDropdown" class="ui fluid search dropdown" multiple="">-->
+                    <!--</select>-->
+
                 </div>
 
                 <p class="boxconfig"><img style=" height: 70%;" src="{{usuario.data.fotoperfil == undefined ? '/img/icono_tri_blanco.png' : usuario.data.fotoperfil}}"></p>
@@ -289,6 +364,8 @@
             </div>
         </nav>
     </div>
+
+
 
 
     <!--Cuadro boxconfig-->
