@@ -233,19 +233,36 @@
         top: -6.5vh;
         left: 29vw;
     }
-    @media (max-width: 602px) {
+    .txtpreguntas{
+        margin: 4px 0 0 25%;
+        display: inline-block;
+    }
+    .selecttipo{
+        text-transform: none;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid;
+        width: 7vw;
+        margin-top: 8%;
+    }
+    .botonañadir{
+        width: 6vw;
+        border: 0;
+        margin-bottom: 1vh;
+    }
+    @media (max-width: 900px){
         .fondoformulario{
-            height: 25vh;
+            height: 159px;
         }
         .tx1{
-            width: 66vw;
+            width: 245px;
         }
         .dx1{
-            width: 66vw;
+            width: 245px;
         }
         #inputselectformulario{
-            width: 40vw;
-            margin-left: 19vw;
+            width: 140px;
+            margin-left: 73px;
         }
         #inputselectformulario span{
             padding-top: 5px;
@@ -254,56 +271,78 @@
         .btnpublicar{
             margin-left: 71%;
             margin-top: 17%;
-            width: 21vw;
+            width: 79px;
         }
         .iconoresponderformulario{
-            width: 16.5vw;
+            width: 61px;
         }
         .tituloformulario{
-            font-size: 4.5vw;
-            margin-left: 25vw;
+            font-size: 15px;
+            margin-left: 92px;
         }
         .iconossuperioruno{
-            height: 4vh;
-            margin-left: 84%;
+            height: 26px;
+            margin-left: 260px;
         }
         .iconossuperiordos{
-            height: 4vh;
+            height: 26px
         }
         .txtsolform{
-            margin-left: 25vw;
-            width: 60vw;
+            margin-left: 93px;
+            width: 225px;
         }
         .iconosolform{
-            width: 4vw;
+            width: 15px;
         }
         .btnresultados{
-            top: 3vh;
-            left: 26vw;
-            width: 24vw;
+            top: 13px;
+            left: 94px;
+            width: 91px;
         }
         .nombrepreguntaform{
             width: 60vw;
             margin-top: -3vh;
-            margin-left: 10vw;
+            margin-left: 37px;
         }
         .tipopreguntaform{
             width: 60vw;
-            margin-left: 10vw;
+            margin-left: 37px;
         }
         .tipopreguntaform md-input-container{
             width: 45vw;
         }
         .botoncrearpregunta{
-            top: -1.5vh;
+            top: 1vh;
+            left: 56px;
         }
         .boxformularios{
-            min-height: 40vh;
+
+            min-height: 210px;
+        }
+        .anadir{
+            width: 30vw;
+        }
+        .tipopreguntaform span{
+            padding-bottom: 15px;
+            padding-top: 10px;
+        }
+        .md-select-menu-container.md-active md-select-menu{
+            z-index: 15;
+        }
+        .txtpreguntas{
+            max-width: 65%;
+        }
+        .botonañadir{
+            width: 6vw;
+            margin-bottom: 1vh;
+            margin-top: 2vh;
+        }
+        .selecttipo{
+            width: 160px;
 
         }
+
     }
-
-
 </style>
 
 
@@ -406,7 +445,7 @@
     <h3 style="margin-left: 22%;margin-top: 6%;">Preguntas</h3>
     <div ng-repeat="pp in forma.preguntas">
 
-        <p style="margin: 4px 0 0 25%;display: inline-block;">{{pp.pregunta}}</p>
+        <p class="txtpreguntas">{{pp.pregunta}}</p>
         <img src="/img/icono-eliminar-g.png" style="height: 18px;display:inline-block;cursor: pointer" ng-click="removerPregunta(pp._id)">
     </div>
 
@@ -424,14 +463,20 @@
             </div>
 
             <div class="tipopreguntaform">
-                <md-input-container>
-                    <label>Tipo</label>
-                    <md-select ng-model="tipo.valor">
-                        <md-option ng-repeat="state in states" value="{{state.html}}">
-                            {{state.visual}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
+               <!--<md-input-container>-->
+                    <!--<label>xxx</label>-->
+                    <!--<md-select ng-model="tipo.valor">-->
+                        <!--<md-option ng-repeat="state in states" value="{{state.html}}">-->
+                            <!--{{state.visual}}-->
+                        <!--</md-option>-->
+                    <!--</md-select>-->
+                <!--</md-input-container>-->
+
+                <select ng-model="tipo.valor" class="selecttipo">
+                    <option ng-repeat="state in states" value="{{state.html}}">
+                        {{state.visual}}
+                    </option>
+                </select>
             </div>
 
             <div ng-show="tipo.valor == 'checkbox' || tipo.valor == 'radio'">
@@ -443,7 +488,7 @@
 
 
                 <!--<input type="text" ng-model="opcion.valor">-->
-                <div style="width: 6vw; border: 0; margin-bottom: 1vh" ng-click="addOpcion()">
+                <div class="botonañadir" ng-click="addOpcion()">
                     <img class="anadir" src="/img/botones_anadir.png">
                 </div>
 

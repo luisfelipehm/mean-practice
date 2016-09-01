@@ -413,7 +413,26 @@
     {
         display: inline-block;vertical-align: -1.4vh
     }
-    @media (max-width: 600px) {
+    .unicamente{
+        display: inline-block;
+    }
+    @media (max-width: 900px) {
+        .thumb{
+            width: 31px;
+            height: 32px;
+            left: -4px;
+        }
+        .eliminarBoxcomment{
+            top: -12vh;
+            width: 39vw;
+            height: 11vh;
+        }
+        .eliminarBoxcomment p{
+            font-size: 10px;
+        }
+        .treli2{
+            top: 10vh;
+        }
         .imguser
         {
             height: 70px;
@@ -472,12 +491,14 @@
             width: 40%; margin: 0 5px 0 5px;
         }
         .boxbtnpubli{
-            width: 30%;
+            width: 56px;
             height: auto;
+            margin-left: -19px;
         }
         .btnpublicar
         {
             width: 100%;
+            height: 18px;
         }
         .contenedorpubli{
             padding: 10px 0;
@@ -519,6 +540,7 @@
         }
         .comentarioautor{
             font-size: 15px;
+            margin-left: 11%;
         }
         .comentariouser{
             font-size: 15px;
@@ -527,12 +549,26 @@
             width: 9vw;
             height: 9vw;
         }
-
-
+        .imgusercoment{
+            width: 6vw;
+            height: 4vh;
+        }
+        .imgtxcomentario{
+            width: 3vh;
+        }
+        .imgtx{
+            width: 19px;
+        }
+        .unicamente{
+            width:67%;
+        }
+        barrader{
+            display: none;
+        }
+        chat{
+            display: none;
+        }
     }
-
-
-
 
 </style>
 
@@ -599,7 +635,7 @@
                         </label>
                             <input type="file" class="camera" ngf-select ng-model="picFile" id="file-img"  ngf-multiple="false" name="file"  ngf-max-size="200MB" />
                     </div>
-                    <div style="display: inline-block;">
+                    <div class="unicamente">
                         <md-input-container id="inputselectformulario">
                             <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
                                 <md-option ng-repeat="area in areas" value="{{area.nombre}}">

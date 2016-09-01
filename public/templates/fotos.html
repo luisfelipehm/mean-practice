@@ -63,12 +63,16 @@
         margin-left: 4.5%;
         margin-bottom: 4.5%;
     }
-    @media(max-width: 602px){
+    .tamañoimagen{
+        height: 100%;
+        width: 100%;
+    }
+    @media(max-width: 900px){
         md-input-container{
-            width: 62vw !important;
+            width: 228px !important;
         }
         .btnpublicarfoto{
-            width: 24%;
+            width: 86px;
         }
         .imgeli{
             width: 2.9vw;
@@ -113,7 +117,9 @@
                         <p class="titulosalbums">{{album.nombre}}</p>
                     </a>
                 </div>
-                <img src="{{(!album.files[0] ? '/img/Iconos_no_adjunto-68.png' : album.files[0].adjunto)}}" class="beImg">
+
+                <img src="{{(!album.files[0] ? '/img/Iconos_no_adjunto-68.png' : album.files[0].adjunto)}}" class="tamañoimagen">
+
             </div>
 
     </div>

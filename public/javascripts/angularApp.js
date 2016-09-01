@@ -1971,6 +1971,12 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
             auth.logOut();
         }
 
+    $scope.getMyCtrlScope = function() {
+        return $scope;
+    }
+ 
+
+
     mySocket.forward('chateando', $scope);
 
     /*
@@ -1999,6 +2005,7 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
 
 
 }]);
+
 
 app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
