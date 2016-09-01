@@ -208,6 +208,7 @@
 
 
     }
+
     .txtsolform{
         width: 37vw;
         margin-left: 11vw;
@@ -315,6 +316,7 @@
             left: 56px;
         }
         .boxformularios{
+
             min-height: 210px;
         }
         .anadir{
@@ -337,6 +339,7 @@
         }
         .selecttipo{
             width: 160px;
+
         }
 
     }
@@ -367,7 +370,7 @@
             </md-input-container>
         </div>
 
-        <div style="display: inline-block;">
+        <div style="display: inline-block;" id="selectCrearDiv">
             <md-input-container id="inputselectformulario">
                 <md-select ng-model="area" placeholder="Privacidad" value="{{area.nombre}}" md-on-open="loadAreas()">
                     <md-option ng-repeat="area in areas" value="{{area.nombre}}">
@@ -380,6 +383,7 @@
          <div class="boxbtn" >
             <input type="image" src="/img/boton-crear.png"  class="md-raised btnpublicar">
          </div>
+
 
     </form>
 
@@ -419,9 +423,11 @@
         </p>
     </div>
 
+
     <div>
         <p class="txtsolform">
             <img class="iconosolform" src="/img/icono-ron.png"> <span>{{forma.descripcion}}</span>
+
         </p>
     </div>
 

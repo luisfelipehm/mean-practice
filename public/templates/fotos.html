@@ -55,6 +55,7 @@
     a {
         text-decoration: none;
     }
+
     .albumsfotos{
         display: inline-block;
         width: 27%;
@@ -81,6 +82,7 @@
         }
         .albumsfotos{
             width: 43%;
+
         }
     }
 </style>
@@ -103,7 +105,9 @@
     </form>
 </div>
 
+
     <div ng-repeat="album in fotos" class="albumsfotos">
+
 
 
             <div class="hovernegro">
@@ -113,7 +117,9 @@
                         <p class="titulosalbums">{{album.nombre}}</p>
                     </a>
                 </div>
+
                 <img src="{{(!album.files[0] ? '/img/Iconos_no_adjunto-68.png' : album.files[0].adjunto)}}" class="tamañoimagen">
+
             </div>
 
     </div>
