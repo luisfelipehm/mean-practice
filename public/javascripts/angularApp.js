@@ -1006,13 +1006,13 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
 
     $scope.generarConv = function( uno, dos ){
         $scope.usuarioMensaje = ($scope.currentUser.username== uno ? dos : uno);
-        console.log($scope.usuarioMensaje)
+        // console.log($scope.usuarioMensaje)
         $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
             $scope.con_quien_converso=dos   ;
             $scope.historial_conv = response.data;
-
-            if(response.data.adjunto===undefined){ console.log('paila'); }else{console.log('ok');}
-
+            var objeto = getElementById(dos);
+            objeto.className = "";
+           // if(response.data.adjunto===undefined){ console.log('paila'); }else{console.log('ok');}
 
             setTimeout(function () {
                 $('.message-list').scrollTop($('.message-list')[0].scrollHeight);
@@ -1062,9 +1062,9 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
             case 'application/vnd.ms-powerpoint.template.macroEnabled.12':
 
 
-                document.getElementById("ADJ").style.visibility = "visible";
-                $scope.nombre_archivo= ff[0].name.substring(0,19);
-                return $scope.nombre_archivo;
+                // document.getElementById("ADJ").style.visibility = "visible";
+                // $scope.nombre_archivo= ff[0].name.substring(0,19);
+                // return $scope.nombre_archivo;
 
                 // le_file= ff;
 
@@ -1082,6 +1082,9 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
 
     /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
     $scope.envarMsj_a_ = function(file){
+        //
+        // var objeto = getElementById(id_del_objeto);
+        // objeto.className = nueva_clase;
 
         //enviarmensajeadjunto()
         console.log(file);
@@ -1147,8 +1150,8 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
                         fotoperfil: (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil),
                         adjunto: data
                     });
-                    angular.element(document.getElementById('previasubidaarchivos' + $scope.usuarioMensaje)).remove();
-                    angular.element(document.getElementById($scope.usuarioMensaje + 'chattext2')).val('');
+                  //  angular.element(document.getElementById('previasubidaarchivos' + $scope.usuarioMensaje)).remove();
+                  //  angular.element(document.getElementById($scope.usuarioMensaje + 'chattext2')).val('');
                 });
             }
 
@@ -1163,21 +1166,12 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
          * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
          */
         $scope.$on('socket:chateando', function (ev, data) {
-
             $scope.generarConv(data.envia, data.recibe)
         });
-
-
-
-
-
-
 
     };
     /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
     /*+++fin+++adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
 
 }])
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -1965,6 +1959,7 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
 }]);
 
 app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$scope){
+    var contador=0;
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser();
@@ -1975,7 +1970,35 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
             mySocket.forward('usuario', $scope);
             auth.logOut();
         }
-    }]);
+
+    mySocket.forward('chateando', $scope);
+
+    /*
+     * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
+     * Ademas el que recibe el mensaje si tiene la caja de chat cerrado la abre en  if($('#'+data.envia+'chat').length == 0){
+     * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
+     */
+
+    $scope.el_click = function () {
+           contador=0;
+           window.location.assign("http://intranet.solucionescyf.com.co/#/root/mensajes")
+    }
+
+    $scope.$on('socket:chateando', function (ev, data) {
+        contador++;
+        $scope.currentUser = auth.currentUser();
+        var yo= $scope.currentUser.username;
+        if(data.recibe == yo){
+            document.getElementById("avisos").style.display = "block";
+            $scope.msj_de= data.envia;
+            $scope.cont= contador;
+        }
+    }); 
+
+
+
+
+}]);
 
 app.controller('DocumentCtrl', ['$scope','users','Upload','$timeout','$http', 'documents','document','auth',  function($scope,users,Upload,$timeout,$http,  documents,document,auth){
 
