@@ -994,11 +994,9 @@ app.config([
 app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','$http','moment','users','$compile', function ($scope,Upload,$timeout,mySocket,auth,$http,moment,users,$compile) {
 
     $scope.currentUser = auth.currentUser();
-    // $scope.artists = response.data.userConectados;
-    var yo;
+    var yo, progreso;//artistas
 
        $http.get('/mensajesNoChat/'+$scope.currentUser.username).then(function (data) {
-           //console.log(data.data)
            $scope.mensajes = data.data;
        },function (err) {
 
@@ -1006,90 +1004,20 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
 
     $scope.generarConv = function( uno, dos ){
         $scope.usuarioMensaje = ($scope.currentUser.username== uno ? dos : uno);
-        // console.log($scope.usuarioMensaje)
         $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
             $scope.con_quien_converso=dos   ;
             $scope.historial_conv = response.data;
             var objeto = getElementById(dos);
             objeto.className = "";
-           // if(response.data.adjunto===undefined){ console.log('paila'); }else{console.log('ok');}
-
             setTimeout(function () {
                 $('.message-list').scrollTop($('.message-list')[0].scrollHeight);
             },500)
-
         })
     };
-    //
-    // angular.filter('newlines', function(text){
-    //     var a = text.replace('<', '&lt;');
-    //     text = a.replace('>', '&gt;');
-    //     return text;
-    // });
 
     /*++++++++++Esto++es++el++Adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    $scope.seleccionarchivochat = function (ff,name) {
-
-        console.log(ff[0].type);
-
-        le_file=ff;
-
-        switch (ff[0].type){
-
-            case 'image/jpeg':
-            case 'image/png':
-            case 'image/gif':
-            case 'image/tiff':
-            case 'application/pdf':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-            case 'application/vnd.ms-excel':
-            case 'application/vnd.ms-word':
-            case 'application/vnd.ms-powerpoint':
-            case 'text/plain':
-            case 'application/msword':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
-            case 'application/vnd.ms-word.template.macroEnabled.12':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
-            case 'application/vnd.ms-excel.sheet.macroEnabled.12':
-            case 'application/vnd.ms-excel.template.macroEnabled.12':
-            case 'application/vnd.ms-excel.sheet.binary.macroEnabled.12':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.template':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
-            case 'application/vnd.ms-powerpoint.addin.macroEnabled.12':
-            case 'application/vnd.ms-powerpoint.presentation.macroEnabled.12':
-            case 'application/vnd.ms-powerpoint.template.macroEnabled.12':
-
-
-                // document.getElementById("ADJ").style.visibility = "visible";
-                // $scope.nombre_archivo= ff[0].name.substring(0,19);
-                // return $scope.nombre_archivo;
-
-                // le_file= ff;
-
-                break;
-
-
-            default:
-                alert("No se puede adjuntar el archivo ya que no corresponde a una extención 'doc','docx','ppsx','ppt','pptm','pptx','xls','xlsx','xlsm','xlsb','pdf','png','tiff','gif','jpg','jpeg','doc' o 'txt'. ");
-                console.log(ff[0].type);
-                break;
-
-        }
-    };
-
-
     /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
     $scope.envarMsj_a_ = function(file){
-        //
-        // var objeto = getElementById(id_del_objeto);
-        // objeto.className = nueva_clase;
-
-        //enviarmensajeadjunto()
-        console.log(file);
-        console.log($scope.picFile);
-
 
         if($scope.mensajeTal == "" || !$scope.mensajeTal){
             return 0;
@@ -1108,55 +1036,100 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
                 $scope.mensajeTal = "";
             });
 
-            if(file){
-                file.upload = Upload.upload({
-                    url: '/chat/adjuntos',
-                    data: {},
-                    file: file,
-                    headers: {Authorization: 'Bearer ' + auth.getToken(), 'Content-Type': file.type}
-                });
-
-                file.upload.then(function (response) {
-                    console.log("Postcontroller: upload then ");
-                    $timeout(function () {
-                        file.result = response.data;
-                    });
-                }, function (response) {
-                    if (response.status > 0)
-                        $scope.errorMsg = response.status + ': ' + response.data;
-                });
-
-                file.upload.progress(function (evt) {
-                    // Math.min is to fix IE which reports 200% sometimes
-                    file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                    console.log("PostController: upload progress " + file.progress);
-                });
-
-                file.upload.success(function (data, status, headers, config) {
-                    console.log(data)
-                    $scope.title = '';
-                    $scope.link = '';
-                    $scope.picFile = '';
-
-                    socket.emit('pubs', 'update');
-                    console.log($scope.usuarioMensaje);
-                    console.log('mimerrjr');
-                    socket.emit("chateando", {
-                        mesj: $scope.mensajeTal,
-                        envia: $scope.currentUser.username,
-                        participan: [$scope.usuarioMensaje, $scope.currentUser.username].sort(),
-                        recibe: $scope.usuarioMensaje,
-                        nombrec: $scope.usuario.data.nombre.split(' ')[0] + ' ' + $scope.usuario.data.apellido.split(' ')[0],
-                        fotoperfil: (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil),
-                        adjunto: data
-                    });
-                  //  angular.element(document.getElementById('previasubidaarchivos' + $scope.usuarioMensaje)).remove();
-                  //  angular.element(document.getElementById($scope.usuarioMensaje + 'chattext2')).val('');
-                });
+            if (file && file.$error != null){
+                alert('No se puede enviar el archivo adjunto, supera el limite permitodo de 200 MB.')
             }
 
-        }
 
+
+            if(file){
+
+                switch (file.type){
+
+                    case 'image/jpeg':
+                    case 'image/png':
+                    case 'image/gif':
+                    case 'image/tiff':
+                    case 'application/pdf':
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                    case 'application/vnd.ms-excel':
+                    case 'application/vnd.ms-word':
+                    case 'application/vnd.ms-powerpoint':
+                    case 'text/plain':
+                    case 'application/msword':
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
+                    case 'application/vnd.ms-word.template.macroEnabled.12':
+                    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
+                    case 'application/vnd.ms-excel.sheet.macroEnabled.12':
+                    case 'application/vnd.ms-excel.template.macroEnabled.12':
+                    case 'application/vnd.ms-excel.sheet.binary.macroEnabled.12':
+                    case 'application/vnd.openxmlformats-officedocument.presentationml.template':
+                    case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
+                    case 'application/vnd.ms-powerpoint.addin.macroEnabled.12':
+                    case 'application/vnd.ms-powerpoint.presentation.macroEnabled.12':
+                    case 'application/vnd.ms-powerpoint.template.macroEnabled.12':
+
+
+
+                        file.upload = Upload.upload({
+                            url: '/chat/adjuntos',
+                            data: {},
+                            file: file,
+                            headers: {Authorization: 'Bearer ' + auth.getToken(), 'Content-Type': file.type}
+                        });
+
+                        file.upload.then(function (response) {
+                            console.log("Postcontroller: upload then ");
+                            $timeout(function () {
+                                file.result = response.data;
+                            });
+                        }, function (response) {
+                            if (response.status > 0)
+                                $scope.errorMsg = response.status + ': ' + response.data;
+                        });
+
+                        file.upload.progress(function (evt) {
+                            file.progress = (100.0 * evt.loaded / evt.total);
+                            console.log("PostController: upload progress " + file.progress);
+                            document.getElementById("bar").style.width = file.progress +'%';
+
+                            if(file.progress>99){
+                                file.progress =0;
+                                document.getElementById("bar").style.width = file.progress +'%';
+                            }
+                        });
+                        progreso=0;
+
+                        file.upload.success(function (data, status, headers, config) {
+                            console.log(data)
+                            $scope.title = '';
+                            $scope.link = '';
+                            $scope.picFile = '';
+
+                            socket.emit('pubs', 'update');
+                            console.log($scope.usuarioMensaje);
+                            console.log('mimerrjr');
+                            socket.emit("chateando", {
+                                mesj: $scope.mensajeTal,
+                                envia: $scope.currentUser.username,
+                                participan: [$scope.usuarioMensaje, $scope.currentUser.username].sort(),
+                                recibe: $scope.usuarioMensaje,
+                                nombrec: $scope.usuario.data.nombre.split(' ')[0] + ' ' + $scope.usuario.data.apellido.split(' ')[0],
+                                fotoperfil: (!$scope.usuario.data.fotoperfil ? "/img/user_chat.png" : $scope.usuario.data.fotoperfil),
+                                adjunto: data
+                            });
+                        });
+
+                        break;
+
+                    default:
+                        alert("No se puede adjuntar el archivo ya que no corresponde a una extención 'doc','docx','ppsx','ppt','pptm','pptx','xls','xlsx','xlsm','xlsb','pdf','png','tiff','gif','jpg','jpeg','doc' o 'txt'. ");
+                        break;
+                }
+            }
+        }
 
         mySocket.forward('chateando', $scope);
 
@@ -1168,13 +1141,11 @@ app.controller('MensajesCtrl', ['$scope','Upload','$timeout','mySocket','auth','
         $scope.$on('socket:chateando', function (ev, data) {
             $scope.generarConv(data.envia, data.recibe)
         });
-
     };
     /*¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦*/
     /*+++fin+++adjunto+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
 }])
-/*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
 
 
 app.controller('GerentesCtrl',['$scope','auth','gdocuments','gdocument','$http','$timeout','Upload', function ($scope,auth,gdocuments,gdocument,$http,$timeout,Upload) {
@@ -1958,12 +1929,13 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
 
 }]);
 
-app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$scope){
+app.controller('NavCtrl', ['$scope','Upload','$timeout','mySocket','auth','$http','moment','users','$compile', function ($scope,Upload,$timeout,mySocket,auth,$http,moment,users,$compile) {
+
     var contador=0;
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser();
-    console.log(nav.currentUser)
+        console.log(nav.currentUser)
 
         nav.logOut = function (user) {
             socket.emit('disusuario', user );
@@ -1979,6 +1951,31 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
 
     mySocket.forward('chateando', $scope);
 
+
+    $scope.currentUser = auth.currentUser();
+
+    $http.get('/mensajesNoChat/'+$scope.currentUser.username).then(function (data) {
+        $scope.mensajes = data.data;
+    },function (err) {
+
+    });
+var i=0,limite=6;
+    $scope.generarConv = function( uno, dos ){
+        $scope.usuarioMensaje = ($scope.currentUser.username== uno ? dos : uno);
+        $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
+            $scope.con_quien_converso=dos   ;
+            i++;
+            if(i>limite){
+            $scope.historial_conv = response.data;
+            }
+            // var objeto = getElementById(dos);
+            // objeto.className = "";
+            // setTimeout(function () {
+            //     $('.message-list').scrollTop($('.message-list')[0].scrollHeight);
+            // },500)
+        })
+    };
+
     /*
      * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
      * Ademas el que recibe el mensaje si tiene la caja de chat cerrado la abre en  if($('#'+data.envia+'chat').length == 0){
@@ -1987,7 +1984,7 @@ app.controller('NavCtrl', ['auth','mySocket','$scope', function( auth,mySocket,$
 
     $scope.el_click = function () {
            contador=0;
-           window.location.assign("http://intranet.solucionescyf.com.co/#/root/mensajes")
+           //window.location.assign("http://intranet.solucionescyf.com.co/#/root/mensajes")
     }
 
     $scope.$on('socket:chateando', function (ev, data) {
@@ -2370,7 +2367,6 @@ app.controller('AdminpqCtrl', ['$scope','auth','pqrsf','$http','Upload','$timeou
                 $scope.cont = 0;
                 angular.forEach(files, function(file) {
                     $scope.cont++;
-
 
                     var a = "/pqrsfs/45/files"
                     file.upload = Upload.upload({
