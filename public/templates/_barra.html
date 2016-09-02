@@ -448,6 +448,8 @@
             });
     $('.ui.dropdown')
             .dropdown();
+
+
 </script>
 
     <div class="barrasup">
@@ -483,6 +485,7 @@
                         <!--<div class="floating ui teal label">{{cont}}</div>-->
                     <!--</div>-->
 
+
                     <div  class="iniciodiv" style="width: 100px">
                         <div class="container">
                             <a id="menuButtonDesktop" class="launch item">
@@ -494,11 +497,13 @@
                                 <!--Name Surname-->
                             </a>
                             <a id="usersPopup" class="launch icon item">
-
-                                <i class="mail icon big" style="color: white"></i>
+                                <i class="mail icon big" style="color: white" ng-click="avisos_cero()"></i>
+                                <div ng-show="cont>0" class="floating ui teal label" id="avisos" style="left: 72%;" >{{cont}}</div>
                             </a>
+
                         </div>
                     </div>
+
                     <div id="userSelPopup" class="ui custom popup top left transition hidden">
                         <div class="">
                                     <div class="thread-count">

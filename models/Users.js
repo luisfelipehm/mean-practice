@@ -35,6 +35,7 @@ var UserSchema = new mongoose.Schema({
     gerente: Boolean,
     admingerente: Boolean,
     carpetasAdicionales: String,
+    conversaciones: Number,
 });
 
 

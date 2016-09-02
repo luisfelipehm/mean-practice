@@ -1671,7 +1671,6 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
         $http.get('losgerentes').then(function (data) {
             $scope.carpetasGerentes2 = data.data;
         });
-
     };
 
 
@@ -1926,51 +1925,59 @@ app.controller('UsersCtrl', ['$scope','auth','users','areas','Upload','$timeout'
 }]);
 
 app.controller('NavCtrl', ['$scope','Upload','$timeout','mySocket','auth','$http','moment','users','$compile', function ($scope,Upload,$timeout,mySocket,auth,$http,moment,users,$compile) {
-
+    $scope.currentUser = auth.currentUser();
     var contador=0;
         var nav = this;
         nav.isLoggedIn = auth.isLoggedIn;
         nav.currentUser = auth.currentUser();
         console.log(nav.currentUser)
-
         nav.logOut = function (user) {
             socket.emit('disusuario', user );
             mySocket.forward('usuario', $scope);
             auth.logOut();
         }
-
     $scope.getMyCtrlScope = function() {
         return $scope;
     }
- 
+
 
 
     mySocket.forward('chateando', $scope);
-
-
-    $scope.currentUser = auth.currentUser();
 
     $http.get('/mensajesNoChat/'+$scope.currentUser.username).then(function (data) {
         $scope.mensajes = data.data;
     },function (err) {
 
     });
-var i=0,limite=6;
-    $scope.generarConv = function( uno, dos ){
-        $scope.usuarioMensaje = ($scope.currentUser.username== uno ? dos : uno);
-        $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
-            $scope.con_quien_converso=dos   ;
-            i++;
-            if(i>limite){
-            $scope.historial_conv = response.data;
-            }
-            // var objeto = getElementById(dos);
-            // objeto.className = "";
-            // setTimeout(function () {
-            //     $('.message-list').scrollTop($('.message-list')[0].scrollHeight);
-            // },500)
-        })
-    };
+
+
+    /*historial convesaciones en el icono de notificaciones*/
+        var i=0,limite=6;
+            $scope.generarConv = function( uno, dos ){
+                $scope.usuarioMensaje = ($scope.currentUser.username== uno ? dos : uno);
+                $http.get('/mensajes/'+ uno +','+ dos).then(function (response) {
+                    $scope.con_quien_converso=dos   ;
+                    i++;
+                    if(i>limite){
+                    $scope.historial_conv = response.data;
+                    }
+                })
+            };
+
+    var christian =  {
+        nombre: "chrstian"
+    }
+
+
+    $scope.cont= 0;
+    users.get($scope.currentUser._id).then(function(data){
+        $scope.usuario =  data.data;
+        $scope.cont = $scope.usuario.conversaciones
+    });
+
+
+
+
 
     /*
      * Cuando el cliente escucha el socket 'chateando' se actualiza la caja de chat del usuario que envio el mensaje
@@ -1978,23 +1985,23 @@ var i=0,limite=6;
      * si ya existe el chat simplemente se agrega el ultimo mensaje con $scope.obtenerMensajes
      */
 
-    $scope.el_click = function () {
-           contador=0;
-           //window.location.assign("http://intranet.solucionescyf.com.co/#/root/mensajes")
-    }
+   
+
+    $scope.avisos_cero = function () {
+        $scope.cont=0;
+        socket.emit("leyonot", {
+            username: $scope.currentUser.username
+        });
+        
+    };
 
     $scope.$on('socket:chateando', function (ev, data) {
         contador++;
-        $scope.currentUser = auth.currentUser();
         var yo= $scope.currentUser.username;
-        if(data.recibe == yo){
-            document.getElementById("avisos").style.display = "block";
-            $scope.msj_de= data.envia;
-            $scope.cont= contador;
+        if(data.recibe == yo){//  recibe  envia
+            $scope.cont = data.conversaciones;
         }
-    }); 
-
-
+    });
 
 
 }]);
@@ -2434,7 +2441,6 @@ app.controller('PqrsfuserCtrl', ['$scope','pqrsf','$http','auth','Upload','$time
         angular.element(document.getElementById('modalarcdocs')).html('')
         angular.element(document.getElementById('modalarcdocs')).append(bases)
         angular.element(document.getElementById('modalarch')).css('display','block')
-
     };
 
     $scope.generarzip = function () {
