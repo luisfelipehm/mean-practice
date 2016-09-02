@@ -279,7 +279,72 @@
     {
         opacity: 1;
     }
-
+    .selecttipodoc{
+        width: 15vw;
+    }
+    .nombreuserform{
+        width: 29.8vw;
+        height: auto;
+    }
+    .ndocumentouserform{
+        margin-bottom: 0;
+        margin-top: 0;
+        height: 4.5vh;
+        width: 18vw;
+    }
+    .empresaform{
+        margin-bottom: 0;
+        margin-top: 0;
+        height: 4.5vh;
+        width: 12vw;
+    }
+    .cargoform{
+        margin-bottom: 0;
+        margin-top: 0;
+        height: 4.5vh;
+        width: 11.5vw;
+    }
+    .tipodepqrsf{
+        width: 8vw;
+    }
+    .txtareapqrsf{
+        width: 44vw;
+        border-radius: .5vw .5vw .5vw .5vw;
+        resize: none;
+    }
+    .cuadroadjunto{
+        width: 8vw;
+        position: absolute;
+        top: 0vh;
+        right:60px;
+    }
+    .picfileadjunto{
+        margin: 0;
+        font-size: .7vw;
+        color: #575756
+    }
+    .adjuntotxt{
+        margin: 0;
+        font-weight: bold;
+        font-size: .8vw;
+        color: #575756;
+    }
+    .cuadroimgadjuntar{
+        position: relative;
+        left: 70%;
+        width: 12vw;
+    }
+    .generapqrsf{
+        width: 6.8vw;
+        margin-left: 6%;
+    }
+    .imgadjuntar{
+        height: 7.5vh;
+    }
+    .cuadronuevoadjunto{
+        margin-top: 1vh;
+        position: relative;
+    }
     @media (max-width: 900px){
         .comilla1{
             height: 27px;
@@ -297,13 +362,94 @@
         .comilla2{
             height: 20px;
             top: 58px;
-            left: 296px;
+            left: 328px;
         }
         .inftextobli{
             width: 90%;
         }
         label{
+            font-size: 12px;
+        }
+        md-input-container .md-input{
+            font-size: 13px;
+        }
+        .espaciono{
+            display: none;
+        }
+        .md-select-value :first-child{
+            font-size: 13px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .selecttipodoc{
+            width: 115px;
+        }
+        .nombreuserform{
+            width: 130px;
+        }
+        .ndocumentouserform{
+            width: 80px;
+            margin-top: -16px;
+        }
+        .empresaform{
+            width: 58px;
+        }
+        .cargoform{
+            width: 44px;
+        }
+        .ciudadform{
+            width: 81px;
+            margin-bottom: -10px;
+        }
+        .tipodepqrsf{
+            width: 90px;
+        }
+        .txtareapqrsf{
+            width: 332px;
+        }
+        .titlepersonales{
+            font-size: 16px;
+        }
+        .cuadroadjunto{
+            /*right: 71px;*/
+            width: 18vw;
+        }
+        .picfileadjunto{
+            font-size: 10px;
+        }
+        .adjuntotxt{
+            font-size: 13px;
+        }
+        .listdat{
             font-size: 11px;
+        }
+        .inpt{
+            width: 99px;
+            font-size: 12px;
+            height: 15px;
+        }
+        .cuadroimgadjuntar{
+            left: 203px;
+            width: 132px;
+        }
+        .generapqrsf{
+            width: 79px;
+            margin-left: 6%;
+        }
+        .iconadjun{
+            width: 35px;
+        }
+        .imgadjuntar{
+            height: 49px;
+        }
+        .nombreuser{
+            height: 40px;
+        }
+        .espacios{
+            height: 40px;
+        }
+        .cuadronuevoadjunto{
+            width: 347px;
         }
     }
 
@@ -347,6 +493,7 @@
         <div class="pqline"><h2 class="pqnav" ng-click="mispq = false">Nueva PQRSF</h2></div>
         <div class="pqline"><h2 class="pqnav" ng-click="mispq = true">Mis PQRSF</h2></div>
     </div>
+
 
 
     <!--MIS PQRS-->
@@ -483,18 +630,19 @@
             <div class="inftextobli"> <label>Los campos con aspectos (*) son campos que se deben llenar obligatoriamente.</label>
 
                 <div class="nombreuser"> <label style="vertical-align: 40%">Al día {{ fechaxxx | moment:'DD'}} de {{   fechaxxx | moment:'MMMM' }} {{ fechaxxx | moment:'YYYY'}} Yo </label> <span class="asterisco">*</span>
-                    <md-input-container style="width: 29.8vw; height: auto">
+                    <md-input-container class="nombreuserform">
                         <label></label>
                         <input type="text" ng-model="nombre" placeholder="Nombres y Apellidos">
                     </md-input-container>
                 </div>
-                <br>
-                <br>
-
-                <div>
+                <div class="espaciono">
+                    <br>
+                    <br>
+                </div>
+                <div class="espacios">
                     <label style="vertical-align: 0">Identificado con </label> <span class="asterisco">*</span>
                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0;">
-                        <md-select placeholder="Tipo Documento" ng-model="tdocumento" style="width: 15vw">
+                        <md-select placeholder="Tipo Documento" ng-model="tdocumento" class="selecttipodoc">
                             <md-option ng-repeat="tipos in tdocumentos" value="{{tipos.nombre}}">
                                 {{tipos.nombre}}
                             </md-option>
@@ -502,33 +650,33 @@
                     </md-input-container>
                     <label> No. <span class="asterisco">*</span> </label>
                     <!--&lt;!&ndash;{{ciudad}}&ndash;&gt;-->
-                    <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 18vw">
+                    <md-input-container class="ndocumentouserform">
                         <label></label>
                         <input type="text" ng-model="ndocumento" placeholder="Documento">
                     </md-input-container>
                 </div>
 
-                <div>
+                <div class="espacios">
                     <label>hago parte de la empresa </label><span class="asterisco">*</span>
-                    <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 12vw">
+                    <md-input-container class="empresaform">
                         <label></label>
                         <input type="text" ng-model="empresa" placeholder="Empresa">
                     </md-input-container>
                     <label>en el cargo de <span class="asterisco">*</span></label>
-                    <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 11.5vw">
+                    <md-input-container class="cargoform">
                         <label></label>
                         <input type="text" ng-model="cargo" placeholder="Cargo">
                     </md-input-container>,
                 </div>
-                <div>
+                <div class="espacios">
                     <label>en la Ciudad de <span class="asterisco">*</span></label>
-                    <md-input-container style="margin-bottom: 0; margin-top: 0; height: 4.5vh;width: 15vw">
+                    <md-input-container class="ciudadform">
                         <label></label>
                         <input type="text" ng-model="ciudad2" placeholder="ciudad">
                     </md-input-container>
                     <label>presento</label><span class="asterisco">*</span>
                     <md-input-container style="vertical-align: 30%;margin-bottom: 0; margin-top: 0;">
-                        <md-select  placeholder="PQRSF" ng-model="tipopq" style="width: 8vw" required>
+                        <md-select  placeholder="PQRSF" ng-model="tipopq" class="tipopqrsf" required>
                             <md-option ng-repeat="t in tipospq" value="{{t.nombre}}" required>
                                 {{t.nombre}}
                             </md-option>
@@ -537,18 +685,18 @@
                 </div>
 
                 <div style="margin-top:3vh">
-                    <textarea style="width: 44vw; border-radius: .5vw .5vw .5vw .5vw;resize: none; " ng-model="comentario"  rows="5"  placeholder="Comentarios..."></textarea>
+                    <textarea class="txtareapqrsf" ng-model="comentario"  rows="5"  placeholder="Comentarios..."></textarea>
                 </div>
 
-                <div style="margin-top: 1vh;position: relative;">
+                <div class="cuadronuevoadjunto">
                     <div style="position: absolute; top:0;right: 15px">
-                        <img style="height: 7.5vh"  ng-src="{{!picFile ? '/img/icono-fomulario.png' : iconoSubidaDocumentoPq(picFile)}}">
+                        <img class="imgadjuntar"  ng-src="{{!picFile ? '/img/icono-fomulario.png' : iconoSubidaDocumentoPq(picFile)}}">
                     </div>
-                    <div style="width: 8vw;position: absolute;top: 0vh; right:60px">
-                        <p style="margin: 0; font-weight: bold; font-size: .8vw;color: #575756">Adjunto:</p>
-                        <p style="margin: 0; font-size: .7vw;color: #575756">Por el solicitante</p>
-                        <p style="margin: 0; font-size: .7vw;color: #575756">{{picFile[0].name}}</p>
-                        <p style="margin: 0; font-size: .7vw;color: #575756">{{picFile[0].size * .001 + "KB"}}</p>
+                    <div class="cuadroadjunto">
+                        <p class="adjuntotxt">Adjunto:</p>
+                        <p class="picfileadjunto">Por el solicitante</p>
+                        <p class="picfileadjunto">{{picFile[0].name}}</p>
+                        <p class="picfileadjunto">{{picFile[0].size * .001 + "KB"}}</p>
                     </div>
                     <p class="titlepersonales">Datos Personales</p>
                     <p class="listdat">Correo Personal <input class="inpt" type="text" ng-model="email" > </p>
@@ -571,13 +719,13 @@
                 <!--<li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}-->
                 <!--</li>-->
 
-                <div style="position: relative; left: 70%;width: 12vw;" >
+                <div class="cuadroimgadjuntar">
                     <label for="file-input">
                         <img class="iconadjun" src="/img/iconoadjdoc.jpg">
                     </label>
                     <input type="file" class="adjunta" ngf-select ng-model="picFile"  id="file-input" ngf-multiple="true"  name="file" ngf-max-size="200MB" required />
                     <!--BOTON ENVIAR-->
-                    <input type="image" src="/img/botones-enviar.png" style="width: 6.8vw; margin-left: 6%" >  </input>
+                    <input type="image" src="/img/botones-enviar.png" class="generapqrsf">  </input>
                 </div>
 
 
