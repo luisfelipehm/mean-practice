@@ -26,7 +26,7 @@ var Folder = mongoose.model('Folder');
 var Formulario = mongoose.model('Formulario');
 var Gfile = mongoose.model('Gfile');
 var Gfolder = mongoose.model('Gfolder');
-
+// var Num_Coment_User = mongoose.model('Coments');
 
 
 
@@ -80,42 +80,23 @@ router.get('/mensajesNoChat/:mes', function(req, res, next) {
       })
 
       }
-
-
         setInterval(function () {
           if (cc == uniqueNames.length) {
             cc++;
             res.json(beta);
           }
         }, 200)
-
-
-
-
-
-
-
-
-
-
-
-
     });
   });
-
-
-
 });
 
-router.get('/posts', function(req, res, next) {
 
+router.get('/posts', function(req, res, next) {
   Post.find().populate('comments').exec(function (err,posts) {
     if(err){ return next(err); }
     res.json(posts);
   })
 });
-
-
 
 
 router.get('/actas', function(req, res, next) {

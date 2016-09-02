@@ -18,18 +18,37 @@ module.exports = function(io) {
                 // or alternatively
                 // return text.replace(urlRegex, '<a href="$1">$1</a>')
             }
-            console.log(msg)
+
             var linkeando = urlify(msg.mesj);
             var conv = new Conversation({usernameone: msg.envia, usernametwo: msg.participan, mensaje: linkeando,receptor: msg.recibe, fecha: Date.now(),fotoperfil: msg.fotoperfil,adjunto: msg.adjunto });
             conv.save(function(){
+                User.findOne({ username: msg.recibe }, function (err, name) {
+                    name.conversaciones = (name.conversaciones ?  name.conversaciones + 1 : 1);
+                    name.save(function (err,d) {
+
+                    });
+                    msg.conversaciones = name.conversaciones;
+                    io.emit('chateando',msg);    
+                });
                 //var sabe = [{usernameone: msg.envia,usernametwo: msg.recibe},{usernametwo: msg.recibe,usernameone: msg.envia}];
-                io.emit('chateando',msg);
+                
             });
 
         });
         socket.on('pubs', function (user) {
 
                 io.emit('pubs',user)
+
+        });
+
+        socket.on('leyonot', function (user) {
+
+            User.findOne({ username: user.username }, function (err, name) {
+                name.conversaciones = 0;
+                name.save();
+
+
+            });
 
         });
 
