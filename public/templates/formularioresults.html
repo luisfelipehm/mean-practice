@@ -69,9 +69,9 @@
 
 </style>
 
-<div ng-repeat="resu in resultadofinal" class="graficasform">
-    <h1 class="tittleresul">{{formulario.preguntas[$index].pregunta}}</h1>
-    <nvd3 options="options" data="resu"></nvd3>
+<div ng-repeat="resu in resultadofinal" class="graficasform" ng-if="formulario.preguntas[$index].tipo != 'text'">
+        <h1 class="tittleresul">{{formulario.preguntas[$index].pregunta}}</h1>
+        <nvd3 options="options" data="resu"></nvd3>
 </div>
 
 
@@ -92,7 +92,9 @@
 
             <td>{{resp.author}}</td>
             <td>{{resp.fecha}}</td>
-            <td ng-repeat="r in resp.dato">{{r.pregunta}}: {{typee(r.respuesta) == "object" ? alegible(r.respuesta) : r.respuesta}}</td>
+            <td ng-repeat="r in resp.dato">
+                {{r.pregunta}}: {{typee(r.respuesta) == "object" ? alegible(r.respuesta) : r.respuesta}}
+            </td>
         </tr>
         </tbody>
     </table>
