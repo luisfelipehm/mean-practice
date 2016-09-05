@@ -396,10 +396,75 @@
         margin-top: 3vh;
         margin-left: 31vw;
     }
+    .inlineblockwidth{
+        display: inline-block;
+    }
+    .infopqrs{
+        display: inline-block;
+        width: 30vw;
+    }
+    .textofecharecibido{
+        margin: 0;
+        font-size: 1vw;
+    }
+    .textotitulopq{
+        font-size: 2.5vw;
+        font-weight: bold;
+    }
+    .txtadobe{
+        position: absolute;
+        top: 0vh;
+        margin: 0;
+        left: 80%;
+        top: 69%;
+    }
+    .imagenformularioprsfs{
+        width: 4vw;
+        position: absolute;
+        top:0;
+        left: 70%;
+    }
+    .txttituloprocesp{
+        font-size: 2vw;
+    }
+    .imagenadjuntarformulario{
+        width: 2vw;
+        vertical-align:middle;
+        margin-left: 33.5vw;
+    }
+    .txtareaobsercacionform{
+        width: 44vw;
+        height: 12vh;
+        padding: 10px;
+        border-radius: .5vw .5vw .5vw .5vw;
+        resize: none;
+    }
+    .imgredirigirnuevapq{
+        width: 5vw;
+        border-radius: .3vw;
+    }
+    .imgcloseproceso{
+        width: 9vw;
+        vertical-align: -1vh;
+    }
+    .imgsendproceso{
+        width: 8vw;
+        vertical-align: -1vh;
+    }
+    .txtsolicitante{
+        position: absolute;
+        top: 0vh;
+        margin: 0;
+        left: 80%;
+        top: 35%;
+    }
+    .margenescomentario{
+        margin-top:3vh;
+    }
     @media (max-width: 1000px) {
         .cajaredirije{
             margin-left: 20px;
-            width: 372px;
+            width: 100%;
         }
         barrader{
             display: none;
@@ -409,15 +474,15 @@
         }
 
         .buscador {
-            width: 370px;
+            width: 100%;
             margin-top: 24px;
         }
         .inputcontainer1{
-            width: 368px;
+            width: 100%;
             margin-top: 22px;
         }
         .inputcontainer2{
-            width: 368px;
+            width: 100%;
         }
         .btnbuscar{
             width: 100px;
@@ -440,7 +505,7 @@
             width: 70px;
         }
         .linearojaredirije{
-            margin-left: 206px;
+            margin-left: 41%;
         }
         .iconotramite{
             width: 14vw;
@@ -484,7 +549,7 @@
         }
         .imgadjuntarrojo{
             width: 28px;
-            margin-left: 300px;
+            margin-left: 54%;
             margin-top: -22px;
         }
         .tituloprocesores{
@@ -508,13 +573,11 @@
             left: 296px;
         }
         .cuadrocambiarchivo{
-            position: relative;
-            display: inline-block;
-            margin-top: 3vh;
-            margin-left: 3vw;
+            margin-top: 0;
+            margin-left: 50vw;
         }
         .newcomentario{
-            width: 310px;
+            width: 100%;
             height: 66px;
         }
         .imgredirigir{
@@ -522,7 +585,7 @@
             border-radius: .3vw;
         }
         .emailedit{
-            width: 227px;
+            width: 219px;
             margin-top: -8px;
         }
         .iconadjun {
@@ -535,14 +598,14 @@
         }
         .iconoenviarres{
             width: 91px;
-            margin-left: 24px;
+            margin-left: 3px;
         }
         .boxpubli{
             margin-top: 3vh;
         }
         .cuadropqcerrado{
             display: inline-block;
-            width: 228px;
+            width: 70%;
         }
         .fechaderecibido{
             font-size: 15px;
@@ -559,7 +622,7 @@
             width: 5vw;
             display: inline-block;
             vertical-align: top;
-            margin-top: 14%;
+            margin-top: 9%;
         }
         .lineagriscierra{
             vertical-align: 6vh;
@@ -603,8 +666,67 @@
         .checktramite{
             top: 7vh !important;
         }
-    }
+        .inlineblockwidth{
+            display: inline-block;
+            width: 100%;
+        }
+        .infopqrs{
+            width: 41vw;
+            margin-left: 16%;
+        }
+        .textofecharecibido{
+            font-size: 11px;
+        }
+        .textotitulopq{
+            font-size: 20px;
+        }
+        .txtadobe{
+            left: 80%;
+            top: 9vh;
+        }
+        .imagenformularioprsfs{
+            width: 51px;
+            left: 62%;
+        }
+        .txttituloprocesp{
+            font-size: 20px;
+        }
+        .imagenadjuntarformulario{
+            width: 22px;
+        }
+        .txtareaobsercacionform{
+            width: 100%;
+        }
+        .imgredirigirnuevapq{
+            width: 74px;
+        }
+        .imgcloseproceso{
+            width: 124px;
+            margin-left: -24px;
+        }
+        .imgsendproceso{
+            width: 112px;
+        }
+        .margenadjunta{
+            margin-left: -83px !important;
+            margin-left: -83px !important;
+        }
+        .txtsolicitante{
+            top: 3vh;
+        }
+        .margenescomentario{
+            margin-top:9vh;
+        }
+        .checkboxnuevo .md-container {
+            top: -1vh;
+        }
 
+    }
+    @media (min-height: 321px) and (orientation: landscape) {
+        .imagendepqrsf{
+            margin-top: 4%;
+        }
+    }
 
 </style>
 
@@ -653,8 +775,8 @@
 
     <!--BUSCADOR-->
     <div class="cajabuscador" >
-        <div style="display: inline-block;"> <input class="buscador" type="text" placeholder="Escribe tu Busqueda..." ng-model="search"></div>
-        <div style="display: inline-block;">
+        <div class="inlineblockwidth"> <input class="buscador" type="text" placeholder="Escribe tu Busqueda..." ng-model="search"></div>
+        <div class="inlineblockwidth">
             <md-input-container class="inputcontainer1">
                 <md-select ng-model="tipospqrs" placeholder="Tipo">
                     <md-option  value="peticion">Petición</md-option>
@@ -665,7 +787,7 @@
                 </md-select>
             </md-input-container>
         </div>
-        <div style="display: inline-block;">
+        <div class="inlineblockwidth">
             <md-input-container class="inputcontainer2">
                 <md-select ng-model="estadopqrs" placeholder="Estado">
                     <md-option  value="cerrado">Cerrado</md-option>
@@ -702,15 +824,16 @@
                     <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Solicitud'" src="/img/adminsolicitud.png">
                     <img class="tipodepqrsf2" ng-if="pq.tipopq == 'Reclamo'" src="/img/adminreclamo.png">
                 </div>
-                <div style="display: inline-block; width: 30vw;"><p class="titlerespon">{{pq.tipopq}} {{pq.enumeracion}}</p>
-                    <p style="margin: 0; font-size: 1vw" > Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
+                <div class="infopqrs">
+                    <p class="titlerespon">{{pq.tipopq}} {{pq.enumeracion}}</p>
+                    <p class="textofecharecibido" > Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
                     <div style="margin-bottom: 2vh;color: #e3152d; " ng-click="editing = true">ver mas</div>
                 </div>
 
                 <div style="border: solid #a5a5a4 .1vw; display: inline-block; margin-left: 3vw;height: 7vh; vertical-align: -1vh"></div>
 
                 <div style=" display:inline-block; vertical-align: 1.5vw;margin-left: 2.5vw ">
-                    <md-checkbox ng-model="datos" class="red" >
+                    <md-checkbox ng-model="datos" class="red checkboxnuevo" >
                     </md-checkbox>
                 </div>
 
@@ -725,7 +848,7 @@
                     <!--TITULO-->
                     <div style="margin-top: 2vh">
                         <img class="comillatramite1" src="/img/icono-comillas1.png">
-                        <span style=" font-size: 2.5vw; font-weight: bold;">{{pq.tipopq}} </span>
+                        <span class="textotitulopq">{{pq.tipopq}} </span>
                         <img class="comillatramite2" src="/img/icono-comillas2.png">
                     </div>
                     <!--DESCRIPCION PEQUEÑA-->
@@ -742,10 +865,10 @@
                             <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
                         </div>
 
-                        <a target="_blank" id="cambioimagenx{{$index}}"> <img  id="imgchangex{{$index}}" style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png"> </a>
+                        <a target="_blank" id="cambioimagenx{{$index}}"> <img  id="imgchangex{{$index}}" class="imagenformularioprsfs" src="/img/icono-fomulario.png"> </a>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; " >Adjunto:</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 35%" >Por el Solicitante</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 69%" >Adobe Pdf</p>
+                        <p class="txtsolicitante" >Por el Solicitante</p>
+                        <p class="txtadobe" >Adobe Pdf</p>
 
                     </div>
 
@@ -760,8 +883,8 @@
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
 
                     <div>
-                        <span style="font-size: 2vw;">Proceso</span>
-                        <img style="width: 2vw; vertical-align:middle;margin-left: 33.5vw" src="/img/adjunto_rojo.png">
+                        <span class="txttituloprocesp">Proceso</span>
+                        <img class="imagenadjuntarformulario" src="/img/adjunto_rojo.png">
                     </div>
 
                     <div style="position: relative"  ng-repeat="cm in pq.comentarios">
@@ -776,8 +899,8 @@
 
                     <form enctype="multipart/form-data" name="myForm" >
 
-                        <div style="margin-top:3vh">
-                            <textarea ng-model="pq.newcomentario" style="width: 44vw;height: 12vh;padding: 10px; border-radius: .5vw .5vw .5vw .5vw;resize: none; " placeholder="Observacion..."></textarea>
+                        <div class="margenescomentario">
+                            <textarea ng-model="pq.newcomentario" class="txtareaobsercacionform" placeholder="Observacion..."></textarea>
                         </div>
 
 
@@ -790,7 +913,7 @@
                         <div style="display: inline-block; margin-top: 0vh">
 
                             <div style="display: inline-block;vertical-align: -1.3vh">
-                                <img style=" width: 5vw; border-radius: .3vw" src="/img/enviarediri.png">
+                                <img class="imgredirigirnuevapq" src="/img/enviarediri.png">
                             </div>
 
                             <div style="display: inline-block">
@@ -809,18 +932,18 @@
                         <div style="padding-bottom: 3vh">
                             <div style="display: inline-block; margin-left: 22vw">
                                 <label for="file-inputtramite{{$index}}">
-                                    <img  class="iconadjun" style="vertical-align: -1vh" src="/img/iconoadjdoc.jpg">
+                                    <img  class="iconadjun  margenadjunta" style="vertical-align: -1vh; " src="/img/iconoadjdoc.jpg">
                                 </label>
                                 <input type="file"  class="adjunta"   ngf-select ng-model="pq.picFile"  id="file-inputtramite{{$index}}"    ngf-multiple="true"  name="file" accept="image/*" ngf-max-size="200MB"  />
                             </div>
 
                             <div style="display: inline-block">
-                                <input ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;" type="image" src="/img/cerrar_proceso.png" style="width: 9vw; vertical-align: -1vh" >
+                                <input ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;" type="image" src="/img/cerrar_proceso.png" class="imgcloseproceso" >
                                 <!--<md-button ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'Cerrado','tramitando');editing = false;">Cerrar Proceso</md-button>-->
                             </div>
 
                             <div style="display: inline-block">
-                                <input type="image" src="/img/botones-enviar.png" style="width: 8vw; vertical-align: -1vh" ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
+                                <input type="image" src="/img/botones-enviar.png" class="imgsendproceso" ng-click="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
                                 <!--<md-button type="submit"  class="md-raised"> Redirigir </md-button>-->
                             </div>
                         </div>
