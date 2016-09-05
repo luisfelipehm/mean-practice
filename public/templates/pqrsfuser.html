@@ -345,24 +345,88 @@
         margin-top: 1vh;
         position: relative;
     }
+    .txtareanuevapq{
+        margin-top:3vh;
+    }
+    .cuadroimagenadjuntarnew{
+        position: absolute;
+        top:0;right: 15px;
+    }
+    .imgeliminarmitramite{
+        width: 1.5vh;
+        margin-top: 0.5vh;
+        margin-left: 97%;
+    }
+    .imgformulario{
+        width: 1.5vw;
+        position: absolute;
+        top: 5vh;
+        left: 92.5%;
+    }
+    .imgformularioadjuntar{
+        width: 4vw;
+        position: absolute;
+        top:0;
+        left: 70%;
+    }
+    .adobetxt{
+        position: absolute;
+        top: 0vh;
+        margin: 0;
+        left: 80%;
+        top: 69%;
+    }
+    .procesotxt{
+        font-size: 2vw;
+    }
+    .adjuntoimg{
+        width: 2vw;
+        vertical-align:middle;
+        margin-left: 33.5vw;
+    }
+    .txtareaobservacion{
+        width: 44vw;
+        height: 12vh;
+        padding: 10px;
+        border-radius: .5vw .5vw .5vw .5vw;
+        resize: none;
+    }
+    .cuadroadjuntarnuevodocumento{
+        display: inline-block;
+        margin-left: 30vw;
+    }
+    .btnenviaractua{
+        width: 8vw;
+        vertical-align: -1vh;
+    }
+    .cuadrocambiaarchivo{
+        position: relative;
+        display: inline-block;
+        margin-top: 3vh;
+        margin-left: 31vw;
+    }
+    .titulopqr{
+        font-size: 2.5vw;
+        font-weight: bold;
+    }
     @media (max-width: 900px){
         .comilla1{
             height: 27px;
             top: 4.8vh;
-            left: 129px;
+            left: 28%;
         }
         .tx1{
             font-size: 25px;
-            margin-right: 46px;
+            margin-right: 17%;
         }
         .tx2{
             font-size: 20px;
-            margin-right: 46px;
+            margin-right: 17%;
         }
         .comilla2{
             height: 20px;
             top: 58px;
-            left: 328px;
+            left: 84%;
         }
         .inftextobli{
             width: 90%;
@@ -385,11 +449,11 @@
             width: 115px;
         }
         .nombreuserform{
-            width: 130px;
+            width: 25%;
         }
         .ndocumentouserform{
             width: 80px;
-            margin-top: -16px;
+            margin-top: -4%;
         }
         .empresaform{
             width: 58px;
@@ -405,14 +469,15 @@
             width: 90px;
         }
         .txtareapqrsf{
-            width: 332px;
+            width: 100%;
         }
         .titlepersonales{
             font-size: 16px;
         }
         .cuadroadjunto{
             /*right: 71px;*/
-            width: 18vw;
+            width: 82%;
+            top: 110%;
         }
         .picfileadjunto{
             font-size: 10px;
@@ -424,16 +489,17 @@
             font-size: 11px;
         }
         .inpt{
-            width: 99px;
+            width: 50%;
             font-size: 12px;
             height: 15px;
         }
         .cuadroimgadjuntar{
-            left: 203px;
+            left: 60%;
             width: 132px;
+            margin-top: 34%;
         }
         .generapqrsf{
-            width: 79px;
+            width: 51%;
             margin-left: 6%;
         }
         .iconadjun{
@@ -450,6 +516,73 @@
         }
         .cuadronuevoadjunto{
             width: 347px;
+        }
+        h2{
+            font-size: 20px;
+        }
+        .tercerdiv{
+            margin-top: 7%;
+        }
+        .cuartodiv{
+            margin-top: 7%;
+            width: 102%;
+        }
+
+        .txtareanuevapq{
+            margin-top:11vh;
+        }
+        .cuadroimagenadjuntarnew{
+            top: 110%;
+            right: 60%;
+        }
+        .tittlemypqrs{
+            font-size: 15px;
+        }
+        .fpqrs{
+            font-size: 13px;
+        }
+        .imgeliminarmitramite{
+            width: 15px;
+            margin-left: 93%;
+        }
+        .imgformulario{
+            width: 43px;
+            left: 65%;
+        }
+        .imgformularioadjuntar{
+            width: 52px;
+            left: 62%;
+        }
+        .adobetxt{
+            top: 124%;
+        }
+        .procesotxt{
+            font-size: 16px;
+        }
+        .adjuntoimg{
+            width: 20px;
+        }
+        .txtareaobservacion{
+            width: 100%;
+        }
+        .cuadroadjuntarnuevodocumento{
+            margin-left: 60%;
+        }
+        .btnenviaractua{
+            width: 68px;
+        }
+        .cuadrocambiaarchivo{
+            margin-top: 0;
+            margin-left: 62%;
+        }
+        .titulopqr{
+            font-size: 21px;
+        }
+        .estadopqrs{
+            height: 40px;
+        }
+        .estiloimgpq{
+            height: auto;
         }
     }
 
@@ -499,12 +632,12 @@
     <!--MIS PQRS-->
     <div ng-init="mispq = true" ng-show="mispq" style="margin-top: 2vh">
         <div ng-repeat="pq in pqrsf | orderBy: '-'" class="boxpubli boxpublipqrs">
-            <div> <img style="width: 1.5vh;margin-top: 0.5vh; margin-left: 97% " src="/img/icono-eliminar-g.png"></div>
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
-            <img class="tipodepqrsf" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
+            <div> <img class="imgeliminarmitramite" src="/img/icono-eliminar-g.png"></div>
+            <img class="tipodepqrsf estiloimgpq" ng-if="pq.tipopq == 'Peticion'" src="/img/peticion.png">
+            <img class="tipodepqrsf estiloimgpq" ng-if="pq.tipopq == 'Solicitud'" src="/img/solicitud.png">
+            <img class="tipodepqrsf estiloimgpq" ng-if="pq.tipopq == 'Felicitacion'" src="/img/felicitacion.png">
+            <img class="tipodepqrsf estiloimgpq" ng-if="pq.tipopq == 'Reclamo'" src="/img/reclamo.png">
+            <img class="tipodepqrsf estiloimgpq" ng-if="pq.tipopq == 'Queja'" src="/img/queja.png">
             <div class="fechas">
                 <p class="tittlemypqrs">{{pq.tipopq}} {{pq.enumeracion}}</p>
                 <p class="fpqrs">Fecha de recibido: {{pq.fechainicio | moment:'DD'}} de {{pq.fechainicio | moment:'MMMM'}} {{pq.fechainicio | moment:'YYYY'}}</p>
@@ -523,7 +656,7 @@
                     <!--TITULO-->
                     <div style="margin-top: 2vh">
                         <img class="comillatramite1" src="/img/icono-comillas1.png">
-                        <span style=" font-size: 2.5vw; font-weight: bold;">{{pq.tipopq}} </span>
+                        <span class="titulopqr">{{pq.tipopq}} </span>
                         <img class="comillatramite2" src="/img/icono-comillas2.png">
                     </div>
                     <!--DESCRIPCION PEQUEÑA-->
@@ -540,14 +673,14 @@
                             <p style="margin-top: 0; font-weight: bold;">{{pq.email}}</p>
                         </div>
 
-                       <a target="_blank" id="cambioimagen{{$index}}"> <img  id="imgchange{{$index}}" style=" width: 4vw;position: absolute; top:0; left: 70%" src="/img/icono-fomulario.png"> </a>
+                       <a target="_blank" id="cambioimagen{{$index}}"> <img  id="imgchange{{$index}}" class="imgformularioadjuntar" src="/img/icono-fomulario.png"> </a>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; " >Adjunto:</p>
                         <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 35%" >Por el Solicitante</p>
-                        <p style="position: absolute; top: 0vh; margin: 0; left: 80%; top: 69%" >Adobe Pdf</p>
+                        <p class="adobetxt" >Adobe Pdf</p>
 
                     </div>
 
-                    <div style="position: relative; display: inline-block; margin-top: 3vh; margin-left: 31vw">
+                    <div class="cuadrocambiaarchivo">
                         <div style="margin-left: .5vw;display: inline-block;cursor: pointer" ng-repeat="f in pq.files" ng-if="f.fase == 1" >
                             <div ng-click="cambiarArchivo($parent.$parent.$index, f.adjunto)" style="width: 10px;height: 10px; display: inline-block;background-color: #E30613;" >
 
@@ -558,8 +691,8 @@
                     <div style="width: 50%; border: solid #a5a5a4 .1vw; margin-top: 2vh"></div>
 
                     <div>
-                        <span style="font-size: 2vw;">Proceso</span>
-                        <img style="width: 2vw; vertical-align:middle;margin-left: 33.5vw" src="/img/adjunto_rojo.png">
+                        <span class="procesotxt">Proceso</span>
+                        <img class="adjuntoimg" src="/img/adjunto_rojo.png">
                     </div>
 
                     <div style="position: relative"  ng-repeat="cm in pq.comentarios">
@@ -568,14 +701,14 @@
                         <span style="font-size: 1.7vw; margin-bottom: 0;">{{cm.u}}  </span>
                         <p style="font-size: 1vw;margin-left: 1.8vw;word-wrap: break-word; border-right: solid #575756 .1vw;width: 85%">{{cm.c}}</p>
 
-                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" ng-click="modalArchivos(pq.files,cm.f)"> <img style=" width: 1.5vw; position: absolute;top: 5vh; left: 92.5%" src="/img/icono-fomulario.png"></a>
+                        <a ng-repeat="f in pq.files" ng-if="f.fase == cm.f" ng-click="modalArchivos(pq.files,cm.f)"> <img class="imgformulario" src="/img/icono-fomulario.png"></a>
                     </div>
 
 
                     <form enctype="multipart/form-data" name="myForm" ng-submit="addCiclo(pq.picFile,pq.newcomentario,pq._id,pq.fase,pq.newresponsable,'En tramite','nada');editing = false;">
 
                         <div style="margin-top:3vh">
-                            <textarea ng-model="pq.newcomentario" style="width: 44vw;height: 12vh;padding: 10px; border-radius: .5vw .5vw .5vw .5vw;resize: none; " placeholder="Observacion..."></textarea>
+                            <textarea ng-model="pq.newcomentario" class="txtareaobservacion" placeholder="Observacion..."></textarea>
                         </div>
 
 
@@ -587,7 +720,7 @@
 
                         <div style="margin-top: 1vh;padding-bottom: 3vh">
 
-                            <div style="display: inline-block; margin-left: 30vw">
+                            <div class="cuadroadjuntarnuevodocumento">
                                 <label for="file-inputtramite{{$index}}">
                                     <img  class="iconadjun" style="vertical-align: -1vh" src="/img/iconoadjdoc.jpg">
                                 </label>
@@ -597,7 +730,7 @@
 
 
                             <div style="display: inline-block">
-                                <input type="image" src="/img/botones-enviar.png" style="width: 8vw; vertical-align: -1vh">
+                                <input type="image" src="/img/botones-enviar.png" class="btnenviaractua">
                                 <!--<md-button type="submit"  class="md-raised"> Redirigir </md-button>-->
                             </div>
                         </div>
@@ -632,7 +765,7 @@
                 <div class="nombreuser"> <label style="vertical-align: 40%">Al día {{ fechaxxx | moment:'DD'}} de {{   fechaxxx | moment:'MMMM' }} {{ fechaxxx | moment:'YYYY'}} Yo </label> <span class="asterisco">*</span>
                     <md-input-container class="nombreuserform">
                         <label></label>
-                        <input type="text" ng-model="nombre" placeholder="Nombres y Apellidos">
+                        <input type="text" ng-model="nombre" placeholder="Nombres">
                     </md-input-container>
                 </div>
                 <div class="espaciono">
@@ -656,7 +789,7 @@
                     </md-input-container>
                 </div>
 
-                <div class="espacios">
+                <div class="espacios tercerdiv">
                     <label>hago parte de la empresa </label><span class="asterisco">*</span>
                     <md-input-container class="empresaform">
                         <label></label>
@@ -668,7 +801,7 @@
                         <input type="text" ng-model="cargo" placeholder="Cargo">
                     </md-input-container>,
                 </div>
-                <div class="espacios">
+                <div class="espacios cuartodiv">
                     <label>en la Ciudad de <span class="asterisco">*</span></label>
                     <md-input-container class="ciudadform">
                         <label></label>
@@ -684,12 +817,12 @@
                     </md-input-container>
                 </div>
 
-                <div style="margin-top:3vh">
+                <div class="txtareanuevapq">
                     <textarea class="txtareapqrsf" ng-model="comentario"  rows="5"  placeholder="Comentarios..."></textarea>
                 </div>
 
                 <div class="cuadronuevoadjunto">
-                    <div style="position: absolute; top:0;right: 15px">
+                    <div class="cuadroimagenadjuntarnew">
                         <img class="imgadjuntar"  ng-src="{{!picFile ? '/img/icono-fomulario.png' : iconoSubidaDocumentoPq(picFile)}}">
                     </div>
                     <div class="cuadroadjunto">
