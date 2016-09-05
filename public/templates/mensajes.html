@@ -231,35 +231,24 @@
                 <textarea data-nombre="{{usuarioMensaje}}" ng-model="mensajeTal" placeholder="Escribe tu mensaje..." class="message-composer" autocomplete="off" name="message" id="message"></textarea>
 
                 <div id="opcionesMensaje">
-
+                    <div style="position: inherit;">
+                    </div>
                     <div id="adjuntoOpcion" ng-click="envarMsj_a_(picFile)">
                             <p><i class="send icon"></i>Enviar</p>
                     </div>
 
-                    <div id="" class="XXX">
+                    <div id="" class="">
                         <input type="file"  ngf-select ng-model="picFile" id="image_src" ngf-multiple="false"  name="file"  ngf-max-size="200MB" />
                         <!--<p> <i class="attach icon "></i>Adjuntar</p>-->
 
                     </div>
-
-                    <!--<div id="adjuntoOpcion"-->
-                         <!--style=" border-top: 1px solid transparent;-->
-                                 <!--border-left: 1px solid transparent;-->
-                                 <!--width: 240px;-->
-                                 <!--text-align: right;-->
-                                 <!--"-->
-                         <!--alt='eliminar {{nombre_archivo}}' title='eliminar {{nombre_archivo}}'-->
-                    <!--&gt;-->
-                        <!--<div id="ADJ" ng-click="borrar()">-->
-                            <!--<i class="remove icon"></i>-->
-                            <!--&nbsp;{{nombre_archivo}}-->
-                            <!--<i class="file icon" id="b"></i>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                </div>
+                <div class="ui bottom attached progress" style="width: 339px;">
+                    <div class="bar" id="bar" style="min-width: 0px"></div>
                 </div>
             </div>
-
         </div>
+
 
     </div>
 </div>
